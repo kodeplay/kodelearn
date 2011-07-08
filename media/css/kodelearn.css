@@ -1,0 +1,328 @@
+/* ...............................
+	Contents
+	...............................
+	1.		General
+	2.		Text and background
+	3.		Page sections
+	4.		Form elements
+	5.		Toggle button
+	6.		Table
+	7.		Pagination
+	
+	END OF GENERAL STYLES
+	.................................
+	
+	8.		Signup form styles
+	
+   ............................. */
+   
+
+body {
+	background: #fff url("../images/body.png"); 
+	margin: 0; 
+	padding: 0; 
+	font-size: 12px; 
+	font-family: verdana, sans serif;
+}
+
+.container {
+	width: 960px;
+	margin-left: auto;
+	margin-right: auto;
+	border: 1px solid #cdcbbd;
+	border-top: none;
+	padding: 0 10px 20px 10px;
+	border-bottom-left-radius: 8px;
+	border-bottom-right-radius: 8px;
+	background: #fff;
+	margin-bottom: 40px;
+}
+
+/* .......................
+	Text and background
+   ..................... */
+.tBrown {	color: #4c3d34; } .bBrown {	background: #4c3d34; }
+.tlBlue {	color: #427693; } .blBlue {	background: #427693; }
+.tdBlue {	color: #415666; } .bdBlue {	background: #415666; }
+.tYellow {	color: #feb100; } .bYellow {	background: #feb100; }
+.tlBrown {	color: #eae3e0; /* Avoid on light background.*/}  .blBrown {	background: #eae3e0; } 
+.tmidBrown { color: #d7c2b5; } .bmidBrown {	background: #d7c2b5; }
+.tWhite {	color: #fff; } .bWhite {	background: #fff; }
+.tlGray {	color: #898989; }
+
+
+/* .......................
+	Page sections
+   ..................... */
+.menubar {	
+	border-bottom: 2px solid #feb100;
+	background: #373736 url("../images/menubar.png") repeat-x left top;
+	height: 32px;
+}
+.wrap {
+	width: 950px;
+	margin-left: auto;
+	margin-right: auto;
+	padding-left: 5px;
+	padding-right: 5px;
+}
+.menu a {	
+	color: #fff;
+	-webkit-transition: all 0.3s ease;
+	-moz-transition: all 0.3s ease;
+	transition: all 0.3s ease;
+	padding: 10px;
+	margin-right: 1px;
+	display: block;
+}
+.menu a:hover {
+	color: #feb100;
+}
+.menu.selected a {
+	background: #7c7b7b url("../images/topmenuSelected.png") repeat-x left bottom; 
+}
+
+.branding {
+	padding: 25px 10px;
+	border-bottom: 2px solid #feb100;
+}
+.branding h1 {	
+	width: 200px;
+}
+
+.topbar {	
+	border-top: 1px solid #4c3d34; 
+	border-bottom: 1px solid #4c3d34; 
+	vertical-align: middle; 
+	height: 35px; 
+}
+.topbar a {
+	font-weight: bold; 
+	color: #4c3d34;
+	display: inline-block;
+	height: 25px;
+	padding: 10px 10px 0 10px;
+	vertical-align: middle;
+	-webkit-transition: color 0.3s ease;
+	-moz-transition: color 0.3s ease;
+	transition: color 0.3s ease;
+}
+.topbar a:hover {	color: #feb100; }
+.topbar .active {
+	color: #feb100; 
+	background: #4c3d34; 
+}
+.sectionTitle {	
+	font-size: 14px; 
+	font-weight: bold; 
+	color: #4c3d34; 
+	border-bottom: 1px solid #eae3e0; 
+	padding: 3px 0; 
+}
+.pageTop {
+	padding: 25px 10px; 
+	vertical-align: middle; 
+	height: 25px; 
+}
+.pageTop.withBorder {
+	border-bottom: 1px solid #4c3d34; 
+}
+.pageTitle {	
+	font-size: 30px; 
+	font-family: Georgia, serif; 
+	color: #4c3d34; 
+}
+.pageDesc {
+	width: 295px; 
+	color: #415666; 
+}
+.sidebarTitle {	
+	color: #898989; 
+	font-size: 18px; 
+	font-family: Georgia, serif; 
+}
+.smallMenu {	
+	color: #000; 
+	font-family: Georgia, serif; 
+}
+.smallText {	
+	font-size: 10px; /* avoid unless necessary */ 
+}
+.role {
+	line-height: 18px;
+	color: #415666;
+}
+
+
+
+/* .......................
+	Form elements
+   ..................... */
+.formcontainer {	
+	border-collapse: collapse; 
+	border: none; /* for tables */ 
+}
+.formcontainer td {	
+	padding: 10px 5px; 
+	vertical-align: middle;
+}
+
+.createButton {	
+	margin-top: 10px;
+	margin-bottom: 10px;
+	display: inline-block;
+	font-weight: bold;
+	padding: 10px; 
+	padding-left: 35px;	 
+	background: #556875 url("../images/createBtn.png") no-repeat left 50%; 
+	color: #fff; 
+	text-shadow: 1px 1px 1px #1a2229; 
+	border: 1px solid #293741; 
+	border-radius: 3px; 
+	-webkit-transition: all 0.3s ease; 
+	-moz-transition: all 0.3s ease; 
+	transition: all 0.3s ease; 
+}
+.createButton:hover {	
+	-webkit-box-shadow: 0 0 8px #4f6473; 
+	-moz-box-shadow: 0 0 8px #4f6473; 
+	box-shadow: 0 0 8px #4f6473; 
+}
+
+
+input[type="text"] , input[type="password"] {
+	padding: 10px; 
+	color: #1d272e; 
+	border: 1px solid #abadb3; 
+	border-radius: 3px; 
+	min-width: 190px; 
+	background: #f3f3f3;
+}
+input[type="text"]:focus , input[type="password"]:focus {	background-color: #fff; }
+input[type="text"].search {	
+	border-radius: 20px;
+	background: #f3f3f3;
+	outline: none;
+}
+input.search:focus {	background-color: #fff; }
+.button {
+	font-weight: bold; 
+	padding: 10px 15px; 
+	border-radius: 20px; 
+	background: #415665 url("../images/button.png") repeat-x left bottom; 
+	color: #fff; 
+	text-shadow: 1px 1px 1px #1f2830; 
+	-webkit-transition: all 0.3s ease; 
+	-moz-transition: all 0.3s ease; 
+	transition: all 0.3s ease; 
+	border: none;
+	cursor: pointer;
+}
+.button:hover {	
+	-webkit-box-shadow: 0 0 8px #4f6473; 
+	-moz-box-shadow: 0 0 8px #4f6473; 
+	box-shadow: 0 0 8px #4f6473; 
+}
+select {	width: 210px;  }
+
+/* .......................
+	Toggle button
+   ..................... */
+.toggleButton {
+	
+	display: inline-block;
+	border-radius: 5px;
+}
+.toggleButton a:first-child {
+	border-top-left-radius: 5px;
+	border-bottom-left-radius: 5px;
+	border: 1px solid #293741; 
+	border-right: none;
+}
+.toggleButton a:nth-child(2n){
+	border-top-right-radius: 5px;
+	border-bottom-right-radius: 5px;
+	border: 1px solid #293741; 
+	border-left: none;
+}
+.toggleButton a {
+	padding: 10px;
+	background: #d2d2d2 url("../images/toggleOff.png") repeat-x left top;
+	color: #a3aaaf;
+	font-weight: bold;
+	text-shadow: 1px 1px 1px #fff;
+}
+.toggleButton .on {
+	background: #3d5160 url("../images/button.png") repeat-x left top;
+	color: #fff; 
+	text-shadow: 1px 1px 1px #000;
+}
+.toggleButton .clear {
+	height: 1px;
+	width: 1px;
+}
+
+
+
+/* .......................
+	Table
+   ..................... */
+.datatable {	
+	font-size: 12px; 
+	border-collapse: collapse; 
+	color: #000; 
+	border: none; 
+}
+.datatable th {	
+	background: #f3f3f3 url("../images/thback.png") repeat-x left bottom;
+	padding: 20px 5px; 
+	color: #4c3d34; 
+	text-shadow: 1px 1px 1px #fff; 
+	border-bottom: 1px solid #4c3d34; 
+}
+.datatable td {	
+	padding: 10px 5px; 
+	border-bottom: 1px solid #d7c2b5; 
+}
+.datatable tr:nth-child(2n) td {	
+	background: #eae3e0; 
+}
+.trid, .triu {	font-size: 9px; }
+
+/* .......................
+	Pagination
+   ..................... */
+.pagination {	
+	background: #9b928d; 
+	color: #51433a; 
+	text-align: right; 
+	padding: 10px; 
+	font-weight: bold; 
+}
+.pagination a {	
+	margin-right: 15px; 
+	padding: 5px; 
+	color: #4C3D34;
+}
+.pagination .selected {	
+	background: #e6dedb; 
+	border: 1px solid #796d66; 
+	border-radius: 3px; 
+}
+/* .......................
+	END OF GENERAL STYLES
+   ..................... */
+   
+   
+   
+/* .......................
+	Signup form styles
+   ..................... */
+#suContainer {	
+	width: 55%; 
+	margin-right: 5px;
+	border-right: 1px solid #eae3e0; 
+}
+#lContainer {
+	margin-left: 15px;
+}

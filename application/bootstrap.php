@@ -80,7 +80,8 @@ if (isset($_SERVER['KOHANA_ENV']))
  * - boolean  caching     enable or disable internal caching                 FALSE
  */
 Kohana::init(array(
-	'base_url'   => '/',
+	'base_url'   => '/kodelearn/',
+    'index.php'  => ''
 ));
 
 /**
@@ -106,14 +107,15 @@ Kohana::modules(array(
 	// 'unittest'   => MODPATH.'unittest',   // Unit testing
 	// 'userguide'  => MODPATH.'userguide',  // User guide and API documentation
         'stickyform' => MODPATH.'stickyform', // The stickyform module
-	));
+        'playground'    => MODPATH.'playground'  // HTML playground for nikhil
+));
 
 /**
  * Set the routes. Each route must have a minimum of a name, a URI and a set of
  * defaults for the URI.
  */
-Route::set('default', '(<controller>(/<action>(/<id>)))')
-	->defaults(array(
-		'controller' => 'welcome',
-		'action'     => 'index',
-	));
+Route::set('default', '(<controller>(/<action>(/<params>)))' , array('params' => '.*?'))
+    ->defaults(array(
+        'controller' => 'welcome',
+        'action'     => 'index',
+    ));
