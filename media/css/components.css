@@ -22,11 +22,13 @@
 .smauto {	margin-left: auto; margin-right: auto; }
 .bm5{	margin-bottom: 5px; }
 .bm10{	margin-bottom: 10px; }
+.bm40 {	margin-bottom: 40px; }
 .vm5 {	margin-top: 5px; margin-bottom: 5px; }
 .vm10 {	margin-top: 10px; margin-bottom: 10px; }
 .vm40 {	margin-top: 40px; margin-bottom: 40px; }
 .tm40 {	margin-top: 40px; }
 .tm10 {	margin-top: 10px; }
+.hm15 {	margin-right: 15px; margin-left: 15px; }
 .pad5 {	padding: 5px;	}
 .pad10 {	padding: 10px;	}
 .vpad5 { padding-top: 5px; padding-bottom: 5px; }
