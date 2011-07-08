@@ -1,0 +1,13 @@
+# sys created files
+*~
+*.swp
+Thumbs.db
+\#*#
+.#*
+
+# eclipse files
+.buildpath
+.project
+.settings/
+
+kohana-3.1.3.1.zip
