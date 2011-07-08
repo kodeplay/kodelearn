@@ -37,6 +37,7 @@ body {
 	background: #fff;
 	margin-bottom: 40px;
 }
+a{ color: #415666; }
 
 /* .......................
 	Text and background
@@ -202,7 +203,7 @@ body {
 }
 .formcontainer td {	
 	padding: 10px 5px; 
-	vertical-align: middle;
+	vertical-align: top;
 }
 
 .createButton {	
@@ -245,6 +246,13 @@ input[type="text"].search {
 	outline: none;
 }
 input.search:focus {	background-color: #fff; }
+textarea {
+	width: 190px;
+	padding: 10px;
+	border: 1px solid #abadb3;
+	background: #f3f3f3;
+}
+textarea:focus {	background: white; }
 .button {
 	font-weight: bold; 
 	padding: 10px 15px; 
