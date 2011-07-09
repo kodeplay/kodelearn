@@ -2,9 +2,8 @@
 <html>
 	<head>
 		<title>KodeLearn - Header after logging in</title>
-		<link rel="stylesheet" href="css/reset.css" />
-		<link rel="stylesheet" href="css/components.css" />
-		<link rel="stylesheet" href="css/kodelearn.css" />
+          <?php foreach ($styles as $file => $type) echo HTML::style($file, array('media' => $type)), PHP_EOL ?>
+          <?php foreach ($scripts as $file) echo HTML::script($file), PHP_EOL ?>
 	</head>
 	<body>
 		<div class="menubar">
