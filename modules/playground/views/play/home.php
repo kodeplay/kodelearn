@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<title>KodeLearn - Header after logging in</title>
+		<title>KodeLearn - Home</title>
 		<link rel="stylesheet" href="css/reset.css" />
 		<link rel="stylesheet" href="css/components.css" />
 		<link rel="stylesheet" href="css/kodelearn.css" />
@@ -10,7 +10,7 @@
 		<div class="menubar">
 			<div class="wrap twhite">
 				<ul class="lsNone l">
-					<li class="menu l active"><a href="#">Home</a></li>
+					<li class="menu l selected"><a href="#">Home</a></li>
 					<li class="menu l"><a href="#">Profile</a></li>
 					<li class="menu l"><a href="#">Inbox</a></li>
 					<li class="clear"></li>
@@ -41,3 +41,8 @@
 				</div><!-- roles -->
 				<div class="clear"></div>
 			</div><!-- branding -->
+						
+		</div><!-- container -->
+		
+	</body>
+</html>
