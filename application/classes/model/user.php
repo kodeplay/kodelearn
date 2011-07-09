@@ -1,0 +1,24 @@
+<?php defined('SYSPATH') or die('No direct script access.');
+
+class Model_User extends ORM {
+
+    public function validator_login($data) {
+        return Validation::factory($data)
+            ->rule('email', 'not_empty')
+            ->rule('email', 'email')
+            ->rule('password', 'not_empty');
+    }
+
+    public function validator_register($data) {
+        return Validation::factory($data)
+            ->rule('email', 'not_empty')
+            ->rule('email', 'email')
+            ->rule('email_parent', 'not_empty')
+            ->rule('email_parent', 'email')
+            ->rule('firstname', 'not_empty')
+            ->rule('lastname', 'not_empty')
+            ->rule('password', 'not_empty')
+            ->rule('password', 'min_length', array(':value', 8))
+            ->rule('confirm_password', 'matches', array(':validation', ':field', 'password'));
+    }
+}

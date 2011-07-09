@@ -80,7 +80,7 @@ if (isset($_SERVER['KOHANA_ENV']))
  * - boolean  caching     enable or disable internal caching                 FALSE
  */
 Kohana::init(array(
-	'base_url'   => '/kodelearn/',
+    'base_url'   => 'http://kodelearn.kp/',
     'index.php'  => ''
 ));
 
