@@ -1,24 +1,24 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<title>KodeLearn - Generic Header</title>
-		<link rel="stylesheet" href="http://localhost/kodelearn/media/css/reset.css" />
-		<link rel="stylesheet" href="http://localhost/kodelearn/media/css/components.css" />
-		<link rel="stylesheet" href="http://localhost/kodelearn/media/css/kodelearn.css" />
+		<title>KodeLearn - Home - Generic Header</title>
+		<link rel="stylesheet" href="css/reset.css" />
+		<link rel="stylesheet" href="css/components.css" />
+		<link rel="stylesheet" href="css/kodelearn.css" />
 	</head>
 	<body>
 		<div class="menubar">
 			<div class="wrap twhite">
 				<ul class="lsNone l">
-					<li class="menu l selected"><a href="#">Home</a></li>
+					<li class="menu l active"><a href="#">Home</a></li>
 					<li class="menu l"><a href="#">About</a></li>
 					<li class="menu l"><a href="#">Features</a></li>
 					<li class="clear"></li>
 				</ul>
 				<ul class="lsNone r">
-					<li class="l menu"><a href="#">Sign up</a></li>
+					<li class="l menu"><a href="authenticate.php">Sign up</a></li>
 					<li class="l pad10"><span class="tlGray">|</span></li>
-					<li class="menu l"><a href="#">Login</a></li>
+					<li class="menu l"><a href="authenticate.php">Login</a></li>
 				</ul>
 				<div class="clear"></div>
 			</div><!-- wrap -->
