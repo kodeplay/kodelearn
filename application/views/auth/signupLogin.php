@@ -96,7 +96,7 @@
                 <td>
                     <?php echo $form_login->password->element(); ?>
                     <span class="form-error"><?php echo $form_login->password->error(); ?></span>
-                    <p><a class="tdBlue bold" href="#">Forgot your password?</a></p>
+                    <p><?php echo $links['forgot_password']; ?></p>
                 </td>
             </tr>
             <tr>

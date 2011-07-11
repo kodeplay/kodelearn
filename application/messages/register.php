@@ -20,5 +20,8 @@ return array(
     ),
     'confirm_password' => array(
         'matches'  => 'Both passwords must match',
-    ),    
+    ),
+    'agree' => array(
+        'not_empty' => 'You must agree to the privacy policy',
+    ),
 );

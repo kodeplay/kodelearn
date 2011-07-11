@@ -32,9 +32,13 @@ class Controller_Auth extends Controller_Base {
         }
         $view = View::factory('auth/signupLogin')
             ->bind('form_login', $form_login)
-            ->bind('form_register', $form_register);
+            ->bind('form_register', $form_register)
+            ->bind('links', $links);        
         $form_login = $this->form_login(($submitted_form === 'login'));
         $form_register = $this->form_register(($submitted_form === 'register'));
+        $links = array(
+            'forgot_password' => Html::anchor('/auth/forgot_password/', 'Forgot Password', array('class' => 'tdblue bold'))
+        );
         $this->content = $view;
     }
 
@@ -95,8 +99,12 @@ class Controller_Auth extends Controller_Base {
             ->append('Confirm Password', 'confirm_password', 'password')
             ->append('Standard/Batch', 'batch_id', 'select', array('options' => array('8th', '9th', '10th')))
             ->append('Course', 'course_id', 'select', array('options' => array('A', 'B', 'C')))
-            ->append('I have read and agree the privacy policy', 'agree', 'checkbox')
-            ->append('Signup Now', 'register', 'submit', array('attributes' => array('class' => 'button')));
+            ->append(
+                'I have read and agree the privacy policy',
+                'agree', 
+                'checkbox', 
+                array('attributes' => array('value' => 1))
+            )->append('Signup Now', 'register', 'submit', array('attributes' => array('class' => 'button')));
         $form->process();
         return $form;
     }
@@ -105,7 +113,7 @@ class Controller_Auth extends Controller_Base {
 
     }
 
-    public function action_recoverpass() {
-
+    public function action_forgot_password() {
+        echo 'to be implemented'; exit;
     }
 }
