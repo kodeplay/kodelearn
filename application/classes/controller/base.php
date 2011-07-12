@@ -6,9 +6,9 @@ class Controller_Base extends Controller_Template {
 
     protected $view;
     
-      public function before()
-      {
-          parent::before();
+    public function before()
+    {
+        parent::before();
   
         if ($this->auto_render)
         {
@@ -17,14 +17,14 @@ class Controller_Base extends Controller_Template {
             $this->template->content = '';
             
 	        $this->template->styles = array(
-	            'media/css/reset.css' => 'reset',
-	            'media/css/components.css' => 'components',
-	            'media/css/kodelearn.css' => 'kodelearn'
+	            'media/css/reset.css' => 'screen',
+	            'media/css/components.css' => 'screen',
+	            'media/css/kodelearn.css' => 'screen'
 	        );
 	        $this->template->scripts = array();
                     
           }
-      }
+    }
 	
 	public function action_index()
 	{
@@ -33,7 +33,7 @@ class Controller_Base extends Controller_Template {
     
 	public function after() {
         if (!$this->request->is_ajax()) {
-            $this->view = View::factory('template/template');
+            $this->view = View::factory('template/logged_template');
         } else {
             $this->view = View::factory('template/content');
         }
