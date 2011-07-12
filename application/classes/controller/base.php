@@ -7,7 +7,7 @@ class Controller_Base extends Controller_Template {
     public $template = 'template/template';
 
     protected $view;
-
+    
     /**
      * Override the before method
      * check if ajax and select correct template
