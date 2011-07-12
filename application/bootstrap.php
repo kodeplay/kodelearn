@@ -104,10 +104,11 @@ Kohana::modules(array(
 	'database'   => MODPATH.'database',   // Database access
 	// 'image'      => MODPATH.'image',      // Image manipulation
 	'orm'        => MODPATH.'orm',        // Object Relationship Mapping
-	// 'unittest'   => MODPATH.'unittest',   // Unit testing
+	'unittest'   => MODPATH.'unittest',   // Unit testing
 	// 'userguide'  => MODPATH.'userguide',  // User guide and API documentation
-        'stickyform' => MODPATH.'stickyform', // The stickyform module
-        'playground'    => MODPATH.'playground'  // HTML playground for nikhil
+        'stickyform' => MODPATH.'stickyform', // The stickyform module by kodeplay
+        'playground' => MODPATH.'playground',  // HTML playground for nikhil
+        'dynamicmenu'=> MODPATH.'dynamicmenu', // Dynamic menu model by kodeplay
 ));
 
 /**

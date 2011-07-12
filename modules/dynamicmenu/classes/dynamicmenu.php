@@ -2,18 +2,17 @@
 
 class DynamicMenu {
 
-    protected $menu_collection;
+    private static $collection;
 
     public function __construct() {
         
     }
 
-    public function addMenu() {
-        
-    }
-
-    protected function process() {
-        
-
+    public static function factory($position) {
+        if (Arr::get(self::$collection, $position) !== null) {
+            return Arr::get(self::$collection, $position);
+        } else {
+            return new DynamicMenu_Menu($position);
+        }        
     }
 }

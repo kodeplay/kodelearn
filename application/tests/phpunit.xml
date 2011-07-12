@@ -1,0 +1,7 @@
+<phpunit colors="true" bootstrap="../../index.php"> 
+    <testsuites> 
+        <testsuite name="DynamicMenu Tests"> 
+            <directory>../../modules/dynamicmenu/tests/</directory> 
+        </testsuite> 
+    </testsuites> 
+</phpunit>
