@@ -2,9 +2,9 @@
 
 return array(
 
-	'driver'       => 'file',
+	'driver'       => 'orm',
 	'hash_method'  => 'sha256',
-	'hash_key'     => NULL,
+	'hash_key'     => 'kodelearn2011',
 	'lifetime'     => 1209600,
 	'session_key'  => 'auth_user',
 
