@@ -335,7 +335,7 @@ select {	width: 210px;  }
 	border-bottom: 1px solid #d7c2b5; 
 	vertical-align: top;
 }
-.datatable tr:nth-child(2n) td {
+.datatable tr:nth-child(odd) td {
 	background: #eae3e0; 
 }
 .trid, .triu {	font-size: 9px; }
