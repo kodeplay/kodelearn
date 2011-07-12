@@ -14,5 +14,5 @@ class DynamicMenu {
         } else {
             return new DynamicMenu_Menu($position);
         }        
-    }
+    }    
 }

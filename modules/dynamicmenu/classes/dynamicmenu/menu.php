@@ -27,18 +27,28 @@ class DynamicMenu_Menu {
      * @param array $attributes - html attributes for this link only.\
      * the global attributes specified by the instance variable will be overridden by this
      */
-    public function add_link($url, $title, $sort_order=NULL, $attributes=NULL) {
+    public function add_link($url, $title, $sort_order=NULL, $attributes=array()) {
         $attributes = array_merge($this->attributes, $attributes);
         $anchor = Html::anchor($url, $title, $attributes);
-        $this->links[$title] = array(
+        $key = self::slugify($title);
+        $this->links[$key] = array(
             'html' => $anchor,
             'title' => $title,
             'sort_order' => (int) $sort_order,
         );
+        return $this;
     }
 
     public function set_attributes($attributes) {
         $this->attributes = $attributes;
+    }
+
+    public function get_attributes() {
+        return $this->attributes;
+    }
+
+    public function get_links() {
+        return $this->links;
     }
 
     /**
@@ -46,7 +56,8 @@ class DynamicMenu_Menu {
      * @return Array 
      */
     public function as_array() {
-        return uasort($this->links, 'DyanamicMenu_Menu::sort_by');
+        uasort($this->links, 'self::sort_by');
+        return $this->links;
     }
 
     private static function sort_by($a, $b) {
@@ -54,6 +65,16 @@ class DynamicMenu_Menu {
             return 0;
         }
         return ($a['sort_order'] < $b['sort_order']) ? -1 : 1;
+    }
+
+    /**
+     * Slugify a String using underscores 
+     * eg. vineetnaik's blog will be slugified to,
+     * vineetnaiks_blog
+     */
+    private static function slugify($str) {
+        $str = Url::title($str);
+        return str_replace(array('-', '.'), '_', $str);        
     }
 
     public function __get($key) {
