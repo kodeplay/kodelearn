@@ -57,9 +57,9 @@ abstract class Kohana_Auth {
 		$this->_session = Session::instance();
 	}
 
-	abstract protected function _login($username, $password, $remember);
+	abstract protected function _login($email, $password, $remember);
 
-	abstract public function password($username);
+	abstract public function password($email);
 
 	abstract public function check_password($password);
 
@@ -77,12 +77,12 @@ abstract class Kohana_Auth {
 	/**
 	 * Attempt to log in a user by using an ORM object and plain-text password.
 	 *
-	 * @param   string   username to log in
+	 * @param   string   email to log in
 	 * @param   string   password to check against
 	 * @param   boolean  enable autologin
 	 * @return  boolean
 	 */
-	public function login($username, $password, $remember = FALSE)
+	public function login($email, $password, $remember = FALSE)
 	{
 		if (empty($password))
 			return FALSE;
@@ -93,7 +93,7 @@ abstract class Kohana_Auth {
 			$password = $this->hash($password);
 		}
 
-		return $this->_login($username, $password, $remember);
+		return $this->_login($email, $password, $remember);
 	}
 
 	/**
@@ -166,7 +166,7 @@ abstract class Kohana_Auth {
 		// Regenerate session_id
 		$this->_session->regenerate();
 
-		// Store username in session
+		// Store email in session
 		$this->_session->set($this->_config['session_key'], $user);
 
 		return TRUE;

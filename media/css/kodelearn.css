@@ -273,6 +273,8 @@ textarea:focus {	background: white; }
 }
 select {	width: 210px;  }
 
+span.form-error { display:block; color:#ff0000; margin:5px 0; }
+
 /* .......................
 	Toggle button
    ..................... */
