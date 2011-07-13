@@ -4,6 +4,7 @@
 		<title>KodeLearn - Home - Generic Header</title>
 		<link rel="stylesheet" href="css/reset.css" />
 		<link rel="stylesheet" href="css/components.css" />
+		<link rel="stylesheet" href="scripts/dropkick/dropkick.css" />
 		<link rel="stylesheet" href="css/kodelearn.css" />
 	</head>
 	<body>
