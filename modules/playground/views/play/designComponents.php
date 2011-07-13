@@ -65,6 +65,11 @@
 					<td>50</td>
 					<td>Area 2</td>
 				</tr>
+				<tr>
+					<td>Room 1</td>
+					<td>50</td>
+					<td>Area 2</td>
+				</tr>
 			</table>
 			
 			<br />
