@@ -106,8 +106,9 @@ Kohana::modules(array(
 	'orm'        => MODPATH.'orm',        // Object Relationship Mapping
 	// 'unittest'   => MODPATH.'unittest',   // Unit testing
 	// 'userguide'  => MODPATH.'userguide',  // User guide and API documentation
-        'stickyform' => MODPATH.'stickyform', // The stickyform module
-        'playground'    => MODPATH.'playground'  // HTML playground for nikhil
+    'stickyform' => MODPATH.'stickyform', // The stickyform module
+    'playground' => MODPATH.'playground',  // HTML playground for nikhil
+	'sort'       => MODPATH.'sort' //for sorting
 ));
 
 /**
