@@ -49,6 +49,10 @@ class Sort {
 		$this->order = $order;
 	}
 	
+	public function get_order(){
+		return $this->order;
+	}
+	
 	public function render(){
 		
 		$html = '';
