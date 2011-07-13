@@ -56,7 +56,7 @@ class DynamicMenu_Menu {
      * @return Array 
      */
     public function as_array() {
-        uasort($this->links, 'self::sort_by');
+        uasort($this->links, 'DynamicMenu_Menu::sort_by');
         return $this->links;
     }
 

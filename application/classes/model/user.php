@@ -2,6 +2,8 @@
 
 class Model_User extends ORM {
 
+    protected $_belongs_to = array('batch' => array('foreign_key' => 'batch_id'));
+	
     public function validator_login($data) {
         return Validation::factory($data)
             ->rule('email', 'not_empty')

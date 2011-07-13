@@ -148,6 +148,7 @@ a{ color: #415666; }
 	-webkit-transition: color 0.3s ease;
 	-moz-transition: color 0.3s ease;
 	transition: color 0.3s ease;
+	cursor: pointer;
 }
 .pageAction:hover {	color: #feb100; }
 .pageAction.active {
