@@ -18,7 +18,7 @@
    
 
 body {
-	background: #fff url("../images/body.png"); 
+	background: #fff url("../image/body.png"); 
 	margin: 0; 
 	padding: 0; 
 	font-size: 12px; 
@@ -57,7 +57,7 @@ a{ color: #415666; }
    ..................... */
 .menubar {	
 	border-bottom: 2px solid #feb100;
-	background: #373736 url("../images/menubar.png") repeat-x left top;
+	background: #373736 url("../image/menubar.png") repeat-x left top;
 	height: 32px;
 }
 .wrap {
@@ -66,6 +66,9 @@ a{ color: #415666; }
 	margin-right: auto;
 	padding-left: 5px;
 	padding-right: 5px;
+}
+.menubar .wrap {	
+	position: relative;
 }
 .menu a {	
 	color: #fff;
@@ -80,7 +83,43 @@ a{ color: #415666; }
 	color: #feb100;
 }
 .menu.active a {
-	background: #7c7b7b url("../images/topmenuSelected.png") repeat-x left bottom; 
+	background: #7c7b7b url("../image/topmenuSelected.png") repeat-x left bottom; 
+}
+#myacContent {
+	top: 2px;
+	right: 5px;
+	position: absolute;
+	background: url("../image/dropmenu.png") repeat-x left -1px;
+	z-index: 9;
+	width: 109px;
+	padding: 0;
+	margin: 0;
+	display: none;
+	padding: 1px;
+	padding-top: 30px;
+	border-bottom-left-radius: 5px;
+	border-bottom-right-radius: 5px;
+	//-webkit-box-shadow: 0 1px 3px #373736;
+}
+#myacContent a {
+	display: block;
+	padding: 10px;
+	color: #333;
+	background: #fff;
+	-webkit-transition: background 0.3s ease;
+	-moz-transition: background 0.3s ease;
+	transition: background 0.3s ease;
+}
+#myacContent a:hover {
+	background: #565655;
+	color: #fff;
+}
+
+#myacContent li {
+	border-bottom: 1px solid #fafafa;
+}
+#myacContent li:last-child {
+	border-bottom: none;
 }
 
 .branding {
@@ -170,7 +209,7 @@ a{ color: #415666; }
 	display: block;
 	padding: 15px 0 15px 45px;
 	color: #636363;
-	background: url("../images/sideicon.jpg") no-repeat left 50%;
+	background: url("../image/sideicon.jpg") no-repeat left 50%;
 }
 .sidemenu.active {
 	background: #f4f4f4;
@@ -178,6 +217,23 @@ a{ color: #415666; }
 }
 .sidemenu.active a{
 	color: #feb100;
+}
+.withUser .sidebarTitle {
+	font-family: Verdana, sans-serif;
+	margin: 5px 0 10px 0;
+}
+#sbType {
+	margin-bottom: 5px;
+	border-bottom: 1px dotted #ccc;
+	padding-bottom: 10px;
+}
+
+#sbProfileImg {
+	width: 72px;
+	height: 72px;
+	padding: 3px;
+	border: 1px solid #ccc;
+	margin: 10px auto;	
 }
 
 
@@ -204,7 +260,7 @@ a{ color: #415666; }
 }
 .formcontainer td {	
 	padding: 10px 5px; 
-	vertical-align: top;
+	vertical-align: middle;
 }
 
 .createButton {	
@@ -214,7 +270,7 @@ a{ color: #415666; }
 	font-weight: bold;
 	padding: 10px; 
 	padding-left: 35px;	 
-	background: #556875 url("../images/createBtn.png") no-repeat left 50%; 
+	background: #556875 url("../image/createBtn.png") no-repeat left 50%; 
 	color: #fff;
 	text-shadow: 1px 1px 1px #1a2229; 
 	border: 1px solid #293741; 
@@ -229,7 +285,10 @@ a{ color: #415666; }
 	box-shadow: 0 0 8px #4f6473; 
 }
 
-
+.multiSelector {
+	height: 100px;
+	width: 90%;
+}
 input[type="text"] , input[type="password"] {
 	padding: 10px; 
 	color: #1d272e; 
@@ -256,9 +315,9 @@ textarea {
 textarea:focus {	background: white; }
 .button {
 	font-weight: bold; 
-	padding: 10px 15px; 
+	padding: 8px 15px;
 	border-radius: 20px; 
-	background: #415665 url("../images/button.png") repeat-x left bottom; 
+	background: #415665 url("../image/button.png") repeat-x left bottom; 
 	color: #fff; 
 	text-shadow: 1px 1px 1px #1f2830; 
 	-webkit-transition: -webkit-box-shadow 0.3s ease; 
@@ -273,8 +332,15 @@ textarea:focus {	background: white; }
 	box-shadow: 0 0 8px #4f6473; 
 }
 select {	width: 210px;  }
-
-span.form-error { display:block; color:#ff0000; margin:5px 0; }
+.formerror {	
+	display: block;
+	color: red;
+}
+.tip {
+	font-style: italic;
+	font-size: 11px;
+	color: #666;
+}
 
 /* .......................
 	Toggle button
@@ -298,13 +364,13 @@ span.form-error { display:block; color:#ff0000; margin:5px 0; }
 }
 .toggleButton a {
 	padding: 10px;
-	background: #d2d2d2 url("../images/toggleOff.png") repeat-x left top;
+	background: #d2d2d2 url("../image/toggleOff.png") repeat-x left top;
 	color: #a3aaaf;
 	font-weight: bold;
 	text-shadow: 1px 1px 1px #fff;
 }
 .toggleButton .on {
-	background: #3d5160 url("../images/button.png") repeat-x left top;
+	background: #3d5160 url("../image/button.png") repeat-x left top;
 	color: #fff; 
 	text-shadow: 1px 1px 1px #000;
 }
@@ -325,7 +391,7 @@ span.form-error { display:block; color:#ff0000; margin:5px 0; }
 	border: none; 
 }
 .datatable th {	
-	background: #f3f3f3 url("../images/thback.png") repeat-x left bottom;
+	background: #f3f3f3 url("../image/thback.png") repeat-x left bottom;
 	padding: 20px 5px; 
 	color: #4c3d34; 
 	text-shadow: 1px 1px 1px #fff; 
@@ -333,13 +399,19 @@ span.form-error { display:block; color:#ff0000; margin:5px 0; }
 	text-align: left;
 	font-weight: bold;
 }
-.datatable td {	
+.datatable td {
 	padding: 10px 5px; 
 	border-bottom: 1px solid #d7c2b5; 
 	vertical-align: top;
 }
-.datatable tr:nth-child(2n) td {
+.datatable.vm td {
+	vertical-align: middle;
+}
+.datatable tr:nth-child(odd) td {
 	background: #eae3e0; 
+}
+.datatable p+p {
+	margin-top: 8px;
 }
 .trid, .triu {	font-size: 9px; }
 
@@ -379,4 +451,83 @@ span.form-error { display:block; color:#ff0000; margin:5px 0; }
 }
 #lContainer {
 	margin-left: 15px;
+}
+
+/* ..........................
+	Role actions permissions
+   ........................ */
+.w15 {	width: 15%; }
+.roleAction {
+	display: inline-block;
+	*display: inline;
+	*width: 100px;
+	*float: left;
+	padding: 5px;
+	background: url("../image/curveShade.png") repeat-x left bottom;
+	margin: 5px;
+	color: #fff;
+	border-radius: 3px;
+	cursor: pointer;
+	-webkit-transition: background 0.3s ease;
+	-moz-transition: background 0.3s ease;
+	transition: background 0.3s ease;
+}
+.roleAction.yes {
+	color: #00571e;
+	color: #2f3f0f;
+	background-color: #59ad07;
+	background-color: #22a309;
+	background-color: #99cc33;
+	border: 1px solid #669933;
+}
+.roleAction.no {
+	color: #570101;
+	color: #3f1510;
+	background-color: #e50000;
+	background-color: #dd4b39;
+	border: 1px solid #5e1f18;
+}
+.raIcon {
+	display: inline-block;
+	*display: inline;
+	padding: 5px;
+	margin-left: 5px;
+	background: url("../image/raIcons.png") no-repeat;
+}
+.roleAction.yes .raIcon {
+	background-position: 1px -21px;
+}
+.roleAction.no .raIcon {
+	background-position: 1px 1px;
+}
+
+.rightSep {
+	margin-right: 20px;
+}
+.dbBorder {
+	padding-bottom: 5px;
+	border-bottom: 1px dashed #ccc;
+}
+#courseContainer {
+	height: 100px;
+	overflow-y: auto;
+	text-align: center;
+	background: #f4f4f4;
+	border-right: 1px solid #e4e4e4;
+	border-left: 1px solid #e4e4e4;
+}
+#courseContainer span {
+	display: inline-block;
+	margin: 10px;
+}
+
+.msgCsMeta {
+	background: #373736 url("../image/menubar.png") repeat-x left bottom;
+	padding: 10px 5px;
+	text-align: center;
+	color: #fff;
+}
+.msgCsMeta a {
+	color: #999;
+	font-weight: normal;
 }

@@ -2,9 +2,9 @@
 <html>
 	<head>
 		<title>KodeLearn - Design Components</title>
-		<link rel="stylesheet" href="css/reset.css" />
-		<link rel="stylesheet" href="css/components.css" />
-		<link rel="stylesheet" href="css/kodelearn.css" />
+		<link rel="stylesheet" href="media/css/reset.css" />
+		<link rel="stylesheet" href="media/css/components.css" />
+		<link rel="stylesheet" href="media/css/kodelearn.css" />
 	</head>
 	<body>
 		<div class="container">
@@ -49,6 +49,11 @@
 					<th class="w20">Room <span class="downsort">&#x25BC;</span></th>
 					<th class="w20">Students</th>
 					<th class="w20">Area</th>
+				</tr>
+				<tr>
+					<td>Room 1</td>
+					<td>50</td>
+					<td>Area 2</td>
 				</tr>
 				<tr>
 					<td>Room 1</td>
