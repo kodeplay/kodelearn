@@ -23,9 +23,13 @@ class Controller_Batch extends Controller_Base
             $order = 'DESC';
         }
         
-        $count = ORM::factory('batch')
-                        ->count_all()
-                        ;
+        $batch = ORM::factory('batch');
+        
+        if($this->request->param('filter_name')){
+        	$batch->where('batches.name', 'LIKE', '%' . $this->request->param('filter_name') . '%');
+        }
+        
+        $count = $batch->count_all();
 
         $pagination = Pagination::factory(array(
             'total_items'    => $count,
@@ -36,13 +40,19 @@ class Controller_Batch extends Controller_Base
         $batch = ORM::factory('batch')
                         ->select(array('COUNT("batches_users.user_id")', 'users'))
                         ->join('batches_users','left')
-                        ->on('batches_users.batch_id','=','batches.id')
-                        ->group_by('batches.id')
-                        ->order_by($sort, $order)
-                        ->limit($pagination->items_per_page)
-                        ->offset($pagination->offset)
-                        ;
+                        ->on('batches_users.batch_id','=','batches.id');
+                        
+        if($this->request->param('filter_name')){
+            $batch->where('batches.name', 'LIKE', '%' . $this->request->param('filter_name') . '%');
+        }
+                        
+        $batch->group_by('batches.id')
+                ->order_by($sort, $order)
+                ->limit($pagination->items_per_page)
+                ->offset($pagination->offset)
+                ;
         $batches = $batch->find_all();
+
 
 
         $sorting = new Sort(array(
@@ -51,7 +61,13 @@ class Controller_Batch extends Controller_Base
                 'Actions'           => '',
         ));
         
-        $sorting->set_link(('batch/index'));
+        $url = ('batch/index');
+        
+        if($this->request->param('filter_name')){
+        	$url .= '/filter_name/'.$this->request->param('filter_name');
+        }
+        
+        $sorting->set_link($url);
         
         $sorting->set_order($order);
         $sorting->set_sort($sort);
@@ -67,10 +83,15 @@ class Controller_Batch extends Controller_Base
         // Render the pagination links
         $pagination = $pagination->render();
         
+        $filter_name = $this->request->param('filter_name');
+        $filter_url = URL::site('batch/index');
+        
         $view = View::factory('batch/list')
                     ->bind('links', $links)        
                     ->bind('table', $table)
                     ->bind('pagination', $pagination)
+                    ->bind('filter_name', $filter_name)
+                    ->bind('filter_url', $filter_url)
                     ;
         
         $this->content = $view;	
