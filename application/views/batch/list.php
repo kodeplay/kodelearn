@@ -22,21 +22,17 @@
 			<tr>
 				<td><input type="checkbox" name="selected[]" class="selected" value="<?php echo $batch->id ?>" /></td>
 				<td><?php echo $batch->name ?></td>
-				<td>50</td>
+				<td><?php echo $batch->users ?></td>
 				<td>
 					<p><?php echo Html::anchor('/batch/edit/id/'.$batch->id, 'View/Edit')?></p>
 				</td>
 			</tr>
 			<?php  } ?>
-			<tr class="pagination">
-				<td class="tar pagination" colspan="4">
-					<a href="#">&laquo;</a>
-					<a href="#">1</a>
-					<a href="#" class="selected">2</a>
-					<a href="#">3</a>
-					<a href="#">&raquo;</a>
-				</td>
-			</tr>
+            <tr class="pagination">
+                <td class="tar pagination" colspan="4">
+                    <?php echo $pagination ?>
+                </td>
+            </tr>
 		</table>
 		</form>
 		

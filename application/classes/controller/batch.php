@@ -23,12 +23,30 @@ class Controller_Batch extends Controller_Base
             $order = 'DESC';
         }
         
-        $batches = ORM::factory('batch')->order_by($sort, $order)->find_all();
+        $count = ORM::factory('batch')
+                        ->count_all()
+                        ;
+
+        $pagination = Pagination::factory(array(
+            'total_items'    => $count,
+            'items_per_page' => 5,
+        ));
         
-        
+        $batch = ORM::factory('batch')
+                        ->select(array('COUNT("users.id")', 'users'))
+                        ->join('users','left')
+                        ->on('batches.id','=','users.batch_id')
+                        ->group_by('batches.id')
+                        ->order_by($sort, $order)
+                        ->limit($pagination->items_per_page)
+                        ->offset($pagination->offset)
+                        ;
+        $batches = $batch->find_all();
+
+
         $sorting = new Sort(array(
                 'Batch'             => 'name',
-                'No. of Students'   => '',
+                'No. of Students'   => 'users',
                 'Actions'           => '',
         ));
         
@@ -45,9 +63,14 @@ class Controller_Batch extends Controller_Base
         
         $table = array('heading' => $heading, 'data' => $batches);
         
+        // Render the pagination links
+        $pagination = $pagination->render();
+        
         $view = View::factory('batch/list')
                     ->bind('links', $links)        
-                    ->bind('table', $table);
+                    ->bind('table', $table)
+                    ->bind('pagination', $pagination)
+                    ;
         
         $this->content = $view;	
 	}
