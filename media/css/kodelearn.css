@@ -413,6 +413,18 @@ select {	width: 210px;  }
 .datatable p+p {
 	margin-top: 8px;
 }
+
+.datatable tr.filter td {
+    border-bottom: 1px solid #4C3D34;
+}
+.datatable tr.filter td .button{
+    padding: 7px 15px;
+}
+.datatable tr.filter input {
+    padding: 5px;
+    min-width: 5px;
+}
+
 .trid, .triu {	font-size: 9px; }
 
 /* .......................
