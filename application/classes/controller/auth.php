@@ -85,8 +85,7 @@ class Controller_Auth extends Controller_Base {
         }
     }
 
-    private function form_register($submitted = false) {
-    	
+    private function form_register($submitted = false) {    	
         $action = 'auth/index';
         $form = new Stickyform($action, array(), ($submitted ? $this->_errors : array()));
         $fields = array('email', 'email_parent', 'firstname', 'lastname', 'password', 'batch_id', 'course_id', 'agree');
