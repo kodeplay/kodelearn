@@ -8,9 +8,3 @@ COLLATE='utf8_general_ci'
 ENGINE=InnoDB
 
 -----------------------------------------------------------------------------------------------------------------
-ALTER TABLE `users`
-    ADD COLUMN `batch_id` INT(11) UNSIGNED NOT NULL AFTER `last_login`;
-
-ALTER TABLE `users`
-    ADD CONSTRAINT `FK_users_batches` FOREIGN KEY (`batch_id`) REFERENCES `batches` (`id`) ON DELETE CASCADE;
----------If above doesnt work then delete all rows of users table and tyr again ---------------------------------

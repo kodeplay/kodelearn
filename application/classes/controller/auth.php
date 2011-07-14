@@ -87,12 +87,6 @@ class Controller_Auth extends Controller_Base {
 
     private function form_register($submitted = false) {
     	
-    	$batches = array();
-    	$batch = ORM::factory('batch')->find_all();
-    	foreach($batch as $row){
-    		$batches[$row->id] = $row->name;
-    	}
-    	
         $action = 'auth/index';
         $form = new Stickyform($action, array(), ($submitted ? $this->_errors : array()));
         $fields = array('email', 'email_parent', 'firstname', 'lastname', 'password', 'batch_id', 'course_id', 'agree');
@@ -104,8 +98,6 @@ class Controller_Auth extends Controller_Base {
             ->append('Last Name', 'lastname', 'text')
             ->append('Password', 'password', 'password')
             ->append('Confirm Password', 'confirm_password', 'password')
-            ->append('Standard/Batch', 'batch_id', 'select', array('options' => $batches))
-            ->append('Course', 'course_id', 'select', array('options' => array('A', 'B', 'C')))
             ->append(
                 'I have read and agree the privacy policy',
                 'agree', 

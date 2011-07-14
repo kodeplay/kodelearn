@@ -2,7 +2,12 @@
 
 class Model_User extends ORM {
 
-    protected $_belongs_to = array('batch' => array('foreign_key' => 'batch_id'));
+	protected $_has_many = array(
+	    'batches' => array(
+	        'model'   => 'batch',
+	        'through' => 'batches_users',
+	    ),
+	);		
 	
     public function validator_login($data) {
         return Validation::factory($data)

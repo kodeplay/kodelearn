@@ -22,7 +22,7 @@
 			<tr>
 				<td><input type="checkbox" name="selected[]" class="selected" value="<?php echo $batch->id ?>" /></td>
 				<td><?php echo $batch->name ?></td>
-				<td><?php echo $batch->users ?></td>
+				<td><?php echo $batch->users;  ?></td>
 				<td>
 					<p><?php echo Html::anchor('/batch/edit/id/'.$batch->id, 'View/Edit')?></p>
 				</td>

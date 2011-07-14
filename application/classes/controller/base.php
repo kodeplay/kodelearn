@@ -49,6 +49,7 @@ class Controller_Base extends Controller_Template {
         );
         $scripts = array(
             'media/javascript/jquery-1.6.2.min.js',
+            'media/javascript/common.js',
         );
         $this->view->set('content', $this->content);
         $this->view->set('styles', $styles);

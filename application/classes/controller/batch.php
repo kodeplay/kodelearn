@@ -32,10 +32,11 @@ class Controller_Batch extends Controller_Base
             'items_per_page' => 5,
         ));
         
+
         $batch = ORM::factory('batch')
-                        ->select(array('COUNT("users.id")', 'users'))
-                        ->join('users','left')
-                        ->on('batches.id','=','users.batch_id')
+                        ->select(array('COUNT("batches_users.user_id")', 'users'))
+                        ->join('batches_users','left')
+                        ->on('batches_users.batch_id','=','batches.id')
                         ->group_by('batches.id')
                         ->order_by($sort, $order)
                         ->limit($pagination->items_per_page)

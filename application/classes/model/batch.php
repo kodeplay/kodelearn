@@ -9,7 +9,10 @@ class Model_Batch extends ORM {
             ->rule('description', 'not_empty');
     }
 
-    protected $_has_many = array(
-       'user' => array ('model' => 'user', 'foreign_key' => 'batch_id' )
-    );
+	protected $_has_many = array(
+	    'users' => array(
+	        'model'   => 'user',
+	        'through' => 'batches_users',
+	    ),
+	);    
 }
