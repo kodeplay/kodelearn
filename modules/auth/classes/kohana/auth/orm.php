@@ -48,4 +48,8 @@ class Kohana_Auth_ORM extends Auth {
 
     }
 
+    public function can($action) {
+        
+    }
+
 } // End Auth File
