@@ -37,7 +37,7 @@ body {
 	background: #fff;
 	margin-bottom: 40px;
 }
-a{ color: #415666; }
+a{ color: #427693; }
 
 /* .......................
 	Text and background
@@ -50,6 +50,7 @@ a{ color: #415666; }
 .tmidBrown { color: #d7c2b5; } .bmidBrown {	background: #d7c2b5; }
 .tWhite {	color: #fff; } .bWhite {	background: #fff; }
 .tlGray {	color: #898989; } 	.tRed {	color: #c00000; }
+.tGreen {	color: #693; }
 
 
 /* .......................
@@ -129,6 +130,12 @@ a{ color: #415666; }
 .branding h1 {	
 	width: 200px;
 }
+.role {
+	padding: 5px;
+}
+.role:hover {
+	background: #f4f4f4;
+}
 
 .topbar {	
 	border-top: 1px solid #4c3d34; 
@@ -136,6 +143,25 @@ a{ color: #415666; }
 	vertical-align: middle; 
 	height: 36px;
 }
+
+.pageTab {
+	font-weight: bold; 
+	color: #4c3d34;
+	display: inline-block;
+	height: 25px;
+	padding: 10px 10px 0 10px;
+	vertical-align: middle;
+	-webkit-transition: color 0.3s ease;
+	-moz-transition: color 0.3s ease;
+	transition: color 0.3s ease;
+}
+.pageTab:hover {	color: #feb100; }
+.pageTab.active {
+	color: #feb100; 
+	background: #4c3d34; 
+	border-top: 1px solid #4c3d34;
+}
+
 .pageAction {
 	margin-right: 20px;
 	margin-top: 1px;
@@ -148,7 +174,6 @@ a{ color: #415666; }
 	-webkit-transition: color 0.3s ease;
 	-moz-transition: color 0.3s ease;
 	transition: color 0.3s ease;
-	cursor: pointer;
 }
 .pageAction:hover {	color: #feb100; }
 .pageAction.active {
@@ -162,6 +187,7 @@ a{ color: #415666; }
 	color: #4c3d34; 
 	border-bottom: 1px solid #eae3e0; 
 	padding: 3px 0; 
+	margin-bottom: 15px;
 }
 .pageTop {
 	padding: 25px 10px; 
@@ -189,6 +215,7 @@ a{ color: #415666; }
 .sidebar {
 	width: 175px;
 	margin-right: 10px;
+	background: url("../image/sidebar.png") no-repeat right 70%;
 }
 .sidebarTitle {	
 	color: #898989; 
@@ -198,19 +225,20 @@ a{ color: #415666; }
 }
 .sidemenu {
 	height: 45px;
-	-webkit-transition: background 0.3s ease;
-	-moz-transition: background 0.3s ease;
-	transition: background 0.3s ease;
 }
 .sidemenu:hover {
-	background: #f4f4f4;
+	font-weight: bold;
 }
 .sidemenu a {
 	display: block;
 	padding: 15px 0 15px 45px;
 	color: #636363;
 	background: url("../image/sideicon.jpg") no-repeat left 50%;
+	-webkit-transition: color 0.3s ease;
+	-moz-transition: background 0.3s ease;
+	transition: background 0.3s ease;
 }
+.sidemenu a:hover {	color: #415666; }
 .sidemenu.active {
 	background: #f4f4f4;
 	font-weight: bold;
@@ -328,7 +356,7 @@ textarea:focus {	background: white; }
 }
 .button:hover {	
 	-webkit-box-shadow: 0 0 8px #4f6473; 
-	-moz-box-shadow: 0 0 8px #4f6473; 
+	-moz-box-shadow: 0 0 8px #4f6473;
 	box-shadow: 0 0 8px #4f6473; 
 }
 select {	width: 210px;  }
@@ -341,6 +369,32 @@ select {	width: 210px;  }
 	font-size: 11px;
 	color: #666;
 }
+.formMessages {
+	background: #fff url("../image/xformMessage.png") repeat-x left bottom;
+	border-radius: 3px;
+	border: 1px solid #efefef;
+	padding: 5px;
+	width: 80%;
+	margin: 10px auto;
+}
+.fmIcon {
+	display: block;
+	float: left;
+	width: 16px;
+	height: 16px;
+	margin: 0px;
+	margin-top: -2px;
+	margin-right: 10px;
+	background: url("../image/fmIcons.png") no-repeat;
+}
+.fmIcon.generic {	background-position: 1px 1px; }
+.fmIcon.good {	background-position: 1px -16px; }
+.fmIcon.bad {	background-position: 1px -32px; }
+.fmText {
+	float: left;
+	font-weight: bold;
+}
+
 
 /* .......................
 	Toggle button
@@ -413,7 +467,6 @@ select {	width: 210px;  }
 .datatable p+p {
 	margin-top: 8px;
 }
-
 .datatable tr.filter td {
     border-bottom: 1px solid #4C3D34;
     vertical-align: middle;
@@ -544,3 +597,27 @@ select {	width: 210px;  }
 	color: #999;
 	font-weight: normal;
 }
+
+.calIcon {
+	background: url("../image/calIcon.png") no-repeat 50%;
+}
+
+.courseSummary a {
+	color: #427693;
+}
+
+
+/* ..........................
+	News feed
+   ........................ */
+.feed li {
+	padding: 10px 5px;
+}
+.feed li+li {
+	border-top: 1px solid #d7c2b5;
+	margin-top: 5px;
+}
+.feedIcon { float: left; height: 16px; width: 16px; display: block; background: url("../image/feedIcons.png") no-repeat 50%; }
+.feedContent {	float: left; margin-left: 20px; }
+.lesson .feedIcon {	background-position: 0 -16px; }
+.deadline .feedIcon {	background-position: 0 0; }
