@@ -416,6 +416,7 @@ select {	width: 210px;  }
 
 .datatable tr.filter td {
     border-bottom: 1px solid #4C3D34;
+    vertical-align: middle;
 }
 .datatable tr.filter td .button{
     padding: 7px 15px;
