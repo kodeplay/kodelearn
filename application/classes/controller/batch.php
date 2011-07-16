@@ -37,10 +37,9 @@ class Controller_Batch extends Controller_Base
         ));
         
 
-        $batch = ORM::factory('batch')
-                        ->select(array('COUNT("batches_users.user_id")', 'users'))
-                        ->join('batches_users','left')
-                        ->on('batches_users.batch_id','=','batches.id');
+        $batch->select(array('COUNT("batches_users.user_id")', 'users'))
+              ->join('batches_users','left')
+              ->on('batches_users.batch_id','=','batches.id');
                         
         if($this->request->param('filter_name')){
             $batch->where('batches.name', 'LIKE', '%' . $this->request->param('filter_name') . '%');
