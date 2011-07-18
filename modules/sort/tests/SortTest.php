@@ -26,11 +26,11 @@ class SortTest extends Kohana_UnitTest_TestCase {
     	
     	$sorting->set_order('ASC');
     	
-        //testing with checkbox colum true
+        //testing with checkbox column true
         $html = '<tr><th><input type="checkbox" onclick="$(\'.selected\').attr(\'checked\', this.checked);"/></th><th>Column1</th></tr>';
         $this->assertEquals($html, $sorting->render());
         
-        //testing with checkbox colum false
+        //testing with checkbox column false
         $sorting->set_check_box_column(FALSE);
         $html = '<tr><th>Column1</th></tr>';
         $this->assertEquals($html, $sorting->render());

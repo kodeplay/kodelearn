@@ -8,16 +8,23 @@
 		<div class="topbar">
 			<?php echo $links['add']?>
 			<a href="#" class="pageAction l">Send message</a>
-			<a href="#" class="pageAction l">Edit</a>
-			<a href="#" class="pageAction r alert">Delete selected...</a>
+			<a onclick="$('#form').submit();" class="pageAction r alert">Delete selected...</a>
 			<span class="clear">&nbsp;</span>
 		</div><!-- topbar -->
-		
+        <form name="form" id="form" method="POST" action="<?php echo $links['delete'] ?>">
 		<table class="vm10 datatable fullwidth">
 			<?php echo $table['heading'] ?>
+            <tr class="filter" >
+                 <td></td>
+                 <td><input type="text" name="filter_id" value="<?php echo $filter_id ?>" size="4" /></td>
+                 <td><input type="text" name="filter_name" value="<?php echo $filter_name ?>" /></td>
+                 <td></td>
+                 <td></td>
+                 <td valign="middle"><a class="button" onclick="filter();">Filter</a></td>
+            </tr>
 			<?php foreach($users as $user) { ?>
 			<tr>
-				<td><input class="selected" name="selected" value="<?php echo $user->id ?>" type="checkbox" /></td>
+				<td><input class="selected" name="selected[]" value="<?php echo $user->id ?>" type="checkbox" /></td>
 				<td><?php echo $user->id ?></td>
 				<td>
 					<div class="l w30"><img src="http://placehold.it/56" alt="User" /></div>
@@ -44,7 +51,25 @@
                 </td>
             </tr>
 		</table>
-		
+		</form>
 	</div><!-- content -->
 	
 	<div class="clear"></div>
+<script type="text/javascript"><!--
+function filter() {
+    url = '<?php echo $filter_url; ?>';
+    var filter_name = $('input[name=\'filter_name\']').attr('value');
+    
+    if (filter_name) {
+        url += '/filter_name/' + encodeURIComponent(filter_name);
+    }
+
+    var filter_id = $('input[name=\'filter_id\']').attr('value');
+    
+    if (filter_id) {
+        url += '/filter_id/' + encodeURIComponent(filter_id);
+    }
+    
+    location = url;
+}
+//--></script>

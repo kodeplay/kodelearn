@@ -19,12 +19,28 @@ class Controller_User extends Controller_Base {
 		
         $user = ORM::factory('user');
 
+        if($this->request->param('filter_name')){
+            $user->where('users.firstname', 'LIKE', '%' . $this->request->param('filter_name') . '%');
+        }
+        
+        if($this->request->param('filter_id')){
+            $user->where('users.id', '=', (int) $this->request->param('filter_id') );
+        }
+        
         $count = $user->count_all();
         
         $pagination = Pagination::factory(array(
             'total_items'    => $count,
             'items_per_page' => 5,
         ));
+        
+        if($this->request->param('filter_name')){
+            $user->where('users.firstname', 'LIKE', '%' . $this->request->param('filter_name') . '%');
+        }
+        
+        if($this->request->param('filter_id')){
+            $user->where('users.id', '=', (int) $this->request->param('filter_id') );
+        }
         
         $users = $user->order_by($sort, $order)
                 ->limit($pagination->items_per_page)
@@ -40,6 +56,14 @@ class Controller_User extends Controller_Base {
         ));
         
         $url = ('user/index');
+        
+        if($this->request->param('filter_name')){
+            $url .= '/filter_name/'.$this->request->param('filter_name');
+        }
+        
+        if($this->request->param('filter_id')){
+            $url .= '/filter_id/'.$this->request->param('filter_id');
+        }
         
         $sorting->set_link($url);
         
@@ -57,11 +81,17 @@ class Controller_User extends Controller_Base {
         $table['heading'] = $heading;
         $table['data'] = $users;
         
-		$view = View::factory('user/list')
+        $filter_name = $this->request->param('filter_name');
+        $filter_url = URL::site('user/index');
+        
+        $view = View::factory('user/list')
                   ->bind('table', $table)
                   ->bind('users', $users)
                   ->bind('links', $links)
                   ->bind('pagination', $pagination)
+                  ->bind('filter_name', $filter_name)
+                  ->bind('filter_id', $filter_id)
+                  ->bind('filter_url', $filter_url)
                   ;
 		
 		$this->content = $view;
@@ -84,7 +114,12 @@ class Controller_User extends Controller_Base {
                     $role = ORM::factory('role', $this->request->post('role_id'));
                     $user->save();
                     $user->add('roles', $role);
-                	Request::current()->redirect('user');
+                   
+                    foreach($this->request->post('batch_id') as $batch_id){
+                        $batch = ORM::factory('batch', $batch_id);
+                        $user->add('batches', $batch);
+                    }
+                    Request::current()->redirect('user');
                     exit;
                 } else {
                     $this->_errors = $validator->errors('register');
@@ -150,9 +185,20 @@ class Controller_User extends Controller_Base {
                     $user->firstname = $this->request->post('firstname');
                     $user->lastname = $this->request->post('lastname');
                     $user->email = $this->request->post('email');
+                    //removing the previous role assigned
                     $user->remove('roles');
+                    //creating a role object and assigning a new role
                     $role = ORM::factory('role', $this->request->post('role_id'));
                     $user->add('roles', $role);
+                    
+                    //removing the previous batch assigned
+                    $user->remove('batches');
+                    
+                    foreach($this->request->post('batch_id') as $batch_id){
+	                    $batch = ORM::factory('batch', $batch_id);
+	                    $user->add('batches', $batch);
+                    }
+                    
                     $user->save();
                     Request::current()->redirect('user');
                     exit;
@@ -162,11 +208,20 @@ class Controller_User extends Controller_Base {
             }
          }
         
-        $form = $this->form('user/edit/id/'.$id ,$submitted, array('firstname' => $user->firstname, 'lastname' => $user->lastname, 'email' => $user->email, 'role_id' => $user->roles->find()->id));
+        $form = $this->form('user/edit/id/'.$id ,$submitted, array('firstname' => $user->firstname, 'lastname' => $user->lastname, 'email' => $user->email, 'role_id' => $user->roles->find()->id, 'batch_id' => $user->batches->find_all()->as_array(NULL, 'id')));
         
         
         $view = View::factory('user/form')
                   ->bind('form', $form);
         $this->content = $view;
 	}
+
+	public function action_delete(){
+        if($this->request->method() === 'POST' && $this->request->post('selected')){
+            foreach($this->request->post('selected') as $user_id){
+                ORM::factory('user', $user_id)->delete();
+            }
+        }
+        Request::current()->redirect('user');
+    }
 }
