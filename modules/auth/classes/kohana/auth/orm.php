@@ -31,8 +31,9 @@ class Kohana_Auth_ORM extends Auth {
         $user->where('email', ' = ', $email)
             ->and_where('password', ' = ', $password)
             ->find();
+            
         // TODO remember to be done
-        if ($user !== null) {
+        if ($user->id !== null) {
             $this->complete_login($user);
             return true;
         } else {

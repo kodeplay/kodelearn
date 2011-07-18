@@ -75,7 +75,9 @@ class Controller_Auth extends Controller_Base {
         $user = ORM::factory('user');
         $validator = $user->validator_register($this->request->post());
         if ($validator->check()) {
-            $user->values($validator->as_array());
+        	$values = $validator->as_array();
+        	$values['password'] =  Auth::instance()->hash($values['password']);
+            $user->values($values);
             $user->save();
             Auth::instance()->login($validator['email'], $validator['password']);
             Request::current()->redirect('home');
