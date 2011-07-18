@@ -621,3 +621,7 @@ select {	width: 210px;  }
 .feedContent {	float: left; margin-left: 20px; }
 .lesson .feedIcon {	background-position: 0 -16px; }
 .deadline .feedIcon {	background-position: 0 0; }
+
+/* Developer Section */
+.pageAction.alert { cursor: pointer; }
+
