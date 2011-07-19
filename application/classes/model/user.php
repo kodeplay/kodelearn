@@ -2,6 +2,18 @@
 
 class Model_User extends ORM {
 
+    protected $_has_many = array(
+        'batches' => array(
+            'model'   => 'batch',
+            'through' => 'batches_users',
+        ),
+        'roles' => array(
+            'model'   => 'role',
+            'through' => 'roles_users',
+        ),
+
+    );      
+    
     public function validator_login($data) {
         return Validation::factory($data)
             ->rule('email', 'not_empty')
@@ -23,13 +35,34 @@ class Model_User extends ORM {
             ->rule('confirm_password', 'matches', array(':validation', ':field', 'password'))
             ->rule('agree', 'not_empty');
     }
-
-    public static function email_unique($email) {
-        $user = ORM::factory('user');
-        $user->where('email', ' = ', $email)
-            ->find();
-            
-        return ($user->id === null);
+    
+    public function validator_create($data){
+        return Validation::factory($data)
+            ->rule('email', 'not_empty')
+            ->rule('email', 'email')
+            ->rule('email', 'Model_User::email_unique')
+            ->rule('firstname', 'not_empty')
+            ->rule('lastname', 'not_empty');
     }
 
+    public function validator_edit($data){
+
+    	return Validation::factory($data)
+            ->rule('email', 'not_empty')
+            ->rule('email', 'email')
+            ->rule('email', 'Model_User::email_unique', array(':value',':user'))
+            ->rule('firstname', 'not_empty')
+            ->rule('lastname', 'not_empty');
+    }
+
+    public static function email_unique($email, $user_object = NULL) {
+        $user = ORM::factory('user');
+
+        $user->where('email', ' = ', $email);
+        if($user_object !== NULL)
+            $user->where('id', '!=', $user_object->id);    
+        $user->find();
+        return ($user->id === null);
+    }
+ 
 }

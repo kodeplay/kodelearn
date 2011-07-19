@@ -75,7 +75,9 @@ class Controller_Auth extends Controller_Base {
         $user = ORM::factory('user');
         $validator = $user->validator_register($this->request->post());
         if ($validator->check()) {
-            $user->values($validator->as_array());
+        	$values = $validator->as_array();
+        	$values['password'] =  Auth::instance()->hash($values['password']);
+            $user->values($values);
             $user->save();
             Auth::instance()->login($validator['email'], $validator['password']);
             Request::current()->redirect('home');
@@ -85,7 +87,7 @@ class Controller_Auth extends Controller_Base {
         }
     }
 
-    private function form_register($submitted = false) {
+    private function form_register($submitted = false) {    	
         $action = 'auth/index';
         $form = new Stickyform($action, array(), ($submitted ? $this->_errors : array()));
         $fields = array('email', 'email_parent', 'firstname', 'lastname', 'password', 'batch_id', 'course_id', 'agree');
@@ -97,8 +99,6 @@ class Controller_Auth extends Controller_Base {
             ->append('Last Name', 'lastname', 'text')
             ->append('Password', 'password', 'password')
             ->append('Confirm Password', 'confirm_password', 'password')
-            ->append('Standard/Batch', 'batch_id', 'select', array('options' => array('8th', '9th', '10th')))
-            ->append('Course', 'course_id', 'select', array('options' => array('A', 'B', 'C')))
             ->append(
                 'I have read and agree the privacy policy',
                 'agree', 

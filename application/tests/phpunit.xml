@@ -1,0 +1,10 @@
+<phpunit colors="true" bootstrap="../../index.php"> 
+    <testsuites> 
+        <testsuite name="DynamicMenu Tests"> 
+            <directory>../../modules/dynamicmenu/tests/</directory> 
+        </testsuite> 
+        <testsuite name="Sort Tests"> 
+            <directory>../../modules/sort/tests/</directory> 
+        </testsuite> 
+    </testsuites> 
+</phpunit>

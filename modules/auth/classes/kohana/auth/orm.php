@@ -26,13 +26,14 @@ class Kohana_Auth_ORM extends Auth {
      * @param   boolean  enable autologin 
      * @return  Model_User user
      */
-    protected function _login($email, $password, $remember=FALSE) {
+    protected function _login($email, $password, $remember) {
         $user = ORM::factory('user');
         $user->where('email', ' = ', $email)
             ->and_where('password', ' = ', $password)
             ->find();
+            
         // TODO remember to be done
-        if ($user !== null) {
+        if ($user->id !== null) {
             $this->complete_login($user);
             return true;
         } else {

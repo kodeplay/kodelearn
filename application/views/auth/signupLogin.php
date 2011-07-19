@@ -51,20 +51,6 @@
                 </td>
             </tr>
             <tr>
-                <td class="tar"><?php echo $form_register->batch_id->label(); ?></td>
-                <td>
-                    <?php echo $form_register->batch_id->element(); ?>
-                    <span class="form-error"><?php echo $form_register->batch_id->error(); ?></span>
-                </td>
-            </tr>
-            <tr>
-                <td class="tar"><?php echo $form_register->course_id->label(); ?></td>
-                <td>
-                    <?php echo $form_register->course_id->element(); ?>
-                    <span class="form-error"><?php echo $form_register->course_id->error(); ?></span>
-                </td>
-            </tr>
-            <tr>
                 <td class="tar"></td>
                 <td>
                     <?php echo $form_register->agree->element(); ?>&nbsp;
