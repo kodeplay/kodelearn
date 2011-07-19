@@ -26,18 +26,8 @@
         </tr>
         <?php } ?>
         <?php } ?>        
-        <tr class="pagination">
-            <td class="tar pagination" colspan="6">
-                <a href="#">&laquo;</a>
-                <a href="#">1</a>
-                <a href="#" class="selected">2</a>
-                <a href="#">3</a>
-                <a href="#">&raquo;</a>
-            </td>
-        </tr>
     </table>
 
 </div><!-- content -->
 
 <div class="clear"></div>
-
