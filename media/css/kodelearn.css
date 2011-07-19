@@ -704,3 +704,6 @@ select {	width: 210px;  }
    ........................ */
 
 
+.roleAction input { display:none; }
+
+.buttons { height: 15px; width: 98%; padding:25px 0 15px; text-align: right; }

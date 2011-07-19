@@ -72,7 +72,7 @@ if ( ! is_dir($system) AND is_dir(DOCROOT.$system))
 define('APPPATH', realpath($application).DIRECTORY_SEPARATOR);
 define('MODPATH', realpath($modules).DIRECTORY_SEPARATOR);
 define('SYSPATH', realpath($system).DIRECTORY_SEPARATOR);
-define('DIR_IMAGE', DOCROOT. 'media\image\data' .DIRECTORY_SEPARATOR);
+define('DIR_IMAGE', DOCROOT. 'media' . DIRECTORY_SEPARATOR . 'image' . DIRECTORY_SEPARATOR . 'data' . DIRECTORY_SEPARATOR);
 
 // Clean up the configuration vars
 unset($application, $modules, $system);

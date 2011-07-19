@@ -4,19 +4,6 @@ class Controller_Auth extends Controller_Base {
 
     protected $_errors = array();
 
-    /**
-     * Override the parent's auth_filter method
-     * this is to ensure that only a non-logged in user can access 
-     * this page. other wise redirected to /home
-     */
-    protected function auth_filter() {
-        $user = Auth::instance()->get_user();
-        if ($user !== null) {
-            Request::current()->redirect('home');
-        }
-        return parent::auth_filter();
-    }
-
     public function action_index() {
         $posted_login = array();
         $posted_register = array();
@@ -117,5 +104,9 @@ class Controller_Auth extends Controller_Base {
 
     public function action_forgot_password() {
         echo 'to be implemented'; exit;
+    }
+
+    public function action_test() {
+        $acl_config = Acl_config::instance();
     }
 }

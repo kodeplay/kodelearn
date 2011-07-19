@@ -11,7 +11,6 @@ class Model_User extends ORM {
             'model'   => 'role',
             'through' => 'roles_users',
         ),
-
     );      
     
     public function validator_login($data) {
