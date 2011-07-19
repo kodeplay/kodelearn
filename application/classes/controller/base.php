@@ -50,6 +50,8 @@ class Controller_Base extends Controller_Template {
         $scripts = array(
             'media/javascript/jquery-1.6.2.min.js',
             'media/javascript/common.js',
+            'media/javascript/ajaxupload.js',
+        
         );
         $this->view->set('content', $this->content);
         $this->view->set('styles', $styles);
@@ -72,7 +74,7 @@ class Controller_Base extends Controller_Template {
                 ->bind('sidemenu', $sidemenu);
             $topmenu = DynamicMenu::factory('topmenu');
             $topmenu->add_link('home', 'Home')
-                ->add_link('account/profile', 'Profile')
+                ->add_link('account', 'Profile')
                 ->add_link('inbox', 'Inbox');
             $sidemenu = DynamicMenu::factory('sidemenu');
             $sidemenu->add_link('user', 'Users', 0)

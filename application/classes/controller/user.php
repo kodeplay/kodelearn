@@ -105,6 +105,7 @@ class Controller_User extends Controller_Base {
                 $submitted = true;
                 $user = ORM::factory('user');
                 $validator = $user->validator_create($this->request->post());
+                $validator->bind(':user', NULL);
                 if ($validator->check()) {
 
                 	$user->firstname = $this->request->post('firstname');
@@ -179,7 +180,7 @@ class Controller_User extends Controller_Base {
         if($this->request->method() === 'POST' && $this->request->post()){
             if (Arr::get($this->request->post(), 'save') !== null){
                 $submitted = true;
-                $validator = $user->validator_edit($this->request->post());
+                $validator = $user->validator_create($this->request->post());
                 $validator->bind(':user', $user);
                 if ($validator->check()) {
                     $user->firstname = $this->request->post('firstname');

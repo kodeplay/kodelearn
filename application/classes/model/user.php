@@ -35,17 +35,8 @@ class Model_User extends ORM {
             ->rule('confirm_password', 'matches', array(':validation', ':field', 'password'))
             ->rule('agree', 'not_empty');
     }
-    
-    public function validator_create($data){
-        return Validation::factory($data)
-            ->rule('email', 'not_empty')
-            ->rule('email', 'email')
-            ->rule('email', 'Model_User::email_unique')
-            ->rule('firstname', 'not_empty')
-            ->rule('lastname', 'not_empty');
-    }
 
-    public function validator_edit($data){
+    public function validator_create($data){
 
     	return Validation::factory($data)
             ->rule('email', 'not_empty')
@@ -53,6 +44,16 @@ class Model_User extends ORM {
             ->rule('email', 'Model_User::email_unique', array(':value',':user'))
             ->rule('firstname', 'not_empty')
             ->rule('lastname', 'not_empty');
+    }
+    
+    public function validator_profile($data){
+    	return Validation::factory($data)
+    	   ->rule('email', 'not_empty')
+    	   ->rule('email', 'email')
+    	   ->rule('email', 'Model_User::email_unique', array(':value',':user'))
+    	   ->rule('firstname', 'not_empty')
+           ->rule('confirm_password', 'matches', array(':validation', ':field', 'password'))
+    	   ->rule('lastname', 'not_empty');    	
     }
 
     public static function email_unique($email, $user_object = NULL) {
