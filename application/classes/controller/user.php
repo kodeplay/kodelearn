@@ -83,6 +83,8 @@ class Controller_User extends Controller_Base {
         
         $filter_name = $this->request->param('filter_name');
         $filter_url = URL::site('user/index');
+        $cacheimage = new CacheImage();
+        
         
         $view = View::factory('user/list')
                   ->bind('table', $table)
@@ -92,6 +94,7 @@ class Controller_User extends Controller_Base {
                   ->bind('filter_name', $filter_name)
                   ->bind('filter_id', $filter_id)
                   ->bind('filter_url', $filter_url)
+                  ->bind('cacheimage', $cacheimage)
                   ;
 		
 		$this->content = $view;
