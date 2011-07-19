@@ -7,5 +7,5 @@ class Model_Role extends ORM {
             'model'   => 'user',
             'through' => 'roles_users',
         ),
-    );    
+    );
 }

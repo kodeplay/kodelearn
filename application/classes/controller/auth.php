@@ -116,4 +116,8 @@ class Controller_Auth extends Controller_Base {
     public function action_forgot_password() {
         echo 'to be implemented'; exit;
     }
+
+    public function action_test() {
+        $acl_config = Acl_config::instance();
+    }
 }
