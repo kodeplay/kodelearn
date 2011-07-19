@@ -23,7 +23,8 @@ class Acl_Config {
         'rest',
         'template',
         'unittest',
-        'welcome'
+        'welcome',
+        'error',
     );
 
     /**
