@@ -45,7 +45,7 @@
 <div class="clear"></div>
 <script type="text/javascript">
 KODELEARN.modules.add('acl', (function () {    
-    var warn_deny_all = <?php echo $is_current_role; ?>;
+    var warn_deny_all = <?php echo (int)$is_current_role; ?>;
     
     return {
         init: function () { 
