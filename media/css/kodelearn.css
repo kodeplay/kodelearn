@@ -8,13 +8,15 @@
 	5.		Toggle button
 	6.		Table
 	7.		Pagination
-	
 	END OF GENERAL STYLES
 	.................................
-	
 	8.		Signup form styles
+	9.		Role actions permissions
+	10.		News feed
+	END.	Developer styles
 	
    ............................. */
+
    
 
 body {
@@ -174,6 +176,7 @@ a{ color: #427693; }
 	-webkit-transition: color 0.3s ease;
 	-moz-transition: color 0.3s ease;
 	transition: color 0.3s ease;
+	cursor: pointer;
 }
 .pageAction:hover {	color: #feb100; }
 .pageAction.active {
@@ -290,6 +293,9 @@ a{ color: #427693; }
 	padding: 10px 5px; 
 	vertical-align: middle;
 }
+.topAlign {
+	vertical-align: top !important;
+}
 
 .createButton {	
 	margin-top: 1px;
@@ -339,6 +345,7 @@ textarea {
 	padding: 10px;
 	border: 1px solid #abadb3;
 	background: #f3f3f3;
+	border-radius: 3px;
 }
 textarea:focus {	background: white; }
 .button {
@@ -622,6 +629,78 @@ select {	width: 210px;  }
 .lesson .feedIcon {	background-position: 0 -16px; }
 .deadline .feedIcon {	background-position: 0 0; }
 
-/* Developer Section */
-.pageAction.alert { cursor: pointer; }
+/* ..........................
+	Calendar
+   ........................ */
+.calendar {
+	border-collapse: collapse; 
+	border: none; 
+}
+.calendar td {
+	border: 1px solid #d7c2b5;
+	padding: 5px;
+}
+.calHead th {
+	border-bottom: 2px solid #4c3d34;
+	background: #f3f3f3 url("../image/thback.png") repeat-x left bottom;
+	padding: 3px 5px;
+	
+}
+#monthName {
+	font-size: 16px;
+	color: #4c3d34;
+	text-shadow: 1px 1px 1px #fff;
+	font-weight: bold;
+}
+.calFilters {
+	background: #eae3e0;
+	border-bottom: 1px solid #d7c2b5;
+}
+.calFilters input {
+	width: 90px;
+	min-width: 0;
+	padding: 2px;
+	border: 1px solid #898989;
+}
+.calFilters select {
+	width: 90px;
+}
+.calFilters .pageAction {
+	color: #4c3d34;
+	margin-right: 0;
+	font-weight: normal;
+}
+.calWeeks {
+	font-weight: bold;
+	color: #415666;
+}
+.calDay td{
+	width: 117px;
+	height: 80px;
+}
+.rectBtn {
+	border-radius: 3px;
+	padding: 5px;
+	background: #415665 url("../image/button.png") repeat-x left bottom; 
+	color: #fff; 
+	text-shadow: 1px 1px 1px #1f2830; 
+	-webkit-transition: -webkit-box-shadow 0.3s ease; 
+	-moz-transition: -moz-box-shadow 0.3s ease; 
+	transition: box-shadow 0.3s ease; 
+	border: none;
+	cursor: pointer;
+	margin-left: 10px;
+	
+}
+.rectBtn:hover {
+	-webkit-box-shadow: 0 0 8px #4f6473; 
+	-moz-box-shadow: 0 0 8px #4f6473;
+	box-shadow: 0 0 8px #4f6473; 
+}
+
+
+/* ..........................
+	Developer section
+   ........................ */
+
 

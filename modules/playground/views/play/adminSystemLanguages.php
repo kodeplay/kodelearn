@@ -5,8 +5,8 @@
 	
 	<div class="r pagecontent">
 		<div class="pageTop">
-			<div class="pageTitle l">Languages</div>
-			<div class="pageDesc r">You can send messages to users.</div>
+			<div class="pageTitle l">Settings</div>
+			<div class="pageDesc r">You can select which languages are enabled in KodeLearn.</div>
 			<div class="clear"></div>
 		</div><!-- pageTop -->
 		
@@ -15,8 +15,8 @@
 			<a href="#" class="pageTab active">Languages</a>
 			<a href="#" class="pageTab">Locations and rooms</a>
 		</div><!-- topbar -->
-		
-		<table class="vm40 datatable fullwidth vm">
+		<p class="vm10 bold tar"><a href="#" class="">Request new language from KodeLearn</a></p>
+		<table class="bm40 datatable fullwidth vm">
 			<tr>
 				<th>Language</th>
 				<th>Short Code</th>
