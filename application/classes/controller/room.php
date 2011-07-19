@@ -1,6 +1,6 @@
 <?php defined('SYSPATH') or die('No direct script access.');
 
-class Controller_Location extends Controller_Base {
+class Controller_Room extends Controller_Base {
 
     public $template = 'template/logged_template';
     
@@ -13,7 +13,7 @@ class Controller_Location extends Controller_Base {
         if($this->request->param('sort')){
             $sort = $this->request->param('sort');
         } else {
-            $sort = 'name';
+            $sort = 'room_name';
         }
         
         if($this->request->param('order')){
@@ -22,13 +22,13 @@ class Controller_Location extends Controller_Base {
             $order = 'DESC';
         }
         
-        $location = ORM::factory('location');
+        $room = ORM::factory('room');
         
-        if($this->request->param('filter_name')){
-            $location->where('locations.name', 'LIKE', '%' . $this->request->param('filter_name') . '%');
+        if($this->request->param('filter_room_name')){
+            $room->where('room_name', 'LIKE', '%' . $this->request->param('filter_room_name') . '%');
         }
         
-        $count = $location->count_all();
+        $count = $room->count_all();
 
         $pagination = Pagination::factory(array(
             'total_items'    => $count,
@@ -36,32 +36,34 @@ class Controller_Location extends Controller_Base {
         ));
         
 
-        $location->select('name','image');
-              
+        $room->select('locations.name','room_number','room_name')
+             ->join('locations','left')
+             ->on('locations.id','=','location_id');
                         
-        if($this->request->param('filter_name')){
-            $location->where('name', 'LIKE', '%' . $this->request->param('filter_name') . '%');
+        if($this->request->param('filter_room_name')){
+            $room->where('room_name', 'LIKE', '%' . $this->request->param('filter_room_name') . '%');
         }
                         
-        $location->group_by('id')
+        $room->group_by('id')
                 ->order_by($sort, $order)
                 ->limit($pagination->items_per_page)
                 ->offset($pagination->offset)
                 ;
-        $locations = $location->find_all();
+        $rooms = $room->find_all();
 
 
 
         $sorting = new Sort(array(
-                'Location'          => 'name',
-                'Map'               => 'image',
-                'Actions'           => '',
+                'Name'          => 'room_name',
+                'Number'        => 'room_number',
+                'Location'      => 'name',
+                'Action'        => ''
         ));
         
-        $url = ('location/index');
+        $url = ('room/index');
         
-        if($this->request->param('filter_name')){
-            $url .= '/filter_name/'.$this->request->param('filter_name');
+        if($this->request->param('filter_room_name')){
+            $url .= '/filter_room_name/'.$this->request->param('filter_room_name');
         }
         
         $sorting->set_link($url);
@@ -71,23 +73,23 @@ class Controller_Location extends Controller_Base {
         $heading = $sorting->render();
         
         $links = array(
-            'add_location' => Html::anchor('/location/add/', 'Create a location', array('class' => 'createButton l')),
-            'delete'      => URL::site('/location/delete/')
+            'add_room' => Html::anchor('/room/add/', 'Create a Room', array('class' => 'createButton l')),
+            'delete'      => URL::site('/room/delete/')
         );
         
-        $table = array('heading' => $heading, 'data' => $locations);
+        $table = array('heading' => $heading, 'data' => $rooms);
         
         // Render the pagination links
         $pagination = $pagination->render();
         
-        $filter_name = $this->request->param('filter_name');
-        $filter_url = URL::site('location/index');
+        $filter_room_name = $this->request->param('filter_room_name');
+        $filter_url = URL::site('room/index');
         
-        $view = View::factory('location/list')
+        $view = View::factory('room/list')
                     ->bind('links', $links)        
                     ->bind('table', $table)
                     ->bind('pagination', $pagination)
-                    ->bind('filter_name', $filter_name)
+                    ->bind('filter_room_name', $filter_room_name)
                     ->bind('filter_url', $filter_url)
                     ;
         
@@ -100,28 +102,29 @@ class Controller_Location extends Controller_Base {
          if($this->request->method() === 'POST' && $this->request->post()){
             if (Arr::get($this->request->post(), 'save') !== null){
                 $submitted = true;
-                $location = ORM::factory('location');
-                $validator = $location->validator($this->request->post());
+                $room = ORM::factory('room');
+                $validator = $room->validator($this->request->post());
                 if ($validator->check()) {
                     
-                    $location->name = $this->request->post('name');
-                    $location->image = $this->request->post('image');
-                    $location->save();
-                    Request::current()->redirect('location');
+                    $room->room_name = $this->request->post('room_name');
+                    $room->room_number = $this->request->post('room_number');
+                    $room->location_id = $this->request->post('location_id');
+                    $room->save();
+                    Request::current()->redirect('room');
                     exit;
                 } else {
-                    $this->_errors = $validator->errors('location');
+                    $this->_errors = $validator->errors('room');
                 }
             }
          }
                 
-        $form = $this->form('location/add', $submitted);
+        $form = $this->form('room/add', $submitted);
         
         $links = array(
-            'cancel' => Html::anchor('/location/', 'or cancel')
+            'cancel' => Html::anchor('/room/', 'or cancel')
         );
         
-        $view = View::factory('location/form')
+        $view = View::factory('room/form')
                   ->bind('links', $links)
                   ->bind('form', $form);
         $this->content = $view;
@@ -129,16 +132,23 @@ class Controller_Location extends Controller_Base {
     
     private function form($action, $submitted = false, $saved_data = array()){
         
+        $locations = array();
+        foreach(ORM::factory('location')->find_all() as $location){
+            $locations[$location->id] = $location->name;
+        }
+        
         $form = new Stickyform($action, array(), ($submitted ? $this->_errors : array()));
         $form->default_data = array(
-            'name' => '',
-            'image' => '',
+            'room_name' => '',
+            'room_number' => '',
+            'location_id' => '',
         );
         
         $form->saved_data = $saved_data;
         $form->posted_data = $submitted ? $this->request->post() : array();
-        $form->append('Name', 'name', 'text');
-        $form->append('Map', 'image', 'text');
+        $form->append('Name', 'room_name', 'text');
+        $form->append('Number', 'room_number', 'text');
+        $form->append('Location', 'location_id', 'select', array('options' => $locations));
         $form->append('Save', 'save', 'submit', array('attributes' => array('class' => 'button')));
         $form->process();
         return $form;
@@ -150,34 +160,35 @@ class Controller_Location extends Controller_Base {
         
         $id = $this->request->param('id');
         if(!$id)
-            Request::current()->redirect('location');
+            Request::current()->redirect('room');
             
-        $location = ORM::factory('location',$id);
+        $room = ORM::factory('room',$id);
         
          if($this->request->method() === 'POST' && $this->request->post()){
             if (Arr::get($this->request->post(), 'save') !== null){
                 $submitted = true;
-                $validator = $location->validator($this->request->post());
+                $validator = $room->validator($this->request->post());
                 if ($validator->check()) {
-                    $location->name = $this->request->post('name');
-                    $location->image = $this->request->post('image');
-                    $location->save();
-                    Request::current()->redirect('location');
+                    $room->room_name = $this->request->post('room_name');
+                    $room->room_number = $this->request->post('room_number');
+                    $room->location_id = $this->request->post('location_id');
+                    $room->save();
+                    Request::current()->redirect('room');
                     exit;
                 } else {
-                    $this->_errors = $validator->errors('location');
+                    $this->_errors = $validator->errors('room');
                 }
             }
          }
         
-        $form = $this->form('location/edit/id/'.$id ,$submitted, array('name' => $location->name, 'image' => $location->image));
+        $form = $this->form('room/edit/id/'.$id ,$submitted, array('room_name' => $room->room_name, 'room_number' => $room->room_number, 'location_id' => $room->location_id));
         
         
         $links = array(
-            'cancel' => Html::anchor('/location/', 'or cancel')
+            'cancel' => Html::anchor('/room/', 'or cancel')
         );
         
-        $view = View::factory('location/form')
+        $view = View::factory('room/form')
                   ->bind('links', $links)
                   ->bind('form', $form);
         $this->content = $view;

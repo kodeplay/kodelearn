@@ -18,3 +18,12 @@ CREATE TABLE `batches_users` (
 )
 COLLATE='utf8_general_ci'
 ENGINE=InnoDB;
+
+
+------------------------------------------------------------------------------------------------------------------
+CREATE TABLE `kodelearn`.`rooms` (
+`id` INT( 11 ) NOT NULL AUTO_INCREMENT PRIMARY KEY ,
+`location_id` INT( 11 ) NOT NULL ,
+`room_number` VARCHAR( 100 ) NOT NULL ,
+`room_name` VARCHAR( 200 ) NOT NULL
+) ENGINE = MYISAM ;
