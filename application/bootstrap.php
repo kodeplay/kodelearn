@@ -102,7 +102,7 @@ Kohana::modules(array(
 	// 'cache'      => MODPATH.'cache',      // Caching with multiple backends
 	// 'codebench'  => MODPATH.'codebench',  // Benchmarking tool
 	'database'      => MODPATH.'database',   // Database access
-	// 'image'      => MODPATH.'image',      // Image manipulation
+	'image'         => MODPATH.'image',      // Image manipulation
 	'orm'           => MODPATH.'orm',        // Object Relationship Mapping
 	'unittest'      => MODPATH.'unittest',   // Unit testing
 	// 'userguide'  => MODPATH.'userguide',  // User guide and API documentation
@@ -110,7 +110,8 @@ Kohana::modules(array(
     'playground'    => MODPATH.'playground',  // HTML playground for nikhil
 	'sort'          => MODPATH.'sort', //for sorting
     'dynamicmenu'   => MODPATH.'dynamicmenu', // Dynamic menu model by kodeplay
-    'pagination'   =>  MODPATH.'pagination', // for server side pagination
+    'pagination'    =>  MODPATH.'pagination', // for server side pagination
+	'cacheimage'    => MODPATH.'cacheimage', // for Image Caching
 ));
 
 /**

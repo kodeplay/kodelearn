@@ -121,9 +121,17 @@ class Controller_Location extends Controller_Base {
             'cancel' => Html::anchor('/location/', 'or cancel')
         );
         
+        $upload_url = URL::site('account/uploadavatar');
+
+        $image = new CacheImage();
+        $avatar = $image->resize($user->avatar, 100, 100);
+        
         $view = View::factory('location/form')
                   ->bind('links', $links)
-                  ->bind('form', $form);
+                  ->bind('form', $form)
+                  ->bind('avatar', $avatar)
+                  ->bind('upload_url', $upload_url);
+                  
         $this->content = $view;
     }
     

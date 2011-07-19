@@ -1,3 +1,9 @@
 [submodule "modules/stickyform"]
 	path = modules/stickyform
 	url = git@vineet-desktop.local:/home/git/repos/kohana_modules/stickyform.git
+[submodule "cacheimage"]
+	path = cacheimage
+	url = git@vineet-desktop.local:/home/git/repos/kohana_modules/cacheimage.git
+[submodule "modules/cacheimage"]
+	path = modules/cacheimage
+	url = git@vineet-desktop.local:/home/git/repos/kohana_modules/cacheimage.git
