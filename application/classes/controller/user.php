@@ -114,7 +114,7 @@ class Controller_User extends Controller_Base {
                 	$user->firstname = $this->request->post('firstname');
                     $user->lastname = $this->request->post('lastname');
                     $user->email = $this->request->post('email');
-                    $user->password = rand(10000, 65000);
+                    $user->password = Auth::instance()->hash(rand(10000, 65000));
                     $role = ORM::factory('role', $this->request->post('role_id'));
                     $user->save();
                     $user->add('roles', $role);
