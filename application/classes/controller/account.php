@@ -2,14 +2,6 @@
 
 class Controller_Account extends Controller_Base {
 	
-    protected function auth_filter() {
-        $user = Auth::instance()->get_user();
-        if ($user === null) {
-            Request::current()->redirect('auth');
-        }
-        return parent::auth_filter();
-    }
-	
     public function action_index(){
 		
     	$user = Auth::instance()->get_user();

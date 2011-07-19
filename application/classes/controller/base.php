@@ -14,7 +14,10 @@ class Controller_Base extends Controller_Template {
      */
     public function before()
     {
-        $this->auth_filter();  
+        $this->auth_filter();
+        if (Auth::instance()->logged_in()) {
+            $this->acl_filter();
+        }
         if (!$this->request->is_ajax()) {
             $this->view = View::factory($this->template);
         } else {
@@ -31,14 +34,29 @@ class Controller_Base extends Controller_Template {
     /**
      * Check whether the user is logged in and set the correct 
      * template to handle both the cases
+     * a logged in user cannot access auth page again
+     * a non logged in user can only access the auth page (temporary)
+     * @todo add other pages that non loggedin user can access.
      */
     protected function auth_filter() {
-        if (!Auth::instance()->logged_in()) {
-            $this->template = 'template/template';
-        } else {
-            $this->template = 'template/logged_template';
+        $logged_in = Auth::instance()->logged_in();        
+        $this->template = !$logged_in ? 'template/template' : 'template/logged_template';
+        $controller = $this->request->controller();
+        if (!$logged_in && $controller !== 'auth') {
+            $this->request->redirect('auth');
+        }
+        if ($logged_in && $controller === 'auth') {
+            $this->request->redirect('home');
         }
     }    
+
+    protected function acl_filter() {
+        $resource = $this->request->controller(); 
+        $acl = Acl::instance();
+        if (!$acl->has_access($resource)) {
+            Request::current()->redirect('accessdenied');
+        }
+    }
     
     public function after() {
         $title   = 'Kode Learn';

@@ -1,12 +1,64 @@
-$(document).ready(function(){
-	
+$(document).ready(function() {
+    
     // Confirm Delete
-    $('form').submit(function(){
+    $('form').submit(function () {
         if ($(this).attr('action').indexOf('delete',1) != -1) {
             if (!confirm ('Delete cannot be undone! Are you sure you want to do this?')) {
                 return false;
             }
         }
     });
-    
+
+    KODELEARN.modules.load();    
 });
+
+/**
+ * KODELEARN is the global namespace
+ */
+var KODELEARN = KODELEARN || { };
+
+KODELEARN.modules = {
+    
+    /**
+     * Object containing all modules
+     */
+    collection: { },
+
+    /**
+     * Method to add a module to the collection
+     * @param String key unique identifier for the module
+     * @param Object module (must have an init function as a property)
+     */
+    add: function (key, module) {
+        this.collection[key] = module;
+    },
+
+    /**
+     * Method to load all the modules by calling their init method
+     * Typically, it will be only called once in the callback of 
+     * document.ready event
+     */
+    load: function () {
+        for (var i in this.collection) {
+            module = this.collection[i];
+            module.init.call(module);
+        }
+    },
+
+    /**
+     * Get the module object from the unique key
+     * @param String key
+     * @return Object 
+     */
+    get: function (key) {
+        return this.collection[key];
+    },
+
+    /**
+     * Get all the modules
+     * @return Object
+     */
+    get_collection: function () {
+        return this.collection;
+    }
+};
