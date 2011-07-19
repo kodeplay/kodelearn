@@ -15,6 +15,17 @@ class Acl_Config {
         return self::$_instance;
     }
 
+    private static $ignoredControllers = array(
+        'auth',
+        'base',
+        'home',
+        'play',
+        'rest',
+        'template',
+        'unittest',
+        'welcome'
+    );
+
     /**
      * The raw config array as it is in the config file
      */
@@ -37,8 +48,24 @@ class Acl_Config {
         $this->_config = Kohana::config('acl');
         $this->_acl = $this->_config->getArrayCopy();
         $this->_default = array_shift($this->_acl);
+        $this->merge_resources();
         foreach ($this->_acl as $resource=>$levels) {
             $this->merge_levels($resource, $levels);
+        }
+    }
+
+    /**
+     * Method to merge resources
+     * It finds out all the controllers and adds the basenames to the acl config array
+     * as resources only if the key doesnot already exists
+     */
+    private function merge_resources() {
+        $controllers = Kohana::list_files('classes/controller');
+        foreach ($controllers as $controller) {            
+            $resource = basename($controller, '.php');
+            if (!array_key_exists($resource, $this->_acl) && !in_array($resource, self::$ignoredControllers)) {
+                $this->_acl[$resource] = array();                
+            }
         }
     }
     

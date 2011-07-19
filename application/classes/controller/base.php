@@ -14,7 +14,8 @@ class Controller_Base extends Controller_Template {
      */
     public function before()
     {
-        $this->auth_filter();  
+        $this->auth_filter();
+        $this->acl_filter();
         if (!$this->request->is_ajax()) {
             $this->view = View::factory($this->template);
         } else {
@@ -39,6 +40,14 @@ class Controller_Base extends Controller_Template {
             $this->template = 'template/logged_template';
         }
     }    
+
+    protected function acl_filter() {
+        $resource = $this->request->controller(); 
+        $acl = Acl::instance();
+        if (!$acl->has_access($resource)) {
+            Request::current()->redirect('accessdenied');
+        }
+    }
     
     public function after() {
         $title   = 'Kode Learn';

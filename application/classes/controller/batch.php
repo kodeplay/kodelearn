@@ -6,8 +6,7 @@ class Controller_Batch extends Controller_Base
     public $template = 'template/logged_template';
     
     protected $_errors = array();
-    
-    
+
     public function action_index(){
         
         

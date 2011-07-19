@@ -12,7 +12,4 @@ return array(
     'user' => array(
         'manage_roles'
     ),
-
-    'batch' => array(),
-
 );

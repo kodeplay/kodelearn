@@ -38,8 +38,35 @@ class Controller_Role extends Controller_Base {
 
     public function action_permissions() {
         $view = View::factory('role/permissions')
-            ->bind('acl', $acl);
-        $acl = Acl::instance()->user_permissions_ui();
+            ->bind('acl', $acl)
+            ->set('action', URL::site('role/permissions'))
+            ->bind('role_id', $role_id);                
+        $post = array();        
+        if ($this->request->method() === 'POST' && $this->request->post()) {
+            $post = $this->request->post();
+            $role_id = $post['role_id'];
+            $role = ORM::factory('role', $role_id);
+            $role->permissions = serialize($post['acl']);
+            $role->save();
+            Request::current()->redirect('role/index');
+        }
+        $role_id = $this->request->param('params');
+        $role = ORM::factory('role', $role_id);
+        $permissions = $role->permissions && $role->permissions !== NULL ? unserialize($role->permissions) : array();
+        $acl_array = Acl::acl_array($permissions);
+        $$acl = array();
+        foreach ($acl_array as $resource=>$levels) {
+            $acl[$resource] = array();
+            $text_resource = Kohana::message('acl', $resource);
+            foreach ($levels as $level=>$permission) {
+                $acl[$resource][$level] = array(
+                    'resource' => $text_resource,
+                    'level' => Inflector::humanize($level),
+                    'permission' => $permission,
+                    'repr_key' => Acl::repr_key($resource, $level),
+                );
+            }
+        }
         $this->content = $view;
     }
 }
