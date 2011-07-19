@@ -1,7 +1,7 @@
-$(document).ready(function(){
+$(document).ready(function() {
     
     // Confirm Delete
-    $('form').submit(function(){
+    $('form').submit(function () {
         if ($(this).attr('action').indexOf('delete',1) != -1) {
             if (!confirm ('Delete cannot be undone! Are you sure you want to do this?')) {
                 return false;
@@ -12,79 +12,53 @@ $(document).ready(function(){
     KODELEARN.modules.load();    
 });
 
+/**
+ * KODELEARN is the global namespace
+ */
 var KODELEARN = KODELEARN || { };
 
 KODELEARN.modules = {
     
-    list: { },
+    /**
+     * Object containing all modules
+     */
+    collection: { },
 
+    /**
+     * Method to add a module to the collection
+     * @param String key unique identifier for the module
+     * @param Object module (must have an init function as a property)
+     */
     add: function (key, module) {
-        this.list[key] = module;
+        this.collection[key] = module;
     },
 
+    /**
+     * Method to load all the modules by calling their init method
+     * Typically, it will be only called once in the callback of 
+     * document.ready event
+     */
     load: function () {
-        for (var i in this.list) {
-            module = this.list[i];
+        for (var i in this.collection) {
+            module = this.collection[i];
             module.init.call(module);
         }
     },
 
+    /**
+     * Get the module object from the unique key
+     * @param String key
+     * @return Object 
+     */
     get: function (key) {
-        return this.list[key];
+        return this.collection[key];
     },
 
-    get_list: function () {
-        return this.list;
+    /**
+     * Get all the modules
+     * @return Object
+     */
+    get_collection: function () {
+        return this.collection;
     }
 };
-
-KODELEARN.modules.add('roles', (function () {
-
-    return {
-        init: function () { 
-            // toggle on click
-            $(".roleAction").click(function () {                
-                if ($(this).hasClass('yes')) {
-                    $(this).removeClass('yes').addClass('no');                    
-                    $(this).children().filter("input:checkbox").attr('checked', false);
-                } else if ($(this).hasClass('no')) {
-                    $(this).removeClass('no').addClass('yes');
-                    $(this).children().filter("input:checkbox").attr('checked', true);
-                }
-            });
-            // allow all
-            $(".allowAll").click(function () {
-                $(this).parent().siblings().eq(1).children().filter('div').each(function () {
-                    $(this).removeClass('no').addClass('yes');
-                    $(this).children().filter("input:checkbox").attr('checked', true);
-                });
-            });
-            // deny all
-            $(".denyAll").click(function () {
-                $(this).parent().siblings().eq(1).children().filter('div').each(function () {
-                    $(this).removeClass('yes').addClass('no');
-                    $(this).children().filter("input:checkbox").attr('checked', false);
-                });
-            });   
-            // allow everything
-            $("#allowEverything").click(function () { 
-                $(".roleAction").each(function () { 
-                    $(this).removeClass('no').addClass('yes');
-                    $(this).children().filter("input:checkbox").attr('checked', true);
-                });
-            });
-            // deny everything
-            $("#denyEverything").click(function () { 
-                $(".roleAction").each(function () { 
-                    $(this).removeClass('yes').addClass('no');
-                    $(this).children().filter("input:checkbox").attr('checked', false);
-                });
-            });
-            // submit the form on clicking save
-            $(".saveAcl").click(function () {
-                $("form#acl-form").submit();
-            });
-        },
-    }
-})());
-

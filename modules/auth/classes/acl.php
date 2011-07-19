@@ -73,6 +73,9 @@ class Acl {
      * for any of the level
      */
     public function has_access($resource) {
+        if (Acl_Config::is_resource_ignored($resource)) {
+            return true;
+        }
         $levels = $this->_permissions[$resource];
         foreach ($levels as $level=>$permit) {
             // if viewing is not allowed then assume no access to the resource

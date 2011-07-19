@@ -119,4 +119,8 @@ class Acl_Config {
         }
         return $this->_acl;
     }
+
+    public static function is_resource_ignored($resource) {
+        return in_array($resource, self::$ignoredControllers);
+    }
 }

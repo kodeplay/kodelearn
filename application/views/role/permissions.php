@@ -8,7 +8,7 @@
         <a class="button" id="allowEverything">Allow All</a>    
         <a class="button" id="denyEverything">Deny All</a>        
         <a class="button saveAcl">Save</a>
-        <a class="button">Cancel</a>        
+        <a href="<?php echo $cancel; ?>" class="button">Cancel</a>        
     </div>
     <form name="acl" id="acl-form" method="post" action="<?php echo $action; ?>">
     <table class="vm10 datatable fullwidth">
@@ -43,3 +43,62 @@
 </div><!-- content -->
 
 <div class="clear"></div>
+<script type="text/javascript">
+KODELEARN.modules.add('acl', (function () {    
+    var warn_deny_all = <?php echo $is_current_role; ?>;
+    
+    return {
+        init: function () { 
+            // toggle on click
+            $(".roleAction").click(function () {                
+                if ($(this).hasClass('yes')) {
+                    $(this).removeClass('yes').addClass('no');                    
+                    $(this).children().filter("input:checkbox").attr('checked', false);
+                } else if ($(this).hasClass('no')) {
+                    $(this).removeClass('no').addClass('yes');
+                    $(this).children().filter("input:checkbox").attr('checked', true);
+                }
+            });
+            // allow all
+            $(".allowAll").click(function () {
+                $(this).parent().siblings().eq(1).children().filter('div').each(function () {
+                    $(this).removeClass('no').addClass('yes');
+                    $(this).children().filter("input:checkbox").attr('checked', true);
+                });
+            });
+            // deny all
+            $(".denyAll").click(function () {
+                $(this).parent().siblings().eq(1).children().filter('div').each(function () {
+                    $(this).removeClass('yes').addClass('no');
+                    $(this).children().filter("input:checkbox").attr('checked', false);
+                });
+            });   
+            // allow everything
+            $("#allowEverything").click(function () { 
+                $(".roleAction").each(function () { 
+                    $(this).removeClass('no').addClass('yes');
+                    $(this).children().filter("input:checkbox").attr('checked', true);
+                });
+            });
+            // deny everything
+            // if current role being editted, show warning if the user tries to do this
+            $("#denyEverything").click(function () { 
+                var goahead = true;
+                if (warn_deny_all == 1) {
+                    goahead = confirm('You are trying to deny all permissions to your own role. This means that you will not get to access this page in the future. Do you really want to continue ?');                    
+                }
+                if (goahead) {
+                    $(".roleAction").each(function () { 
+                        $(this).removeClass('yes').addClass('no');
+                        $(this).children().filter("input:checkbox").attr('checked', false);
+                    });
+                }
+            });
+            // submit the form on clicking save
+            $(".saveAcl").click(function () {
+                $("form#acl-form").submit();
+            });        
+        },
+    }
+})());
+</script>

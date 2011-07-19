@@ -40,7 +40,9 @@ class Controller_Role extends Controller_Base {
         $view = View::factory('role/permissions')
             ->bind('acl', $acl)
             ->set('action', URL::site('role/permissions'))
-            ->bind('role_id', $role_id);                
+            ->bind('role_id', $role_id)
+            ->bind('is_current_role', $is_current_role)
+            ->set('cancel', URL::site('role'));
         $post = array();        
         if ($this->request->method() === 'POST' && $this->request->post()) {
             $post = $this->request->post();
@@ -67,6 +69,10 @@ class Controller_Role extends Controller_Base {
                 );
             }
         }
+        // check whether the role being edited is the role of the current user
+        // if yes, show a warning before user tries to deny all permissions
+        $user_role_id = Auth::instance()->get_user()->roles->find()->id;
+        $is_current_role = ($role_id == $user_role_id);
         $this->content = $view;
     }
 }
