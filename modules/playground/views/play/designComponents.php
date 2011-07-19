@@ -2,9 +2,9 @@
 <html>
 	<head>
 		<title>KodeLearn - Design Components</title>
-		<link rel="stylesheet" href="css/reset.css" />
-		<link rel="stylesheet" href="css/components.css" />
-		<link rel="stylesheet" href="css/kodelearn.css" />
+		<link rel="stylesheet" href="/media/css/reset.css" />
+		<link rel="stylesheet" href="/media/css/components.css" />
+		<link rel="stylesheet" href="/media/css/kodelearn.css" />
 	</head>
 	<body>
 		<div class="container">

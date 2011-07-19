@@ -109,9 +109,11 @@ class Controller_Auth extends Controller_Base {
         return $form;
     }
 
-    public function action_logout() {
-
-    }
+    /*public function action_logout() {
+         Auth::instance()->logout();
+         Request::current()->redirect('welcome');
+        
+    }*/
 
     public function action_forgot_password() {
         echo 'to be implemented'; exit;

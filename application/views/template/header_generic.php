@@ -26,5 +26,5 @@
         <div class="container">
             
             <div class="branding">
-                <h1 class="dib"><a href="#"><img src="images/kodelearn.jpg" alt="KodeLearn | Home" /></a></h1>
+                <h1 class="dib"><a href="#"><img src="/media/image/kodelearn.jpg" alt="KodeLearn | Home" /></a></h1>
             </div><!-- branding -->

@@ -28,6 +28,7 @@ class Model_User extends ORM {
         $user = ORM::factory('user');
         $user->where('email', ' = ', $email)
             ->find();
+            
         return ($user->id === null);
     }
 
