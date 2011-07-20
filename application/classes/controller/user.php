@@ -2,6 +2,9 @@
 
 class Controller_User extends Controller_Base {
 	
+    private $error;
+    private $success = '';
+    
 	public function action_index() {
 		
 		
@@ -74,8 +77,9 @@ class Controller_User extends Controller_Base {
         $pagination = $pagination->render();
         
         $links = array(
-            'add' => Html::anchor('/user/add/', 'Create a user', array('class' => 'createButton l')),
-            'delete'      => URL::site('/user/delete/')
+            'add'       => Html::anchor('/user/add/', 'Create a user', array('class' => 'createButton l')),
+            'uploadcsv' => Html::anchor('/user/uploadcsv/', 'Upload CSV', array('class' => 'pageAction l')),
+            'delete'    => URL::site('/user/delete/')
         );
                 
         $table['heading'] = $heading;
@@ -228,4 +232,108 @@ class Controller_User extends Controller_Base {
         }
         Request::current()->redirect('user');
     }
+    
+    public function action_uploadcsv(){
+
+        if($this->request->method() === 'POST' && $this->request->post()){
+            if (Arr::get($this->request->post(), 'save') !== null){
+            	
+                $filename = $_FILES['csv']['name'];
+	            $extension = explode(".",$filename);
+	            if(isset($extension[1]) && strtolower($extension[1]) === "csv"){ //Validation of file 
+	                   
+                    $filename = $_FILES['csv']['tmp_name'];
+                    $handle = fopen($filename, "r");
+	                
+                    while (($data = fgetcsv($handle, 1000, ',')) !== FALSE){
+                        $filedata[] = $data;
+                    }
+
+                    unset($filedata[0]);
+
+                    $records_added = 0;
+                    $error = 0;
+                    foreach($filedata as $key => $row){
+                    	$data = array(
+                            'firstname' => $row[0],
+                            'lastname'  => $row[1],
+                    	    'email'     => $row[2],
+                    	);
+                    	
+                    	$user = ORM::factory('user');
+                        $validator = $user->validator_create($data);
+                        $validator->bind(':user', NULL);
+                        if ($validator->check()) {
+                            //add user
+		                    $user->firstname = $data['firstname'];
+		                    $user->lastname = $data['lastname'];
+		                    $user->email = $data['email'];
+		                    $user->password = Auth::instance()->hash(rand(10000, 65000));
+		                    $role = ORM::factory('role', $this->request->post('role_id'));
+		                    $user->save();
+		                    $user->add('roles', $role);
+		                   
+		                    if(($this->request->post('batch_id'))){
+			                    foreach($this->request->post('batch_id') as $batch_id){
+			                        $batch = ORM::factory('batch', $batch_id);
+			                        $user->add('batches', $batch);
+			                    }
+		                    }
+                            $records_added += 1;	
+		                } else {
+		                	$this->error['warning'] = "There was an error on line # " . $key . " Records Added " . $records_added;
+                            $this->error['description'] = implode('<br/>',$validator->errors('register'));
+                            $error = 1;
+                            break;
+		                }
+                    }
+                    if(!$error){
+	               		$this->success = "Users uploaded successfully. Records Added " . $records_added ;
+                    }
+	               
+	               fclose($handle);
+	            } else {
+	               $this->error['warring'] = "The file you uploaded is not a valid csv file";
+	               $this->error['description'] = ""; 
+	            }
+            }
+        }
+        
+    	$roles = array();
+        foreach(ORM::factory('role')->find_all() as $role){
+            $roles[$role->id] = $role->name;
+        }
+
+        $batches = array();
+        foreach(ORM::factory('batch')->find_all() as $batch){
+            $batches[$batch->id] = $batch->name;
+        }
+    	
+        $form = new Stickyform('user/uploadcsv', array('enctype' => 'multipart/form-data'), array());
+        $form->default_data = array(
+            'role_id'   => '',
+            'batch_id'  => ''
+        );
+        
+        $form->saved_data = array();
+        $form->posted_data =  array();
+        $form->append('Role', 'role_id', 'select', array('options' => $roles));
+        $form->append('Select batch', 'batch_id', 'select', array('options' => $batches, 'attributes' => array('multiple' => 'multiple', 'name' => 'batch_id[]')));
+        $form->append('Upload', 'save', 'submit', array('attributes' => array('class' => 'button')));
+        $form->process();
+    	
+        $links = array(
+            'sample'    => Html::anchor('/users_sample.csv', 'or click here to download a sample CSV file')
+        );
+        
+    	$view = View::factory('user/uploadcsv')
+    	           ->bind('form', $form)
+    	           ->bind('error', $this->error)
+    	           ->bind('success', $this->success)
+    	           ->bind('links', $links);
+    	
+    	$this->content = $view;
+    	
+    }
+    
 }

@@ -7,7 +7,8 @@
 		
 		<div class="topbar">
 			<?php echo $links['add']?>
-			<a href="#" class="pageAction l">Send message</a>
+            <a href="#" class="pageAction l">Send message</a>
+            <?php echo $links['uploadcsv']?>
 			<a onclick="$('#form').submit();" class="pageAction r alert">Delete selected...</a>
 			<span class="clear">&nbsp;</span>
 		</div><!-- topbar -->
