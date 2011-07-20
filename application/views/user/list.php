@@ -27,7 +27,7 @@
 				<td><input class="selected" name="selected[]" value="<?php echo $user->id ?>" type="checkbox" /></td>
 				<td><?php echo $user->id ?></td>
 				<td>
-					<div class="l w30"><img src="http://placehold.it/56" alt="User" /></div>
+					<div class="l w30"><img src="<?php echo $cacheimage->resize($user->avatar, 56, 56);?>" alt="User" /></div>
 					<div class="l">
 						<p><?php echo $user->firstname . ' ' . $user->lastname ?></p>
 						<p><?php echo $user->email ?></p>
