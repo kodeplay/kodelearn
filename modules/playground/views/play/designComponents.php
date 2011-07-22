@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
     <head>
         <title>KodeLearn - Design Components</title>
         <?php foreach ($styles as $file => $type) echo HTML::style($file, array('media' => $type)), PHP_EOL ?>
@@ -83,4 +84,5 @@
             </div>
         </div><!-- w960 -->
     </body>
+
 </html>

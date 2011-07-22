@@ -61,11 +61,40 @@ class Model_User extends ORM {
 
     public static function email_unique($email, $user_object = NULL) {
         $user = ORM::factory('user');
+
         $user->where('email', ' = ', $email);
         if($user_object !== NULL)
             $user->where('id', '!=', $user_object->id);    
         $user->find();
         return ($user->id === null);
+    }
+    
+    public function validator_forgot_password($data) {
+       
+        return Validation::factory($data)
+            ->rule('email', 'not_empty')
+            ->rule('email', 'email')
+            ->rule('email', 'Model_User::email_exist');
+            
+    }
+    
+    public function validator_changepassword($data) {
+       
+        return Validation::factory($data)
+            ->rule('password', 'not_empty')
+            ->rule('password', 'min_length', array(':value', 8))
+            ->rule('confirm_password', 'matches', array(':validation', ':field', 'password'));
+            
+    }
+    
+    public static function email_exist($email) {
+        $user = ORM::factory('user');
+        
+        $user->where('email', '=', $email);
+        
+        $user->find();
+        
+        return ($user->id !== null);
     }
  
 }

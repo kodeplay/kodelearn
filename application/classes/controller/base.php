@@ -51,10 +51,10 @@ class Controller_Base extends Controller_Template {
     }    
 
     protected function acl_filter() {
-        $resource = $this->request->controller(); 
+        $resource = $this->request->controller();
         $acl = Acl::instance();
         if (!$acl->has_access($resource)) {
-            Request::current()->redirect('accessdenied');
+            Request::current()->redirect('error/access_denied');
         }
     }
     
@@ -107,4 +107,4 @@ class Controller_Base extends Controller_Template {
         }
     }
 
-} // End Welcome
+}

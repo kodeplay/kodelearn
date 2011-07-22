@@ -20,9 +20,17 @@ COLLATE='utf8_general_ci'
 ENGINE=InnoDB;
 
 ------------------------------------------------------------------------------------------------------------------
+CREATE TABLE `kodelearn`.`rooms` (
+`id` INT( 11 ) NOT NULL AUTO_INCREMENT PRIMARY KEY ,
+`location_id` INT( 11 ) NOT NULL ,
+`room_number` VARCHAR( 100 ) NOT NULL ,
+`room_name` VARCHAR( 200 ) NOT NULL
+) ENGINE = MYISAM ;
+
+------------------------------------------------------------------------------------------------------------------
 ALTER TABLE `users`
     ADD COLUMN `avatar` VARCHAR(255) NULL DEFAULT NULL AFTER `last_login`;
-------------------------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------------
 
 CREATE TABLE `courses_users` (
     `user_id` INT(11) UNSIGNED NOT NULL,
@@ -34,3 +42,8 @@ CREATE TABLE `courses_users` (
 )
 COLLATE='utf8_general_ci'
 ENGINE=InnoDB;
+
+------------------------------------------------------------------------------------------------------------------
+ALTER TABLE `roles`
+      ADD COLUMN `permissions` TEXT NOT NULL AFTER `description`
+
