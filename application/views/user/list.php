@@ -9,6 +9,7 @@
 			<?php echo $links['add']?>
             <a href="#" class="pageAction l">Send message</a>
             <?php echo $links['uploadcsv']?>
+            <?php echo $links['roles']?>
 			<a onclick="$('#form').submit();" class="pageAction r alert">Delete selected...</a>
 			<span class="clear">&nbsp;</span>
 		</div><!-- topbar -->
