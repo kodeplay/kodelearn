@@ -238,6 +238,27 @@ class Controller_Course extends Controller_Base {
     	
     	$this->content = $view;
     }
+    
+    public function action_assign() {
+    	
+    	$id = $this->request->param('id');
+    	if(!$id)
+    	   Request::current()->redirect('course');
+    	   
+    	$course = ORM::factory('course', $id);
+    	   
+    	$view = View::factory('course/assign')
+    	               ->bind('course', $course);
+    	               
+    	$this->content = $view;
+    }
+    
+    public function action_join() {
+    	
+    	$view = View::factory('course/join');
+    	
+    	$this->content = $view;
+    }
 }
 
   
