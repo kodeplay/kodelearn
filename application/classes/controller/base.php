@@ -63,12 +63,14 @@ class Controller_Base extends Controller_Template {
         $styles = array(
             'media/css/reset.css' => 'screen',
             'media/css/components.css' => 'screen',
-            'media/css/kodelearn.css' => 'screen'
+            'media/css/kodelearn.css' => 'screen',
+            'media/css/jquery-ui-1.8.14.custom.css' => 'screen'
         );
         $scripts = array(
             'media/javascript/jquery-1.6.2.min.js',
             'media/javascript/common.js',
             'media/javascript/ajaxupload.js',
+            'media/javascript/jquery-ui-1.8.14.custom.min.js',
         
         );
         $this->view->set('content', $this->content);

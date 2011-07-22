@@ -7,7 +7,8 @@
 		
 		<div class="topbar">
 			<?php echo $links['add']?>
-			<a href="#" class="pageAction l">Send message</a>
+            <a href="#" class="pageAction l">Send message</a>
+            <?php echo $links['uploadcsv']?>
 			<a onclick="$('#form').submit();" class="pageAction r alert">Delete selected...</a>
 			<span class="clear">&nbsp;</span>
 		</div><!-- topbar -->
@@ -38,7 +39,7 @@
 				<td>
 				<?php echo implode(', ', $user->batches->find_all()->as_array(NULL, 'name')); ?>
 				</td>
-				<td>PHP, JavaScript, ASP</td>
+				<td><?php echo implode(', ', $user->courses->find_all()->as_array(NULL, 'name')); ?></td>
 				<td>
 					<p><?php echo Html::anchor('/user/edit/id/'.$user->id, 'View/Edit')?></p>
 					<p><a href="#">Send message</a></p>
