@@ -8,7 +8,7 @@
 		
 		<div class="topbar">
 			<a href="#" class="pageTab active">Create course</a>
-			<a href="#" class="pageTab">Add Users</a>
+			<a href="#" class="pageTab">Assign Users</a>
 		</div><!-- topbar -->
 		
 		<?php echo $form->startform(); ?>
@@ -49,14 +49,3 @@
 	
 	<div class="clear"></div>
 	
-<script type="text/javascript"><!--
-KODELEARN.modules.add('course_list' , (function () {    
-    
-    return {
-        init: function () { 
-           $('.date').datepicker({dateFormat: 'yy-mm-dd'});
-        }
-    }; 
-})());
-
-//--></script>

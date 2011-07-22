@@ -29,7 +29,7 @@
         <div class="container">
             
             <div class="branding">
-                <h1 class="dib l"><a href="#"><img src="images/kodelearn.jpg" alt="KodeLearn | Home" /></a></h1>
+                <h1 class="dib l"><a href="#"><img src="/media/image/kodelearn.jpg" alt="KodeLearn | Home" /></a></h1>
                 
                 <div class="roles dib r">
                     <p id="roleViewToggle">Switch roles <span class="trid">&#x25BC;</span></p>

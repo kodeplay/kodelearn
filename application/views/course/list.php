@@ -16,12 +16,12 @@
         <table class="vm10 datatable fullwidth">
             <?php echo $table['heading'] ?>
             <tr class="filter">
-                <td></td>
+                <td><input type="hidden" id="filter_url" value="<?php echo $filter_url ?>" /></td>
                 <td><input type="text" name="filter_name" value="<?php echo $filter_name ?>" /></td>
                 <td><input type="text" name="filter_access_code" value="<?php echo $filter_access_code ?>" /></td>
                 <td><input type="text" class="date" name="filter_start_date" value="<?php echo $filter_start_date ?>" /></td>
                 <td><input type="text" class="date" name="filter_end_date" value="<?php echo $filter_end_date ?>" /></td>
-                <td valign="middle"><a class="button" onclick="filter();">Filter</a></td>
+                <td valign="middle"><a class="button" id="trigger_filter" href="#">Filter</a></td>
             </tr>
             <?php foreach($table['data'] as $course){ ?>
             <tr>
@@ -46,42 +46,3 @@
     </div><!-- content -->
     
     <div class="clear"></div>
-<script type="text/javascript"><!--
-KODELEARN.modules.add('course_list' , (function () {    
-    
-    return {
-        init: function () { 
-    	   $('.date').datepicker({dateFormat: 'yy-mm-dd'});
-        }
-    }; 
-})());
-
-function filter() {
-    url = '<?php echo $filter_url; ?>';
-    var filter_name = $('input[name=\'filter_name\']').attr('value');
-    
-    if (filter_name) {
-        url += '/filter_name/' + encodeURIComponent(filter_name);
-    }
-
-    var filter_access_code = $('input[name=\'filter_access_code\']').attr('value');
-    
-    if (filter_access_code) {
-        url += '/filter_access_code/' + encodeURIComponent(filter_access_code);
-    }
-
-    var filter_start_date = $('input[name=\'filter_start_date\']').attr('value');
-    
-    if (filter_start_date) {
-        url += '/filter_start_date/' + encodeURIComponent(filter_start_date);
-    }
-
-    var filter_end_date = $('input[name=\'filter_end_date\']').attr('value');
-    
-    if (filter_end_date) {
-        url += '/filter_end_date/' + encodeURIComponent(filter_end_date);
-    }
-    
-    location = url;
-}
-//--></script>
