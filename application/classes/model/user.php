@@ -7,6 +7,10 @@ class Model_User extends ORM {
             'model'   => 'batch',
             'through' => 'batches_users',
         ),
+        'courses' => array(
+            'model'   => 'course',
+            'through' => 'courses_users',
+        ),
         'roles' => array(
             'model'   => 'role',
             'through' => 'roles_users',

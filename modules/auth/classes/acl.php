@@ -14,7 +14,9 @@ class Acl {
      *     'r2' => ...
      * )
      */
-    private $_permissions;
+    private $_permissions = array();
+
+    private static $REPR_SEPARATOR = '_';
 
     /**
      * @return Acl
@@ -32,10 +34,14 @@ class Acl {
 
     /**
      * Method will load the permissions for the current user from its
-     * role and store it in the $_permissions array
+     * role and store it in the $_permissions array. If the user is not 
+     * logged in, just return
      */
     private function load() {
         $user = Auth::instance()->get_user();
+        if ($user === NULL) {
+            return;
+        }
         $role = ORM::factory('role', $user->roles->find());
         $permissions = $role->permissions && $role->permissions !== NULL ? unserialize($role->permissions) : array();
         $this->_permissions = self::acl_array($permissions);
@@ -62,7 +68,7 @@ class Acl {
      * carry out the action on the resource.
      */
     public function is_allowed($repr_key) {
-        list($resource, $action) = explode("_", $repr_key, 2);
+        list($resource, $action) = self::split_repr_key($repr_key);
         return $this->_permissions[$resource][$action];
     }
 
@@ -78,10 +84,6 @@ class Acl {
         }
         $levels = $this->_permissions[$resource];
         foreach ($levels as $level=>$permit) {
-            // if viewing is not allowed then assume no access to the resource
-            if ($level === 'view' && !$permit) {
-                return false;
-            }
             // if atleast one is permitted then allow access
             if ($permit) {
                 return true;
@@ -130,7 +132,16 @@ class Acl {
      * eg. resource = batch, level = update, repr_key = batch_update
      */
     public static function repr_key($resource, $level) {
-        return $resource . '_' . $level;
+        return $resource . self::$REPR_SEPARATOR . $level;
+    }
+
+    /**
+     * Converts the representational key back to an array of resource and action
+     * @param String $repr_key eg. user_create
+     * @return Array array(<resource>, <action>)
+     */
+    public static function split_repr_key($repr_key) {
+        return explode(self::$REPR_SEPARATOR, $repr_key, 2);        
     }
 
     /**

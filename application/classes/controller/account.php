@@ -51,7 +51,7 @@ class Controller_Account extends Controller_Base {
         
         $upload_url = URL::site('account/uploadavatar');
 
-        $image = new CacheImage();
+        $image = CacheImage::factory();
         $avatar = $image->resize($user->avatar, 100, 100);
          
         $view = View::factory('account/profile')
@@ -75,7 +75,7 @@ class Controller_Account extends Controller_Base {
 			
 			if($path = Upload::save($_FILES['image'], $filename, DIR_IMAGE)){
 				
-				$image = new CacheImage();
+				$image = CacheImage::factory();
 				$src = $image->resize($filename, 100, 100);
 
 				$user = Auth::instance()->get_user();

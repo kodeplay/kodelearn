@@ -51,10 +51,10 @@ class Controller_Base extends Controller_Template {
     }    
 
     protected function acl_filter() {
-        $resource = $this->request->controller(); 
+        $resource = $this->request->controller();
         $acl = Acl::instance();
         if (!$acl->has_access($resource)) {
-            Request::current()->redirect('accessdenied');
+            Request::current()->redirect('error/access_denied');
         }
     }
     
@@ -63,12 +63,14 @@ class Controller_Base extends Controller_Template {
         $styles = array(
             'media/css/reset.css' => 'screen',
             'media/css/components.css' => 'screen',
-            'media/css/kodelearn.css' => 'screen'
+            'media/css/kodelearn.css' => 'screen',
+            'media/css/jquery-ui-1.8.14.custom.css' => 'screen'
         );
         $scripts = array(
             'media/javascript/jquery-1.6.2.min.js',
             'media/javascript/common.js',
             'media/javascript/ajaxupload.js',
+            'media/javascript/jquery-ui-1.8.14.custom.min.js',
         
         );
         $this->view->set('content', $this->content);
@@ -105,4 +107,4 @@ class Controller_Base extends Controller_Template {
         }
     }
 
-} // End Welcome
+}

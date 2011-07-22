@@ -34,14 +34,8 @@
                     </td>
                 </tr>
                 <tr>
-                    <td><label for="course">Select course</label></td>
-                    <td>
-                        <select name="" id="course" multiple>
-                            <option value="">Course 1</option>
-                            <option value="">Course 1</option>
-                            <option value="">Course 1</option>
-                            <option value="">Course 1</option>
-                        </select>
+                    <td><?php echo $form->course_id->label(); ?></td>
+                    <td><?php echo $form->course_id->element(); ?>
                         <p class="tip">You can select multiple courses.</p>
                     </td>
                 </tr>

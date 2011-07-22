@@ -377,7 +377,7 @@ select {	width: 210px;  }
 	color: #666;
 }
 .formMessages {
-	background: #fff url("../image/xformMessage.png") repeat-x left bottom;
+	background: #fff url("../image/formMessage.png") repeat-x left bottom;
 	border-radius: 3px;
 	border: 1px solid #efefef;
 	padding: 5px;

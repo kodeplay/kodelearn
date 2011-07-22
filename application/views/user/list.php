@@ -7,7 +7,8 @@
 		
 		<div class="topbar">
 			<?php echo $links['add']?>
-			<a href="#" class="pageAction l">Send message</a>
+            <a href="#" class="pageAction l">Send message</a>
+            <?php echo $links['uploadcsv']?>
 			<a onclick="$('#form').submit();" class="pageAction r alert">Delete selected...</a>
 			<span class="clear">&nbsp;</span>
 		</div><!-- topbar -->
@@ -27,7 +28,7 @@
 				<td><input class="selected" name="selected[]" value="<?php echo $user->id ?>" type="checkbox" /></td>
 				<td><?php echo $user->id ?></td>
 				<td>
-					<div class="l w30"><img src="http://placehold.it/56" alt="User" /></div>
+					<div class="l w30"><img src="<?php echo $cacheimage->resize($user->avatar, 56, 56);?>" alt="User" /></div>
 					<div class="l">
 						<p><?php echo $user->firstname . ' ' . $user->lastname ?></p>
 						<p><?php echo $user->email ?></p>
@@ -38,7 +39,7 @@
 				<td>
 				<?php echo implode(', ', $user->batches->find_all()->as_array(NULL, 'name')); ?>
 				</td>
-				<td>PHP, JavaScript, ASP</td>
+				<td><?php echo implode(', ', $user->courses->find_all()->as_array(NULL, 'name')); ?></td>
 				<td>
 					<p><?php echo Html::anchor('/user/edit/id/'.$user->id, 'View/Edit')?></p>
 					<p><a href="#">Send message</a></p>

@@ -27,13 +27,10 @@ class Controller_Role extends Controller_Base {
 
     public function action_edit() {
 
-
     }
 
     protected function form($data) {
-
-
-
+        
     }
 
     public function action_permissions() {
@@ -73,6 +70,6 @@ class Controller_Role extends Controller_Base {
         // if yes, show a warning before user tries to deny all permissions
         $user_role_id = Auth::instance()->get_user()->roles->find()->id;
         $is_current_role = ($role_id == $user_role_id);
-        $this->content = $view;
+        $this->content = $view; 
     }
 }

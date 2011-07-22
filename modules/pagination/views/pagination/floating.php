@@ -56,10 +56,9 @@ for ($i = $n7; $i <= $n8; $i++)
 }
 
 ?>
-
+<?php if($items_per_page != $total_items){ ?>
 		<a href="<?php echo HTML::chars($page->url($first_page)) ?>" rel="first">&laquo;</a>
 
-<!--		<a href="<?php echo HTML::chars($page->url($previous_page)) ?>" rel="prev">&lt;</a>-->
 
 	<?php foreach ($links as $number => $content): ?>
 
@@ -78,5 +77,7 @@ for ($i = $n7; $i <= $n8; $i++)
 	<?php endif*/ ?>
 
 		<a href="<?php echo HTML::chars($page->url($last_page)) ?>" rel="last">&raquo;</a>
+		<?php } ?>
+Showing <?php echo $current_first_item ?> to <?php echo $current_last_item ?> of <?php echo $total_items ?> (<?php echo $total_pages ?> Pages)
 
 <!-- .pagination -->
