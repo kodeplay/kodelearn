@@ -19,20 +19,26 @@
 			     <td></td>
 			     <td><input type="text" name="filter_name" value="<?php echo $filter_name ?>" /></td>
 			     <td></td>
+			     <td></td>
 			     <td valign="middle"><a class="button" onclick="filter();">Filter</a></td>
 			</tr>
 			<?php foreach($table['data'] as $location){ ?>
 			<tr>
-				<td><input type="checkbox" name="selected[]" class="selected" value="<?php echo $location->id ?>" /></td>
-				<td><?php echo $location->name ?></td>
-				<td><?php echo $location->image;  ?></td>
+				<?php 
+				    $images = CacheImage::factory();
+                    $image = $images->resize($location->image, 200, 100);
+				?>
+				<td><input type="checkbox" name="selected[]" class="selected" value="<?php echo $location->id; ?>" /></td>
+				<td><?php echo $location->name; ?></td>
+				<td><img src="<?php echo $image; ?>" alt="" id="photo" /><?php //echo $location->image;  ?></td>
+				<td><?php echo $location->room_count; ?></td>
 				<td>
 					<p><?php echo Html::anchor('/location/edit/id/'.$location->id, 'View/Edit')?></p>
 				</td>
 			</tr>
 			<?php  } ?>
             <tr class="pagination">
-                <td class="tar pagination" colspan="4">
+                <td class="tar pagination" colspan="5">
                     <?php echo $pagination ?>
                 </td>
             </tr>

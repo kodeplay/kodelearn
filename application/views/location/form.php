@@ -18,11 +18,11 @@
 			</tr>
 			<tr>
                 <td>
-                    <label for="photo">Photograph</label>
-                    <p class="tip">Preferred size: 100px</p>
+                    <label for="photo">Map</label>
+                    <p class="tip">Preferred size: 400px X 200px</p>
                 </td>
-                <td><img src="<?php echo $avatar ?>" alt="" id="photo" />
-                <input style="font-size:12px;" type="button" id="uploadavatar" value="Upload"></td>
+                <td><img src="<?php echo $image ?>" alt="" id="photo" />
+                <input style="font-size:12px;" type="button" id="uploadmap" value="Upload"></td>
             </tr>
 			<tr>
 				<td></td>
@@ -41,7 +41,7 @@
 	<div class="clear"></div>
 	
 <script type="text/javascript"><!--
-new AjaxUpload('#uploadavatar', {
+new AjaxUpload('#uploadmap', {
     action : '<?php echo $upload_url ?>',
     name : 'image',
     autoSubmit : true,
@@ -54,8 +54,10 @@ new AjaxUpload('#uploadavatar', {
         
         if(data.success){
             $('#photo').attr('src',data.image);
+            $('input[name=image]').attr('value',data.filename);
+            //$('image').val(data.filename);  
         } else {
-           $('#uploadavatar').after('<span class="form-error">' + data.errors.image + '</span>'); 
+           $('#uploadmap').after('<span class="form-error">' + data.errors.image + '</span>'); 
         }
     }
 });

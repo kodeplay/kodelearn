@@ -36,14 +36,16 @@ class Controller_Location extends Controller_Base {
         ));
         
 
-        $location->select('name','image');
+        $location->select(array('count("rooms.location_id")', 'room_count'))
+                 ->join('rooms','left')
+                 ->on('locations.id','=','rooms.location_id');
               
                         
         if($this->request->param('filter_name')){
-            $location->where('name', 'LIKE', '%' . $this->request->param('filter_name') . '%');
+            $location->where('locations.name', 'LIKE', '%' . $this->request->param('filter_name') . '%');
         }
                         
-        $location->group_by('id')
+        $location->group_by('locations.id')
                 ->order_by($sort, $order)
                 ->limit($pagination->items_per_page)
                 ->offset($pagination->offset)
@@ -54,7 +56,8 @@ class Controller_Location extends Controller_Base {
 
         $sorting = new Sort(array(
                 'Location'          => 'name',
-                'Map'               => 'image',
+                'Map'               => '',
+                'No of Rooms'             => 'room_count',
                 'Actions'           => '',
         ));
         
@@ -96,11 +99,11 @@ class Controller_Location extends Controller_Base {
     
     public function action_add(){
          $submitted = false;
-         
+         $location = ORM::factory('location');
          if($this->request->method() === 'POST' && $this->request->post()){
             if (Arr::get($this->request->post(), 'save') !== null){
                 $submitted = true;
-                $location = ORM::factory('location');
+                
                 $validator = $location->validator($this->request->post());
                 if ($validator->check()) {
                     
@@ -121,18 +124,60 @@ class Controller_Location extends Controller_Base {
             'cancel' => Html::anchor('/location/', 'or cancel')
         );
         
-        $upload_url = URL::site('account/uploadavatar');
+        $upload_url = URL::site('location/uploadmap');
 
-        $image = new CacheImage();
-        $avatar = $image->resize($user->avatar, 100, 100);
+        $images = CacheImage::factory();
+        $image = $images->resize($location->image, 400, 200);
+        //$image = $location->image;
         
         $view = View::factory('location/form')
                   ->bind('links', $links)
                   ->bind('form', $form)
-                  ->bind('avatar', $avatar)
+                  ->bind('image', $image)
                   ->bind('upload_url', $upload_url);
                   
         $this->content = $view;
+    }
+    
+    public function action_uploadmap(){
+        
+        $filename = 'map_'.time() . '_' . $_FILES['image']['name'];
+                
+        $file_validation = new Validation($_FILES);
+        $file_validation->rule('image','upload::valid');
+        $file_validation->rule('image', 'upload::type', array(':value', array('jpg', 'png', 'gif', 'jpeg')));
+        
+        if ($file_validation->check()){
+            
+            if($path = Upload::save($_FILES['image'], $filename, DIR_IMAGE)){
+                
+                $images = CacheImage::factory();;
+                $src = $images->resize($filename, 400, 200);
+
+                
+                
+                $json = array(
+                   'success'   => 1,
+                   'image'     => $src,
+                   'filename'  => $filename 
+                );
+            } else {
+                $json = array(
+                   'success'  => 0,
+                   'errors'   => array('image' => 'The file is not a valid Image')
+                );
+            }
+        } else {
+            $json = array(
+                 'success'   => 0,
+                 'errors'    => (array) $file_validation->errors('profile')
+            );
+        }
+        
+         
+        echo json_encode($json);
+        exit;
+        
     }
     
     private function form($action, $submitted = false, $saved_data = array()){
@@ -146,7 +191,7 @@ class Controller_Location extends Controller_Base {
         $form->saved_data = $saved_data;
         $form->posted_data = $submitted ? $this->request->post() : array();
         $form->append('Name', 'name', 'text');
-        $form->append('Map', 'image', 'text');
+        $form->append('', 'image', 'hidden');
         $form->append('Save', 'save', 'submit', array('attributes' => array('class' => 'button')));
         $form->process();
         return $form;
@@ -185,11 +230,19 @@ class Controller_Location extends Controller_Base {
             'cancel' => Html::anchor('/location/', 'or cancel')
         );
         
+        $upload_url = URL::site('location/uploadmap');
+
+        $images = CacheImage::factory();
+        $image = $images->resize($location->image, 400, 200);
+        //$image = $location->image;
+        
         $view = View::factory('location/form')
                   ->bind('links', $links)
-                  ->bind('form', $form);
+                  ->bind('form', $form)
+                  ->bind('image', $image)
+                  ->bind('upload_url', $upload_url);
+                  
         $this->content = $view;
-        
         
     }
     

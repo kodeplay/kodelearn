@@ -5,6 +5,7 @@ return array(
         'not_empty' => 'Please enter an email address',
         'email'     => 'Email not valid',
         'Model_User::email_unique'  => 'Email Already Exists',
+        'Model_User::email_exist'  => 'Email Does Not Exist',
     ),
     'email_parent' => array(
         'not_empty' => 'Please enter an email address',

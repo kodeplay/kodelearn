@@ -82,7 +82,7 @@
                 <td>
                     <?php echo $form_login->password->element(); ?>
                     <span class="form-error"><?php echo $form_login->password->error(); ?></span>
-                    <p><?php echo $links['forgot_password']; ?></p>
+                    <p><?php echo $links['forgot_password_link']; ?></p>
                 </td>
             </tr>
             <tr>
@@ -95,6 +95,34 @@
             </tr>
         </table>
         <?php echo $form_login->endform(); ?>
+        <br>
+        <div style="display:<?php echo $display; ?>;" id="forgot_password">
+        <p class="tdBlue bm40">Forgot Password</p>
+        <?php echo $display_success; ?>
+        <?php echo $form_forgot_password->startform(); ?>
+        <table class="formcontainer">
+            <tr>
+                <td class="tar"><?php echo $form_forgot_password->email->label(); ?></td>
+                <td>
+                    <?php echo $form_forgot_password->email->element(); ?>
+                    <span class="form-error"><?php echo $form_forgot_password->email->error(); ?></span>
+                </td>
+            </tr>
+            
+            <tr>
+                <td class="tar"></td>
+                <td><?php echo $form_forgot_password->forgot_password->element(); ?></td>
+            </tr>
+        </table>
+        <?php echo $form_forgot_password->endform(); ?>
+        </div>
 </div><!-- lContainer -->
 
 <div class="clear"></div>
+<script type="text/javascript">
+
+function forgotPassword()
+{
+	$('#forgot_password').css('display','block');
+}
+//--></script>
