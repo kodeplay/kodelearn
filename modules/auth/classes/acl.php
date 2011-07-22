@@ -84,10 +84,6 @@ class Acl {
         }
         $levels = $this->_permissions[$resource];
         foreach ($levels as $level=>$permit) {
-            // if viewing is not allowed then assume no access to the resource
-            if ($level === 'view' && !$permit) {
-                return false;
-            }
             // if atleast one is permitted then allow access
             if ($permit) {
                 return true;
