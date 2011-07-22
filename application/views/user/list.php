@@ -16,12 +16,12 @@
 		<table class="vm10 datatable fullwidth">
 			<?php echo $table['heading'] ?>
             <tr class="filter" >
-                 <td></td>
+                 <td><input type="hidden" id="filter_url" value="<?php echo $filter_url ?>" /></td>
                  <td><input type="text" name="filter_id" value="<?php echo $filter_id ?>" size="4" /></td>
                  <td><input type="text" name="filter_name" value="<?php echo $filter_name ?>" /></td>
                  <td></td>
                  <td></td>
-                 <td valign="middle"><a class="button" onclick="filter();">Filter</a></td>
+                 <td valign="middle"><a class="button" id="trigger_filter" href="#">Filter</a></td>
             </tr>
 			<?php foreach($users as $user) { ?>
 			<tr>
@@ -56,21 +56,3 @@
 	</div><!-- content -->
 	
 	<div class="clear"></div>
-<script type="text/javascript"><!--
-function filter() {
-    url = '<?php echo $filter_url; ?>';
-    var filter_name = $('input[name=\'filter_name\']').attr('value');
-    
-    if (filter_name) {
-        url += '/filter_name/' + encodeURIComponent(filter_name);
-    }
-
-    var filter_id = $('input[name=\'filter_id\']').attr('value');
-    
-    if (filter_id) {
-        url += '/filter_id/' + encodeURIComponent(filter_id);
-    }
-    
-    location = url;
-}
-//--></script>

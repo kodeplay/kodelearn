@@ -112,6 +112,7 @@ Kohana::modules(array(
     'dynamicmenu'   => MODPATH.'dynamicmenu', // Dynamic menu model by kodeplay
     'pagination'    =>  MODPATH.'pagination', // for server side pagination
 	'cacheimage'    => MODPATH.'cacheimage', // for Image Caching
+	'email'         => MODPATH.'email', // for mailling
 ));
 
 /**

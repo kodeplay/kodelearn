@@ -62,3 +62,34 @@ KODELEARN.modules = {
         return this.collection;
     }
 };
+
+KODELEARN.modules.add('add_datepicker' , (function () {    
+    
+    return {
+        init: function () { 
+    	   $('.date').datepicker({dateFormat: 'yy-mm-dd'});
+        }
+    }; 
+})());
+
+KODELEARN.modules.add('filter', (function () {
+	
+	return {
+		init: function () {
+			
+			$('#trigger_filter').click(function(){
+				var url = $('#filter_url').val();
+				
+				$('input[name*="filter_"]').each(function (){
+					if($(this).val()){
+						url += '/' + $(this).attr('name') + '/' + encodeURIComponent($(this).val());
+					}
+				});
+				location = url;
+			});
+	}
+	};
+	
+})());
+
+
