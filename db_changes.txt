@@ -22,3 +22,15 @@ ENGINE=InnoDB;
 ------------------------------------------------------------------------------------------------------------------
 ALTER TABLE `users`
     ADD COLUMN `avatar` VARCHAR(255) NULL DEFAULT NULL AFTER `last_login`;
+------------------------------------------------------------------------------------------------------------------
+
+CREATE TABLE `courses_users` (
+    `user_id` INT(11) UNSIGNED NOT NULL,
+    `course_id` INT(11) UNSIGNED NOT NULL,
+    PRIMARY KEY (`user_id`, `course_id`),
+    INDEX `course_id` (`course_id`),
+    CONSTRAINT `FK_courses_users_courses` FOREIGN KEY (`course_id`) REFERENCES `courses` (`id`) ON DELETE CASCADE,
+    CONSTRAINT `FK_courses_users_users` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
+)
+COLLATE='utf8_general_ci'
+ENGINE=InnoDB;

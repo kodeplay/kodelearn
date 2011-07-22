@@ -87,7 +87,7 @@ class Controller_User extends Controller_Base {
         
         $filter_name = $this->request->param('filter_name');
         $filter_url = URL::site('user/index');
-        $cacheimage = new CacheImage();
+        $cacheimage = CacheImage::factory();
         
         
         $view = View::factory('user/list')
@@ -113,19 +113,27 @@ class Controller_User extends Controller_Base {
                 $user = ORM::factory('user');
                 $validator = $user->validator_create($this->request->post());
                 $validator->bind(':user', NULL);
-                if ($validator->check()) {
-
-                	$user->firstname = $this->request->post('firstname');
+                if($validator->check()) {
+                    $user->firstname = $this->request->post('firstname');
                     $user->lastname = $this->request->post('lastname');
                     $user->email = $this->request->post('email');
                     $user->password = Auth::instance()->hash(rand(10000, 65000));
                     $role = ORM::factory('role', $this->request->post('role_id'));
                     $user->save();
                     $user->add('roles', $role);
-                   
-                    foreach($this->request->post('batch_id') as $batch_id){
-                        $batch = ORM::factory('batch', $batch_id);
-                        $user->add('batches', $batch);
+                    
+                    if($this->request->post('batch_id')){
+                        foreach($this->request->post('batch_id') as $batch_id){
+                            $batch = ORM::factory('batch', $batch_id);
+                            $user->add('batches', $batch);
+                        }
+                    }
+                    
+                    if($this->request->post('course_id')){
+                        foreach($this->request->post('course_id') as $course_id){
+                            $course = ORM::factory('course', $course_id);
+                            $user->add('courses', $course);
+                        }
                     }
                     Request::current()->redirect('user');
                     exit;
@@ -154,13 +162,19 @@ class Controller_User extends Controller_Base {
             $batches[$batch->id] = $batch->name;
         }
         
+        $courses = array();
+        foreach(ORM::factory('course')->find_all() as $course) {
+        	$courses[$course->id] = $course->name;
+        }
+        
 		$form = new Stickyform($action, array(), ($submitted ? $this->_errors : array()));
         $form->default_data = array(
             'firstname' => '',
             'lastname'  => '',
             'email'     => '',
             'role_id'   => '',
-            'batch_id'  => ''
+            'batch_id'  => '',
+            'course_id' => ''
         );
         
         $form->saved_data = $saved_data;
@@ -170,6 +184,7 @@ class Controller_User extends Controller_Base {
         $form->append('Email', 'email', 'text');
         $form->append('Role', 'role_id', 'select', array('options' => $roles));
         $form->append('Select batch', 'batch_id', 'select', array('options' => $batches, 'attributes' => array('multiple' => 'multiple', 'name' => 'batch_id[]')));
+        $form->append('Select Course', 'course_id', 'select', array('options' => $courses, 'attributes' => array('multiple' => 'multiple', 'name' => 'course_id[]')));
         $form->append('Save', 'save', 'submit', array('attributes' => array('class' => 'button')));
         $form->process();
         return $form;
@@ -199,12 +214,20 @@ class Controller_User extends Controller_Base {
                     $role = ORM::factory('role', $this->request->post('role_id'));
                     $user->add('roles', $role);
                     
-                    //removing the previous batch assigned
+                    //removing the previous batches assigned
                     $user->remove('batches');
                     
                     foreach($this->request->post('batch_id') as $batch_id){
-	                    $batch = ORM::factory('batch', $batch_id);
-	                    $user->add('batches', $batch);
+                        $batch = ORM::factory('batch', $batch_id);
+                        $user->add('batches', $batch);
+                    }
+                    
+                    //removing the previous courses assigned
+                    $user->remove('courses');
+                    
+                    foreach($this->request->post('course_id') as $course_id){
+                        $course = ORM::factory('course', $course_id);
+                        $user->add('courses', $course);
                     }
                     
                     $user->save();
@@ -216,7 +239,7 @@ class Controller_User extends Controller_Base {
             }
          }
         
-        $form = $this->form('user/edit/id/'.$id ,$submitted, array('firstname' => $user->firstname, 'lastname' => $user->lastname, 'email' => $user->email, 'role_id' => $user->roles->find()->id, 'batch_id' => $user->batches->find_all()->as_array(NULL, 'id')));
+        $form = $this->form('user/edit/id/'.$id ,$submitted, array('firstname' => $user->firstname, 'lastname' => $user->lastname, 'email' => $user->email, 'role_id' => $user->roles->find()->id, 'batch_id' => $user->batches->find_all()->as_array(NULL, 'id'), 'course_id' => $user->courses->find_all()->as_array(NULL, 'id')));
         
         
         $view = View::factory('user/form')

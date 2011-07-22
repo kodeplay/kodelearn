@@ -39,7 +39,7 @@
 				<td>
 				<?php echo implode(', ', $user->batches->find_all()->as_array(NULL, 'name')); ?>
 				</td>
-				<td>PHP, JavaScript, ASP</td>
+				<td><?php echo implode(', ', $user->courses->find_all()->as_array(NULL, 'name')); ?></td>
 				<td>
 					<p><?php echo Html::anchor('/user/edit/id/'.$user->id, 'View/Edit')?></p>
 					<p><a href="#">Send message</a></p>
