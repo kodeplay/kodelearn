@@ -18,6 +18,9 @@ class Controller_Base extends Controller_Template {
         if (Auth::instance()->logged_in()) {
             $this->acl_filter();
         }
+        // create a new Config reader and attach to the Config instance
+        $config = Config::instance();
+        $config->attach(new Config_Database());
         if (!$this->request->is_ajax()) {
             $this->view = View::factory($this->template);
         } else {

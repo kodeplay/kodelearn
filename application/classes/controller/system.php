@@ -19,26 +19,70 @@ class Controller_System extends Controller_Base {
 
         // get all institution types
 
-        // get all roles
-        $roles = ORM::factory('role')->find_all()->as_array('id', 'name');
+        $this->form(array(), array());
         
 
         $this->content = $view;
     }
     
-    protected function form($data, $errors) {
+    protected function form($saved_data, $errors) {
         $action = 'system';
+        // get all roles
+        $roles = ORM::factory('role')->find_all()->as_array('id', 'name');
+        // get all institution types
+        $institution_types = ORM::factory('institutiontype')->find_all()->as_array('id', 'name');
+        // get settings
+        $config = Config::instance();
+        $config_settings = $config->load('config')->as_array();        
         $form = new Stickyform($action, array(), $errors);
-        $fields = array('name', 'type_id', 'logo', 'website', 'address', 'allow_registration', 'default_role', 'user_approval');
+        $fields = array(
+            'name', 
+            'institutiontype_id', 
+            'logo', 'website', 
+            'address', 
+            'config_membership', 
+            'config_default_role', 
+            'config_user_approval'
+        );
         $form->default_data = array_fill_keys($fields, '');
-        if ($this->request->method() === 'POST' && $this->request->post()) {
-            $form->posted_data = $this->request->post();
-        } else {
-            $form->posted_data = array();
-        }
-        //        $form->append('Institution Name', 'name', 
-
-                               
-
+        if ($saved_data) {
+            $saved_config = $saved_data['config'];
+            unset($saved_data['config']);
+            foreach ($saved_config as $key=>$value) {
+                $saved_data['config_' . $key] = $value;
+            }
+            $this->saved_data = $saved_data;
+         }
+         if ($this->request->method() === 'POST' && $this->request->post()) {
+             $form->posted_data = $this->request->post();
+         } else {
+             $form->posted_data = array();
+         }
+         $form->append('Institution Name', 'name', 'text')
+             ->append('Institution Type', 'institutiontype_id', 'select', array('options' => $institution_types))
+             ->append('Logo', 'logo', 'text')
+             ->append('Website', 'website', 'text')
+             ->append('Address', 'address', 'textarea')
+             ->append('Membership', 'config_membership', 'checkbox', array(
+                 'attributes' => array(
+                     'value' => 1,
+                     'name' => 'config[membership]',
+                 )
+             ))
+             ->append('Default Role', 'config_default_role', 'select', array(
+                 'attributes' => array(
+                     'name' => 'config[default_role]',
+                 ),
+                 'options' => $roles,
+             ))
+             ->append('User Approval', 'config_user_approval', 'checkbox', array(
+                 'attributes' => array(
+                     'value' => 1,
+                     'name' => 'config[user_approval]',
+                 )
+             ))
+             ->process();
+         // var_dump($form);
+         return $form;
     }
 }
