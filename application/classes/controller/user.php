@@ -1,13 +1,12 @@
 <?php defined('SYSPATH') or die('No direct script access.');
 
 class Controller_User extends Controller_Base {
-	
+    
     private $error;
     private $success = '';
     
-	public function action_index() {
-		
-		
+    public function action_index() {        
+        
         if($this->request->param('sort')){
             $sort = $this->request->param('sort');
         } else {
@@ -19,7 +18,7 @@ class Controller_User extends Controller_Base {
         } else {
             $order = 'DESC';
         }
-		
+        
         $user = ORM::factory('user');
 
         if($this->request->param('filter_name')){
@@ -46,16 +45,16 @@ class Controller_User extends Controller_Base {
         }
         
         $users = $user->order_by($sort, $order)
-                ->limit($pagination->items_per_page)
-                ->offset($pagination->offset)
-                ->find_all();
+            ->limit($pagination->items_per_page)
+            ->offset($pagination->offset)
+            ->find_all();
         
         $sorting = new Sort(array(
-                'Roll No'           => 'id',
-                'Name'              => 'firstname',
-                'Batch'             => '',
-                'Cources'           => '',
-                'Actions'           => ''
+            'Roll No'           => 'id',
+            'Name'              => 'firstname',
+            'Batch'             => '',
+            'Cources'           => '',
+            'Actions'           => ''
         ));
         
         $url = ('user/index');
@@ -79,9 +78,10 @@ class Controller_User extends Controller_Base {
         $links = array(
             'add'       => Html::anchor('/user/add/', 'Create a user', array('class' => 'createButton l')),
             'uploadcsv' => Html::anchor('/user/uploadcsv/', 'Upload CSV', array('class' => 'pageAction l')),
+            'roles'     => Html::anchor('/role/', 'Manage Roles', array('class' => 'pageAction 1')),
             'delete'    => URL::site('/user/delete/')
         );
-                
+        
         $table['heading'] = $heading;
         $table['data'] = $users;
         
@@ -91,23 +91,23 @@ class Controller_User extends Controller_Base {
         
         
         $view = View::factory('user/list')
-                  ->bind('table', $table)
-                  ->bind('users', $users)
-                  ->bind('links', $links)
-                  ->bind('pagination', $pagination)
-                  ->bind('filter_name', $filter_name)
-                  ->bind('filter_id', $filter_id)
-                  ->bind('filter_url', $filter_url)
-                  ->bind('cacheimage', $cacheimage)
-                  ;
-		
-		$this->content = $view;
-	}
-	
-	public function action_add(){
-         $submitted = false;
-         
-         if($this->request->method() === 'POST' && $this->request->post()){
+            ->bind('table', $table)
+            ->bind('users', $users)
+            ->bind('links', $links)
+            ->bind('pagination', $pagination)
+            ->bind('filter_name', $filter_name)
+            ->bind('filter_id', $filter_id)
+            ->bind('filter_url', $filter_url)
+            ->bind('cacheimage', $cacheimage)
+            ;
+        
+        $this->content = $view;
+    }
+    
+    public function action_add(){
+        $submitted = false;
+        
+        if($this->request->method() === 'POST' && $this->request->post()){
             if (Arr::get($this->request->post(), 'save') !== null){
                 $submitted = true;
                 $user = ORM::factory('user');
@@ -141,17 +141,17 @@ class Controller_User extends Controller_Base {
                     $this->_errors = $validator->errors('register');
                 }
             }
-         }
-		
-		$form = $this->form('user/add', $submitted);
-		
+        }
+        
+        $form = $this->form('user/add', $submitted);
+        
         $view = View::factory('user/form')
-                    ->bind('form', $form);
+            ->bind('form', $form);
         $this->content = $view;
-	}
-	
-	private function form($action, $submitted = false, $saved_data = array()) {
-		
+    }
+    
+    private function form($action, $submitted = false, $saved_data = array()) {
+        
         $roles = array();
         foreach(ORM::factory('role')->find_all() as $role){
             $roles[$role->id] = $role->name;
@@ -164,10 +164,10 @@ class Controller_User extends Controller_Base {
         
         $courses = array();
         foreach(ORM::factory('course')->find_all() as $course) {
-        	$courses[$course->id] = $course->name;
+            $courses[$course->id] = $course->name;
         }
         
-		$form = new Stickyform($action, array(), ($submitted ? $this->_errors : array()));
+        $form = new Stickyform($action, array(), ($submitted ? $this->_errors : array()));
         $form->default_data = array(
             'firstname' => '',
             'lastname'  => '',
@@ -188,15 +188,15 @@ class Controller_User extends Controller_Base {
         $form->append('Save', 'save', 'submit', array('attributes' => array('class' => 'button')));
         $form->process();
         return $form;
-	}
-	
-	public function action_edit() {
+    }
+    
+    public function action_edit() {
         $submitted = false;
-		
-		$id = $this->request->param('id');
+        
+        $id = $this->request->param('id');
         if(!$id)
             Request::current()->redirect('user');
-            
+        
         $user = ORM::factory('user', $id);
 
         if($this->request->method() === 'POST' && $this->request->post()){
@@ -238,17 +238,17 @@ class Controller_User extends Controller_Base {
                     $this->_errors = $validator->errors('register');
                 }
             }
-         }
+        }
         
         $form = $this->form('user/edit/id/'.$id ,$submitted, array('firstname' => $user->firstname, 'lastname' => $user->lastname, 'email' => $user->email, 'role_id' => $user->roles->find()->id, 'batch_id' => $user->batches->find_all()->as_array(NULL, 'id'), 'course_id' => $user->courses->find_all()->as_array(NULL, 'id')));
         
         
         $view = View::factory('user/form')
-                  ->bind('form', $form);
+            ->bind('form', $form);
         $this->content = $view;
-	}
+    }
 
-	public function action_delete(){
+    public function action_delete(){
         if($this->request->method() === 'POST' && $this->request->post('selected')){
             foreach($this->request->post('selected') as $user_id){
                 ORM::factory('user', $user_id)->delete();
@@ -261,14 +261,14 @@ class Controller_User extends Controller_Base {
 
         if($this->request->method() === 'POST' && $this->request->post()){
             if (Arr::get($this->request->post(), 'save') !== null){
-            	
+                
                 $filename = $_FILES['csv']['name'];
-	            $extension = explode(".",$filename);
-	            if(isset($extension[1]) && strtolower($extension[1]) === "csv"){ //Validation of file 
-	                   
+                $extension = explode(".",$filename);
+                if(isset($extension[1]) && strtolower($extension[1]) === "csv"){ //Validation of file 
+                    
                     $filename = $_FILES['csv']['tmp_name'];
                     $handle = fopen($filename, "r");
-	                
+                    
                     while (($data = fgetcsv($handle, 1000, ',')) !== FALSE){
                         $filedata[] = $data;
                     }
@@ -283,43 +283,43 @@ class Controller_User extends Controller_Base {
                             'lastname'  => $row[1],
                     	    'email'     => $row[2],
                     	);
-                    	
+                        
                     	$user = ORM::factory('user');
                         $validator = $user->validator_create($data);
                         $validator->bind(':user', NULL);
                         if ($validator->check()) {
                             //add user
-		                    $user->firstname = $data['firstname'];
-		                    $user->lastname = $data['lastname'];
-		                    $user->email = $data['email'];
-		                    $user->password = Auth::instance()->hash(rand(10000, 65000));
-		                    $role = ORM::factory('role', $this->request->post('role_id'));
-		                    $user->save();
-		                    $user->add('roles', $role);
-		                   
-		                    if(($this->request->post('batch_id'))){
-			                    foreach($this->request->post('batch_id') as $batch_id){
-			                        $batch = ORM::factory('batch', $batch_id);
-			                        $user->add('batches', $batch);
-			                    }
-		                    }
+                            $user->firstname = $data['firstname'];
+                            $user->lastname = $data['lastname'];
+                            $user->email = $data['email'];
+                            $user->password = Auth::instance()->hash(rand(10000, 65000));
+                            $role = ORM::factory('role', $this->request->post('role_id'));
+                            $user->save();
+                            $user->add('roles', $role);
+                            
+                            if(($this->request->post('batch_id'))){
+                                foreach($this->request->post('batch_id') as $batch_id){
+                                    $batch = ORM::factory('batch', $batch_id);
+                                    $user->add('batches', $batch);
+                                }
+                            }
                             $records_added += 1;	
-		                } else {
-		                	$this->error['warning'] = "There was an error on line # " . $key . " Records Added " . $records_added;
+                        } else {
+                            $this->error['warning'] = "There was an error on line # " . $key . " Records Added " . $records_added;
                             $this->error['description'] = implode('<br/>',$validator->errors('register'));
                             $error = 1;
                             break;
-		                }
+                        }
                     }
                     if(!$error){
-	               		$this->success = "Users uploaded successfully. Records Added " . $records_added ;
+                        $this->success = "Users uploaded successfully. Records Added " . $records_added ;
                     }
-	               
-	               fclose($handle);
-	            } else {
-	               $this->error['warring'] = "The file you uploaded is not a valid csv file";
-	               $this->error['description'] = ""; 
-	            }
+                    
+                    fclose($handle);
+                } else {
+                    $this->error['warring'] = "The file you uploaded is not a valid csv file";
+                    $this->error['description'] = ""; 
+                }
             }
         }
         
@@ -332,7 +332,7 @@ class Controller_User extends Controller_Base {
         foreach(ORM::factory('batch')->find_all() as $batch){
             $batches[$batch->id] = $batch->name;
         }
-    	
+        
         $form = new Stickyform('user/uploadcsv', array('enctype' => 'multipart/form-data'), array());
         $form->default_data = array(
             'role_id'   => '',
@@ -345,19 +345,19 @@ class Controller_User extends Controller_Base {
         $form->append('Select batch', 'batch_id', 'select', array('options' => $batches, 'attributes' => array('multiple' => 'multiple', 'name' => 'batch_id[]')));
         $form->append('Upload', 'save', 'submit', array('attributes' => array('class' => 'button')));
         $form->process();
-    	
+        
         $links = array(
             'sample'    => Html::anchor('/users_sample.csv', 'or click here to download a sample CSV file')
         );
         
     	$view = View::factory('user/uploadcsv')
-    	           ->bind('form', $form)
-    	           ->bind('error', $this->error)
-    	           ->bind('success', $this->success)
-    	           ->bind('links', $links);
-    	
+            ->bind('form', $form)
+            ->bind('error', $this->error)
+            ->bind('success', $this->success)
+            ->bind('links', $links);
+        
     	$this->content = $view;
-    	
+        
     }
     
 }
