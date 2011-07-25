@@ -255,10 +255,61 @@ class Controller_Course extends Controller_Base {
     
     public function action_join() {
     	
+    	if($this->request->method() === 'POST' && $this->request->post()){
+    		$access_code = $this->request->post('access_code');
+        
+            if($access_code){
+            	$course = ORM::factory('course')->where('access_code' , '=' , $access_code)->find();
+            	$user = Auth::instance()->get_user();
+            	$user->add('courses', $course);
+            	$json = array('response' => 'You are joined in ' . $course->name . ' course.');
+            	
+            } else {
+            	$json = array('response' => 'Please enter access code.');
+            } 		
+            
+            echo json_encode($json);
+            exit;
+    	}
+    	
     	$view = View::factory('course/join');
     	
     	$this->content = $view;
     }
+    
+    public function action_course_detail(){
+    	
+    	$access_code = $this->request->post('access_code');
+    	
+    	if($access_code){
+    		$course = ORM::factory('course')->where('access_code' , '=' , $access_code)->find();
+    		if($course->id !== NULL){
+    			
+    			$user = Auth::instance()->get_user();
+
+    			if($user->has('courses', $course)){
+    				$json = array('response' => 'You are Already in this Course.');
+    			} else {
+	                $html = '<table class="formcontainer">';
+	                $html .= '<tr><td>Course Name:</td><td>' . $course->name . '</td>';
+                    $html .= '<tr><td>Start Date:</td><td>' . $course->start_date . '</td>';
+                    $html .= '<tr><td>End Date:</td><td>' . $course->end_date . '</td>';
+                    $html .= '<tr><td></td><td><a class="button" id="join_course">Join</a>';
+                    $json = array('response' => $html);
+    			}
+    			
+    		} else {
+	    		$json = array('response' => 'No course found for this access code');
+    		}
+    		
+    	} else {
+    		$json = array('response' => 'Please enter access code.');
+    	}
+
+    	echo json_encode($json);
+    }
+    	
+    
 }
 
   

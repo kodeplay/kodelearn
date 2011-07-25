@@ -216,18 +216,19 @@ class Controller_User extends Controller_Base {
                     
                     //removing the previous batches assigned
                     $user->remove('batches');
-                    
-                    foreach($this->request->post('batch_id') as $batch_id){
-                        $batch = ORM::factory('batch', $batch_id);
-                        $user->add('batches', $batch);
+                    if($this->request->post('batch_id')){
+	                    foreach($this->request->post('batch_id') as $batch_id){
+	                        $batch = ORM::factory('batch', $batch_id);
+	                        $user->add('batches', $batch);
+	                    }
                     }
-                    
                     //removing the previous courses assigned
                     $user->remove('courses');
-                    
-                    foreach($this->request->post('course_id') as $course_id){
-                        $course = ORM::factory('course', $course_id);
-                        $user->add('courses', $course);
+                    if($this->request->post('course_id')){
+	                    foreach($this->request->post('course_id') as $course_id){
+	                        $course = ORM::factory('course', $course_id);
+	                        $user->add('courses', $course);
+	                    }
                     }
                     
                     $user->save();
