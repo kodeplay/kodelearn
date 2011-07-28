@@ -8,81 +8,94 @@
     <div class="topbar">
         <a href="#" class="pageTab active">General</a>
         <a href="#" class="pageTab">Languages</a>
-        <a href="#" class="pageTab">Locations and rooms</a>
+        <a href="http://kodelearn.kp/location/index/" class="pageTab">Locations and rooms</a>
     </div><!-- topbar -->
     
-    <form action="">
+    <?php echo $form->startform(); ?>
         <table class="formcontainer">
             <tr>
-                <td><label for="insti">Institution Name</label></td>
-                <td><input type="text" id="insti" /></td>
+                <td><label for="insti"><?php echo $form->name->label(); ?></label></td>
+                <td><?php echo $form->name->element(); ?></td>
             </tr>
             <tr>
-                <td><label for="instiType">Institution Type</label></td>
+                <td><label for="instiType"><?php echo $form->institutiontype_id->label(); ?></label></td>
                 <td>
-                    <select id="instiType">
-                        <option value="">High School</option>
-                        <option value="">Junior College</option>
-                        <option value="">Professional College</option>
-                        <option value="">Coaching Class</option>
-                    </select>
+                    <?php echo $form->institutiontype_id->element(); ?>
                 </td>
             </tr>
             <tr>
                 <td class="topAlign">
-                    Logo
+                    <?php echo $form->logo->label(); ?>
                     <p class="tip">Preferred size: 100px</p>
                 </td>
-                <td><img src="http://placehold.it/100" alt="" /></td>
+                <td><img src="<?php echo $image ?>" alt="" id="photo" />
+                <input style="font-size:12px;" type="button" id="uploadinst" value="Upload"><?php echo $form->logo->element(); ?></td>
             </tr>
             <tr>
-                <td><label for="instiURL">Institution URL</label></td>
-                <td><input type="text" id="instiURL" /></td>
+                <td><label for="instiURL"><?php echo $form->website->label(); ?></label></td>
+                <td><?php echo $form->website->element(); ?></td>
             </tr>
             <tr>
-                <td class="topAlign"><label for="instiAddr">Address</label></td>
+                <td class="topAlign"><label for="instiAddr"><?php echo $form->address->label(); ?></label></td>
                 <td>
-                    <textarea name="" id="instiAddr" cols="30" rows="5"></textarea>
+                    <?php echo $form->address->element(); ?>
                 </td>
             </tr>
             <tr>
-                <td><label for="lang">Language</label></td>
+                <td><label for="lang"><?php echo $form->config_language_id->label(); ?></label></td>
                 <td>
-                    <select id="lang">
-                        <option value="">English</option>
-                        <option value="">French</option>
-                        <option value="">Deutsch</option>
-                        <option value="">Español</option>
-                    </select>
+                    <?php echo $form->config_language_id->element(); ?>
                 </td>
             </tr>
             <tr>
-                <td><label for="membership">Membership</label></td>
+                <td><label for="membership"><?php echo $form->config_membership->label(); ?></label></td>
                 <td>
-                    <input type="checkbox" id="membership" /> <label for="membership">Anyone can register</label>
+                    <?php echo $form->config_membership->element(); ?> <label for="membership">Anyone can register</label>
                 </td>
             </tr>
             <tr>
-                <td><label for="roleStudent">New user's default role</label></td>
+                <td><label for="roleStudent"><?php echo $form->config_default_role->label(); ?></label></td>
                 <td class="topAlign">
-                    <p><input type="radio" name="defaultRole" selected id="roleStudent" /><label for="roleStudent">Student</label></p>
-                    <p><input type="radio" name="defaultRole" id="roleTeacher" /><label for="roleTeacher">Teacher</label></p>
+                    <?php echo $form->config_default_role->element(); ?>
                 </td>
             </tr>
             <tr>
-                <td class="topAlign"><label for="uarYes">User approval required</label></td>
+                <td class="topAlign"><label for="uarYes"><?php echo $form->config_user_approval->label(); ?></label></td>
                 <td>
-                    <p><input type="radio" name="uaReq" selected id="uarYes" /><label for="uarYes">Yes</label></p>
-                    <p><input type="radio" name="uaReq" id="uarNo" /><label for="uarNo">No</label></p>
+                     <?php echo $form->config_user_approval->element(); ?>
                 </td>
             </tr>
             <tr>
                 <td></td>
-                <td><input class="button" type="submit" value="Save changes" /></td>
+                <td><?php echo $form->save->element(); ?></td>
             </tr>
         </table>
-    </form>
+    <?php echo $form->endForm(); ?>
     
 </div><!-- pagecontent -->
 
 <div class="clear"></div>
+
+<script type="text/javascript"><!--
+new AjaxUpload('#uploadinst', {
+    action : '<?php echo $upload_url ?>',
+    name : 'image',
+    autoSubmit : true,
+    responseType: 'json',
+    onChange: function(file, extension){   },   
+    onSubmit: function(file, extension) {
+        //alert('submiting');
+    },
+    onComplete: function(file, data) {
+        
+        if(data.success){
+            $('#photo').attr('src',data.image);
+            $('input[name=logo]').attr('value',data.filename);
+            //$('image').val(data.filename);  
+        } else {
+           $('#uploadinst').after('<span class="form-error">' + data.errors.image + '</span>'); 
+        }
+    }
+});
+
+//--></script>

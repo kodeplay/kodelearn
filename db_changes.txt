@@ -20,17 +20,45 @@ COLLATE='utf8_general_ci'
 ENGINE=InnoDB;
 
 ------------------------------------------------------------------------------------------------------------------
-CREATE TABLE `kodelearn`.`rooms` (
-`id` INT( 11 ) NOT NULL AUTO_INCREMENT PRIMARY KEY ,
-`location_id` INT( 11 ) NOT NULL ,
-`room_number` VARCHAR( 100 ) NOT NULL ,
-`room_name` VARCHAR( 200 ) NOT NULL
-) ENGINE = MYISAM ;
+CREATE TABLE IF NOT EXISTS `locations` (
+  `id` int(100) NOT NULL AUTO_INCREMENT,
+  `name` varchar(200) CHARACTER SET latin1 NOT NULL,
+  `image` varchar(200) CHARACTER SET latin1 NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+-------------------------------------------------------------------------------------------------------------------
+
+CREATE TABLE IF NOT EXISTS `rooms` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `location_id` int(11) NOT NULL,
+  `room_number` varchar(100) CHARACTER SET latin1 NOT NULL,
+  `room_name` varchar(200) CHARACTER SET latin1 NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `locations` (`location_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+
+ALTER TABLE `rooms`
+  ADD CONSTRAINT `rooms_ibfk_1` FOREIGN KEY (`location_id`) REFERENCES `locations` (`id`) ON DELETE CASCADE;
+
 
 ------------------------------------------------------------------------------------------------------------------
 ALTER TABLE `users`
     ADD COLUMN `avatar` VARCHAR(255) NULL DEFAULT NULL AFTER `last_login`;
 ----------------------------------------------------------------------------------------------------------------
+
+CREATE TABLE IF NOT EXISTS `courses` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL,
+  `description` varchar(255) DEFAULT NULL,
+  `access_code` varchar(50) DEFAULT NULL,
+  `start_date` date NOT NULL,
+  `end_date` date NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3 ;
+
+
 
 CREATE TABLE `courses_users` (
     `user_id` INT(11) UNSIGNED NOT NULL,
