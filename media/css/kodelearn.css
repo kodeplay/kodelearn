@@ -8,6 +8,7 @@
 	5.		Toggle button
 	6.		Table
 	7.		Pagination
+	8.		Rank badges
 	END OF GENERAL STYLES
 	.................................
 	8.		Signup form styles
@@ -41,6 +42,7 @@ body {
 }
 a{ color: #427693; }
 
+
 /* .......................
 	Text and background
    ..................... */
@@ -53,7 +55,11 @@ a{ color: #427693; }
 .tWhite {	color: #fff; } .bWhite {	background: #fff; }
 .tlGray {	color: #898989; } 	.tRed {	color: #c00000; }
 .tGreen {	color: #693; }
+.alert {	color: #f00; }
 
+.tpad10 {
+	padding-top: 10px;
+}
 
 /* .......................
 	Page sections
@@ -293,6 +299,13 @@ a{ color: #427693; }
 	padding: 10px 5px; 
 	vertical-align: middle;
 }
+.smallTextBoxes input[type="text"] {
+	padding: 3px;
+	width: 50px;
+	min-width: 50px;
+	border-radius: 0;
+	text-align:center;
+}
 .topAlign {
 	vertical-align: top !important;
 }
@@ -366,6 +379,7 @@ textarea:focus {	background: white; }
 	-moz-box-shadow: 0 0 8px #4f6473;
 	box-shadow: 0 0 8px #4f6473; 
 }
+
 select {	width: 210px;  }
 .formerror {	
 	display: block;
@@ -469,7 +483,7 @@ select {	width: 210px;  }
 	vertical-align: middle;
 }
 .datatable tr:nth-child(odd) td {
-	background: #eae3e0; 
+	background-color:##eae3e0;
 }
 .datatable p+p {
 	margin-top: 8px;
@@ -530,6 +544,7 @@ select {	width: 210px;  }
 	Role actions permissions
    ........................ */
 .w15 {	width: 15%; }
+.roleAction input { display:none; }
 .roleAction {
 	display: inline-block;
 	*display: inline;
@@ -700,10 +715,29 @@ select {	width: 210px;  }
 
 
 /* ..........................
+	Rank badges
+   ........................ */
+.rankBadge1 td:last-child {
+	background-image: url("../image/rankBadges.png");
+	background-repeat: no-repeat;
+	background-position: 100% 0;
+}
+
+.rankBadge2 {
+	background-image: url("../image/rankBadges.png");
+	background-repeat: no-repeat;
+	background-position: 100% -64px;
+}
+.rankBadge3 {
+	background-image: url("../image/rankBadges.png");
+	background-repeat: no-repeat;
+	background-position: 100% -137px;
+}
+
+
+/* ..........................
 	Developer section
    ........................ */
 
-
-.roleAction input { display:none; }
-
 .buttons { height: 15px; width: 98%; padding:25px 0 15px; text-align: right; }
+/* TIP: Add text align rules ONLY if you are sure that the selector will have that value for text align in ALL instances. Prefer using the class "tar" defined in components.css in other cases.*/

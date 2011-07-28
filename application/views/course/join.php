@@ -20,7 +20,7 @@ KODELEARN.modules.add('join_course' , (function () {
                if(accessCode){
 	        	   $.post(KODELEARN.config.base_url + "course/course_detail", { "access_code": accessCode },
 	        			   function(data){
-	        		   $('#course_info').html(data.response);
+	        		   		   $('#course_info').html(data.response);
 	        			   }, "json");
 	
 	           } else {

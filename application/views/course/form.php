@@ -6,12 +6,30 @@
 			<div class="clear"></div>
 		</div><!-- pageTop -->
 		
+		<?php echo $form->startform(); ?>
+		<?php echo $form->save->element(); ?>
 		<div class="topbar">
 			<a href="#" class="pageTab active">Create course</a>
 			<a href="#" class="pageTab">Assign Users</a>
 		</div><!-- topbar -->
+		<br/>
+		<br/>
+		Add users from Batch: 
+		<select id="batch_id">
+		  <option value="0">Select Batch</option>
+		  <?php foreach($batches as $batch){ ?>
+		      <option value="<?php echo $batch->id ?>"><?php echo $batch->name ?></option>
+		  <?php }?>
+		</select>
+		<a class="button" href="#" id="add_users"> Add</a>
+        <br/>       <br/>
+		<div id="tabs">
+		  <ul>
+		      <li><a href="#form-details"> Course Details</a></li>
+		      <li><a href="#assign-users"> Assign Users</a></li>
+		  </ul>
 		
-		<?php echo $form->startform(); ?>
+		<div id="form-details">
 		<table class="formcontainer vm40">
 			<tr>
 				<td><?php echo $form->name->label(); ?></td>
@@ -40,12 +58,42 @@
             </tr>
 			<tr>
 				<td></td>
-				<td><?php echo $form->save->element(); ?></td>
+				<td></td>
 			</tr>
 		</table>
+		</div>
+		
+		<div id="assign-users">
+            <?php echo $users ?>		  
+		</div>
+		</div>
 		<?php echo $form->endForm(); ?>
 		
 	</div><!-- pagecontent -->
 	
 	<div class="clear"></div>
+	
+<script type="text/javascript"><!--
+KODELEARN.modules.add('assign_users' , (function () {    
+    
+    return {
+        init: function () { 
+    	   $( "#tabs" ).tabs();
+
+    	   $('#add_users').click(function(){
+        	   var batch_id = $('#batch_id').val();
+        	   var course_id = '<?php echo $course_id ?>';
+        	   if(batch_id){
+                   $.post(KODELEARN.config.base_url + "course/get_users", { "batch_id": batch_id, "course_id": course_id },
+                           function(data){
+                	       	  $('#assign-users').html(data.response);
+                	       	  
+                           }, "json");
+        	   }
+    	   });
+
+        }
+    }; 
+})());
+//--></script>
 	
