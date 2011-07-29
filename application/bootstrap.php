@@ -113,7 +113,8 @@ Kohana::modules(array(
     'pagination'    =>  MODPATH.'pagination', // for server side pagination
 	'cacheimage'    => MODPATH.'cacheimage', // for Image Caching
 	'email'         => MODPATH.'email', // for mailling
-	'exam'          => MODPATH.'exam'
+	'exam'          => MODPATH.'exam',
+	'examgroup'     => MODPATH.'examgroup'
 ));
 
 /**

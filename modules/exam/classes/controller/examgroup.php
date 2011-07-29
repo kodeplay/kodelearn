@@ -1,19 +1,16 @@
 <?php defined('SYSPATH') or die('No direct script access.');
 
-class Controller_Room extends Controller_Base {
-
+class Controller_Examgroup extends Controller_Base {
+    
     public $template = 'template/logged_template';
     
     protected $_errors = array();
-
     
     public function action_index(){
-        
-        
         if($this->request->param('sort')){
             $sort = $this->request->param('sort');
         } else {
-            $sort = 'room_name';
+            $sort = 'name';
         }
         
         if($this->request->param('order')){
@@ -22,13 +19,13 @@ class Controller_Room extends Controller_Base {
             $order = 'DESC';
         }
         
-        $room = ORM::factory('room');
+        $examgroup = ORM::factory('examgroup');
         
-        if($this->request->param('filter_room_name')){
-            $room->where('room_name', 'LIKE', '%' . $this->request->param('filter_room_name') . '%');
+        if($this->request->param('filter_name')){
+            $examgroup->where('name', 'LIKE', '%' . $this->request->param('filter_name') . '%');
         }
         
-        $count = $room->count_all();
+        $count = $examgroup->count_all();
 
         $pagination = Pagination::factory(array(
             'total_items'    => $count,
@@ -36,34 +33,30 @@ class Controller_Room extends Controller_Base {
         ));
         
 
-        $room->select('locations.name','room_number','room_name')
-             ->join('locations','left')
-             ->on('locations.id','=','location_id');
+        $examgroup->select('name');
                         
-        if($this->request->param('filter_room_name')){
-            $room->where('room_name', 'LIKE', '%' . $this->request->param('filter_room_name') . '%');
+        if($this->request->param('filter_name')){
+            $examgroup->where('name', 'LIKE', '%' . $this->request->param('filter_name') . '%');
         }
                         
-        $room->group_by('id')
+        $examgroup->group_by('id')
                 ->order_by($sort, $order)
                 ->limit($pagination->items_per_page)
                 ->offset($pagination->offset)
                 ;
-        $rooms = $room->find_all();
+        $examgroups = $examgroup->find_all();
 
 
 
         $sorting = new Sort(array(
-                'Name'          => 'room_name',
-                'Number'        => 'room_number',
-                'Location'      => 'name',
+                'Name'          => 'name',
                 'Action'        => ''
         ));
         
-        $url = ('room/index');
+        $url = ('examgroup/index');
         
-        if($this->request->param('filter_room_name')){
-            $url .= '/filter_room_name/'.$this->request->param('filter_room_name');
+        if($this->request->param('filter_name')){
+            $url .= '/filter_name/'.$this->request->param('filter_name');
         }
         
         $sorting->set_link($url);
@@ -73,23 +66,23 @@ class Controller_Room extends Controller_Base {
         $heading = $sorting->render();
         
         $links = array(
-            'add_room' => Html::anchor('/room/add/', 'Create a Room', array('class' => 'createButton l')),
-            'delete'      => URL::site('/room/delete/')
+            'add_examgroup' => Html::anchor('/examgroup/add/', 'Create an Exam group', array('class' => 'createButton l')),
+            'delete'      => URL::site('/examgroup/delete/')
         );
         
-        $table = array('heading' => $heading, 'data' => $rooms);
+        $table = array('heading' => $heading, 'data' => $examgroups);
         
         // Render the pagination links
         $pagination = $pagination->render();
         
-        $filter_room_name = $this->request->param('filter_room_name');
-        $filter_url = URL::site('room/index');
+        $filter_name = $this->request->param('filter_name');
+        $filter_url = URL::site('examgroup/index');
         
-        $view = View::factory('room/list')
+        $view = View::factory('examgroup/list')
                     ->bind('links', $links)        
                     ->bind('table', $table)
                     ->bind('pagination', $pagination)
-                    ->bind('filter_room_name', $filter_room_name)
+                    ->bind('filter_name', $filter_name)
                     ->bind('filter_url', $filter_url)
                     ;
         
@@ -102,29 +95,28 @@ class Controller_Room extends Controller_Base {
          if($this->request->method() === 'POST' && $this->request->post()){
             if (Arr::get($this->request->post(), 'save') !== null){
                 $submitted = true;
-                $room = ORM::factory('room');
-                $validator = $room->validator($this->request->post());
+                $examgroup = ORM::factory('examgroup');
+                $validator = $examgroup->validator($this->request->post());
                 if ($validator->check()) {
                     
-                    $room->room_name = $this->request->post('room_name');
-                    $room->room_number = $this->request->post('room_number');
-                    $room->location_id = $this->request->post('location_id');
-                    $room->save();
-                    Request::current()->redirect('room');
+                    $examgroup->name = $this->request->post('name');
+                    
+                    $examgroup->save();
+                    Request::current()->redirect('examgroup');
                     exit;
                 } else {
-                    $this->_errors = $validator->errors('room');
+                    $this->_errors = $validator->errors('examgroup');
                 }
             }
          }
                 
-        $form = $this->form('room/add', $submitted);
+        $form = $this->form('examgroup/add', $submitted);
         
         $links = array(
-            'cancel' => Html::anchor('/room/', 'or cancel')
+            'cancel' => Html::anchor('/examgroup/', 'or cancel')
         );
         
-        $view = View::factory('room/form')
+        $view = View::factory('examgroup/form')
                   ->bind('links', $links)
                   ->bind('form', $form);
         $this->content = $view;
@@ -133,22 +125,16 @@ class Controller_Room extends Controller_Base {
     private function form($action, $submitted = false, $saved_data = array()){
         
         $locations = array();
-        foreach(ORM::factory('location')->find_all() as $location){
-            $locations[$location->id] = $location->name;
-        }
         
         $form = new Stickyform($action, array(), ($submitted ? $this->_errors : array()));
         $form->default_data = array(
-            'room_name' => '',
-            'room_number' => '',
-            'location_id' => '',
+            'name' => '',
+            
         );
         
         $form->saved_data = $saved_data;
         $form->posted_data = $submitted ? $this->request->post() : array();
-        $form->append('Name', 'room_name', 'text');
-        $form->append('Number', 'room_number', 'text');
-        $form->append('Location', 'location_id', 'select', array('options' => $locations));
+        $form->append('Name', 'name', 'text');
         $form->append('Save', 'save', 'submit', array('attributes' => array('class' => 'button')));
         $form->process();
         return $form;
@@ -160,35 +146,33 @@ class Controller_Room extends Controller_Base {
         
         $id = $this->request->param('id');
         if(!$id)
-            Request::current()->redirect('room');
+            Request::current()->redirect('examgroup');
             
-        $room = ORM::factory('room',$id);
+        $examgroup = ORM::factory('examgroup',$id);
         
          if($this->request->method() === 'POST' && $this->request->post()){
             if (Arr::get($this->request->post(), 'save') !== null){
                 $submitted = true;
-                $validator = $room->validator($this->request->post());
+                $validator = $examgroup->validator($this->request->post());
                 if ($validator->check()) {
-                    $room->room_name = $this->request->post('room_name');
-                    $room->room_number = $this->request->post('room_number');
-                    $room->location_id = $this->request->post('location_id');
-                    $room->save();
-                    Request::current()->redirect('room');
+                    $examgroup->name = $this->request->post('name');
+                    $examgroup->save();
+                    Request::current()->redirect('examgroup');
                     exit;
                 } else {
-                    $this->_errors = $validator->errors('room');
+                    $this->_errors = $validator->errors('examgroup');
                 }
             }
          }
         
-        $form = $this->form('room/edit/id/'.$id ,$submitted, array('room_name' => $room->room_name, 'room_number' => $room->room_number, 'location_id' => $room->location_id));
+        $form = $this->form('examgroup/edit/id/'.$id ,$submitted, array('name' => $examgroup->name));
         
         
         $links = array(
-            'cancel' => Html::anchor('/room/', 'or cancel')
+            'cancel' => Html::anchor('/examgroup/', 'or cancel')
         );
         
-        $view = View::factory('room/form')
+        $view = View::factory('examgroup/form')
                   ->bind('links', $links)
                   ->bind('form', $form);
         $this->content = $view;
@@ -199,10 +183,9 @@ class Controller_Room extends Controller_Base {
     public function action_delete(){
         if($this->request->method() === 'POST' && $this->request->post('selected')){
             foreach($this->request->post('selected') as $id){
-                ORM::factory('room', $id)->delete();
+                ORM::factory('examgroup', $id)->delete();
             }
         }
-        Request::current()->redirect('room');
+        Request::current()->redirect('examgroup');
     }
-    
 }
