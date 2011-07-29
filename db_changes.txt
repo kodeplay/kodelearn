@@ -133,3 +133,59 @@ CREATE TABLE IF NOT EXISTS `setting` (
   `config_value` varchar(255) NOT NULL,
   PRIMARY KEY (`setting_id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=3 ;
+
+
+-----------------------------------------------------------------------------------------------------------------
+CREATE TABLE `eventtypes` (
+    `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+    `type` VARCHAR(50) NOT NULL,
+    PRIMARY KEY (`id`)
+)
+COLLATE='utf8_general_ci'
+ENGINE=InnoDB;
+-----------------------------------------------------------------------------------------------------------------
+CREATE TABLE `events` (
+    `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+    `eventtype_id` INT(10) UNSIGNED NOT NULL DEFAULT '0',
+    `eventstart` DATETIME NOT NULL,
+    `eventend` DATETIME NOT NULL,
+    `location_id` INT(10) NOT NULL,
+    PRIMARY KEY (`id`),
+    INDEX `FK_events_eventtypes` (`eventtype_id`),
+    INDEX `FK_events_locations` (`location_id`),
+    CONSTRAINT `FK_events_locations` FOREIGN KEY (`location_id`) REFERENCES `locations` (`id`) ON DELETE CASCADE,
+    CONSTRAINT `FK_events_eventtypes` FOREIGN KEY (`eventtype_id`) REFERENCES `eventtypes` (`id`) ON DELETE CASCADE
+)
+COLLATE='utf8_general_ci'
+ENGINE=InnoDB;
+-----------------------------------------------------------------------------------------------------------------
+CREATE TABLE `examgroups` (
+    `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+    `name` VARCHAR(50) NULL DEFAULT NULL COLLATE 'latin1_swedish_ci',
+    `course_id` INT(10) UNSIGNED NOT NULL,
+    PRIMARY KEY (`id`),
+    INDEX `FK_examgroups_courses` (`course_id`),
+    CONSTRAINT `FK_examgroups_courses` FOREIGN KEY (`course_id`) REFERENCES `courses` (`id`) ON DELETE CASCADE
+)
+COLLATE='utf8_general_ci'
+ENGINE=InnoDB;
+-----------------------------------------------------------------------------------------------------------------
+CREATE TABLE `exams` (
+    `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+    `name` VARCHAR(50) NOT NULL,
+    `examgroup_id` INT(10) UNSIGNED NOT NULL,
+    `event_id` INT(10) UNSIGNED NOT NULL,
+    `total_marks` INT(10) UNSIGNED NOT NULL,
+    `passing_marks` INT(10) UNSIGNED NOT NULL,
+    `reminder` ENUM('1','0') NOT NULL DEFAULT '1',
+    PRIMARY KEY (`id`),
+    INDEX `FK_exams_examgroups` (`examgroup_id`),
+    INDEX `FK_exams_events` (`event_id`),
+    CONSTRAINT `FK_exams_examgroups` FOREIGN KEY (`examgroup_id`) REFERENCES `examgroups` (`id`) ON DELETE CASCADE,
+    CONSTRAINT `FK_exams_events` FOREIGN KEY (`event_id`) REFERENCES `events` (`id`) ON DELETE CASCADE
+)
+COLLATE='utf8_general_ci'
+ENGINE=InnoDB;
+
+
+
