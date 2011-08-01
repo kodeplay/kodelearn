@@ -279,9 +279,9 @@ class Controller_User extends Controller_Base {
                     $error = 0;
                     foreach($filedata as $key => $row){
                     	$data = array(
-                            'firstname' => $row[0],
-                            'lastname'  => $row[1],
-                    	    'email'     => $row[2],
+                            'firstname' => isset($row[0]) ? $row[0] : '',
+                            'lastname'  => isset($row[1]) ? $row[1] : '',
+                    	    'email'     => isset($row[2]) ? $row[2] : '',
                     	);
                         
                     	$user = ORM::factory('user');
