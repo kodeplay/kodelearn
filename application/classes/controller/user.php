@@ -336,7 +336,7 @@ class Controller_User extends Controller_Base {
         $form = new Stickyform('user/uploadcsv', array('enctype' => 'multipart/form-data'), array());
         $form->default_data = array(
             'role_id'   => '',
-            'batch_id'  => ''
+            'batch_id'  => $this->request->param('batch_id')
         );
         
         $form->saved_data = array();

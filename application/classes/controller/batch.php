@@ -116,16 +116,8 @@ class Controller_Batch extends Controller_Base
             }
         }
         
-        $form = $this->form('batch/add', $submitted);
+        $this->form('batch/add', $submitted);
         
-        $links = array(
-            'cancel' => Html::anchor('/batch/', 'or cancel')
-        );
-        
-        $view = View::factory('batch/form')
-            ->bind('links', $links)
-            ->bind('form', $form);
-        $this->content = $view;
     }
     
     private function form($action, $submitted = false, $saved_data = array()){
@@ -142,8 +134,24 @@ class Controller_Batch extends Controller_Base
         $form->append('Description', 'description', 'textarea', array('attributes' => array('cols' => 50, 'rows' => 5)));
         $form->append('Save', 'save', 'submit', array('attributes' => array('class' => 'button')));
         $form->process();
-        return $form;
+
+        $id = $this->request->param('id');
         
+        $links = array(
+            'cancel' => Html::anchor('/batch/', 'or cancel'),
+            'upload' => Html::anchor('user/uploadcsv/batch_id/' . $id, 'Upload Now', array('class' => 'button'))
+        );
+        
+        $action = $this->request->action();
+        
+        $view = View::factory('batch/form')
+            ->bind('links', $links)
+            ->bind('form', $form)
+            ->bind('action', $action)
+            ->bind('id', $id);
+            
+        $this->content = $view;
+                
     }
     
     public function action_edit(){
@@ -171,18 +179,7 @@ class Controller_Batch extends Controller_Base
             }
         }
         
-        $form = $this->form('batch/edit/id/'.$id ,$submitted, array('name' => $batch->name, 'description' => $batch->description));
-        
-        
-        $links = array(
-            'cancel' => Html::anchor('/batch/', 'or cancel')
-        );
-        
-        $view = View::factory('batch/form')
-            ->bind('links', $links)
-            ->bind('form', $form);
-        $this->content = $view;
-        
+        $this->form('batch/edit/id/'.$id ,$submitted, array('name' => $batch->name, 'description' => $batch->description));
         
     }
     
