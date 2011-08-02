@@ -114,7 +114,7 @@ Kohana::modules(array(
 	'cacheimage'    => MODPATH.'cacheimage', // for Image Caching
 	'email'         => MODPATH.'email', // for mailling
 	'exam'          => MODPATH.'exam',
-	'examgroup'     => MODPATH.'examgroup'
+	'event'         => MODPATH.'event'
 ));
 
 /**

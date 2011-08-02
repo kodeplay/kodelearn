@@ -79,6 +79,15 @@ KODELEARN.modules.add('add_datepicker' , (function () {
     }; 
 })());
 
+KODELEARN.modules.add('add_timepicker' , (function () {    
+    
+    return {
+        init: function () { 
+    	   $('.time').timepicker({});
+        }
+    }; 
+})());
+
 KODELEARN.modules.add('filter', (function () {
 	
 	return {
@@ -98,5 +107,23 @@ KODELEARN.modules.add('filter', (function () {
 	};
 	
 })());
+
+KODELEARN.modules.add('toggle_buttons', (function () {
+	
+	return {
+		init: function () {
+			
+		//Toggle buttons
+		$(".toggleButton > a").click(function (ev) {
+			$(this).parent().find("a").removeClass("on");
+			$(this).addClass("on");
+			$(".toggleButton >input").val($(this).attr('data'));
+			ev.preventDefault();
+		});
+	}
+	};
+	
+})());
+
 
 
