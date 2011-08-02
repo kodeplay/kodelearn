@@ -73,14 +73,27 @@ class Controller_Auth extends Controller_Base {
 
     private function register() {
         $user = ORM::factory('user');
+        $config_settings = Config::instance()->load('config');
+        $auto_login = true;
         $validator = $user->validator_register($this->request->post());
         if ($validator->check()) {
-        	$values = $validator->as_array();
-        	$values['password'] =  Auth::instance()->hash($values['password']);
+            $values = $validator->as_array();
+            $values['password'] =  Auth::instance()->hash($values['password']);
+            if ($config_settings->user_approval) {
+                $values['status'] = 0;
+                $auto_login = false;
+            }
             $user->values($values);
             $user->save();
-            Auth::instance()->login($validator['email'], $validator['password']);
-            Request::current()->redirect('home');
+            $role = ORM::factory('role', $config_settings->default_role);
+            $user->add('roles', $role);
+            if ($auto_login) {
+                Auth::instance()->login($validator['email'], $validator['password']);
+                Request::current()->redirect('home');
+                exit;
+            } else {
+                echo 'Your account is pending the administrators approval';
+            }
             exit;
         } else {
             $this->_errors = $validator->errors('register');
