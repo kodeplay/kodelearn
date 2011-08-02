@@ -45,10 +45,11 @@ class Controller_Base extends Controller_Template {
         $logged_in = Auth::instance()->logged_in();        
         $this->template = !$logged_in ? 'template/template' : 'template/logged_template';
         $controller = $this->request->controller();
+        $action = $this->request->action();
         if (!$logged_in && $controller !== 'auth') {
             $this->request->redirect('auth');
         }
-        if ($logged_in && $controller === 'auth') {
+        if ($logged_in && $controller === 'auth' && $action !== 'logout') {
             $this->request->redirect('home');
         }
     }    
@@ -98,7 +99,8 @@ class Controller_Base extends Controller_Template {
             $topmenu = DynamicMenu::factory('topmenu');
             $topmenu->add_link('home', 'Home')
                 ->add_link('account', 'Profile')
-                ->add_link('inbox', 'Inbox');
+                ->add_link('inbox', 'Inbox')
+                ->add_link('auth/logout', 'Logout');
             $sidemenu = DynamicMenu::factory('sidemenu');
             $sidemenu->add_link('user', 'Users', 0)
                 ->add_link('batch', 'Batches', 1)

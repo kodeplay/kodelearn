@@ -21,7 +21,8 @@
                         <span id="user">John</span> 
                         <span class="tlGray">|</span>
                     </li>
-                    <li class="menu l"><a href="#">My Account <span class="trid">&#x25BC;</span></a></li>
+                   <!-- <li class="menu l"><a href="#">My Account <span class="trid">&#x25BC;</span></a></li> -->
+                    <li class="menu l"><?php echo $topmenu->logout; ?></li>
                 </ul>
                 <div class="clear"></div>
             </div><!-- wrap -->
