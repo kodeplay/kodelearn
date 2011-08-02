@@ -415,7 +415,12 @@ select {	width: 210px;  }
 	float: left;
 	font-weight: bold;
 }
-
+.form-error {
+	display: block;
+	color: #f00;
+	margin-bottom: 10px;
+	font-weight:bold;
+}
 
 /* .......................
 	Toggle button

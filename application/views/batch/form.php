@@ -27,13 +27,14 @@
 			</tr>
 		</table>
 		<?php echo $form->endForm(); ?>
+		<?php if($action === 'edit') { ?>
 		<p class="sectionTitle">Add students to this batch</p>
-		<p class="vm10">A CSV file is the easiest way to add students to a batch. ABCDEFGHIJKLMNOPQRSTUVWXYZ.</p>
+		<p class="vm10">A CSV file is the easiest way to add students to a batch. </p>
 		<p class="tm40">
-			<a href="#" class="button">Upload now</a>
+			<?php echo $links['upload'] ?>
 		</p>
-		<p class="vm40"><a href="#">or click here to download a sample CSV file</a></p>
-		
+		<p class="vm40"></p>
+		<?php } ?>
 		
 		
 	</div><!-- content -->

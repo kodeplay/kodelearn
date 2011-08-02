@@ -43,8 +43,13 @@ class Controller_System extends Controller_Base {
         $images = CacheImage::factory();
         $image = $images->resize($institution->logo, 100, 100);
         
-        $form = $this->form(array('name' => $institution->name, 'institutiontype_id' => $institution->institution_type_id, 'logo' => $institution->logo, 'website' => $institution->website, 'address' => $institution->address, 'config' => $config_settings), array());
-        
+        $form = $this->form(array(
+            'name' => $institution->name, 
+            'institutiontype_id' => $institution->institution_type_id, 
+            'logo' => $institution->logo, 
+            'website' => $institution->website, 
+            'address' => $institution->address, 
+            'config' => $config_settings), array());        
 
         $this->content = $view;
     }
