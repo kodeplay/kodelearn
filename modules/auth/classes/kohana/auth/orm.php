@@ -30,8 +30,8 @@ class Kohana_Auth_ORM extends Auth {
         $user = ORM::factory('user');
         $user->where('email', ' = ', $email)
             ->and_where('password', ' = ', $password)
-            ->find();
-            
+            ->and_where('status', ' = ', 1)
+            ->find();            
         // TODO remember to be done
         if ($user->id !== null) {
             $this->complete_login($user);

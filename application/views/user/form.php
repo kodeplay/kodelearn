@@ -32,12 +32,16 @@
                         <?php echo $form->batch_id->element(); ?>
                         <p class="tip">You can select multiple batches.</p>
                     </td>
-                </tr>
+                </tr>                
                 <tr>
                     <td><?php echo $form->course_id->label(); ?></td>
                     <td><?php echo $form->course_id->element(); ?>
                         <p class="tip">You can select multiple courses.</p>
                     </td>
+                </tr>
+                <tr>
+                    <td><?php echo $form->status->label(); ?></td>
+                    <td><?php echo $form->status->element(); ?></td>
                 </tr>
 				<tr>
 					<td></td>

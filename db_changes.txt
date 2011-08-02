@@ -188,4 +188,5 @@ COLLATE='utf8_general_ci'
 ENGINE=InnoDB;
 
 
-
+----------------------------------------------------------------------------------------------------------------
+ALTER TABLE `users` ADD `status` TINYINT( 1 ) NOT NULL DEFAULT '1'

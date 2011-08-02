@@ -15,7 +15,8 @@
         <table class="formcontainer">
             <tr>
                 <td><label for="insti"><?php echo $form->name->label(); ?></label></td>
-                <td><?php echo $form->name->element(); ?></td>
+                <td><?php echo $form->name->element(); ?>
+                <span class="form-error"><?php echo $form->name->error(); ?></span></td>
             </tr>
             <tr>
                 <td><label for="instiType"><?php echo $form->institutiontype_id->label(); ?></label></td>

@@ -68,7 +68,8 @@
 
 <div class="vpad40 l" id="lContainer">
     <p class="tdBlue bm40">Login to learn online</p>
-    <?php echo $form_login->startform(); ?>
+    <?php echo $login_message; ?>
+        <?php echo $form_login->startform(); ?>
         <table class="formcontainer">
             <tr>
                 <td class="tar"><?php echo $form_login->email->label(); ?></td>
