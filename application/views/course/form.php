@@ -9,7 +9,7 @@
 		<?php echo $form->startform(); ?>
 		<?php echo $form->save->element(); ?>
 		<div class="topbar">
-			<a href="#" class="pageTab active">Create course</a>
+			<a href="#" class="pageTab active">Course Details</a>
 			<a href="#" class="pageTab">Assign Users</a>
 		</div><!-- topbar -->
 		<br/>
