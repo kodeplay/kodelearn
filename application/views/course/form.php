@@ -1,28 +1,18 @@
 	
 	<div class="r pagecontent">
-		<div class="pageTop">
+		<div class="pageTop withBorder">
 			<div class="pageTitle l">Courses</div>
 			<div class="pageDesc r">You can view and edit courses here. You can also assign users to courses.</div>
 			<div class="clear"></div>
 		</div><!-- pageTop -->
 		
 		<?php echo $form->startform(); ?>
-		<?php echo $form->save->element(); ?>
-		<div class="topbar">
-			<a href="#" class="pageTab active">Create course</a>
-			<a href="#" class="pageTab">Assign Users</a>
-		</div><!-- topbar -->
+		<div class="vm10">
+			<?php echo $form->save->element(); ?>
+			<span class="clear h2">&nbsp;</span>
+		</div> <!-- vm10 -->
 		<br/>
-		<br/>
-		Add users from Batch: 
-		<select id="batch_id">
-		  <option value="0">Select Batch</option>
-		  <?php foreach($batches as $batch){ ?>
-		      <option value="<?php echo $batch->id ?>"><?php echo $batch->name ?></option>
-		  <?php }?>
-		</select>
-		<a class="button" href="#" id="add_users"> Add</a>
-        <br/>       <br/>
+		
 		<div id="tabs">
 		  <ul>
 		      <li><a href="#form-details"> Course Details</a></li>
@@ -64,6 +54,17 @@
 		</div>
 		
 		<div id="assign-users">
+			<p class="bm40">
+				Add users from Batch: 
+				<select id="batch_id">
+				  <option value="0">Select Batch</option>
+				  <?php foreach($batches as $batch){ ?>
+					  <option value="<?php echo $batch->id ?>"><?php echo $batch->name ?></option>
+				  <?php }?>
+				</select>
+				<a class="button" href="#" id="add_users"> Add</a>
+			</p>
+			
             <?php echo $users ?>		  
 		</div>
 		</div>

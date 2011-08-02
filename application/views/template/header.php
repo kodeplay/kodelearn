@@ -21,8 +21,13 @@
                         <span id="user">John</span> 
                         <span class="tlGray">|</span>
                     </li>
-                    <li class="menu l"><a href="#">My Account <span class="trid">&#x25BC;</span></a></li>
+                    <li class="menu l"><a href="#" id="myac">My Account <span class="trid">&#x25BC;</span></a></li>
                 </ul>
+				<ul id="myacContent" class="crsrPoint">
+					<li><a href="#">Settings</a></li>
+					<li><a href="#">Account</a></li>
+					<li><a href="#">Logout</a></li>
+				</ul>
                 <div class="clear"></div>
             </div><!-- wrap -->
         </div><!-- menubar -->
