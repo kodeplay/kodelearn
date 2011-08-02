@@ -10,12 +10,12 @@ class Controller_Auth extends Controller_Base {
         $posted_forgot_password = array();
         $submitted_form = '';
         $display = "none";
-        
+        $login_msg = "";
         if ($this->request->method() === 'POST' && $this->request->post()) {
             
             if (Arr::get($this->request->post(), 'login') !== null) {
                 $submitted_form = 'login';
-                $this->login();
+                $login_msg = $this->login();
             } elseif (Arr::get($this->request->post(), 'register') !== null) {
                 $submitted_form = 'register';
                 $this->register();
@@ -32,7 +32,8 @@ class Controller_Auth extends Controller_Base {
             ->bind('form_forgot_password', $form_forgot_password)
             ->bind('links', $links)
             ->bind('display', $display)
-            ->bind('display_success', $display_success);          
+            ->bind('display_success', $display_success)
+            ->bind('login_message', $login_msg);          
         $form_login = $this->form_login(($submitted_form === 'login'));
         $form_register = $this->form_register(($submitted_form === 'register'));
         $form_forgot_password = $this->form_forgot_password(($submitted_form === 'forgot_password'));
@@ -68,6 +69,7 @@ class Controller_Auth extends Controller_Base {
             exit;
         } else {
             $this->_errors = $validator->errors('login');
+            return '<div class="formMessages" style="width:310px; height:25px"><span class="fmIcon bad"></span> <span class="fmText">No match for Email and/or Password.</span><span class="clear">&nbsp;</span></div>';
         }
     }
 
@@ -109,11 +111,12 @@ class Controller_Auth extends Controller_Base {
         return $form;
     }
 
-    /*public function action_logout() {
-         Auth::instance()->logout();
-         Request::current()->redirect('welcome');
+    public function action_logout() {
         
-    }*/
+        Auth::instance()->logout();
+        Request::current()->redirect('auth');
+        
+    }
 
    /* public function action_forgot_password() {
        
