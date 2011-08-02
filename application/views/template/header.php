@@ -21,12 +21,14 @@
                         <span id="user">John</span> 
                         <span class="tlGray">|</span>
                     </li>
-                    <li class="menu l"><a href="#" id="myac">My Account <span class="trid">&#x25BC;</span></a></li>
+
+                   <li class="menu l"><a href="#">My Account <span class="trid">&#x25BC;</span></a></li>
+                    
                 </ul>
 				<ul id="myacContent" class="crsrPoint">
 					<li><a href="#">Settings</a></li>
 					<li><a href="#">Account</a></li>
-					<li><a href="#">Logout</a></li>
+					<li><?php echo $topmenu->logout; ?></li>
 				</ul>
                 <div class="clear"></div>
             </div><!-- wrap -->
@@ -35,7 +37,7 @@
         <div class="container">
             
             <div class="branding">
-                <h1 class="dib l"><a href="#"><img src="media/image/kodelearn.jpg" alt="KodeLearn | Home" /></a></h1>
+                <h1 class="dib l"><a href="#"><img src="<?php echo Url::base(); ?>media/image/kodelearn.jpg" alt="KodeLearn | Home" /></a></h1>
                 
                 <div class="roles dib r">
                     <p id="roleViewToggle">Switch roles <span class="trid">&#x25BC;</span></p>

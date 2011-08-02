@@ -7,10 +7,12 @@
 		</div><!-- pageTop -->
 		
 		<?php echo $form->startform(); ?>
+
 		<div class="vm10">
 			<?php echo $form->save->element(); ?>
 			<span class="clear h2">&nbsp;</span>
 		</div> <!-- vm10 -->
+
 		<br/>
 		
 		<div id="tabs">

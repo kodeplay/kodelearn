@@ -3,6 +3,7 @@
 class Controller_System extends Controller_Base {
 
     public function action_index() {
+        $submitted = false;
         $view = View::factory('system/form')
             ->bind('form', $form)
             ->bind('image', $image)
@@ -13,7 +14,7 @@ class Controller_System extends Controller_Base {
                
         // if post, validate, save and redirect
         if ($this->request->method() === 'POST' && $this->request->post()) {
-            
+            $submitted = true;
             $config_post = $this->request->post('config');
             if(isset($config_post['membership'])){
                 $config_post['membership'];
@@ -27,15 +28,22 @@ class Controller_System extends Controller_Base {
             }
             //echo $config_post['membership'];
             //exit;
-            $institution->name = $this->request->post('name');
-            $institution->institution_type_id = $this->request->post('institutiontype_id');
-            $institution->logo = $this->request->post('logo');
-            $institution->website = $this->request->post('website');
-            $institution->address = $this->request->post('address');
-            $institution->save();
-            $config->load('config')->setMany($config_post);
-            Request::current()->redirect('system');
-            exit;
+            $validator = $institution->validator($this->request->post());
+            if ($validator->check()) {
+                
+                $institution->name = $this->request->post('name');
+                $institution->institution_type_id = $this->request->post('institutiontype_id');
+                $institution->logo = $this->request->post('logo');
+                $institution->website = $this->request->post('website');
+                $institution->address = $this->request->post('address');
+                $institution->save();
+                $config->load('config')->setMany($config_post);
+                Request::current()->redirect('system');
+                exit;    
+            } else {
+                $this->_errors = $validator->errors('institution');
+            }
+            
             
         }
         
@@ -49,12 +57,12 @@ class Controller_System extends Controller_Base {
             'logo' => $institution->logo, 
             'website' => $institution->website, 
             'address' => $institution->address, 
-            'config' => $config_settings), array());        
+            'config' => $config_settings), $submitted);        
 
         $this->content = $view;
     }
     
-    protected function form($saved_data, $errors) {
+    protected function form($saved_data, $submitted = false) {
         $action = 'system';
         // get all roles
         $roles = ORM::factory('role')->find_all()->as_array('id', 'name');
@@ -68,7 +76,7 @@ class Controller_System extends Controller_Base {
             '4' => 'Español',
         );
                
-        $form = new Stickyform($action, array(), $errors);
+        $form = new Stickyform($action, array(), ($submitted ? $this->_errors : array()));
         $fields = array(
             'name', 
             'institutiontype_id', 
