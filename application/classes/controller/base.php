@@ -75,6 +75,7 @@ class Controller_Base extends Controller_Template {
             'media/javascript/common.js',
             'media/javascript/ajaxupload.js',
             'media/javascript/jquery-ui-1.8.14.custom.min.js',
+            'media/javascript/jquery-ui-timepicker-addon.js',
 			'media/javascript/kodelearnUI.js'
         );
         $this->view->set('content', $this->content);
