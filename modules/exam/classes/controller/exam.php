@@ -37,9 +37,9 @@ class Controller_Exam extends Controller_Base {
                 'Grading Period'    => '',
                 'Date / Time'       => '',
                 'Course'            => '',
-                'Total Marks'       => '',
-                'Passing Marks'     => '',
-                'Reminder'          => '',
+                'Total Marks'       => 'total_marks',
+                'Passing Marks'     => 'passing_marks',
+                'Reminder'          => 'reminder',
                 'Action'        => ''
         ));
         
@@ -69,18 +69,18 @@ class Controller_Exam extends Controller_Base {
 		$this->content = $view;
 	}
 	
-	public function action_add(){
-		$submitted = FALSE;
-		
+    public function action_add(){
+        $submitted = FALSE;
+        
         if($this->request->method() === 'POST' && $this->request->post()){
             if (Arr::get($this->request->post(), 'save') !== null){
                 $submitted = true;
                 $exam = ORM::factory('exam');
                 $validator = $exam->validator($this->request->post());
                 if ($validator->check()) {
-                	$event_exam = Event::factory('exam');
+                    $event_exam = Event::factory('exam');
 
-                	$from = $this->request->post('date') . ' ' . $this->request->post('from');
+                    $from = $this->request->post('date') . ' ' . $this->request->post('from');
                     if(!(strtotime($from)))
                          $from = $this->request->post('date') . ' 00:00';
                           
@@ -88,11 +88,14 @@ class Controller_Exam extends Controller_Base {
                     if(!(strtotime($to)))
                          $to = $this->request->post('date') . ' 00:00';
                     
+                    $from = strtotime($from);
+                    $to = strtotime($to);
+        
                     $event_exam->set_values($this->request->post());
-                    echo '<pre>';
-                    print_r($this->request->post());
-                	echo '</pre>';
-                	exit;
+                    $event_exam->set_value('eventstart', $from);
+                    $event_exam->set_value('eventend', $to);
+                    $event_exam->add();
+
                     Request::current()->redirect('exam');
                     exit;
                 } else {
@@ -102,14 +105,93 @@ class Controller_Exam extends Controller_Base {
         }
         
         $form = $this->form('exam/add', $submitted);
-		
-		$view = View::factory('exam/form')
-		               ->bind('form', $form);
-		
+        $event_id = 0;
+        $view = View::factory('exam/form')
+                       ->bind('form', $form)
+                       ->bind('event_id', $event_id);
+        
         $this->content = $view;
-	}
-	
-    private function form($action, $submitted = false, $saved_data = array()){
+    }
+
+    public function action_edit(){
+    	
+    	$id = $this->request->param('id');
+    	
+    	if(!$id)
+    	   Request::current()->redirect('exam');
+    	
+        $submitted = FALSE;
+        
+        if($this->request->method() === 'POST' && $this->request->post()){
+            if (Arr::get($this->request->post(), 'save') !== null){
+                $submitted = true;
+                $exam = ORM::factory('exam');
+                $validator = $exam->validator($this->request->post());
+                if ($validator->check()) {
+                    $event_exam = Event::factory('exam');
+
+                    $from = $this->request->post('date') . ' ' . $this->request->post('from');
+                    if(!(strtotime($from)))
+                         $from = $this->request->post('date') . ' 00:00';
+                          
+                    $to = $this->request->post('date') . ' ' . $this->request->post('to'); 
+                    if(!(strtotime($to)))
+                         $to = $this->request->post('date') . ' 00:00';
+                    
+                    $from = strtotime($from);
+                    $to = strtotime($to);
+        
+                    $event_exam->set_values($this->request->post());
+                    $event_exam->set_value('eventstart', $from);
+                    $event_exam->set_value('eventend', $to);
+                    $event_exam->update($id);
+
+                    Request::current()->redirect('exam');
+                    exit;
+                } else {
+                    $this->_errors = $validator->errors('exam');
+                }
+            }
+        }
+        
+        $exam = ORM::factory('exam', $id);
+        
+        $event = ORM::factory('event', $exam->event_id);
+        
+        $saved_data = array(
+            'name'          => $exam->name,
+            'examgroup_id'  => $exam->examgroup_id,
+            'course_id'     => $exam->course_id,
+            'total_marks'   => $exam->total_marks,
+            'passing_marks' => $exam->passing_marks,
+            'reminder'      => $exam->reminder,
+            'date'          => date('Y-m-d', $event->eventstart),
+            'from'          => date('H:i', $event->eventstart),
+            'to'            => date('H:i', $event->eventend),
+            'room_id'       => $event->room_id
+        );
+
+        $results = Event::get_avaliable_rooms($event->eventstart, $event->eventend, $event->id);
+        
+        $rooms = array();
+        foreach($results as $room){
+            $rooms[$room->id] = $room->room_number . ', ' . $room->room_name;
+        }
+        
+        $room = ORM::factory('room', $event->room_id);
+        
+        $rooms[$room->id] = $room->room_number . ', ' . $room->room_name;
+        
+        $form = $this->form('exam/edit/id/' . $id, $submitted, $saved_data, $rooms);
+        $event_id = $exam->event_id;
+        $view = View::factory('exam/form')
+                       ->bind('form', $form)
+                       ->bind('event_id', $event_id);
+        
+        $this->content = $view;
+    }
+    
+    private function form($action, $submitted = false, $saved_data = array(), $rooms = array()){
         
     	
         $examgroups = array();
@@ -147,7 +229,7 @@ class Controller_Exam extends Controller_Base {
         $form->append('Passing Marks', 'passing_marks', 'text');
         $form->append('Reminder', 'reminder', 'hidden');
         $form->append('Grading Period', 'examgroup_id', 'select', array('options' => $examgroups));
-        $form->append('Room', 'room_id', 'select', array('options' => array()));
+        $form->append('Room', 'room_id', 'select', array('options' => $rooms));
         $form->append('Course', 'course_id', 'select', array('options' => $courses));
         $form->append('Save', 'save', 'submit', array('attributes' => array('class' => 'button')));
         $form->process();
@@ -169,7 +251,18 @@ class Controller_Exam extends Controller_Base {
         $from = strtotime($from);
         $to = strtotime($to);
         
-        $rooms = Event::get_avaliable_rooms($from, $to);
+        $event_id = $this->request->post('event_id');
+        
+        $results = Event::get_avaliable_rooms($from, $to, $event_id);
+        
+        $rooms = array();
+        foreach($results as $room){
+        	$rooms[$room->id] = $room->room_number . ', ' . $room->room_name;
+        }
+        
+        $element =Form::select('room_id',$rooms);
+        
+        echo json_encode(array('element' => $element));
         
     }
     

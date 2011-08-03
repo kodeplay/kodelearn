@@ -24,7 +24,7 @@
                 <td><?php echo $exam->passing_marks ?></td>
                 <td><?php echo ($exam->reminder)?'Yes':'No'; ?></td>
                 <td>
-                    <p><a href="#">View/ Edit</a></p>
+                    <p><?php echo Html::anchor('/exam/edit/id/'.$exam->id, 'View/Edit')?></p>
                 </td>
             </tr>
             <?php }?>
