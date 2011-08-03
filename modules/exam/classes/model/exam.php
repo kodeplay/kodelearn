@@ -4,6 +4,8 @@ class Model_Exam extends ORM {
 
     protected $_belongs_to = array('course' => array(), 'event' => array(), 'examgroup' => array());
 
+    protected $_has_many = array('examresult' => array('model' => 'examresult'));
+
     public function validator($data) {
         return Validation::factory($data)
             ->rule('name', 'not_empty')

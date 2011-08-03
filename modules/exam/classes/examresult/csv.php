@@ -5,7 +5,7 @@ class Examresult_Csv {
     /*
      * Method to get the matrix which will be finally put into the css
      * @param array $students keys = student_ids, values = Student Names
-     * @param array $exams keys = exam_ids, values = Exam Names
+     * @param array $exams {keys = exam_ids, values = Exam Names}
      * @param array $results optional 
      *           eg. array(
      *                 'student_id' => array('exam_id' => marks)
@@ -32,5 +32,22 @@ class Examresult_Csv {
             $matrix[] = $line;           
         }
         return $matrix;
+    }
+
+    /**
+     * Method to get the ordered list of exam_ids from the first line 
+     * of the csv 
+     * @param array $csv_headings First line of the csv file
+     * @param array $exams {keys = Exam Names, values = Exam Ids}
+     * @return array of exam_ids in the order in which they appear in the 
+     */
+    public static function ordered_exams($csv_headings, $exams) {
+        // remove the first two headings and get only exam headings
+        $exam_names = array_slice($csv_headings, 2);
+        $ordered_exams = array();
+        foreach ($exam_names as $exam_name) {
+            $ordered_exams[] = $exams[$exam_name];
+        }
+        return $ordered_exams;
     }
 }

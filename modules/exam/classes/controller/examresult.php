@@ -2,14 +2,26 @@
 
 class Controller_Examresult extends Controller_Base {
 
-    // is this required ?
     public function action_index() {
-
+        $view = View::factory('examresult/upload')
+            ->bind('form', $form);
+        $this->content = $view;
     }
-
     
     public function action_upload() {
-        
+        $examgroup_id = 2;
+        $csv_data = array(
+            array('Student Id', 'Student Name', 'Chapter 5, 6'),
+            array(51, 'Vineet Student', 22),
+            array(52, 'Jimit Student', 24),
+        );
+        // get all the exams in this exam group
+        $exams = Model_Examgroup::get_exams($examgroup_id)
+            ->as_array('name', 'id');
+        $csv_headings = array_shift($csv_data);
+        // get the array of exam_ids in the order they appear in the csv
+        $ordered_exams = Examresult_Csv::ordered_exams($csv_headings, $exams);
+        Model_Examresult::csv_import($csv_data, $ordered_exams);
     }
 
     /**
@@ -41,7 +53,7 @@ class Controller_Examresult extends Controller_Base {
 
     // only the administrator and the teacher will be permitted to do this
     public function action_edit() {
-
+        
     }
 
     // view results of all users - so typically only the administrator and teacher 
