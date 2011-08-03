@@ -9,12 +9,6 @@ $(document).ready (function () {
 		$("#myacContent").fadeOut("fast");
 	});
 	
-	//Role actions toggle - used on permissions page
-	$(".roleAction").click(function () {
-		$(this).toggleClass("yes");
-		$(this).toggleClass("no");
-	});
-	
 	//Role toggle - used on header
 	$("#roleViewToggle").click(function () {
 		$("#roleList").slideToggle("fast");

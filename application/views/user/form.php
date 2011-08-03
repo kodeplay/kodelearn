@@ -1,7 +1,7 @@
 	<div class="r pagecontent">
 		<div class="pageTop withBorder">
-			<div class="pageTitle l">Create a new user</div>
-			<div class="pageDesc r">Create a new user here.</div>
+			<div class="pageTitle l"><?php echo $heading[0];?></div>
+			<div class="pageDesc r"><?php echo $heading[1];?></div>
 			<div class="clear"></div>
 		</div><!-- pageTop -->
 		

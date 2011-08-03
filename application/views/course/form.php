@@ -66,9 +66,9 @@
 				</select>
 				<a class="button" href="#" id="add_users"> Add</a>
 			</p>
-			
-            <?php echo $users ?>		  
-		</div>
+    		<div id="assign-users-ajax">	
+                <?php echo $users ?>		  
+    		</div>
 		</div>
 		<?php echo $form->endForm(); ?>
 		
@@ -89,7 +89,7 @@ KODELEARN.modules.add('assign_users' , (function () {
         	   if(batch_id){
                    $.post(KODELEARN.config.base_url + "course/get_users", { "batch_id": batch_id, "course_id": course_id },
                            function(data){
-                	       	  $('#assign-users').html(data.response);
+                	       	  $('#assign-users-ajax').html(data.response);
                 	       	  
                            }, "json");
         	   }
