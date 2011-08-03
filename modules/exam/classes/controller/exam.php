@@ -57,13 +57,15 @@ class Controller_Exam extends Controller_Base {
         $pagination = $pagination->render();
         
         $links = array(
-            'add' => Html::anchor('/exam/add/', 'Create an Exam', array('class' => 'createButton l')),
-            'delete'      => URL::site('/exam/delete/')
+            'add'       => Html::anchor('/exam/add/', 'Create an Exam', array('class' => 'createButton l')),
+            'delete'    => URL::site('/exam/delete/'),
+            'examgroup' => Html::anchor('examgroup', 'Grading Period', array('class' => 'l pageAction'))
         );
 		
         $view = View::factory('exam/list')
                         ->bind('links', $links)
                         ->bind('table', $table)
+                        ->bind('count', $count)
                         ->bind('pagination', $pagination);
 		
 		$this->content = $view;

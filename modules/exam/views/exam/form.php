@@ -82,6 +82,7 @@ KODELEARN.modules.add('create_exam' , (function () {
     
     return {
         init: function () { 
+    	   $('select[name="room_id"]').click(function(){  $('input[name="to"]').blur(); });
            $('input[name="to"]').blur(function(){
                var data = $('form').serializeArray();
                $.post(KODELEARN.config.base_url + "exam/get_avaliable_rooms",  data,

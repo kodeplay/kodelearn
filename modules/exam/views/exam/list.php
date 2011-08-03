@@ -6,7 +6,7 @@
         </div><!-- pageTop -->
         <div class="topbar">
             <?php echo $links['add']?>
-            
+            <?php echo $links['examgroup']?>
             <a onclick="$('#exam').submit();" class="pageAction r alert">Delete selected...</a>
             <span class="clear">&nbsp;</span>
         </div><!-- topbar -->
@@ -28,11 +28,19 @@
                 </td>
             </tr>
             <?php }?>
-            <tr class="pagination">
-                <td class="tar pagination" colspan="9">
-                    <?php echo $pagination ?>
-                </td>
-            </tr>
+            <?php if($count > 0){ ?>
+                <tr class="pagination">
+                    <td class="tar pagination" colspan="9">
+                        <?php echo $pagination ?>
+                    </td>
+                </tr>
+                <?php } else { ?>
+                <tr>
+                    <td colspan="9" align="center">
+                        No Records Found
+                    </td>
+                </tr>
+                <?php } ?>
         </table>
         </form>
     </div>
