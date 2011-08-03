@@ -9,6 +9,7 @@
 	6.		Table
 	7.		Pagination
 	8.		Rank badges
+	9.		Breadcrumbs
 	END OF GENERAL STYLES
 	.................................
 	8.		Signup form styles
@@ -737,6 +738,32 @@ select {	width: 210px;  }
 	background-image: url("../image/rankBadges.png");
 	background-repeat: no-repeat;
 	background-position: 100% -137px;
+}
+
+
+/* ..........................
+	Breadcrumbs
+   ........................ */
+.breadcrumbs {
+	padding: 7px 3px;
+	border-bottom: 1px solid #feb100;
+	color: #4c3d34;
+	font-size: 12px;
+}
+.breadcrumbs .sep {
+	font-family: Arial;
+	margin-left: 2px;
+	margin-right: 2px;
+	font-size: 13px;
+	padding-bottom: 3px;
+}
+.breadcrumbs a {
+	color: #4c3d34;
+	padding-left: 2px;
+	padding-right: 2px;
+}
+.breadcrumbs a:hover {
+	border-bottom: 1px dotted #948b85;
 }
 
 
