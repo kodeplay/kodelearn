@@ -39,11 +39,13 @@
             <tr>
                 <td><?php echo 'Time' ?></td>
                 <td><?php echo $form->from->element(); ?>
-                    <span class="form-error"><?php echo $form->from->error(); ?></span>
+                    
                     &nbsp;&nbsp;
                     <?php echo $form->to->label(); ?>
                     <?php echo $form->to->element(); ?>
-                <span class="form-error"><?php echo $form->to->error(); ?></span></td>
+                <span class="form-error"><?php echo $form->from->error(); ?></span>
+                <span class="form-error"><?php echo $form->to->error(); ?></span>
+                </td>
             </tr>
             
             <tr>
@@ -65,6 +67,7 @@
             <tr>
                 <td></td>
                 <td>
+                    <input type="hidden" name="event_id" value="<?php echo $event_id ?>" />
                     <?php echo $form->save->element(); ?>
                 </td>
             </tr>
@@ -83,7 +86,7 @@ KODELEARN.modules.add('create_exam' , (function () {
                var data = $('form').serializeArray();
                $.post(KODELEARN.config.base_url + "exam/get_avaliable_rooms",  data,
                        function(data){
-                           $('#course_info').html(data.response);
+                           $('select[name="room_id"]').replaceWith(data.element);
                        }, "json");
            });
         }

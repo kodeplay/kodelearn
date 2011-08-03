@@ -143,11 +143,14 @@ class Controller_User extends Controller_Base {
                 }
             }
         }
-        
+        $heading[] = 'Create a new user';
+        $heading[] = 'Create a new user here';
         $form = $this->form('user/add', $submitted);
         
         $view = View::factory('user/form')
-            ->bind('form', $form);
+            ->bind('form', $form)
+            ->bind('heading',$heading);
+            
         $this->content = $view;
     }
     
@@ -258,9 +261,12 @@ class Controller_User extends Controller_Base {
             'course_id' => $user->courses->find_all()->as_array(NULL, 'id'),
             'status' => (int) $user->status,
         ));        
+        $heading[] = "View/Edit ".$user->firstname."'s Profile";
+        $heading[] = 'View/Edit here';
         
         $view = View::factory('user/form')
-            ->bind('form', $form);
+            ->bind('form', $form)
+            ->bind('heading', $heading);
         $this->content = $view;
     }
 
@@ -276,12 +282,13 @@ class Controller_User extends Controller_Base {
     public function action_uploadcsv(){
 
         if($this->request->method() === 'POST' && $this->request->post()){
+            
             if (Arr::get($this->request->post(), 'save') !== null){
-                
+               
                 $filename = $_FILES['csv']['name'];
                 $extension = explode(".",$filename);
                 if(isset($extension[1]) && strtolower($extension[1]) === "csv"){ //Validation of file 
-                    
+                     
                     $filename = $_FILES['csv']['tmp_name'];
                     $handle = fopen($filename, "r");
                     
@@ -333,7 +340,7 @@ class Controller_User extends Controller_Base {
                     
                     fclose($handle);
                 } else {
-                    $this->error['warring'] = "The file you uploaded is not a valid csv file";
+                    $this->error['warning'] = "The file you uploaded is not a valid csv file";
                     $this->error['description'] = ""; 
                 }
             }
@@ -352,7 +359,7 @@ class Controller_User extends Controller_Base {
         $form = new Stickyform('user/uploadcsv', array('enctype' => 'multipart/form-data'), array());
         $form->default_data = array(
             'role_id'   => '',
-            'batch_id'  => $this->request->param('batch_id')
+            'batch_id'  => $this->request->param('batch_id', array())
         );
         
         $form->saved_data = array();
