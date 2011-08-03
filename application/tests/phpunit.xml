@@ -9,8 +9,11 @@
         <testsuite name="Auth/Role/ACL Tests"> 
             <directory>../../modules/auth/tests/</directory> 
         </testsuite> 
-        <testsuite name="Stickyform/ACL Tests"> 
+        <testsuite name="Stickyform"> 
             <directory>../../modules/stickyform/tests/</directory> 
+        </testsuite> 
+        <testsuite name="Exam/Exam Results Tests"> 
+            <directory>../../modules/exam/tests/</directory> 
         </testsuite> 
     </testsuites> 
 </phpunit>
