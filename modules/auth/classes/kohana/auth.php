@@ -95,6 +95,16 @@ abstract class Kohana_Auth {
 
 		return $this->_login($email, $password, $remember);
 	}
+	
+	
+    public function login_cookie($email, $password, $remember = FALSE)
+    {
+        if (empty($password))
+            return FALSE;
+
+        
+        return $this->_login($email, $password, $remember);
+    }
 
 	/**
 	 * Log out a user by removing the related session variables.
@@ -118,7 +128,7 @@ abstract class Kohana_Auth {
 			// Regenerate session_id
 			$this->_session->regenerate();
 		}
-
+        cookie::delete('authautologin');
 		// Double check
 		return ! $this->logged_in();
 	}

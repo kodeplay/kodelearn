@@ -93,6 +93,7 @@ class Controller_User extends Controller_Base {
         $view = View::factory('user/list')
             ->bind('table', $table)
             ->bind('users', $users)
+            ->bind('count', $count)
             ->bind('links', $links)
             ->bind('pagination', $pagination)
             ->bind('filter_name', $filter_name)
