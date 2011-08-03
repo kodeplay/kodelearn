@@ -266,4 +266,12 @@ class Controller_Exam extends Controller_Base {
         
     }
     
+    public function action_delete(){
+        if($this->request->method() === 'POST' && $this->request->post('selected')){
+            foreach($this->request->post('selected') as $exam_id){
+                ORM::factory('exam', $exam_id)->delete();
+            }
+        }
+        Request::current()->redirect('exam');
+    }
 }

@@ -15,7 +15,7 @@
             <?php echo $table['heading']?>
             <?php foreach($table['data'] as $exam){ ?>
             <tr>
-                <td><input type="checkbox" class="selected" name="selected" value="" /></td>
+                <td><input type="checkbox" class="selected" name="selected[]" value="<?php echo $exam->id ?>" /></td>
                 <td><?php echo $exam->name ?></td>
                 <td><?php echo $exam->examgroup->name ?></td>
                 <td><?php echo date('d M Y H:i ', $exam->event->eventstart) ?></td>
