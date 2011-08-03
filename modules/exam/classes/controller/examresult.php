@@ -3,25 +3,45 @@
 class Controller_Examresult extends Controller_Base {
 
     public function action_index() {
-        $view = View::factory('examresult/upload')
-            ->bind('form', $form);
-        $this->content = $view;
+
     }
     
     public function action_upload() {
-        $examgroup_id = 2;
-        $csv_data = array(
-            array('Student Id', 'Student Name', 'Chapter 5, 6'),
-            array(51, 'Vineet Student', 22),
-            array(52, 'Jimit Student', 24),
+        $view = View::factory('examresult/upload')
+            ->bind('form', $form)
+            ->bind('success', $success);
+        $errors = array();
+        if ($this->request->method() === 'POST' && $this->request->post()) {
+            $examgroup_id = $this->request->post('examgroup_id');
+            $csv = new Examresult_Csv($_FILES['csv_file']);
+            if ($csv->validate()) {
+                $csv_data = $csv->content();
+                // get all the exams in this exam group
+                $exams = Model_Examgroup::get_exams($examgroup_id)
+                    ->as_array('name', 'id');
+                $csv_headings = array_shift($csv_data);
+                // get the array of exam_ids in the order they appear in the csv
+                $ordered_exams = Examresult_Csv::ordered_exams($csv_headings, $exams);
+                Model_Examresult::csv_import($csv_data, $ordered_exams);
+                $success = 'Results uploaded successfully. Click here to view them';
+            } else {
+                $errors = array(
+                    'csv_file' => 'CSV file uploaded is invalid',
+                );
+            }
+        }
+        $form = new Stickyform('examresult/upload', array('enctype' => 'multipart/form-data'), $errors);
+        $form->default_data = array(
+            'examgroup_id' => '',
+            'csv_file' => '',
         );
-        // get all the exams in this exam group
-        $exams = Model_Examgroup::get_exams($examgroup_id)
-            ->as_array('name', 'id');
-        $csv_headings = array_shift($csv_data);
-        // get the array of exam_ids in the order they appear in the csv
-        $ordered_exams = Examresult_Csv::ordered_exams($csv_headings, $exams);
-        Model_Examresult::csv_import($csv_data, $ordered_exams);
+        $form->posted_data = $this->request->post();
+        $examgroups = ORM::factory('examgroup')->find_all()->as_array('id', 'name');
+        $form->append('Select Exam Group:', 'examgroup_id', 'select', array('options' => $examgroups))
+            ->append('CSV File:', 'csv_file', 'file')
+            ->append('Upload', 'upload', 'submit', array('attributes' => array('class' => 'button')))
+            ->process();
+        $this->content = $view;
     }
 
     /**

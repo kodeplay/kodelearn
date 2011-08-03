@@ -2,6 +2,38 @@
 
 class Examresult_Csv {
 
+    private $file;
+
+    /**
+     * @param array $files_arr eg. $_FILES['csv']
+     */
+    public function __construct($files_arr) {
+        $this->file = $files_arr;
+    }
+
+    /**
+     * Method to validate the file uploaded. 
+     * @return boolean if its a csv file
+     */
+    public function validate() {
+        $filename = $this->file['name'];
+        $extension = explode(".",$filename);
+        return (isset($extension[1]) && strtolower($extension[1]) === "csv");
+    }
+
+    /**
+     * Method to read the csv file uploaded and return the content
+     * @return array $filedata
+     */
+    public function content() {
+        $filename = $this->file['tmp_name'];
+        $handle = fopen($filename, "r");        
+        while (($data = fgetcsv($handle, 1000, ',')) !== FALSE){
+            $filedata[] = $data;
+        }
+        return $filedata;
+    }
+
     /*
      * Method to get the matrix which will be finally put into the css
      * @param array $students keys = student_ids, values = Student Names
