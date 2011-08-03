@@ -19,15 +19,24 @@ class Controller_Examresult extends Controller_Base {
      */
     public function action_download_csv() {
         $examgroup_id = $this->request->param('examgroup_id');
-        // get all exams whose examgroup_id is passed in get
-        $exams = ORM::factory('exam')
-            ->where('examgroup_id', ' = ', $examgroup_id)
-            ->find_all()->as_array('id');
-        var_dump($exams);
+        $examgroup = ORM::factory('examgroup', $examgroup_id);
+        // get all students in this examgroup
+        $students = Model_Examgroup::get_students($examgroup_id);
+        // var_dump($students); exit;
+        // get all the exams in this exam group
+        $exams = Model_Examgroup::get_exams($examgroup_id)
+            ->as_array('id', 'name');
+        $matrix = Examresult_Csv::matrix($students, $exams, array());
+        // var_dump($matrix); exit; 
+        $filename = Inflector::underscore($examgroup->name) . '_results.csv';
+        header( 'Content-Type: text/csv' );
+        header( 'Content-Disposition: attachment;filename='.$filename);
+        $fp = fopen('php://output', 'w');
+        foreach ($matrix as $row) {
+            fputcsv($fp, $row);
+        }
+        fclose($fp);
         exit;
-        
-        
-        
     }
 
     // only the administrator and the teacher will be permitted to do this
@@ -51,8 +60,4 @@ class Controller_Examresult extends Controller_Base {
 
 
     }
-
-
-
-
 }
