@@ -88,6 +88,7 @@ class Controller_Room extends Controller_Base {
         $view = View::factory('room/list')
                     ->bind('links', $links)        
                     ->bind('table', $table)
+                    ->bind('count', $count)
                     ->bind('pagination', $pagination)
                     ->bind('filter_room_name', $filter_room_name)
                     ->bind('filter_url', $filter_url)

@@ -6,7 +6,10 @@
                 <th>Batch</th>
                 <th>Courses</th>
             </tr>
-            <?php foreach($data as $user){ ?>
+            <?php if($count > 0)
+            {
+               
+                foreach($data as $user){ ?>
             <tr>
                 <td><input type="checkbox" name="selected[]" class="selected" value="<?php echo $user->id ?>" <?php echo (in_array($user->id, $user_ids)) ? 'checked="checked"':''?> /></td>
                 <td><?php echo $user->id ?></td>
@@ -22,5 +25,15 @@
                 <td><?php echo implode(', ', $user->batches->find_all()->as_array(NULL, 'name')); ?></td>
                 <td><?php echo implode(', ', $user->courses->find_all()->as_array(NULL, 'name')); ?></td>
             </tr>
-            <?php } ?>
+            <?php } 
+            } else {
+                
+                ?>
+            <tr>
+                <td colspan = "5" align="center">
+                    No Records Found
+                </td>
+            </tr>   
+            <?php }
+            ?>
         </table>

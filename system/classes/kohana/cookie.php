@@ -113,7 +113,7 @@ class Kohana_Cookie {
 
 		// Add the salt to the cookie value
 		$value = Cookie::salt($name, $value).'~'.$value;
-
+        
 		return setcookie($name, $value, $expiration, Cookie::$path, Cookie::$domain, Cookie::$secure, Cookie::$httponly);
 	}
 
