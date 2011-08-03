@@ -45,3 +45,5 @@
                 </div><!-- roles -->
                 <div class="clear"></div>
             </div><!-- branding -->
+			
+			<?php include_once 'breadcrumbs.php'; ?>
