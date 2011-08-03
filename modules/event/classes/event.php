@@ -2,7 +2,9 @@
 
 class Event {
 	
-	private $_values;
+	protected $_values;
+	
+	protected $_type;
 
 	public static function factory($type){
 		$file = MODPATH . 'event\classes\event\\' . $type . '.php';
@@ -16,11 +18,7 @@ class Event {
 	}
 	
 	public function set_values(array $values){
-		if($this->check_default_values($values)){
-			$this->_values = $values;
-		} else {
-			throw new Event_Exception('The required values for the event is not set.');
-		}
+		$this->_values = $values;
 	}
 	
 	public function set_value($key, $value){
@@ -31,18 +29,49 @@ class Event {
 		 return (isset($values['eventstart']) && isset($values['eventend']) && isset($values['room_id']));
 	}
 	
-	public static function get_avaliable_rooms($from, $to){
+	public function add(){
+		
+		$this->set_value('eventtype', $this->_type);
+		
+		$event = ORM::factory('event');
+		
+		$event->values($this->_values);
+		
+		$event->save();
+		
+		return $event->id; 
+		
+	}
+	
+	public static function get_avaliable_rooms($from, $to, $event_id = FALSE){
 
+		$event = ORM::factory('event');
+		$event->and_where_open()
+		                           ->where('events.eventstart', 'BETWEEN', array($from, $to))
+		                           ->and_where('events.eventend', 'BETWEEN', array($from, $to))
+		                           ->and_where_close();
+		if($event_id){
+			$event->and_where('events.id', '!=', $event_id);
+		}
+		$occupied_room_ids = $event->find_all()->as_array(NULL, 'room_id');
+		
 		$room = ORM::factory('room');
-		$rooms = $room->join('events', 'LEFT')
-		              ->on('rooms.id', '=', 'events.room_id')
-		              ->where('events.room_id', 'IS', NULL)
-		              ->and_where_open()
-		              ->and_where('events.eventstart' , '>', $from)
-		              ->or_where('events.eventsstart', '<', $to)
-		              ->and_where_close()
-		              ->find_all();
-		echo $room->last_query(); exit;
+		if($occupied_room_ids)
+    		$room->where('id', 'NOT IN', $occupied_room_ids);
+    		
+		$rooms = $room->find_all()->as_array();
+		
 		return $rooms;
 	}
+	
+	public function update($id){
+		
+		$event = ORM::factory('event', $id);
+		
+		$event->values($this->_values);
+		
+		$event->save();
+		
+	}
+	
 }
