@@ -66,7 +66,7 @@
 
 /* Interaction states
 ----------------------------------*/
-.ui-state-default, .ui-widget-content .ui-state-default, .ui-widget-header .ui-state-default { border: 1px solid #415665; background: #ffffff url(images/ui-bg_gloss-wave_60_ffffff_500x100.png) 50% 50% repeat-x; font-weight: bold; color: #4c3000; }
+.ui-state-default, .ui-widget-content .ui-state-default, .ui-widget-header .ui-state-default { border: 1px solid #ccc; background: #ffffff url(images/ui-bg_gloss-wave_60_ffffff_500x100.png) 50% 50% repeat-x; font-weight: bold; color: #4c3000; }
 .ui-state-default a, .ui-state-default a:link, .ui-state-default a:visited { color: #4c3000; text-decoration: none; }
 .ui-state-hover, .ui-widget-content .ui-state-hover, .ui-widget-header .ui-state-hover, .ui-state-focus, .ui-widget-content .ui-state-focus, .ui-widget-header .ui-state-focus { border: 1px solid #a45b13; background: #ffdd57 url(images/ui-bg_gloss-wave_70_ffdd57_500x100.png) 50% 50% repeat-x; background: #fff; font-weight: bold; color: #feb100; }
 .ui-state-hover a, .ui-state-hover a:hover { color: #381f00; text-decoration: none; }
@@ -595,4 +595,7 @@ button.ui-button::-moz-focus-inner { border: 0; padding: 0; } /* reset extra pad
 }
 .ui-widget-content .button {
 	color: #fff;
+}
+.ui-datepicker.ui-widget-content {
+	border: 1px solid #ccc;
 }
