@@ -114,6 +114,7 @@ class Controller_Course extends Controller_Base {
         
         $view = View::factory('course/list')
 		          ->bind('table', $table)
+		          ->bind('count', $count)
 		          ->bind('links', $links)
 		          ->bind('pagination', $pagination)
                   ->bind('filter_name', $filter_name)
@@ -172,9 +173,10 @@ class Controller_Course extends Controller_Base {
         $cacheimage = CacheImage::factory();
         $user_ids = array();
         $course_id = 0;
-
+        $count = 0;
         $users = View::factory('course/assign')
                         ->bind('data', $data)
+                        ->bind('count', $count)
                         ->bind('cacheimage', $cacheimage)
                         ->bind('user_ids', $user_ids);
 		
@@ -254,9 +256,10 @@ class Controller_Course extends Controller_Base {
         $data = $course->users->find_all();
         $cacheimage = CacheImage::factory();
         $user_ids = $data->as_array(NULL, 'id');
-
+        $count = $course->users->count_all();
         $users = View::factory('course/assign')
                         ->bind('data', $data)
+                        ->bind('count', $count)
                         ->bind('cacheimage', $cacheimage)
                         ->bind('user_ids', $user_ids);
         
@@ -296,14 +299,17 @@ class Controller_Course extends Controller_Base {
         
         if($user_ids){
             $data = ORM::factory('user')->where('id', 'IN', $user_ids )->find_all();
+            $count = ORM::factory('user')->where('id', 'IN', $user_ids )->count_all();
         } else {
         	$data = ORM::factory('user')->where('id', '=', 0 )->find_all();
+        	$count = ORM::factory('user')->where('id', '=', 0 )->count_all();
         }
 
         $cacheimage = CacheImage::factory();
         	
         $view = View::factory('course/assign')
                         ->bind('data', $data)
+                        ->bind('count', $count)
                         ->bind('cacheimage', $cacheimage)
                         ->bind('user_ids', $course_users);
 

@@ -5,6 +5,20 @@ class Controller_Auth extends Controller_Base {
     protected $_errors = array();
 
     public function action_index() {
+        $cookie = cookie::get('authautologin');
+        if($cookie){
+            $token = ORM::factory('user_token');
+            $token->where('token', ' = ', $cookie)
+            ->find();
+            $user = ORM::factory('user');
+            $user->where('id', ' = ', $token->user_id)
+            ->find();
+                        
+            Auth::instance()->login_cookie($user->email, $user->password);
+            Request::current()->redirect('home');
+            exit;
+            
+        }
         $posted_login = array();
         $posted_register = array();
         $posted_forgot_password = array();
@@ -63,9 +77,14 @@ class Controller_Auth extends Controller_Base {
     private function login() {
         $user = ORM::factory('user');
         $validator = $user->validator_login($this->request->post());
+        $remember = array_key_exists('remember', $this->request->post()) ? (bool) $this->request->post('remember') : FALSE;
+        //$remember = true;
+        $log_chk = Auth::instance()->login($this->request->post('email'), $this->request->post('password'), $remember);
         if ($validator->check()
-            && Auth::instance()->login($validator['email'], $validator['password'])) {
-            Request::current()->redirect('home');
+            && $log_chk) {
+             
+                
+                Request::current()->redirect('home');
             exit;
         } else {
             $this->_errors = $validator->errors('login');

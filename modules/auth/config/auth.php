@@ -7,6 +7,7 @@ return array(
 	'hash_key'     => 'kodelearn2011',
 	'lifetime'     => 1209600,
 	'session_key'  => 'auth_user',
+    'salt' => 'test',
 
 	// Username/password combinations for the Auth File driver
 	'users' => array(

@@ -66,7 +66,7 @@ class Controller_Examgroup extends Controller_Base {
         $heading = $sorting->render();
         
         $links = array(
-            'add_examgroup' => Html::anchor('/examgroup/add/', 'Create an Exam group', array('class' => 'createButton l')),
+            'add_examgroup' => Html::anchor('/examgroup/add/', 'Create a Grading Period', array('class' => 'createButton l')),
             'delete'      => URL::site('/examgroup/delete/')
         );
         
@@ -81,6 +81,7 @@ class Controller_Examgroup extends Controller_Base {
         $view = View::factory('examgroup/list')
                     ->bind('links', $links)        
                     ->bind('table', $table)
+                    ->bind('count', $count)
                     ->bind('pagination', $pagination)
                     ->bind('filter_name', $filter_name)
                     ->bind('filter_url', $filter_url)

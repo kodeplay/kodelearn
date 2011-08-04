@@ -87,6 +87,7 @@ class Controller_Batch extends Controller_Base
         $view = View::factory('batch/list')
             ->bind('links', $links)        
             ->bind('table', $table)
+            ->bind('count', $count)
             ->bind('pagination', $pagination)
             ->bind('filter_name', $filter_name)
             ->bind('filter_url', $filter_url)

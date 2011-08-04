@@ -29,11 +29,23 @@
                 </td>
             </tr>
             <?php  } ?>
-            <tr class="pagination">
-                <td class="tar pagination" colspan="5">
-                    <?php echo $pagination ?>
-                </td>
-            </tr>
+            <?php if($count > 0){ ?>
+                <tr class="pagination">
+                    <td class="tar pagination" colspan="5">
+                        <?php echo $pagination ?>
+                    </td>
+                </tr>
+                <?php 
+                } else {
+                ?>
+                <tr>
+                    <td colspan="5" align="center">
+                        No Records Found
+                    </td>
+                </tr>
+                <?php 
+                }
+                ?>
         </table>
         </form>
         

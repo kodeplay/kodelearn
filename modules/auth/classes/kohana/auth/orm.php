@@ -27,6 +27,7 @@ class Kohana_Auth_ORM extends Auth {
      * @return  Model_User user
      */
     protected function _login($email, $password, $remember) {
+       
         $user = ORM::factory('user');
         $user->where('email', ' = ', $email)
             ->and_where('password', ' = ', $password)
@@ -34,6 +35,24 @@ class Kohana_Auth_ORM extends Auth {
             ->find();            
         // TODO remember to be done
         if ($user->id !== null) {
+            
+            if ($remember === TRUE)
+                {
+                    // Create a new autologin token
+                    $token = ORM::factory('user_token');
+    
+                    // Set token data
+                    $token->user_id = $user->id;
+                    $token->expires = time() + $this->_config['lifetime'];
+                    $token->save();
+    
+                    // Set the autologin cookie
+                   
+                    cookie::set('authautologin', $token->token, $this->_config['lifetime']);
+                    
+                }
+            
+            
             $this->complete_login($user);
             return true;
         } else {
