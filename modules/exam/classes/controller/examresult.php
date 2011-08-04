@@ -3,7 +3,7 @@
 class Controller_Examresult extends Controller_Base {
 
     public function action_index() {
-
+        
     }
     
     public function action_upload() {
@@ -79,16 +79,6 @@ class Controller_Examresult extends Controller_Base {
     // view results of all users - so typically only the administrator and teacher 
     // will have this permission
     public function action_view() {
-
-
-    }
-
-    // View the marksheet of a student by passing a user_id in get
-    // so will be accessible only to the admin and teacher
-    // if no user is passed, a filter will be applied to check if 
-    // its the current user trying to view his/her own marksheet or 
-    // if its the parant trying to view the marksheet of their pupil
-    public function action_marksheet() {
 
 
     }
