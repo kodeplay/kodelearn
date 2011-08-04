@@ -8,6 +8,11 @@ class Acl {
     private static $_instance = null;
 
     /**
+     * ORM object for role of the current user
+     */
+    private $role;
+
+    /**
      * Array of permissions as follows
      * array(
      *     'r1' => array('level1', ....),
@@ -42,8 +47,8 @@ class Acl {
         if ($user === NULL) {
             return;
         }
-        $role = ORM::factory('role', $user->roles->find());
-        $permissions = $role->permissions && $role->permissions !== NULL ? unserialize($role->permissions) : array();
+        $this->role = ORM::factory('role', $user->roles->find());
+        $permissions = $this->role->permissions && $this->role->permissions !== NULL ? unserialize($this->role->permissions) : array();
         $this->_permissions = self::acl_array($permissions);
     }
 
@@ -90,6 +95,37 @@ class Acl {
             }
         }
         return false;
+    }
+
+    /**
+     * Method to get the relevant user related to whom the data will be shown.
+     * This will depend upon the role of the current user.
+     * case: 
+     *      student : relevant user = current user. return user id of current user
+     *      parent : relevant user = child of the current user. return user id of child
+     *      admin OR teacher : no relevant user. return 0
+     * @return int $user_id
+     */
+    public function relevant_user() {
+        $role_name = $this->role->name;
+        $user;
+        switch ($role_name) {
+        case "Student":
+            $user = Auth::instance()->get_user();
+            break;
+        case "Parent":
+            $parent_id = Auth::instance()->get_user()->id;
+            $user = ORM::factory('user')
+                ->where('parent_user_id', ' = ', $parent_id)
+                ->find();
+            return $user;
+            break;
+        case "Admin":
+        case "Teacher":
+        default: 
+            return False;
+        }
+        return $user;
     }
 
     /**
