@@ -56,7 +56,7 @@ for ($i = $n7; $i <= $n8; $i++)
 }
 
 ?>
-<?php if($items_per_page != $total_items){ ?>
+<?php if($items_per_page < $total_items){ ?>
 		<a href="<?php echo HTML::chars($page->url($first_page)) ?>" rel="first">&laquo;</a>
 
 
