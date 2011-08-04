@@ -1,9 +1,9 @@
 <?php defined('SYSPATH') or die('No direct script access.');
 
 class Controller_Course extends Controller_Base {
-	
-	public function action_index() {
-		
+    
+    public function action_index() {
+        
         if($this->request->param('sort')){
             $sort = $this->request->param('sort');
         } else {
@@ -15,7 +15,7 @@ class Controller_Course extends Controller_Base {
         } else {
             $order = 'DESC';
         }
-		
+        
         $course = ORM::factory('course');
         
         if($this->request->param('filter_name')){
@@ -56,14 +56,14 @@ class Controller_Course extends Controller_Base {
         if($this->request->param('filter_end_date')){
             $course->where('courses.end_date', '=', '' . $this->request->param('filter_end_date') . '');
         }
-                
+        
         $course->order_by($sort, $order)
             ->limit($pagination->items_per_page)
             ->offset($pagination->offset)
             ;
         
-		$courses = $course->find_all();
-		
+        $courses = $course->find_all();
+        
         $sorting = new Sort(array(
             'Course'        => 'name',
             'Access Code'   => 'access_code',
@@ -95,7 +95,7 @@ class Controller_Course extends Controller_Base {
         $sorting->set_order($order);
         $sorting->set_sort($sort);
         $heading = $sorting->render();
-		
+        
         // Render the pagination links
         $pagination = $pagination->render();
         
@@ -105,7 +105,7 @@ class Controller_Course extends Controller_Base {
         );
         
         $table = array('heading' => $heading, 'data' => $courses);
-		
+        
         $filter_name = $this->request->param('filter_name');
         $filter_access_code = $this->request->param('filter_access_code');
         $filter_start_date = $this->request->param('filter_start_date');
@@ -113,31 +113,31 @@ class Controller_Course extends Controller_Base {
         $filter_url = URL::site('course/index');
         
         $view = View::factory('course/list')
-		          ->bind('table', $table)
-		          ->bind('count', $count)
-		          ->bind('links', $links)
-		          ->bind('pagination', $pagination)
-                  ->bind('filter_name', $filter_name)
-                  ->bind('filter_access_code', $filter_access_code)
-                  ->bind('filter_start_date', $filter_start_date)
-                  ->bind('filter_end_date', $filter_end_date)
-                  ->bind('filter_url', $filter_url);
-                  
-		$this->content = $view;
-	}
-	
-	public function action_delete(){
+            ->bind('table', $table)
+            ->bind('count', $count)
+            ->bind('links', $links)
+            ->bind('pagination', $pagination)
+            ->bind('filter_name', $filter_name)
+            ->bind('filter_access_code', $filter_access_code)
+            ->bind('filter_start_date', $filter_start_date)
+            ->bind('filter_end_date', $filter_end_date)
+            ->bind('filter_url', $filter_url);
+        
+        $this->content = $view;
+    }
+    
+    public function action_delete(){
         if($this->request->method() === 'POST' && $this->request->post('selected')){
             foreach($this->request->post('selected') as $course_id){
                 ORM::factory('course', $course_id)->delete();
             }
         }
         Request::current()->redirect('course');
-	}
-	
-	public function action_add(){
-		
-		$submitted = FALSE;
+    }
+    
+    public function action_add(){
+        
+        $submitted = FALSE;
         if($this->request->method() === 'POST' && $this->request->post()){
             if (Arr::get($this->request->post(), 'save') !== null){
                 $submitted = true;
@@ -163,35 +163,35 @@ class Controller_Course extends Controller_Base {
                     exit;
                 } else {
                     $this->_errors = $validator->errors('course');
-               }
+                }
             }
         }
         
-		$form = $this->form('course/add', $submitted);
-		
+        $form = $this->form('course/add', $submitted);
+        
         $data = array();
         $cacheimage = CacheImage::factory();
         $user_ids = array();
         $course_id = 0;
         $count = 0;
         $users = View::factory('course/assign')
-                        ->bind('data', $data)
-                        ->bind('count', $count)
-                        ->bind('cacheimage', $cacheimage)
-                        ->bind('user_ids', $user_ids);
-		
+            ->bind('data', $data)
+            ->bind('count', $count)
+            ->bind('cacheimage', $cacheimage)
+            ->bind('user_ids', $user_ids);
+        
         $batches = ORM::factory('batch')->find_all();
         $view = View::factory('course/form')
-                       ->bind('form', $form)
-                       ->bind('users', $users)
-                       ->bind('batches', $batches)
-                       ->bind('course_id', $course_id);
-		
-		$this->content = $view;
-	}
-	
-	private function form($action, $submitted = false, $saved_data = array()){
-		
+            ->bind('form', $form)
+            ->bind('users', $users)
+            ->bind('batches', $batches)
+            ->bind('course_id', $course_id);
+        
+        $this->content = $view;
+    }
+    
+    private function form($action, $submitted = false, $saved_data = array()){
+        
         $form = new Stickyform($action, array(), ($submitted ? $this->_errors : array()));
         $form->default_data = array(
             'name' => '',
@@ -211,15 +211,15 @@ class Controller_Course extends Controller_Base {
         $form->append('Save', 'save', 'submit', array('attributes' => array('class' => 'button r')));
         $form->process();
         return $form;
-	}
-	
+    }
+    
     public function action_edit() {
         $submitted = false;
         
         $id = $this->request->param('id');
         if(!$id)
             Request::current()->redirect('course');
-            
+        
         $course = ORM::factory('course', $id);
 
         if($this->request->method() === 'POST' && $this->request->post()){
@@ -235,12 +235,12 @@ class Controller_Course extends Controller_Base {
                     $course->end_date = $this->request->post('end_date');
                     if($this->request->post('selected')){
                     	$course->remove('users');
-	                    if($this->request->post('selected')){
-	                        foreach($this->request->post('selected') as $user_id){
-	                            $user = ORM::factory('user', $user_id);
-	                            $course->add('users', $user);
-	                        }
-	                    }
+                        if($this->request->post('selected')){
+                            foreach($this->request->post('selected') as $user_id){
+                                $user = ORM::factory('user', $user_id);
+                                $course->add('users', $user);
+                            }
+                        }
                     }
                     $course->save();
                     Request::current()->redirect('course');
@@ -249,7 +249,7 @@ class Controller_Course extends Controller_Base {
                     $this->_errors = $validator->errors('course');
                 }
             }
-         }
+        }
         
         $form = $this->form('course/edit/id/'.$id ,$submitted, array('name' => $course->name, 'description' => $course->description, 'access_code' => $course->access_code, 'start_date' => $course->start_date, 'end_date' => $course->end_date));
         
@@ -258,40 +258,40 @@ class Controller_Course extends Controller_Base {
         $user_ids = $data->as_array(NULL, 'id');
         $count = $course->users->count_all();
         $users = View::factory('course/assign')
-                        ->bind('data', $data)
-                        ->bind('count', $count)
-                        ->bind('cacheimage', $cacheimage)
-                        ->bind('user_ids', $user_ids);
+            ->bind('data', $data)
+            ->bind('count', $count)
+            ->bind('cacheimage', $cacheimage)
+            ->bind('user_ids', $user_ids);
         
         
-                        
+        
         $batches = ORM::factory('batch')->find_all();
         $view = View::factory('course/form')
-                       ->bind('form', $form)
-                       ->bind('users', $users)
-                       ->bind('batches', $batches)
-                       ->bind('course_id', $id);
+            ->bind('form', $form)
+            ->bind('users', $users)
+            ->bind('batches', $batches)
+            ->bind('course_id', $id);
         
         $this->content = $view;
     }
     
     public function action_summary() {
-    	
+        
     	$id = $this->request->param('id');
     	if(!$id)
-    	   Request::current()->redirect('course');
-    	   
+            Request::current()->redirect('course');
+        
     	$course = ORM::factory('course', $id);
-    	
+        
     	$view = View::factory('course/summary')
-    	               ->bind('course', $course);
-    	
+            ->bind('course', $course);
+        
     	$this->content = $view;
     }
     
     public function action_get_users() {
-    	
-    	
+        
+        
         $course_users = ORM::factory('course', $this->request->post('course_id'))->users->find_all()->as_array(NULL, 'id');
         $batch_users = ORM::factory('batch', $this->request->post('batch_id'))->users->find_all()->as_array(NULL, 'id');
         
@@ -301,33 +301,33 @@ class Controller_Course extends Controller_Base {
             $data = ORM::factory('user')->where('id', 'IN', $user_ids )->find_all();
             $count = ORM::factory('user')->where('id', 'IN', $user_ids )->count_all();
         } else {
-        	$data = ORM::factory('user')->where('id', '=', 0 )->find_all();
-        	$count = ORM::factory('user')->where('id', '=', 0 )->count_all();
+            $data = ORM::factory('user')->where('id', '=', 0 )->find_all();
+            $count = ORM::factory('user')->where('id', '=', 0 )->count_all();
         }
 
         $cacheimage = CacheImage::factory();
-        	
+        
         $view = View::factory('course/assign')
-                        ->bind('data', $data)
-                        ->bind('count', $count)
-                        ->bind('cacheimage', $cacheimage)
-                        ->bind('user_ids', $course_users);
+            ->bind('data', $data)
+            ->bind('count', $count)
+            ->bind('cacheimage', $cacheimage)
+            ->bind('user_ids', $course_users);
 
         $response = $this->response->body($view)->body();
     	echo json_encode(array('response' => $response));
     }
     
     public function action_join() {
-    	
-    	if($this->request->method() === 'POST' && $this->request->post()){
-    		$access_code = $this->request->post('access_code');
         
+    	if($this->request->method() === 'POST' && $this->request->post()){
+            $access_code = $this->request->post('access_code');
+            
             if($access_code){
             	$course = ORM::factory('course')->where('access_code' , '=' , $access_code)->find();
             	$user = Auth::instance()->get_user();
             	$user->add('courses', $course);
             	$json = array('response' => 'You are joined in ' . $course->name . ' course.');
-            	
+                
             } else {
             	$json = array('response' => 'Please enter access code.');
             } 		
@@ -335,45 +335,44 @@ class Controller_Course extends Controller_Base {
             echo json_encode($json);
             exit;
     	}
-    	
+        
     	$view = View::factory('course/join');
-    	
+        
     	$this->content = $view;
     }
     
     public function action_course_detail(){
-    	
+        
     	$access_code = $this->request->post('access_code');
-    	
+        
     	if($access_code){
-    		$course = ORM::factory('course')->where('access_code' , '=' , $access_code)->find();
-    		if($course->id !== NULL){
-    			
-    			$user = Auth::instance()->get_user();
+            $course = ORM::factory('course')->where('access_code' , '=' , $access_code)->find();
+            if($course->id !== NULL){
+                
+                $user = Auth::instance()->get_user();
 
-    			if($user->has('courses', $course)){
-    				$json = array('response' => 'You are Already in this Course.');
-    			} else {
-	                $html = '<table class="formcontainer">';
-	                $html .= '<tr><td>Course Name:</td><td>' . $course->name . '</td>';
+                if($user->has('courses', $course)){
+                    $json = array('response' => 'You are Already in this Course.');
+                } else {
+                    $html = '<table class="formcontainer">';
+                    $html .= '<tr><td>Course Name:</td><td>' . $course->name . '</td>';
                     $html .= '<tr><td>Start Date:</td><td>' . $course->start_date . '</td>';
                     $html .= '<tr><td>End Date:</td><td>' . $course->end_date . '</td>';
                     $html .= '<tr><td></td><td><a class="button" id="join_course">Join</a>';
                     $json = array('response' => $html);
-    			}
-    			
-    		} else {
-	    		$json = array('response' => 'No course found for this access code');
-    		}
-    		
+                }
+                
+            } else {
+                $json = array('response' => 'No course found for this access code');
+            }
+            
     	} else {
-    		$json = array('response' => 'Please enter access code.');
+            $json = array('response' => 'Please enter access code.');
     	}
 
     	echo json_encode($json);
     }
-    	
+    
     
 }
 
-  
