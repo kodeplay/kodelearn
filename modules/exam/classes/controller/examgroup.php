@@ -66,7 +66,7 @@ class Controller_Examgroup extends Controller_Base {
         $heading = $sorting->render();
         
         $links = array(
-            'add_examgroup' => Html::anchor('/examgroup/add/', 'Create an Exam group', array('class' => 'createButton l')),
+            'add_examgroup' => Html::anchor('/examgroup/add/', 'Create a Grading Period', array('class' => 'createButton l')),
             'delete'      => URL::site('/examgroup/delete/')
         );
         

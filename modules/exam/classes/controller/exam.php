@@ -57,13 +57,15 @@ class Controller_Exam extends Controller_Base {
         $pagination = $pagination->render();
         
         $links = array(
-            'add' => Html::anchor('/exam/add/', 'Create an Exam', array('class' => 'createButton l')),
-            'delete'      => URL::site('/exam/delete/')
+            'add'       => Html::anchor('/exam/add/', 'Create an Exam', array('class' => 'createButton l')),
+            'delete'    => URL::site('/exam/delete/'),
+            'examgroup' => Html::anchor('examgroup', 'Grading Period', array('class' => 'l pageAction'))
         );
 		
         $view = View::factory('exam/list')
                         ->bind('links', $links)
                         ->bind('table', $table)
+                        ->bind('count', $count)
                         ->bind('pagination', $pagination);
 		
 		$this->content = $view;
@@ -266,4 +268,12 @@ class Controller_Exam extends Controller_Base {
         
     }
     
+    public function action_delete(){
+        if($this->request->method() === 'POST' && $this->request->post('selected')){
+            foreach($this->request->post('selected') as $exam_id){
+                ORM::factory('exam', $exam_id)->delete();
+            }
+        }
+        Request::current()->redirect('exam');
+    }
 }

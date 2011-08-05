@@ -6,7 +6,7 @@
         </div><!-- pageTop -->
         <div class="topbar">
             <?php echo $links['add']?>
-            
+            <?php echo $links['examgroup']?>
             <a onclick="$('#exam').submit();" class="pageAction r alert">Delete selected...</a>
             <span class="clear">&nbsp;</span>
         </div><!-- topbar -->
@@ -15,7 +15,7 @@
             <?php echo $table['heading']?>
             <?php foreach($table['data'] as $exam){ ?>
             <tr>
-                <td><input type="checkbox" class="selected" name="selected" value="" /></td>
+                <td><input type="checkbox" class="selected" name="selected[]" value="<?php echo $exam->id ?>" /></td>
                 <td><?php echo $exam->name ?></td>
                 <td><?php echo $exam->examgroup->name ?></td>
                 <td><?php echo date('d M Y H:i ', $exam->event->eventstart) ?></td>
@@ -28,11 +28,19 @@
                 </td>
             </tr>
             <?php }?>
-            <tr class="pagination">
-                <td class="tar pagination" colspan="9">
-                    <?php echo $pagination ?>
-                </td>
-            </tr>
+            <?php if($count > 0){ ?>
+                <tr class="pagination">
+                    <td class="tar pagination" colspan="9">
+                        <?php echo $pagination ?>
+                    </td>
+                </tr>
+                <?php } else { ?>
+                <tr>
+                    <td colspan="9" align="center">
+                        No Records Found
+                    </td>
+                </tr>
+                <?php } ?>
         </table>
         </form>
     </div>
