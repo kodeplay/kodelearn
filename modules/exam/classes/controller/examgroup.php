@@ -125,8 +125,6 @@ class Controller_Examgroup extends Controller_Base {
     
     private function form($action, $submitted = false, $saved_data = array()){
         
-        $locations = array();
-        
         $form = new Stickyform($action, array(), ($submitted ? $this->_errors : array()));
         $form->default_data = array(
             'name' => '',

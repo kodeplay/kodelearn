@@ -95,8 +95,10 @@ class Controller_Base extends Controller_Template {
                 ->add_link('page/features', 'Features')            
                 ->add_link('auth', 'Signup/Login');
         } else {
+            $username = Auth::instance()->get_user()->firstname;
             $this->view->bind('topmenu', $topmenu)
-                ->bind('sidemenu', $sidemenu);
+                ->bind('sidemenu', $sidemenu)
+                ->bind('username', $username);
             $topmenu = DynamicMenu::factory('topmenu');
             $topmenu->add_link('home', 'Home')
                 ->add_link('account', 'Profile')
