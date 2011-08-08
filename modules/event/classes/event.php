@@ -7,8 +7,8 @@ class Event {
 	protected $_type;
 
 	public static function factory($type){
-		$file = MODPATH . 'event\classes\event\\' . $type . '.php';
-
+		$file = MODPATH . 'event/classes/event/' . $type . '.php';
+        
 		if(file_exists($file)){
 			$class = 'Event_' . $type;
 			return new $class;
