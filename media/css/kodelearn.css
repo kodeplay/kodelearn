@@ -775,3 +775,11 @@ select {	width: 210px;  }
 /* TIP: Add text align rules ONLY if you are sure that the selector will have that value for text align in ALL instances. Prefer using the class "tar" defined in components.css in other cases.*/
 #sbName { margin: 6px; }
 .container { height: auto; overflow: hidden; }
+#upcoming_exams li {
+    font-size: 15px;
+    margin-bottom: 20px;
+    margin-left: 15px;
+}
+#upcoming_exams li ul {
+	margin-top: 10px;
+}
