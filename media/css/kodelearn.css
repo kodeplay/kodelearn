@@ -341,8 +341,7 @@ input[type="text"] , input[type="password"] {
 	padding: 10px; 
 	color: #1d272e; 
 	border: 1px solid #abadb3; 
-	border-radius: 3px; 
-	min-width: 190px; 
+	border-radius: 3px;
 	background: #f3f3f3;
 }
 input[type="text"]:focus , input[type="password"]:focus {	background-color: #fff; }
@@ -503,7 +502,7 @@ select {	width: 210px;  }
 }
 .datatable tr.filter input {
     padding: 5px;
-    min-width: 5px;
+    width: 145px;
 }
 
 .trid, .triu {	font-size: 9px; }
