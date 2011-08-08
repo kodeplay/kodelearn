@@ -73,7 +73,37 @@ class Controller_Examresult extends Controller_Base {
 
     // only the administrator and the teacher will be permitted to do this
     public function action_edit() {
-        
+        $view = View::factory('examresult/edit')
+            ->bind('results', $results)
+            ->bind('exams', $exams)
+            ->bind('examgroup', $examgroup);            
+        // $examgroup_id = $this->request->param('examgroup_id');
+        $examgroup_id = 2;
+        $examgroup = ORM::factory('examgroup', $examgroup_id);
+        $results = array();
+        // get all students in this examgroup
+        $students = Model_Examgroup::get_students($examgroup_id);
+        // get all the exams in this exam group
+        $exams = Model_Examgroup::get_exams($examgroup_id);
+        // get the exam results
+        $examresults = ORM::factory('examresult')
+            ->where('exam_id', ' IN ', array_keys($exams->as_array('id','name')))
+            ->find_all();
+        foreach ($students as $user_id=>$name) {
+            $marks = array();
+            foreach ($examresults as $examresult) {
+                if ($examresult->user_id != $user_id) {
+                    continue;
+                }
+                $marks[$examresult->exam_id] = $examresult->marks;
+            }
+            $results[] = array(
+                'user_id' => $user_id,
+                'name' => $name,
+                'marks' => $marks,
+            );
+        }
+        $this->content = $view;
     }
 
     // view results of all users - so typically only the administrator and teacher 
