@@ -9,7 +9,7 @@
             <div class="sectionTitle">Upcoming Exams</div>
             <ul>
                 <?php foreach($exams as $exam) {?>
-                <li <?php echo ($exam->event->eventstart < (time() + 86500))?'class="tRed"':''?>><?php echo date('d M Y H:i ', $exam->event->eventstart)?> - <?php echo $exam->name?> - <?php echo Date::fuzzy_span($exam->event->eventstart); ?></li>
+                <li <?php echo ($exam->event->eventstart < (time() + 86500))?'class="tGreen"':''?>><?php echo date('d M Y H:i ', $exam->event->eventstart)?> - <?php echo $exam->name?> - <?php echo Date::fuzzy_span($exam->event->eventstart); ?></li>
                 <?php }?>
             </ul>
         </div>
@@ -18,9 +18,14 @@
             <div class="sectionTitle">Past Exams</div>
             <ul>
                 <?php foreach($past_exams as $exam) {?>
+                
                 <li> <?php echo $exam->name?> 
                     <ul>
-                        <li>Scored: 24 out of <?php echo $exam->total_marks ?></li>
+                        <?php if($marks = $exam->examresult->where('user_id', '=', $user_id)->find()->marks){ ?>
+                            <li <?php echo ($marks < $exam->passing_marks)?'class="tRed"':'class="tGreen"'?>>Scored: <?php echo $marks ?> out of <?php echo $exam->total_marks ?></li>
+                        <?php } else {?>
+                            <li>Result not declared Yet</li>
+                        <?php }?>
                     </ul>
                 </li>
                 <?php }?>

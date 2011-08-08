@@ -35,9 +35,12 @@ class Controller_Exam extends Controller_Base {
             $past_exams = array(); 
     	}
     	
+    	$user_id = $user->id;
+    	
     	$view = View::factory('exam/schedule')
     	               ->bind('exams', $exams)
-    	               ->bind('past_exams', $past_exams);
+    	               ->bind('past_exams', $past_exams)
+    	               ->bind('user_id', $user_id);
     	
     	$this->content = $view;
     }
