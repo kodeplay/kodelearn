@@ -99,6 +99,7 @@ class Controller_Role extends Controller_Base {
             ->set('action', URL::site('role/permissions'))
             ->bind('role_id', $role_id)
             ->bind('is_current_role', $is_current_role)
+            ->bind('role_name', $role_name)
             ->set('cancel', URL::site('role'));
         $post = array();        
         if ($this->request->method() === 'POST' && $this->request->post()) {
@@ -111,6 +112,7 @@ class Controller_Role extends Controller_Base {
         }
         $role_id = $this->request->param('params');
         $role = ORM::factory('role', $role_id);
+        $role_name = $role->name;
         $permissions = $role->permissions && $role->permissions !== NULL ? unserialize($role->permissions) : array();
         $acl_array = Acl::acl_array($permissions);
         $$acl = array();

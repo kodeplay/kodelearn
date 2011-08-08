@@ -1,6 +1,6 @@
 <div class="r pagecontent">
     <div class="pageTop withBorder">
-        <div class="pageTitle l">User roles: <span id="roleOf">Administrators</span></div>
+        <div class="pageTitle l">User role: <span id="roleOf"><?php echo $role_name; ?></span></div>
         <div class="pageDesc r">this is a test description this is a test description this is a test description this is a test description this is a test description </div>
         <div class="clear"></div>
     </div><!-- pageTop -->
