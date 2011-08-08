@@ -2,67 +2,35 @@
 
 class Controller_Course extends Controller_Base {
     
-    public function action_index() {
+    public function action_index() {        
+        $sort = $this->request->param('sort', 'name');        
+        $order = $this->request->param('order', 'ASC');
         
-        if($this->request->param('sort')){
-            $sort = $this->request->param('sort');
-        } else {
-            $sort = 'name';
-        }
-        
-        if($this->request->param('order')){
-            $order = $this->request->param('order');
-        } else {
-            $order = 'DESC';
-        }
-        
-        $course = ORM::factory('course');
-        
-        if($this->request->param('filter_name')){
-            $course->where('courses.name', 'LIKE', '%' . $this->request->param('filter_name') . '%');
-        }
-        
-        if($this->request->param('filter_access_code')){
-            $course->where('courses.access_code', 'LIKE', '%' . $this->request->param('filter_access_code') . '%');
-        }
-        
-        if($this->request->param('filter_start_date')){
-            $course->where('courses.start_date', '=', '' . $this->request->param('filter_start_date') . '');
-        }
-        
-        if($this->request->param('filter_end_date')){
-            $course->where('courses.end_date', '=', '' . $this->request->param('filter_end_date') . '');
-        }
-        
-        $count = $course->count_all();
-        
+        $criteria = array(
+            'user' => Acl::instance()->relevant_user(),
+            'filters' => array(
+                'name' => $this->request->param('filter_name'),
+                'access_code' => $this->request->param('filter_access_code'),
+                'start_date' => $this->request->param('filter_start_date'),
+                'end_date' => $this->request->param('filter_end_date'),
+            ),
+        );
+
+        $total = Model_Course::courses_total($criteria);
+
         $pagination = Pagination::factory(array(
-            'total_items'    => $count,
+            'total_items'    => $total,
             'items_per_page' => 5,
         ));
         
-        if($this->request->param('filter_name')){
-            $course->where('courses.name', 'LIKE', '%' . $this->request->param('filter_name') . '%');
-        }
+        $criteria = array_merge($criteria, array(
+            'sort' => $sort,
+            'order' => $order,
+            'limit' => $pagination->items_per_page,
+            'offset' => $pagination->offset,            
+        ));
         
-        if($this->request->param('filter_access_code')){
-            $course->where('courses.access_code', 'LIKE', '%' . $this->request->param('filter_access_code') . '%');
-        }
-        
-        if($this->request->param('filter_start_date')){
-            $course->where('courses.start_date', '=', '' . $this->request->param('filter_start_date') . '');
-        }
-        
-        if($this->request->param('filter_end_date')){
-            $course->where('courses.end_date', '=', '' . $this->request->param('filter_end_date') . '');
-        }
-        
-        $course->order_by($sort, $order)
-            ->limit($pagination->items_per_page)
-            ->offset($pagination->offset)
-            ;
-        
-        $courses = $course->find_all();
+        $courses = Model_Course::courses($criteria);
         
         $sorting = new Sort(array(
             'Course'        => 'name',
@@ -90,8 +58,7 @@ class Controller_Course extends Controller_Base {
             $url .= '/filter_end_date/'.$this->request->param('filter_end_date');
         }
         
-        $sorting->set_link($url);
-        
+        $sorting->set_link($url);        
         $sorting->set_order($order);
         $sorting->set_sort($sort);
         $heading = $sorting->render();
@@ -114,7 +81,7 @@ class Controller_Course extends Controller_Base {
         
         $view = View::factory('course/list')
             ->bind('table', $table)
-            ->bind('count', $count)
+            ->bind('count', $total)
             ->bind('links', $links)
             ->bind('pagination', $pagination)
             ->bind('filter_name', $filter_name)
