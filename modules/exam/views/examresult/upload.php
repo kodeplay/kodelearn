@@ -18,7 +18,7 @@
         </tr>
         <tr>            
             <td colspan="2">
-                <a href="javascript:void(0);">Download</a> the csv of students first <br/><br/>
+                <a href="#" onclick="downloadurl();">Download</a> the csv of students first <br/><br/>
                 After filling in all the marks, upload it.
             </td>
         </tr>
@@ -38,3 +38,12 @@
 	
 <div class="clear"></div>
 </div>
+<script type="text/javascript"><!--
+function downloadurl()
+{
+	var examgroup_id = $('#examgroup_id').val();
+   
+	window.location.href = "<?php echo Url::base(); ?>index.php/examresult/download_csv/examgroup_id/"+examgroup_id;
+	
+}
+//--></script>
