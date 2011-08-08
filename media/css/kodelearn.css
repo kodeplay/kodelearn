@@ -773,3 +773,5 @@ select {	width: 210px;  }
 
 .buttons { height: 15px; width: 98%; padding:25px 0 15px; text-align: right; }
 /* TIP: Add text align rules ONLY if you are sure that the selector will have that value for text align in ALL instances. Prefer using the class "tar" defined in components.css in other cases.*/
+#sbName { margin: 6px; }
+.container { height: auto; overflow: hidden; }

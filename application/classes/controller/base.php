@@ -88,13 +88,20 @@ class Controller_Base extends Controller_Template {
     protected function menu_init() {
         $this->view->bind('topmenu', $topmenu)
             ->bind('sidemenu', $sidemenu)
+            ->bind('role', $role)
             ->bind('username', $username)
-            ->bind('display_pic', $display_pic);
+            ->bind('user', $user);
         if (!Auth::instance()->logged_in()) {
             $role = 'guest';
         } else {
             $role = Acl::instance()->role()->name;
+            $user = Auth::instance()->get_user();
             $username = Auth::instance()->get_user()->firstname;
+            if ('student' === strtolower($role)) {
+                $avatar = Auth::instance()->get_user()->avatar;
+                $avatar = $avatar === null ? '' : $avatar;
+                $this->view->set('avatar', CacheImage::instance()->resize($avatar, 72, 72));
+            }
         }
         $menu = Acl_Menu::factory($role);
         // var_dump($menu); exit;
