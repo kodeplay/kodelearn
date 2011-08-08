@@ -14,9 +14,14 @@ class Controller_Exammarksheet extends Controller_Base {
      * if its the parant trying to view the marksheet of their pupil
      */
     public function action_index() {
-       
-                    
-        
+    	
+    	$examgroups = ORM::factory('examgroup')->find_all();
+    	
+    	$view = View::factory('examresult/index')
+    	               ->bind('examgroup', $examgroups);
+    	
+    	$this->content = $view;
+    	
     }
     
     public function action_details() {
@@ -38,10 +43,16 @@ class Controller_Exammarksheet extends Controller_Base {
         $marksheet->select('marks')
              ->join('examresults','left')
              ->on('examresults.exam_id', '=', 'id');
-        $marksheet->where('examresults.user_id', '=', $user_id)
-                  ->or_where('examresults.user_id', 'IS', NULL);
+        $marksheet->and_where_open()
+                  ->where('examresults.user_id', '=', $user_id)
+                  ->or_where('examresults.user_id', 'IS', NULL)
+                  ->and_where_close()
+                  ->and_where_open()
+                  ->and_where('exams.examgroup_id', '=', $examgroup_id)
+                  ->and_where_close();
+                  
         $marksheet = $marksheet->find_all();
-        
+
         $view = View::factory('examresult/exammarksheet')
                     ->bind('marksheets', $marksheet)
                     ->bind('relevant_user', $relevant_user);

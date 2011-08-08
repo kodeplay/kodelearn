@@ -30,7 +30,7 @@
                 </li>
                 <?php }?>
             </ul>            <br/>
-            <div class="r"><a href="#">View Marksheet</a></div>
+            <div class="r"><?php echo HTML::anchor('exammarksheet', 'View Marksheet'); ?></div>
         </div>
         
     </div>
