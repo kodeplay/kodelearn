@@ -282,10 +282,19 @@ class Controller_Course extends Controller_Base {
             Request::current()->redirect('course');
         
     	$course = ORM::factory('course', $id);
-        
+    	$count_student = ORM::factory('course', $id)->users->count_all();
+    	
+    	$count_exam = ORM::factory('exam');
+    	$count_exam = $count_exam->where('course_id', '=', $id)->count_all();
+    	
+    	$count = array(
+            'count_student' => $count_student,
+            'count_exam' => $count_exam,
+        );
     	$view = View::factory('course/summary')
-            ->bind('course', $course);
-        
+    	               ->bind('course', $course)
+    	               ->bind('count', $count);;
+    	
     	$this->content = $view;
     }
     

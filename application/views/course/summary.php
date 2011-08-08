@@ -15,13 +15,10 @@
 		<div class="blBrown courseSummary pad10">
 			<p class="h2 vm10">Course summary</p>
 			<p class="vm10">
-				<a href="#">70 students</a>
+				<a href="#"><?php echo $count['count_student']; ?> students</a>
 				have access to
-				<a href="#">20 lessons</a>,
-				<a href="#">5 assignments</a>,
-				<a href="#">18 documents</a>,
-				<a href="#">75 links</a> and 
-				<a href="#">1 quiz</a>
+				<a href="#"><?php echo $count['count_exam']; ?> exam(s)</a>
+				
 			</p>
 		</div><!-- courseSummary -->
 		
