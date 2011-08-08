@@ -3,14 +3,19 @@
             <div class="pageTitle l">Courses</div>
             <div class="pageDesc r">this is a test description this is a test description this is a test description this is a test description this is a test description </div>
             <div class="clear"></div>
-        </div><!-- pageTop -->
+        </div><!-- pageTop -->        
         
         <div class="topbar">
-            <?php echo $links['add']?>
-            <a href="#" class="pageAction l">Send message</a>
+            <?php if (Acl::instance()->is_allowed('course_create')) { ?>
+            <?php echo $links['add']; ?>
+            <?php } ?>
+            <a href="#" class="pageAction l">Send message</a> 
+            <?php if (Acl::instance()->is_allowed('course_delete')) { ?>
             <a onclick="$('#course').submit();" class="pageAction r alert">Delete selected...</a>
+            <?php } ?>            
             <span class="clear">&nbsp;</span>
         </div><!-- topbar -->
+        
         
         <form name="course" id="course" method="POST" action="<?php echo $links['delete'] ?>">
         <table class="vm10 datatable fullwidth">
@@ -31,8 +36,12 @@
                 <td><?php echo $course->start_date ?></td>
                 <td><?php echo $course->end_date ?></td>
                 <td>
-                    <p><?php echo Html::anchor('/course/summary/id/'.$course->id, 'View')?> /
-                    <?php echo Html::anchor('/course/edit/id/'.$course->id, 'Edit')?></p>
+                    <p>
+                    <?php echo Html::anchor('/course/summary/id/'.$course->id, 'View')?> 
+                    <?php if (Acl::instance()->is_allowed('course_edit')) { 
+                        echo '/ ' . Html::anchor('/course/edit/id/'.$course->id, 'Edit');
+                    } ?>
+                    </p>
                 </td>
             </tr>
             <?php }?>
@@ -46,7 +55,7 @@
                 } else {
                 ?>
                 <tr>
-                    <td colspan="5" align="center">
+                    <td colspan="6" align="center">
                         No Records Found
                     </td>
                 </tr>
