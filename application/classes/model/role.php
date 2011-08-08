@@ -8,4 +8,10 @@ class Model_Role extends ORM {
             'through' => 'roles_users',
         ),
     );
+    
+    public function validator($data) {
+        return Validation::factory($data)
+            ->rule('name', 'not_empty');
+            
+    }
 }

@@ -15,10 +15,12 @@
                     <li class="menu l"><?php echo $topmenu->inbox; ?></li>
                     <li class="clear"></li>
                 </ul>
+                <?php //$b = time(); $hour = date("g:i",$b); $m = date ("A", $b); if ($m == "AM") { if ($hour == 12) { $msg = "Good Evening!"; } elseif ($hour < 4) { $msg = "Good Evening!"; } elseif ($hour > 3) { $msg = "Good Morning!"; } } elseif ($m == "PM") { if ($hour == 12) { $msg = "Good Afternoon!"; } elseif ($hour < 5) { $msg = "Good Afternoon!"; } elseif ($hour > 4) { $msg = "Good Evening!"; } } ?> 
+                
                 <ul class="lsNone r">
                     <li class="l pad10 tWhite">
-                        <span id="greet">Good morning</span>, 
-                        <span id="user">John</span> 
+                        <span id="greet"><?php //echo $msg ?></span>, 
+                        <span id="user"><?php echo $username;?></span> 
                         <span class="tlGray">|</span>
                     </li>
 
@@ -26,8 +28,8 @@
                     
                 </ul>
 				<ul id="myacContent" class="crsrPoint">
-					<li><a href="#">Settings</a></li>
-					<li><a href="#">Account</a></li>
+					<li><a href="<?php echo Url::base(); ?>system">Settings</a></li>
+					<li><a href="<?php echo Url::base(); ?>account">Account</a></li>
 					<li><?php echo $topmenu->logout; ?></li>
 				</ul>
                 <div class="clear"></div>
@@ -37,7 +39,7 @@
         <div class="container">
             
             <div class="branding">
-                <h1 class="dib l"><a href="#"><img src="<?php echo Url::base(); ?>media/image/kodelearn.jpg" alt="KodeLearn | Home" /></a></h1>
+                <h1 class="dib l"><a href="<?php echo Url::base(); ?>home"><img src="<?php echo Url::base(); ?>media/image/kodelearn.jpg" alt="KodeLearn | Home" /></a></h1>
                 
                 <div class="roles dib r">
                     <p id="roleViewToggle">Switch roles <span class="trid">&#x25BC;</span></p>
@@ -48,3 +50,16 @@
                 </div><!-- roles -->
                 <div class="clear"></div>
             </div><!-- branding -->
+<SCRIPT LANGUAGE="JavaScript">
+datetoday = new Date();
+timenow=datetoday.getTime();
+//datetoday.setTime(timenow);
+thehour = datetoday.getHours();
+if (thehour > 18) display = "Evening";
+else if (thehour >12) display = "Afternoon";
+else display = "Morning";
+var greeting = ("Good " + display + "!");
+//alert(greeting);
+$('#greet').html(greeting);
+//  End -->
+</script>

@@ -13,8 +13,8 @@ class Controller_Role extends Controller_Base {
                 'id' => $role->id,
                 'name' => $role->name,
                 'num_users' => $role->users->count_all(),
-                'action_edit' => Html::anchor('role/edit/' . $role->id, 'edit'),
-                'action_delete' => Html::anchor('role/delete/' . $role->id, 'delete'),
+                'action_edit' => Html::anchor('role/edit/id/' . $role->id, 'edit'),
+                'action_delete' => Html::anchor('role/delete/id/' . $role->id, 'delete'),
                 'action_permissions' => Html::anchor('role/permissions/' . $role->id, 'set permissions'),
             );
         }
@@ -26,11 +26,71 @@ class Controller_Role extends Controller_Base {
     }
 
     public function action_edit() {
-
+        
+        $submitted = false;
+        
+        $id = $this->request->param('id');
+        if(!$id)
+            Request::current()->redirect('role');
+            
+        $role = ORM::factory('role',$id);
+        
+         if($this->request->method() === 'POST' && $this->request->post()){
+            if (Arr::get($this->request->post(), 'save') !== null){
+                $submitted = true;
+                $validator = $role->validator($this->request->post());
+                if ($validator->check()) {
+                    $role->name = $this->request->post('name');
+                    $role->description = $this->request->post('description');
+                    $role->save();
+                    Request::current()->redirect('role');
+                    exit;
+                } else {
+                    $this->_errors = $validator->errors('role');
+                }
+            }
+         }
+        
+        $form = $this->form('role/edit/id/'.$id ,$submitted, array('name' => $role->name, 'description' => $role->description));
+        
+        
+        $links = array(
+            'cancel' => Html::anchor('/role/', 'or cancel')
+        );
+        
+        $view = View::factory('role/form')
+                  ->bind('links', $links)
+                  ->bind('form', $form);
+        $this->content = $view;
     }
 
-    protected function form($data) {
+    protected function form($action, $submitted = false, $saved_data = array()) {
+        $form = new Stickyform($action, array(), ($submitted ? $this->_errors : array()));
+        $form->default_data = array(
+            'name' => '',
+            'description' => '',            
+        );
         
+        $form->saved_data = $saved_data;
+        $form->posted_data = $submitted ? $this->request->post() : array();
+        $form->append('Name', 'name', 'text');
+        $form->append('Description', 'description', 'textarea', array('attributes' => array('cols' => 50, 'rows' => 5)));
+        $form->append('Save', 'save', 'submit', array('attributes' => array('class' => 'button')));
+        $form->process();
+        return $form;
+    }
+    
+    public function action_delete(){
+        $id = $this->request->param('id');
+        if(!$id){
+            Request::current()->redirect('role');
+        }    
+        $role = ORM::factory('role', $id);
+        $count = $role->users->count_all();
+        if($count<1){
+            $role->delete();
+        }
+        Request::current()->redirect('role');
     }
 
     public function action_permissions() {
