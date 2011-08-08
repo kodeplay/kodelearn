@@ -86,33 +86,19 @@ class Controller_Base extends Controller_Template {
     }
 
     protected function menu_init() {
-        // Adding the top menu
+        $this->view->bind('topmenu', $topmenu)
+            ->bind('sidemenu', $sidemenu)
+            ->bind('username', $username)
+            ->bind('display_pic', $display_pic);
         if (!Auth::instance()->logged_in()) {
-            $this->view->bind('topmenu', $topmenu);
-            $topmenu = DynamicMenu::factory('topmenu');
-            $topmenu->add_link('index', 'Home')
-                ->add_link('page/about', 'About')
-                ->add_link('page/features', 'Features')            
-                ->add_link('auth', 'Signup/Login');
+            $role = 'guest';
         } else {
+            $role = Acl::instance()->role()->name;
             $username = Auth::instance()->get_user()->firstname;
-            $this->view->bind('topmenu', $topmenu)
-                ->bind('sidemenu', $sidemenu)
-                ->bind('username', $username);
-            $topmenu = DynamicMenu::factory('topmenu');
-            $topmenu->add_link('home', 'Home')
-                ->add_link('account', 'Profile')
-                ->add_link('inbox', 'Inbox')
-                ->add_link('auth/logout', 'Logout');
-            $sidemenu = DynamicMenu::factory('sidemenu');
-            $sidemenu->add_link('user', 'Users', 0)
-                ->add_link('batch', 'Batches', 1)
-                ->add_link('system', 'System', 2)
-                ->add_link('course', 'Courses', 3)
-                ->add_link('lecture', 'Lectures', 4)
-                ->add_link('exam', 'Exam', 5)
-                ->add_link('calender', 'Calender', 6);
         }
+        $menu = Acl_Menu::factory($role);
+        // var_dump($menu); exit;
+        $topmenu = $menu->get('topmenu');
+        $sidemenu = $menu->get('sidemenu');
     }
-
 }

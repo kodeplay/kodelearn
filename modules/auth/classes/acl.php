@@ -10,7 +10,7 @@ class Acl {
     /**
      * ORM object for role of the current user
      */
-    private $role;
+    private $_role;
 
     /**
      * Array of permissions as follows
@@ -47,8 +47,8 @@ class Acl {
         if ($user === NULL) {
             return;
         }
-        $this->role = ORM::factory('role', $user->roles->find());
-        $permissions = $this->role->permissions && $this->role->permissions !== NULL ? unserialize($this->role->permissions) : array();
+        $this->_role = ORM::factory('role', $user->roles->find());
+        $permissions = $this->_role->permissions && $this->_role->permissions !== NULL ? unserialize($this->_role->permissions) : array();
         $this->_permissions = self::acl_array($permissions);
     }
 
@@ -107,7 +107,7 @@ class Acl {
      * @return int $user_id
      */
     public function relevant_user() {
-        $role_name = $this->role->name;
+        $role_name = $this->_role->name;
         $user;
         switch ($role_name) {
         case "Student":
@@ -197,4 +197,12 @@ class Acl {
         }
         return $arr;
     }
+
+    /**
+     * A simple getter for role property
+     * @return Model_Role role
+     */
+    public function role() {
+        return $this->_role;
+    }    
 }
