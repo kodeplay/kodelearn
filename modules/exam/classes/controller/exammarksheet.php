@@ -2,6 +2,10 @@
 
 class Controller_Exammarksheet extends Controller_Base {
 
+    public static $action_acl_map = array(
+        'view' => 'index',
+    );
+
     /** 
      * View the marksheet of a student by passing a user_id in get
      * so will be accessible only to the admin and teacher
@@ -21,10 +25,6 @@ class Controller_Exammarksheet extends Controller_Base {
             echo 'Not allowed';
             exit;
         }
-
-        
-
-
     }
 
     // @todo

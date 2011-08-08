@@ -1,10 +1,10 @@
 <?php defined('SYSPATH') or die('No direct script access.');
 
 class Controller_Exam extends Controller_Base {
-	
-	public function action_index(){
+    
+    public function action_index(){
         
-		if($this->request->param('sort')){
+        if($this->request->param('sort')){
             $sort = $this->request->param('sort');
         } else {
             $sort = 'name';
@@ -15,7 +15,7 @@ class Controller_Exam extends Controller_Base {
         } else {
             $order = 'DESC';
         }
-		
+        
         $exam = ORM::factory('exam');
         
         $count = $exam->count_all();
@@ -26,21 +26,21 @@ class Controller_Exam extends Controller_Base {
         ));
         
         $exam->group_by('id')
-             ->order_by($sort, $order)
-             ->limit($pagination->items_per_page)
-             ->offset($pagination->offset)
-             ;
+            ->order_by($sort, $order)
+            ->limit($pagination->items_per_page)
+            ->offset($pagination->offset)
+            ;
         $exams = $exam->find_all();
         
         $sorting = new Sort(array(
-                'Name'              => 'name',
-                'Grading Period'    => '',
-                'Date / Time'       => '',
-                'Course'            => '',
-                'Total Marks'       => 'total_marks',
-                'Passing Marks'     => 'passing_marks',
-                'Reminder'          => 'reminder',
-                'Action'        => ''
+            'Name'              => 'name',
+            'Grading Period'    => '',
+            'Date / Time'       => '',
+            'Course'            => '',
+            'Total Marks'       => 'total_marks',
+            'Passing Marks'     => 'passing_marks',
+            'Reminder'          => 'reminder',
+            'Action'        => ''
         ));
         
         $url = ('exam/index');
@@ -50,7 +50,7 @@ class Controller_Exam extends Controller_Base {
         $sorting->set_order($order);
         $sorting->set_sort($sort);
         $heading = $sorting->render();
-		
+        
         $table = array('heading' => $heading, 'data' => $exams);
         
         // Render the pagination links
@@ -61,16 +61,16 @@ class Controller_Exam extends Controller_Base {
             'delete'    => URL::site('/exam/delete/'),
             'examgroup' => Html::anchor('examgroup', 'Grading Period', array('class' => 'l pageAction'))
         );
-		
+        
         $view = View::factory('exam/list')
-                        ->bind('links', $links)
-                        ->bind('table', $table)
-                        ->bind('count', $count)
-                        ->bind('pagination', $pagination);
-		
-		$this->content = $view;
-	}
-	
+            ->bind('links', $links)
+            ->bind('table', $table)
+            ->bind('count', $count)
+            ->bind('pagination', $pagination);
+        
+        $this->content = $view;
+    }
+    
     public function action_add(){
         $submitted = FALSE;
         
@@ -84,15 +84,15 @@ class Controller_Exam extends Controller_Base {
 
                     $from = $this->request->post('date') . ' ' . $this->request->post('from');
                     if(!(strtotime($from)))
-                         $from = $this->request->post('date') . ' 00:00';
-                          
+                        $from = $this->request->post('date') . ' 00:00';
+                    
                     $to = $this->request->post('date') . ' ' . $this->request->post('to'); 
                     if(!(strtotime($to)))
-                         $to = $this->request->post('date') . ' 00:00';
+                        $to = $this->request->post('date') . ' 00:00';
                     
                     $from = strtotime($from);
                     $to = strtotime($to);
-        
+                    
                     $event_exam->set_values($this->request->post());
                     $event_exam->set_value('eventstart', $from);
                     $event_exam->set_value('eventend', $to);
@@ -109,19 +109,19 @@ class Controller_Exam extends Controller_Base {
         $form = $this->form('exam/add', $submitted);
         $event_id = 0;
         $view = View::factory('exam/form')
-                       ->bind('form', $form)
-                       ->bind('event_id', $event_id);
+            ->bind('form', $form)
+            ->bind('event_id', $event_id);
         
         $this->content = $view;
     }
 
     public function action_edit(){
-    	
+        
     	$id = $this->request->param('id');
-    	
+        
     	if(!$id)
-    	   Request::current()->redirect('exam');
-    	
+            Request::current()->redirect('exam');
+        
         $submitted = FALSE;
         
         if($this->request->method() === 'POST' && $this->request->post()){
@@ -134,15 +134,15 @@ class Controller_Exam extends Controller_Base {
 
                     $from = $this->request->post('date') . ' ' . $this->request->post('from');
                     if(!(strtotime($from)))
-                         $from = $this->request->post('date') . ' 00:00';
-                          
+                        $from = $this->request->post('date') . ' 00:00';
+                    
                     $to = $this->request->post('date') . ' ' . $this->request->post('to'); 
                     if(!(strtotime($to)))
-                         $to = $this->request->post('date') . ' 00:00';
+                        $to = $this->request->post('date') . ' 00:00';
                     
                     $from = strtotime($from);
                     $to = strtotime($to);
-        
+                    
                     $event_exam->set_values($this->request->post());
                     $event_exam->set_value('eventstart', $from);
                     $event_exam->set_value('eventend', $to);
@@ -187,20 +187,20 @@ class Controller_Exam extends Controller_Base {
         $form = $this->form('exam/edit/id/' . $id, $submitted, $saved_data, $rooms);
         $event_id = $exam->event_id;
         $view = View::factory('exam/form')
-                       ->bind('form', $form)
-                       ->bind('event_id', $event_id);
+            ->bind('form', $form)
+            ->bind('event_id', $event_id);
         
         $this->content = $view;
     }
     
     private function form($action, $submitted = false, $saved_data = array(), $rooms = array()){
         
-    	
+        
         $examgroups = array();
         foreach(ORM::factory('examgroup')->find_all() as $examgroup){
             $examgroups[$examgroup->id] = $examgroup->name;
         }
-    	
+        
         $courses = array();
         foreach(ORM::factory('course')->find_all() as $course){
             $courses[$course->id] = $course->name;
@@ -241,15 +241,15 @@ class Controller_Exam extends Controller_Base {
     }
     
     public function action_get_avaliable_rooms(){
-    	
+        
         $from = $this->request->post('date') . ' ' . $this->request->post('from');
         if(!(strtotime($from)))
             $from = $this->request->post('date') . ' 00:00';
-                          
+        
         $to = $this->request->post('date') . ' ' . $this->request->post('to'); 
         if(!(strtotime($to)))
             $to = $this->request->post('date') . ' 00:00';
-            
+        
         $from = strtotime($from);
         $to = strtotime($to);
         
@@ -259,7 +259,7 @@ class Controller_Exam extends Controller_Base {
         
         $rooms = array();
         foreach($results as $room){
-        	$rooms[$room->id] = $room->room_number . ', ' . $room->room_name;
+            $rooms[$room->id] = $room->room_number . ', ' . $room->room_name;
         }
         
         $element =Form::select('room_id',$rooms);
