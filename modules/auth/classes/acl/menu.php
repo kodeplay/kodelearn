@@ -16,6 +16,7 @@ abstract class Acl_Menu {
     }
 
     public function get($name) {
+        
         return Arr::get($this->menu_collection, $name);
     }
 

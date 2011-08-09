@@ -28,9 +28,14 @@
                     
                 </ul>
 				<ul id="myacContent" class="crsrPoint">
-					<li><a href="<?php echo Url::base(); ?>system">Settings</a></li>
-					<li><a href="<?php echo Url::base(); ?>account">Account</a></li>
-					<li><?php echo $topmenu->logout; ?></li>
+					<?php 
+                        $links = $myaccount->as_array(); 
+                        foreach ($links as $link) {
+                    ?>
+                        <li><?php echo $link['html']; ?></li>
+                    <?php 
+                        } 
+                    ?>
 				</ul>
                 <div class="clear"></div>
             </div><!-- wrap -->
@@ -39,7 +44,7 @@
         <div class="container">
             
             <div class="branding">
-                <h1 class="dib l"><a href="<?php echo Url::base(); ?>home"><img src="<?php echo Url::base(); ?>media/image/kodelearn.jpg" alt="KodeLearn | Home" /></a></h1>
+                <h1 class="dib l"><a href="<?php echo Url::base(); ?>home"><img src="<?php echo $image; ?>" alt="KodeLearn | Home" /></a></h1>
                 
                 <div class="roles dib r">
                     <p id="roleViewToggle">Switch roles <span class="trid">&#x25BC;</span></p>
