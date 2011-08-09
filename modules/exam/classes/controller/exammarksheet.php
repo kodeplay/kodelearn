@@ -14,8 +14,23 @@ class Controller_Exammarksheet extends Controller_Base {
      * if its the parant trying to view the marksheet of their pupil
      */
     public function action_index() {
-    	
-    	$examgroups = ORM::factory('examgroup')->find_all();
+    	$relevant_user = Acl::instance()->relevant_user();
+        if (!$relevant_user) {
+            echo 'Not allowed';
+            exit;
+        }
+        
+    	$user = Auth::instance()->get_user();
+        
+        $course_ids = $user->courses->find_all()->as_array(NULL, 'id');
+        
+        $exams = ORM::factory('exam');
+        $exams->where('course_id', 'IN', $course_ids)->group_by('examgroup_id');
+        $exams = $exams->find_all()->as_array(NULL, 'examgroup_id');
+        
+        $examgroups = ORM::factory('examgroup');
+        $examgroups->where('id', 'IN', $exams)->group_by('id');
+        $examgroups = $examgroups->find_all();
     	
     	$view = View::factory('examresult/index')
     	               ->bind('examgroup', $examgroups);
@@ -52,9 +67,16 @@ class Controller_Exammarksheet extends Controller_Base {
                   ->and_where_close();
                   
         $marksheet = $marksheet->find_all();
-
+        $flg = 0;
+        foreach($marksheet as $mark) {
+            if($mark->marks != NULL){
+               $flg++;
+            } 
+            //echo "<br>";
+        }
         $view = View::factory('examresult/exammarksheet')
                     ->bind('marksheets', $marksheet)
+                    ->bind('flg', $flg)
                     ->bind('relevant_user', $relevant_user);
         
         $this->content = $view; 
