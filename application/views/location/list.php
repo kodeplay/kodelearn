@@ -28,7 +28,7 @@
     					
     			<tr>
     				<?php 
-    				    $images = CacheImage::factory();
+    				    $images = CacheImage::instance();
                         $image = $images->resize($location->image, 200, 100);
     				?>
     				<td><input type="checkbox" name="selected[]" class="selected" value="<?php echo $location->id; ?>" /></td>

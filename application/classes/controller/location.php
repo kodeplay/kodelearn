@@ -125,7 +125,7 @@ class Controller_Location extends Controller_Base {
         
         $upload_url = URL::site('location/uploadmap');
 
-        $images = CacheImage::factory();
+        $images = CacheImage::instance();
         $image = $images->resize($location->image, 400, 200);
         //$image = $location->image;
         
@@ -150,7 +150,7 @@ class Controller_Location extends Controller_Base {
             
             if($path = Upload::save($_FILES['image'], $filename, DIR_IMAGE)){
                 
-                $images = CacheImage::factory();;
+                $images = CacheImage::instance();;
                 $src = $images->resize($filename, 400, 200);
 
                 
@@ -231,7 +231,7 @@ class Controller_Location extends Controller_Base {
         
         $upload_url = URL::site('location/uploadmap');
 
-        $images = CacheImage::factory();
+        $images = CacheImage::instance();
         $image = $images->resize($location->image, 400, 200);
         //$image = $location->image;
         
