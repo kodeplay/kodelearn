@@ -28,7 +28,7 @@ class Model_Examresult extends ORM {
     public static function save_results($result_sets) {
         if (!$result_sets) {
             return;
-        }
+        }        
         $db_keys = array_keys($result_sets[0]);
         $query = DB::insert('examresults', $db_keys);
         foreach ($result_sets as $result) {

@@ -5,48 +5,48 @@ class Controller_Exam extends Controller_Base {
     public function action_index(){
         
     	$relevant_user = Acl::instance()->relevant_user();
-    	
+        
     	if($relevant_user){
-    		$this->get_schedule();
+            $this->get_schedule();
     	} else {
-    		$this->get_list();
+            $this->get_list();
     	}
     }
     
     private function get_schedule() {
-    	
+        
     	$user = Auth::instance()->get_user();
-    	
+        
     	$course_ids = $user->courses->find_all()->as_array(NULL, 'id');
-    	
+        
     	if($course_ids){
             $exams = ORM::factory('exam')
-                          ->join('events')->on('exams.event_id', '=', 'events.id')
-                          ->where('course_id', 'IN', $course_ids)
-                          ->and_where('events.eventstart', '>', time())
-                          ->find_all();
-          $past_exams = ORM::factory('exam')
-                          ->join('events')->on('exams.event_id', '=', 'events.id')
-                          ->where('course_id', 'IN', $course_ids)
-                          ->and_where('events.eventstart', '<', time())
-                          ->find_all();
+                ->join('events')->on('exams.event_id', '=', 'events.id')
+                ->where('course_id', 'IN', $course_ids)
+                ->and_where('events.eventstart', '>', time())
+                ->find_all();
+            $past_exams = ORM::factory('exam')
+                ->join('events')->on('exams.event_id', '=', 'events.id')
+                ->where('course_id', 'IN', $course_ids)
+                ->and_where('events.eventstart', '<', time())
+                ->find_all();
     	} else {
             $exams = array(); 
             $past_exams = array(); 
     	}
-    	
+        
     	$user_id = $user->id;
-    	
+        
     	$view = View::factory('exam/schedule')
-    	               ->bind('exams', $exams)
-    	               ->bind('past_exams', $past_exams)
-    	               ->bind('user_id', $user_id);
-    	
+            ->bind('exams', $exams)
+            ->bind('past_exams', $past_exams)
+            ->bind('user_id', $user_id);
+        
     	$this->content = $view;
     }
     
     private function get_list() {
-    	
+        
         if($this->request->param('sort')){
             $sort = $this->request->param('sort');
         } else {
@@ -102,7 +102,8 @@ class Controller_Exam extends Controller_Base {
         $links = array(
             'add'       => Html::anchor('/exam/add/', 'Create an Exam', array('class' => 'createButton l')),
             'delete'    => URL::site('/exam/delete/'),
-            'examgroup' => Html::anchor('examgroup', 'Grading Period', array('class' => 'l pageAction'))
+            'examgroup' => Html::anchor('examgroup', 'Grading Period', array('class' => 'l pageAction')),
+            'examresult' => Html::anchor('examresult/upload', 'Manage Results', array('class' => '1 pageAction')),
         );
         
         $view = View::factory('exam/list')

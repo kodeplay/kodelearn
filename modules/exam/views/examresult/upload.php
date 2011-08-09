@@ -24,7 +24,7 @@
             <td><?php echo $form->examgroup_id->element(); ?></td>
         </tr>
         <tr>            
-            <td colspan="2">
+            <td colspan="2">                
                 <a href="#" onclick="downloadurl();">Download</a> the csv of students first <br/><br/>
                 After filling in all the marks, upload it.
             </td>
@@ -38,7 +38,16 @@
         </tr>
         <tr>
             <td></td>
-            <td><?php echo $form->upload->element(); ?></td>
+            <td align="center"><?php echo $form->upload->element(); ?></td>
+        </tr>
+        <tr>
+            <td colspan="2" align="center">OR</td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                Click <a id="browser-edit" href="javascript:void(0);">here</a> to edit 
+                the results in the browser for the above selected examgroup
+            </td>
         </tr>
     </table>
     </div><!-- pagecontent -->
@@ -53,4 +62,7 @@ function downloadurl()
 	window.location.href = "<?php echo Url::base(); ?>index.php/examresult/download_csv/examgroup_id/"+examgroup_id;
 	
 }
+$("#browser-edit").click(function() {
+    window.location.href = "<?php echo Url::base(); ?>index.php/examresult/edit/examgroup_id/"+$('#examgroup_id').val();
+});
 //--></script>

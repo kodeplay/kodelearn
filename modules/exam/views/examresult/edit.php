@@ -4,22 +4,36 @@
         <div class="pageDesc r">this is a test description this is a test description this is a test description this is a test description this is a test description </div>
         <div class="clear"></div>
     </div><!-- pageTop -->
-    <div class="buttons">               
-        <a class="button saveAcl" onclick="$('#examresult-edit-form').submit();">Save</a>
+    <?php if ($success) {  ?>
+    <div class="formMessages good">     
+        <span class="fmIcon good"></span> <span class="fmText" ><?php echo $success ?></span>
+        <span class="clear">&nbsp;</span>
+    </div>
+    <?php } ?>
+    <?php if ($warning) { ?>
+    <div class="formMessages bad">
+        <span class="fmIcon bad"></span> 
+        <span class="fmText"><?php echo $warning; ?></span>
+        <span class="clear">&nbsp;</span>
+    </div>
+    <?php } ?>
+    <div class="buttons">
+        <a href="<?php echo $csv_import; ?>" class="button">CSV Import</a>   
+        <a class="button" onclick="$('#examresult-edit-form').submit();">Save</a>
         <a href="#" class="button">Cancel</a>        
     </div>
     <form id="examresult-edit-form" method="post" action="<?php echo $edit_form_action; ?>">
         <table class="vm10 datatable fullwidth">
             <tr>
-                <td>Student</td>
+                <th>Student</th>
                 <?php $exam_seq; ?>
                 <?php foreach ($exams as $exam) { ?>
                 <?php $exam_seq[] = $exam->id; ?>
-                <td><?php echo $exam->name . '<br/> Out of: ' . $exam->total_marks; ?></td>
+                <th><?php echo $exam->name . '<br/> Out of: ' . $exam->total_marks; ?></th>
                 <?php } ?>
             </tr>        
             <?php foreach ($results as $result) { ?>
-            <tr>
+            <tr <?php echo $result['invalid'] ? 'class="bad"' : ''; ?>>
                 <td><?php echo $result['name']; ?></td>
                 <?php foreach ($exam_seq as $e) { ?>
                 <td><input type="text" name="result[<?php echo $e; ?>][<?php echo $result['user_id']; ?>]" value="<?php echo $result['marks'][$e]; ?>" /></td>
@@ -27,8 +41,9 @@
             </tr>
             <?php } ?>        
         </table>
+        <input type="hidden" name="examgroup_id" value="<?php echo $examgroup->id; ?>" />
     </form>
     <div class="buttons">
-        <a class="button saveAcl" onclick="$('#examresult-edit-form').submit();">Save</a>
+        <a class="button" onclick="$('#examresult-edit-form').submit();">Save</a>
     </div>
 </div><!-- content -->
