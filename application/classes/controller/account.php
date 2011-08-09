@@ -50,6 +50,7 @@ class Controller_Account extends Controller_Base {
         $form->process();
         
         $upload_url = URL::site('account/uploadavatar');
+        $remove_url = URL::site('account/removeimage');
 
         $image = CacheImage::factory();
         $avatar = $image->resize($user->avatar, 100, 100);
@@ -57,6 +58,7 @@ class Controller_Account extends Controller_Base {
         $view = View::factory('account/profile')
                     ->bind('form', $form)
                     ->bind('upload_url', $upload_url)
+                    ->bind('remove_url', $remove_url)
                     ->bind('user', $user)
                     ->bind('avatar', $avatar);
                     
@@ -103,6 +105,16 @@ class Controller_Account extends Controller_Base {
 		echo json_encode($json);
 		exit;
 		
+	}
+	
+	public function action_removeimage(){
+	    $user = Auth::instance()->get_user();
+	    $user->avatar = "";
+        $user->save();
+	    $image = CacheImage::factory();
+        $src = $image->resize($user->avatar, 100, 100);
+        echo $src;
+        exit;
 	}
 	
 	public function action_test(){
