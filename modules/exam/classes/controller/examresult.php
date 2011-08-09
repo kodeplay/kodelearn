@@ -76,7 +76,14 @@ class Controller_Examresult extends Controller_Base {
         $view = View::factory('examresult/edit')
             ->bind('results', $results)
             ->bind('exams', $exams)
-            ->bind('examgroup', $examgroup);            
+            ->bind('examgroup', $examgroup)
+            ->bind('edit_form_action', $action);
+        if ($this->request->method() === 'POST' && $this->request->post()) {
+            $examresults = $this->request->post('result');
+            $result_sets = self::result_sets($examresults);
+            Model_Examresult::save_results($result_sets);
+        }
+        $action = Url::site('examresult/edit');
         // $examgroup_id = $this->request->param('examgroup_id');
         $examgroup_id = 2;
         $examgroup = ORM::factory('examgroup', $examgroup_id);
@@ -104,6 +111,28 @@ class Controller_Examresult extends Controller_Base {
             );
         }
         $this->content = $view;
+    }
+
+    /**
+     * Method to get the result sets from the post data submitted
+     * @param array $results (keys = exam_id, values = array ( keys = student_id, values = marks scored)
+     * @return array $results array keys (exam_id, user_id, marks)
+     */
+    private static function result_sets($examresults) {
+        if (!$examresults) {
+            return array();
+        }
+        $sets = array();
+        foreach ($examresults as $exam_id=>$results) {
+            foreach ($results as $user_id=>$marks) {
+                $sets[] = array(
+                    'exam_id' => $exam_id,
+                    'user_id' => $user_id,
+                    'marks' => $marks
+                );
+            }
+        }
+        return $sets;
     }
 
     // view results of all users - so typically only the administrator and teacher 
