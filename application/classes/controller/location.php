@@ -73,6 +73,7 @@ class Controller_Location extends Controller_Base {
         
         $links = array(
             'add_location' => Html::anchor('/location/add/', 'Create a location', array('class' => 'createButton l')),
+            'rooms' => Html::anchor('/room', 'Rooms', array('class' => 'pageAction l')),
             'delete'      => URL::site('/location/delete/')
         );
         

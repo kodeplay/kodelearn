@@ -7,7 +7,7 @@
 		
 		<div class="topbar">
 			<?php echo $links['add_location']?>
-			<a href="http://kodelearn.kp/room/index/" class="pageAction">Rooms</a>
+			<?php echo $links['rooms']?>
 			<a onclick="$('#location').submit();" class="pageAction r alert">Delete selected...</a>
 			<span class="clear">&nbsp;</span>
 		</div><!-- topbar -->

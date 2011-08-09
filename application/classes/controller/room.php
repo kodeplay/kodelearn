@@ -74,6 +74,7 @@ class Controller_Room extends Controller_Base {
         
         $links = array(
             'add_room' => Html::anchor('/room/add/', 'Create a Room', array('class' => 'createButton l')),
+            'locations' => Html::anchor('/location', 'Locations', array('class' => 'pageAction l')),
             'delete'      => URL::site('/room/delete/')
         );
         
