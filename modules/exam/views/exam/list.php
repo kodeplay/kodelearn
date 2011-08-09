@@ -14,6 +14,17 @@
         <form name="exam" id="exam" method="POST" action="<?php echo $links['delete'] ?>">
         <table class="vm10 datatable fullwidth">
             <?php echo $table['heading']?>
+            <tr class="filter" >
+                 <td><input style="width: 120px;" type="hidden" id="filter_url" value="<?php echo $filter_url ?>" /></td>
+                 <td><input type="text" name="filter_name" value="<?php echo $filter_name ?>" /></td>
+                 <td></td>
+                 <td></td>
+                 <td></td>
+                 <td><input style="width: 25px;" type="text" name="filter_total_marks" value="<?php echo $filter_total_marks ?>" /></td>
+                 <td><input style="width: 25px;" type="text" name="filter_passing_marks" value="<?php echo $filter_passing_marks ?>" /></td>
+                 <td></td>
+                 <td valign="middle"><a class="button" id="trigger_filter" href="#">Filter</a></td>
+            </tr>
             <?php foreach($table['data'] as $exam){ ?>
             <tr>
                 <td><input type="checkbox" class="selected" name="selected[]" value="<?php echo $exam->id ?>" /></td>

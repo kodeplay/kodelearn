@@ -37,7 +37,9 @@
 					<p class="tip">Preferred size: 100px</p>
 				</td>
 				<td><img src="<?php echo $avatar ?>" alt="" id="photo" />
-				<input style="font-size:12px;" type="button" id="uploadavatar" value="Upload"></td>
+				    <input style="font-size:12px;" type="button" id="uploadavatar" value="Upload"><br>
+				    <a href="#" onclick="return removeImage()">[Remove]</a>
+				</td>
 			</tr>
 			<tr>
 				<td><label for="otherd">Other details</label></td>
@@ -87,5 +89,24 @@ new AjaxUpload('#uploadavatar', {
         }
     }
 });
+
+function removeImage() {
+    var usrId = "<?php echo $user->id ?>";
+    
+	$.ajax(
+	        {
+	            type: "POST",
+	            dataType:"html",
+	            url:     "<?php echo $remove_url ?>",
+	            data:    "usrId="+usrId,
+	            success: function(data)
+	            {
+	                if(data != ""){
+	                	$('#photo').attr('src',data);
+	                }
+	            }
+	        });
+}
+
 
 //--></script>

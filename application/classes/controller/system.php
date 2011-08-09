@@ -48,7 +48,7 @@ class Controller_System extends Controller_Base {
         }
         
         $upload_url = URL::site('system/uploadinst');
-        $images = CacheImage::factory();
+        $images = CacheImage::instance();
         $image = $images->resize($institution->logo, 100, 100);
         
         $form = $this->form(array(
@@ -149,7 +149,7 @@ class Controller_System extends Controller_Base {
             
             if($path = Upload::save($_FILES['image'], $filename, DIR_IMAGE)){
                 
-                $images = CacheImage::factory();;
+                $images = CacheImage::instance();;
                 $src = $images->resize($filename, 100, 100);
 
                 

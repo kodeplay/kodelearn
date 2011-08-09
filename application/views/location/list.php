@@ -7,7 +7,7 @@
 		
 		<div class="topbar">
 			<?php echo $links['add_location']?>
-			<a href="http://kodelearn.kp/room/index/" class="pageAction">Rooms</a>
+			<?php echo $links['rooms']?>
 			<a onclick="$('#location').submit();" class="pageAction r alert">Delete selected...</a>
 			<span class="clear">&nbsp;</span>
 		</div><!-- topbar -->
@@ -28,7 +28,7 @@
     					
     			<tr>
     				<?php 
-    				    $images = CacheImage::factory();
+    				    $images = CacheImage::instance();
                         $image = $images->resize($location->image, 200, 100);
     				?>
     				<td><input type="checkbox" name="selected[]" class="selected" value="<?php echo $location->id; ?>" /></td>

@@ -89,6 +89,7 @@ class Controller_Base extends Controller_Template {
         $this->view->bind('topmenu', $topmenu)
             ->bind('sidemenu', $sidemenu)
             ->bind('myaccount', $myaccount)
+            ->bind('image', $image)
             ->bind('role', $role)
             ->bind('username', $username)
             ->bind('user', $user);
@@ -109,5 +110,7 @@ class Controller_Base extends Controller_Template {
         $topmenu = $menu->get('topmenu');
         $sidemenu = $menu->get('sidemenu');
         $myaccount = $menu->get('myaccount');
+        $institution = ORM::factory('institution', $id=1);
+        $image = CacheImage::instance()->resize($institution->logo, 240, 60);
     }
 }
