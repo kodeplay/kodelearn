@@ -5,7 +5,9 @@
         <div class="clear"></div>
     </div><!-- pageTop -->
     
-   
+    <?php 
+        if($flg > 0) {
+    ?>   
      <table class="vm10 datatable fullwidth">
             <tr> 
                  <th>Exam</th>
@@ -94,6 +96,12 @@
                 </td>
             </tr>
         </table>
+        
+     <?php 
+        } else {
+            echo "Marksheet not available";
+        }
+     ?>
     </div><!-- pagecontent -->
     
 <div class="clear"></div>
