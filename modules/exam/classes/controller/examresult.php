@@ -47,6 +47,8 @@ class Controller_Examresult extends Controller_Base {
     }
 
     /**
+     * @action download csv
+     * @view None!
      * Create the csv for entering the results for the examgroup 
      * and force download of the csv file.
      * @param GET int examgroup_id
