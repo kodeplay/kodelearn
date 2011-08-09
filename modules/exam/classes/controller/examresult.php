@@ -37,7 +37,7 @@ class Controller_Examresult extends Controller_Base {
         );
         $form->posted_data = $this->request->post();
         $examgroups = ORM::factory('examgroup')->find_all()->as_array('id', 'name');
-        $form->append('Select Exam Group:', 'examgroup_id', 'select', array('options' => $examgroups))
+        $form->append('Select Exam Group:', 'examgroup_id', 'select', array('options' => $examgroups, 'attributes' => array('id' => 'examgroup_id')))
             ->append('CSV File:', 'csv_file', 'file')
             ->append('Upload', 'upload', 'submit', array('attributes' => array('class' => 'button')))
             ->process();

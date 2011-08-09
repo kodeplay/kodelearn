@@ -14,19 +14,51 @@ class Controller_Exammarksheet extends Controller_Base {
      * if its the parant trying to view the marksheet of their pupil
      */
     public function action_index() {
-        $relevant_user = Acl::instance()->relevant_user();
+    	
+    	$examgroups = ORM::factory('examgroup')->find_all();
+    	
+    	$view = View::factory('examresult/index')
+    	               ->bind('examgroup', $examgroups);
+    	
+    	$this->content = $view;
+    	
+    }
+    
+    public function action_details() {
+         $relevant_user = Acl::instance()->relevant_user();
         // check if admin in which _case_ a user_id in the get param is required
         if (!$relevant_user) {
-            $user_id = $this->request->get('user_id');
+            $user_id = $this->request->param('user_id');
             $relevant_user = ORM::factory('user', $user_id);
+           
         }
-
         if (!$relevant_user) {
             echo 'Not allowed';
             exit;
         }
-    }
+       
+        $user_id = $relevant_user->id;
+        $examgroup_id = $this->request->param('examgroup_id');
+        $marksheet = ORM::factory('exam');
+        $marksheet->select('marks')
+             ->join('examresults','left')
+             ->on('examresults.exam_id', '=', 'id');
+        $marksheet->and_where_open()
+                  ->where('examresults.user_id', '=', $user_id)
+                  ->or_where('examresults.user_id', 'IS', NULL)
+                  ->and_where_close()
+                  ->and_where_open()
+                  ->and_where('exams.examgroup_id', '=', $examgroup_id)
+                  ->and_where_close();
+                  
+        $marksheet = $marksheet->find_all();
 
+        $view = View::factory('examresult/exammarksheet')
+                    ->bind('marksheets', $marksheet)
+                    ->bind('relevant_user', $relevant_user);
+        
+        $this->content = $view; 
+    }
     // @todo
     public function action_pdf() {
         
