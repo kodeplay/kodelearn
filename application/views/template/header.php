@@ -28,9 +28,14 @@
                     
                 </ul>
 				<ul id="myacContent" class="crsrPoint">
-					<li><a href="<?php echo Url::base(); ?>system">Settings</a></li>
-					<li><a href="<?php echo Url::base(); ?>account">Account</a></li>
-					<li><?php echo $topmenu->logout; ?></li>
+					<?php 
+                        $links = $myaccount->as_array(); 
+                        foreach ($links as $link) {
+                    ?>
+                        <li><?php echo $link['html']; ?></li>
+                    <?php 
+                        } 
+                    ?>
 				</ul>
                 <div class="clear"></div>
             </div><!-- wrap -->
