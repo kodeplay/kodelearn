@@ -136,11 +136,19 @@ class Controller_Course extends Controller_Base {
         
         $form = $this->form('course/add', $submitted);
         
-        $data = array();
         $cacheimage = CacheImage::factory();
-        $user_ids = array();
+        
+        if($this->request->post('selected')){
+            $user_ids = $this->request->post('selected');        	
+            $data = ORM::factory('user')->where('id' , 'IN', $this->request->post('selected'))->find_all();
+            $count = ORM::factory('user')->where('id' , 'IN', $this->request->post('selected'))->count_all();
+        } else {
+	        $user_ids = array();
+	        $data = array();
+	        $count = 0;
+        }
+        
         $course_id = 0;
-        $count = 0;
         $users = View::factory('course/assign')
             ->bind('data', $data)
             ->bind('count', $count)

@@ -61,12 +61,36 @@ class Controller_Exam extends Controller_Base {
         
         $exam = ORM::factory('exam');
         
+        if($this->request->param('filter_name')){
+            $exam->where('exams.name', 'LIKE', '%' . $this->request->param('filter_name') . '%');
+        }
+        
+        if($this->request->param('filter_passing_marks')){
+            $exam->where('exams.passing_marks', 'LIKE', '%' . $this->request->param('filter_passing_marks') . '%');
+        }
+        
+        if($this->request->param('filter_total_marks')){
+            $exam->where('exams.total_marks', 'LIKE', '%' . $this->request->param('filter_total_marks') . '%');
+        }
+        
         $count = $exam->count_all();
         
         $pagination = Pagination::factory(array(
             'total_items'    => $count,
             'items_per_page' => 5,
         ));
+        
+        if($this->request->param('filter_name')){
+            $exam->where('exams.name', 'LIKE', '%' . $this->request->param('filter_name') . '%');
+        }
+        
+        if($this->request->param('filter_passing_marks')){
+            $exam->where('exams.passing_marks', 'LIKE', '%' . $this->request->param('filter_passing_marks') . '%');
+        }
+        
+        if($this->request->param('filter_total_marks')){
+            $exam->where('exams.total_marks', 'LIKE', '%' . $this->request->param('filter_total_marks') . '%');
+        }
         
         $exam->group_by('id')
             ->order_by($sort, $order)
@@ -88,6 +112,18 @@ class Controller_Exam extends Controller_Base {
         
         $url = ('exam/index');
         
+        if($this->request->param('filter_name')){
+            $url .= '/filter_name/'.$this->request->param('filter_name');
+        }
+        
+        if($this->request->param('filter_passing_marks')){
+            $url .= '/filter_passing_marks/'.$this->request->param('filter_passing_marks');
+        }
+        
+        if($this->request->param('filter_total_marks')){
+            $url .= '/filter_total_marks/'.$this->request->param('filter_total_marks');
+        }
+        
         $sorting->set_link($url);
         
         $sorting->set_order($order);
@@ -105,10 +141,19 @@ class Controller_Exam extends Controller_Base {
             'examgroup' => Html::anchor('examgroup', 'Grading Period', array('class' => 'l pageAction'))
         );
         
+        $filter_name = $this->request->param('filter_name');
+        $filter_passing_marks = $this->request->param('filter_passing_marks');
+        $filter_total_marks = $this->request->param('filter_total_marks');
+        $filter_url = URL::site('exam/index');
+        
         $view = View::factory('exam/list')
             ->bind('links', $links)
             ->bind('table', $table)
             ->bind('count', $count)
+            ->bind('filter_name', $filter_name)
+            ->bind('filter_passing_marks', $filter_passing_marks)
+            ->bind('filter_total_marks', $filter_total_marks)
+            ->bind('filter_url', $filter_url)
             ->bind('pagination', $pagination);
         
         $this->content = $view;
