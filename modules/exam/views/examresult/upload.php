@@ -10,6 +10,13 @@
         <span class="clear">&nbsp;</span>
     </div>
     <?php } ?>
+    <?php if ($warning) { ?>
+    <div class="formMessages">
+        <span class="fmIcon bad"></span> 
+        <span class="fmText"><?php echo $warning; ?></span>
+        <span class="clear">&nbsp;</span>
+    </div>
+    <?php } ?>
     <?php echo $form->startform(); ?>
     <table class="formcontainer">
         <tr>
