@@ -16,7 +16,12 @@ class Acl_Menu_Admin extends Acl_Menu {
             ->add_link('lecture', 'Lectures', 4)
             ->add_link('exam', 'Exam', 5)
             ->add_link('calender', 'Calender', 6);
+        $myaccount = DynamicMenu::factory('myaccount');
+        $myaccount->add_link('system', 'Setting', 0)
+            ->add_link('account', 'Account', 1)
+            ->add_link('auth/logout', 'Logout', 2);
         $this->set('topmenu', $topmenu)
-            ->set('sidemenu', $sidemenu);
+            ->set('sidemenu', $sidemenu)
+            ->set('myaccount', $myaccount);
     }
 }
