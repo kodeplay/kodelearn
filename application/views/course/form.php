@@ -2,7 +2,7 @@
 	<div class="r pagecontent">
 		<div class="pageTop withBorder">
 			<div class="pageTitle l">Courses</div>
-			<div class="pageDesc r">You can view and edit courses here. You can also assign users to courses.</div>
+			<div class="pageDesc r"><?php echo $page_description; ?></div>
 			<div class="clear"></div>
 		</div><!-- pageTop -->
 		

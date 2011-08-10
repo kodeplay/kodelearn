@@ -1,7 +1,7 @@
     <div class="r pagecontent">
         <div class="pageTop">
             <div class="pageTitle l">Courses</div>
-            <div class="pageDesc r">this is a test description this is a test description this is a test description this is a test description this is a test description </div>
+            <div class="pageDesc r"><?php echo $page_description; ?></div>
             <div class="clear"></div>
         </div><!-- pageTop -->        
         

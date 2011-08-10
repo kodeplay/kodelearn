@@ -1,7 +1,7 @@
     <div class="r pagecontent">
         <div class="pageTop withBorder">
             <div class="pageTitle l">Upoad User CSV</div>
-            <div class="pageDesc r">Create a new user here.</div>
+            <div class="pageDesc r"><?php echo $page_description; ?></div>
             <div class="clear"></div>
         </div><!-- pageTop -->
         <?php if($error){ ?>

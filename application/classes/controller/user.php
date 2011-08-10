@@ -89,7 +89,7 @@ class Controller_User extends Controller_Base {
         $filter_url = URL::site('user/index');
         $cacheimage = CacheImage::instance();
         
-        
+        $page_description = Kohana::message('page_title', 'user_index.description');
         $view = View::factory('user/list')
             ->bind('table', $table)
             ->bind('users', $users)
@@ -100,6 +100,7 @@ class Controller_User extends Controller_Base {
             ->bind('filter_id', $filter_id)
             ->bind('filter_url', $filter_url)
             ->bind('cacheimage', $cacheimage)
+            ->bind('page_description', $page_description)
             ;
         
         $this->content = $view;
@@ -144,9 +145,10 @@ class Controller_User extends Controller_Base {
                 }
             }
         }
-        $heading[] = 'Create a new user';
-        $heading[] = 'Create a new user here';
+        $heading[] = Kohana::message('page_title', 'user_add.title');
+        $heading[] = Kohana::message('page_title', 'user_add.description');
         $form = $this->form('user/add', $submitted);
+        
         
         $view = View::factory('user/form')
             ->bind('form', $form)
@@ -262,8 +264,10 @@ class Controller_User extends Controller_Base {
             'course_id' => $user->courses->find_all()->as_array(NULL, 'id'),
             'status' => (int) $user->status,
         ));        
-        $heading[] = "View/Edit ".$user->firstname."'s Profile";
-        $heading[] = 'View/Edit here';
+        //$heading[] = "View/Edit ".$user->firstname."'s Profile";
+        $heading[] = str_replace('{user}', $user->firstname, Kohana::message('page_title', 'user_edit.title'));
+        $heading[] = Kohana::message('page_title', 'user_edit.description');
+        
         
         $view = View::factory('user/form')
             ->bind('form', $form)
@@ -373,12 +377,13 @@ class Controller_User extends Controller_Base {
         $links = array(
             'sample'    => Html::anchor('/users_sample.csv', 'or click here to download a sample CSV file')
         );
-        
+        $page_description = Kohana::message('page_title', 'user_uploadcsv.description');
     	$view = View::factory('user/uploadcsv')
             ->bind('form', $form)
             ->bind('error', $this->error)
             ->bind('success', $this->success)
-            ->bind('links', $links);
+            ->bind('links', $links)
+            ->bind('page_description', $page_description);
         
     	$this->content = $view;
         
