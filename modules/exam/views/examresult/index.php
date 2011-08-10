@@ -8,9 +8,15 @@
     <div class="sectionTitle">View Marksheet for</div>
     
     <ul>
-        <?php foreach($examgroup as $group){ ?>
-        <li class="vm10 "><a href="<?php echo URL::base() . 'exammarksheet/details/examgroup_id/' . $group->id ?>"><?php echo $group->name?></a></li>
-        <?php }?>
+        <?php if($examgroup){?>
+            <?php foreach($examgroup as $group){ ?>
+            <li class="vm10 "><a href="<?php echo URL::base() . 'exammarksheet/details/examgroup_id/' . $group->id ?>"><?php echo $group->name?></a></li>
+            <?php }?>
+        <?php 
+        }else{
+            echo "No marksheets found";
+        }
+        ?>
     </ul>
     
 </div>
