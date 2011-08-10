@@ -167,6 +167,7 @@ class Controller_Exam extends Controller_Base {
                 $submitted = true;
                 $exam = ORM::factory('exam');
                 $validator = $exam->validator($this->request->post());
+                $validator->bind(':to', $this->request->post('to'));
                 if ($validator->check()) {
                     $event_exam = Event::factory('exam');
 

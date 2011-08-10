@@ -17,7 +17,20 @@ class Model_Exam extends ORM {
             ->rule('date', 'not_empty')
             ->rule('from', 'not_empty')
             ->rule('to', 'not_empty')
+            ->rule('from', 'Model_Exam::time_check', array(':value',':to'))
             ->rule('passing_marks', 'digit')
             ->rule('name', 'min_length', array(':value', 3));
+    }
+    
+    public static function time_check($from, $to = NULL) {
+        $s_from = strtotime($from);
+        
+        $s_to = strtotime($to);
+        
+        if($s_from > $s_to){
+            return false;
+        } else {
+            return true;
+        }
     }
 }
