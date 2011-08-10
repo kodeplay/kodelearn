@@ -3,8 +3,10 @@
 class Controller_Role extends Controller_Base {
 
     public function action_index() {
+        $page_description = Kohana::message('page_title', 'role_index.description');
         $view = View::factory('role/list')
-            ->bind('roles', $roles);
+            ->bind('roles', $roles)
+            ->bind('page_description', $page_description);
         $role_model = ORM::factory('role');
         $all_roles = $role_model->find_all();
         $roles = array();
@@ -57,10 +59,11 @@ class Controller_Role extends Controller_Base {
         $links = array(
             'cancel' => Html::anchor('/role/', 'or cancel')
         );
-        
+        $page_description = Kohana::message('page_title', 'role_edit.description');
         $view = View::factory('role/form')
                   ->bind('links', $links)
-                  ->bind('form', $form);
+                  ->bind('form', $form)
+                  ->bind('page_description', $page_description);
         $this->content = $view;
     }
 

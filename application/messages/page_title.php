@@ -27,5 +27,13 @@ return array(
         'description'     => 'Create new users here, by uploading the csv.',
         
     ),
+    'role_index' => array(
+        'description'     => 'This is the roles page you can view the list of all roles here.',
+        
+    ),
+    'role_edit' => array(
+        'description'     => 'You can edit a role here.',
+        
+    ),
     
 );

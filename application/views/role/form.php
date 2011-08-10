@@ -1,7 +1,7 @@
     <div class="r pagecontent">
         <div class="pageTop withBorder">
             <div class="pageTitle l">Edit a Role </div>
-            <div class="pageDesc r">this is a test description this is a test description this is a test description this is a test description this is a test description </div>
+            <div class="pageDesc r"><?php echo $page_description; ?></div>
             <div class="clear"></div>
         </div><!-- pageTop -->
         <?php echo $form->startform(); ?>
