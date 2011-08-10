@@ -7,6 +7,7 @@
         <div class="topbar">
             <?php echo $links['add']?>
             <?php echo $links['examgroup']?>
+            <?php echo $links['examresult']?>
             <a onclick="$('#exam').submit();" class="pageAction r alert">Delete selected...</a>
             <span class="clear">&nbsp;</span>
         </div><!-- topbar -->

@@ -391,13 +391,24 @@ select {	width: 210px;  }
 	color: #666;
 }
 .formMessages {
-	background: #fff url("../image/formMessage.png") repeat-x left bottom;
+	background: #e0f0f5;
+	border: 1px solid #b8bec4;
 	border-radius: 3px;
-	border: 1px solid #efefef;
 	padding: 5px;
 	width: 80%;
 	margin: 10px auto;
 }
+
+.formMessages.good {
+	background: #e0f0f5;
+	border: 1px solid #b8bec4;
+}
+
+.formMessages.bad {
+	background: #f4dcdc;
+	border: 1px solid #c00000;
+}
+
 .fmIcon {
 	display: block;
 	float: left;
@@ -782,3 +793,6 @@ select {	width: 210px;  }
 #upcoming_exams li ul {
 	margin-top: 10px;
 }
+
+/** ......... error row ............ */
+tr.bad { background: #f4dcdc; }

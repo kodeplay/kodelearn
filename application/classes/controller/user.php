@@ -87,7 +87,7 @@ class Controller_User extends Controller_Base {
         
         $filter_name = $this->request->param('filter_name');
         $filter_url = URL::site('user/index');
-        $cacheimage = CacheImage::factory();
+        $cacheimage = CacheImage::instance();
         
         
         $view = View::factory('user/list')
