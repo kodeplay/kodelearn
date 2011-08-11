@@ -22,7 +22,10 @@ class Controller_User extends Controller_Base {
         $user = ORM::factory('user');
 
         if($this->request->param('filter_name')){
-            $user->where('users.firstname', 'LIKE', '%' . $this->request->param('filter_name') . '%');
+            $user->and_where_open()
+                 ->where('users.firstname', 'LIKE', '%' . $this->request->param('filter_name') . '%')
+                 ->or_where('users.lastname', 'LIKE', '%' . $this->request->param('filter_name') . '%')
+                 ->and_where_close();
         }
         
         if($this->request->param('filter_id')){
@@ -37,7 +40,10 @@ class Controller_User extends Controller_Base {
         ));
         
         if($this->request->param('filter_name')){
-            $user->where('users.firstname', 'LIKE', '%' . $this->request->param('filter_name') . '%');
+            $user->and_where_open()
+                 ->where('users.firstname', 'LIKE', '%' . $this->request->param('filter_name') . '%')
+                 ->or_where('users.lastname', 'LIKE', '%' . $this->request->param('filter_name') . '%')
+                 ->and_where_close();
         }
         
         if($this->request->param('filter_id')){

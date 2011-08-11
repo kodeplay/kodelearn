@@ -5,10 +5,10 @@
             <div class="clear"></div>
         </div><!-- pageTop -->
         <div class="topbar">
+            <a onclick="$('#exam').submit();" class="pageAction r alert">Delete selected...</a>
             <?php echo $links['add']?>
             <?php echo $links['examgroup']?>
             <?php echo $links['examresult']?>
-            <a onclick="$('#exam').submit();" class="pageAction r alert">Delete selected...</a>
             <span class="clear">&nbsp;</span>
         </div><!-- topbar -->
         <form name="exam" id="exam" method="POST" action="<?php echo $links['delete'] ?>">
