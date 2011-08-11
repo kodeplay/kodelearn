@@ -61,8 +61,17 @@ class Sort {
 			$html .= '<th><input type="checkbox" onclick="$(\'.selected\').attr(\'checked\', this.checked);"/></th>';
 		}
 		
-		foreach($this->heading as $text => $sort){
-            $html .= '<th>';
+		foreach($this->heading as $text => $option){
+			
+			if(is_array($option)){
+				$sort = $option['sort'];
+				$attributes = ($option['attributes']) ? $option['attributes'] : array(); 
+			} else {
+				$sort = $option;
+				$attributes = array();
+			}
+			
+            $html .= '<th' . HTML::attributes($attributes) . '>';
 			if($sort){
 				$html .= Html::anchor($this->link . '/sort/' . $sort . '/order/' . $this->order , $text);
 				if($this->sort == $sort){
