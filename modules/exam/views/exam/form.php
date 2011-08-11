@@ -49,8 +49,9 @@
             
             <tr>
                 <td><?php echo $form->room_id->label(); ?></td>
+
                 <td><span id="loading">Please wait... Loading Rooms</span><br/>
-                <?php echo $form->room_id->element(); ?>
+                <?php echo $form->room_id->element(); ?> &nbsp; &nbsp; <?php echo $links['rooms']; ?>
                 <span class="form-error"><?php echo $form->room_id->error(); ?></span></td>
             </tr>
             <tr>

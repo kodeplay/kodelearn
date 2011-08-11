@@ -103,6 +103,16 @@ KODELEARN.modules.add('filter', (function () {
 				});
 				location = url;
 			});
+			$('tr.filter td input').keypress(function(e){
+				var key;      
+			     if(window.event)
+			          key = window.event.keyCode; //IE
+			     else
+			          key = e.which; //firefox      
+
+			     return (key != 13);
+			});
+			
 	}
 	};
 	
