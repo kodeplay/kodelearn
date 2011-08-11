@@ -21,6 +21,13 @@ class Model_Examgroup extends ORM {
         return $exams;
     }
 
+    public static function has_exams($examgroup_id) {
+        $count = ORM::factory('exam')
+            ->where('examgroup_id', ' = ', $examgroup_id)
+            ->count_all();
+        return ($count > 0);
+    }
+
     /**
      * Method to get all users for an examgroup
      * @param int $examgroup_id

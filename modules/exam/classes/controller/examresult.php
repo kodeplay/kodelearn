@@ -56,12 +56,20 @@ class Controller_Examresult extends Controller_Base {
     public function action_download_csv() {
         $examgroup_id = $this->request->param('examgroup_id');
         $examgroup = ORM::factory('examgroup', $examgroup_id);
-        // get all students in this examgroup
-        $students = Model_Examgroup::get_students($examgroup_id);
-        // var_dump($students); exit;
         // get all the exams in this exam group
         $exams = Model_Examgroup::get_exams($examgroup_id)
             ->as_array('id', 'name');
+        if (!count($exams)) {
+            Session::instance()->set('examgroup_nil_exams', array(
+                'examgroup_id' => $examgroup_id,
+                'back_url' => Url::site('examresult/upload'),
+            ));
+            Request::current()->redirect('examgroup/nil_exams');
+            exit;
+        }
+        // get all students in this examgroup
+        $students = Model_Examgroup::get_students($examgroup_id);
+        // var_dump($students); exit;
         $examresults = ORM::factory('examresult')
             ->where('exam_id', ' IN ', array_keys($exams))
             ->find_all();
@@ -117,6 +125,13 @@ class Controller_Examresult extends Controller_Base {
         $examgroup = ORM::factory('examgroup', $examgroup_id);
         // get all the exams in this exam group
         $exams = Model_Examgroup::get_exams($examgroup_id);
+        if (!count($exams->as_array())) {
+            Session::instance()->set('examgroup_nil_exams', array(
+                'examgroup_id' => $examgroup_id,
+                'back_url' => Url::site('examresult/upload'),
+            ));
+            Request::current()->redirect('examgroup/nil_exams');
+        }
         $results = $this->form($examgroup_id, $exams);
         $this->content = $view;
     }
