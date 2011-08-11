@@ -17,7 +17,7 @@
 			<?php echo $table['heading'] ?>
 			<tr class="filter" >
 			     <td><input type="hidden" id="filter_url" value="<?php echo $filter_url ?>" /></td>
-			     <td><input type="text" name="filter_name" value="<?php echo $filter_name ?>" /></td>
+			     <td><input type="text" name="filter_name" value="<?php echo $filter_name ?>"  /></td>
 			     <td></td>
 			     <td valign="middle"><a class="button" id="trigger_filter" href="#">Filter</a></td>
 			</tr>
@@ -54,3 +54,17 @@
 	</div><!-- content -->
 	
 	<div class="clear"></div>
+<script type="text/javascript"><!--
+/*
+function disableEnterKey(e)
+{
+     var key;      
+     if(window.event)
+          key = window.event.keyCode; //IE
+     else
+          key = e.which; //firefox      
+
+     return (key != 13);
+}
+*/
+//--></script>
