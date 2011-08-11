@@ -182,7 +182,7 @@ class Controller_Exam extends Controller_Base {
                     
                     $from = strtotime($from);
                     $to = strtotime($to);
-                    
+
                     $event_exam->set_values($this->request->post());
                     $event_exam->set_value('eventstart', $from);
                     $event_exam->set_value('eventend', $to);
@@ -323,8 +323,8 @@ class Controller_Exam extends Controller_Base {
         $form->posted_data = $submitted ? $this->request->post() : array();
         $form->append('Name', 'name', 'text');
         $form->append('Date', 'date', 'text', array('attributes' => array('class' => 'date')));
-        $form->append('From', 'from', 'text', array('attributes' => array('class' => 'time', 'size' => '4', 'style' => 'min-width: 20px;')));
-        $form->append('To', 'to', 'text', array('attributes' => array('class' => 'time', 'size' => '4', 'style' => 'min-width: 20px;')));
+        $form->append('From', 'from', 'hidden');
+        $form->append('To', 'to', 'hidden');
         $form->append('Total Marks', 'total_marks', 'text');
         $form->append('Passing Marks', 'passing_marks', 'text');
         $form->append('Reminder', 'reminder', 'hidden');
