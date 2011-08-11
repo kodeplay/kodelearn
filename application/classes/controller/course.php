@@ -68,7 +68,8 @@ class Controller_Course extends Controller_Base {
         
         $links = array(
             'add' => Html::anchor('/course/add/', 'Create a course', array('class' => 'createButton l')),
-            'delete'      => URL::site('/course/delete/')
+            'delete'      => URL::site('/course/delete/'),
+            'join' => Html::anchor('/course/join/', 'Join Course', array('class' => 'pageAction c'))
         );
         
         $table = array('heading' => $heading, 'data' => $courses);
