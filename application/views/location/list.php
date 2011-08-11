@@ -6,9 +6,9 @@
 		</div><!-- pageTop -->
 		
 		<div class="topbar">
+			<a onclick="$('#location').submit();" class="pageAction r alert">Delete selected...</a>
 			<?php echo $links['add_location']?>
 			<?php echo $links['rooms']?>
-			<a onclick="$('#location').submit();" class="pageAction r alert">Delete selected...</a>
 			<span class="clear">&nbsp;</span>
 		</div><!-- topbar -->
 		
