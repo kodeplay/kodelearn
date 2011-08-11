@@ -1,5 +1,5 @@
 <div class="r pagecontent">
-    <div class="pageTop">
+    <div class="pageTop withBorder">
         <div class="pageTitle l">Exam Results</div>
         <div class="pageDesc r">this is a test description this is a test description this is a test description this is a test description this is a test description </div>
         <div class="clear"></div>
@@ -16,9 +16,9 @@
         <span class="fmText"><?php echo $warning; ?></span>
         <span class="clear">&nbsp;</span>
     </div>
-    <?php } ?>
+    <?php } ?>    
     <?php echo $form->startform(); ?>
-    <table class="formcontainer">
+    <table class="formcontainer tm40">
         <tr>
             <td><?php echo $form->examgroup_id->label(); ?></td>
             <td><?php echo $form->examgroup_id->element(); ?></td>
@@ -50,6 +50,7 @@
             </td>
         </tr>
     </table>
+    <?php echo $form->endform(); ?>
     </div><!-- pagecontent -->
 	
 <div class="clear"></div>

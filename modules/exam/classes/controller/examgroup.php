@@ -187,4 +187,23 @@ class Controller_Examgroup extends Controller_Base {
         }
         Request::current()->redirect('examgroup');
     }
+
+    public function action_nil_exams() {
+        $view = View::factory('examgroup/nil_exams')
+            ->bind('examgroup', $examgroup)
+            ->bind('back_url', $back_url)
+            ->bind('create_exam', $create_exam);
+        $session = Session::instance();
+        $session_data = $session->get('examgroup_nil_exams');
+        if (!$session_data) {
+            Request::current()->redirect('examgroup/index');
+        }
+        $examgroup_id = $session_data['examgroup_id'];
+        $back_url = $session_data['back_url'];
+        $create_exam = Url::site('exam/add');
+        // session data is not longer required
+        $session->delete('examgroup_nil_exams');
+        $examgroup = ORM::factory('examgroup', $examgroup_id);
+        $this->content = $view;
+    }
 }

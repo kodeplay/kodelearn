@@ -35,8 +35,17 @@
             <?php foreach ($results as $result) { ?>
             <tr <?php echo $result['invalid'] ? 'class="bad"' : ''; ?>>
                 <td><?php echo $result['name']; ?></td>
-                <?php foreach ($exam_seq as $e) { ?>
-                <td><input type="text" name="result[<?php echo $e; ?>][<?php echo $result['user_id']; ?>]" value="<?php echo $result['marks'][$e]; ?>" /></td>
+                <?php 
+                    foreach ($exam_seq as $e) { 
+                        $ex_arr = $result['exam_marks'][$e];
+                ?>
+                <td>
+                    <?php if ($ex_arr['student_applicable']) { ?>
+                        <input type="text" name="result[<?php echo $e; ?>][<?php echo $result['user_id']; ?>]" value="<?php echo $ex_arr['marks']; ?>" />
+                    <?php } else { ?>
+                        n/a
+                    <?php } ?>
+                </td> 
                 <?php } ?>
             </tr>
             <?php } ?>        

@@ -56,12 +56,20 @@ class Controller_Examresult extends Controller_Base {
     public function action_download_csv() {
         $examgroup_id = $this->request->param('examgroup_id');
         $examgroup = ORM::factory('examgroup', $examgroup_id);
-        // get all students in this examgroup
-        $students = Model_Examgroup::get_students($examgroup_id);
-        // var_dump($students); exit;
         // get all the exams in this exam group
         $exams = Model_Examgroup::get_exams($examgroup_id)
             ->as_array('id', 'name');
+        if (!count($exams)) {
+            Session::instance()->set('examgroup_nil_exams', array(
+                'examgroup_id' => $examgroup_id,
+                'back_url' => Url::site('examresult/upload'),
+            ));
+            Request::current()->redirect('examgroup/nil_exams');
+            exit;
+        }
+        // get all students in this examgroup
+        $students = Model_Examgroup::get_students($examgroup_id);
+        // var_dump($students); exit;
         $examresults = ORM::factory('examresult')
             ->where('exam_id', ' IN ', array_keys($exams))
             ->find_all();
@@ -117,6 +125,13 @@ class Controller_Examresult extends Controller_Base {
         $examgroup = ORM::factory('examgroup', $examgroup_id);
         // get all the exams in this exam group
         $exams = Model_Examgroup::get_exams($examgroup_id);
+        if (!count($exams->as_array())) {
+            Session::instance()->set('examgroup_nil_exams', array(
+                'examgroup_id' => $examgroup_id,
+                'back_url' => Url::site('examresult/upload'),
+            ));
+            Request::current()->redirect('examgroup/nil_exams');
+        }
         $results = $this->form($examgroup_id, $exams);
         $this->content = $view;
     }
@@ -136,24 +151,52 @@ class Controller_Examresult extends Controller_Base {
         $examresults = ORM::factory('examresult')
             ->where('exam_id', ' IN ', array_keys($exams->as_array('id','name')))
             ->find_all();
-        $default_marks = array_fill_keys(array_keys($exams->as_array('id')), 0);
+
+        $default_exam_marks = $this->edit_default_values($students, $exams); 
+        // var_dump($default_exam_marks); exit;
         $post_data = $this->request->post('result');
         $post_data = $post_data === null ? array() : $post_data;
         foreach ($students as $user_id=>$name) {
-            $marks = $default_marks;
+            $exam_marks = $default_exam_marks[$user_id];
             foreach ($examresults as $examresult) {
-                if ($examresult->user_id != $user_id) continue;
+                if ($examresult->user_id != $user_id) continue;                   
                 $exam_id = $examresult->exam_id;
-                $marks[$exam_id] = isset($post_data[$exam_id][$user_id]) ? $post_data[$exam_id][$user_id] :$examresult->marks;
+                $marks = isset($post_data[$exam_id][$user_id]) ? $post_data[$exam_id][$user_id] : $examresult->marks;
+                $exam_marks[$exam_id]['marks'] = $marks;
             }
             $results[] = array(
                 'user_id' => $user_id,
                 'name' => $name,
-                'marks' => $marks,
+                'exam_marks' => $exam_marks,
                 'invalid' => in_array($user_id, $this->_invalid_rows),
             );
         }
         return $results;
+    }
+
+    /**
+     * Method to get the default values that any cell will come filled in 
+     * if the examresults for the exam_id and user_id combination is not yet entered
+     * @param array $students (keys = user_ids, values = user names)
+     * @param Database_Mysql_Result $exams
+     * @return array 
+     *            user_id >
+     *                     exam_id > 
+     *                               0 > marks, student_applicable
+     */
+    private function edit_default_values($students, $exams) {
+        $default_values = array();
+        foreach ($students as $user_id=>$name) {
+            foreach ($exams as $exam) {
+                $users = $exam->course->users->find_all()->as_array('id');
+                $exam_students = array_keys($users);
+                $default_values[$user_id][$exam->id] = array(
+                    'marks' => '',
+                    'student_applicable' => in_array($user_id, $exam_students),
+                );
+            }
+        }
+        return $default_values;
     }
 
     /**

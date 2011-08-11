@@ -33,4 +33,15 @@ class Model_Exam extends ORM {
             return true;
         }
     }
+
+    /**
+     * Method to get the students appearing for an exam
+     * @param int $exam_id
+     * @return array (values = user_ids of the students)
+     */
+    public function get_students($exam_id) {
+        $exam = ORM::factory('exam', $exam_id);
+        $users = $exam->course->users->find_all();
+        return $users;
+    }
 }
