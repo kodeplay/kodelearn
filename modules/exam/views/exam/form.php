@@ -50,7 +50,7 @@
             
             <tr>
                 <td><?php echo $form->room_id->label(); ?></td>
-                <td><?php echo $form->room_id->element(); ?>
+                <td><?php echo $form->room_id->element(); ?> &nbsp; &nbsp; <?php echo $links['rooms']; ?>
                 <span class="form-error"><?php echo $form->room_id->error(); ?></span></td>
             </tr>
             <tr>

@@ -198,9 +198,13 @@ class Controller_Exam extends Controller_Base {
         
         $form = $this->form('exam/add', $submitted);
         $event_id = 0;
+        $links = array(
+            'rooms'       => Html::anchor('/room/', 'Add Rooms', array('target' => '_blank')),
+        );
         $view = View::factory('exam/form')
             ->bind('form', $form)
-            ->bind('event_id', $event_id);
+            ->bind('event_id', $event_id)
+            ->bind('links', $links);
         
         $this->content = $view;
     }
@@ -277,10 +281,13 @@ class Controller_Exam extends Controller_Base {
         
         $form = $this->form('exam/edit/id/' . $id, $submitted, $saved_data, $rooms);
         $event_id = $exam->event_id;
+        $links = array(
+            'rooms'       => Html::anchor('/room/', 'Add Rooms', array('target' => '_blank')),
+        );
         $view = View::factory('exam/form')
             ->bind('form', $form)
-            ->bind('event_id', $event_id);
-        
+            ->bind('event_id', $event_id)
+            ->bind('links', $links);
         $this->content = $view;
     }
     
