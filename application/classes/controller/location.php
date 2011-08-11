@@ -134,7 +134,8 @@ class Controller_Location extends Controller_Base {
                   ->bind('links', $links)
                   ->bind('form', $form)
                   ->bind('image', $image)
-                  ->bind('upload_url', $upload_url);
+                  ->bind('upload_url', $upload_url)
+                  ;
                   
         $this->content = $view;
     }
@@ -240,7 +241,8 @@ class Controller_Location extends Controller_Base {
                   ->bind('links', $links)
                   ->bind('form', $form)
                   ->bind('image', $image)
-                  ->bind('upload_url', $upload_url);
+                  ->bind('upload_url', $upload_url)
+                  ;
                   
         $this->content = $view;
         

@@ -4,10 +4,12 @@ class Controller_System extends Controller_Base {
 
     public function action_index() {
         $submitted = false;
+        
         $view = View::factory('system/form')
             ->bind('form', $form)
             ->bind('image', $image)
-            ->bind('upload_url', $upload_url);
+            ->bind('upload_url', $upload_url)
+            ;
         $institution = ORM::factory('institution', $id=1);
         $config = Config::instance();
         $config_settings = $config->load('config')->as_array();    

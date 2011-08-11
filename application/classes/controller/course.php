@@ -79,7 +79,7 @@ class Controller_Course extends Controller_Base {
         $filter_end_date = $this->request->param('filter_end_date');
         $filter_url = URL::site('course/index');
         
-        $page_description = Kohana::message('page_title', 'course_index.description');
+        
         $view = View::factory('course/list')
             ->bind('table', $table)
             ->bind('count', $total)
@@ -90,7 +90,7 @@ class Controller_Course extends Controller_Base {
             ->bind('filter_start_date', $filter_start_date)
             ->bind('filter_end_date', $filter_end_date)
             ->bind('filter_url', $filter_url)
-            ->bind('page_description', $page_description);
+            ;
         
         $this->content = $view;
     }
@@ -157,14 +157,14 @@ class Controller_Course extends Controller_Base {
             ->bind('cacheimage', $cacheimage)
             ->bind('user_ids', $user_ids);
             
-        $page_description = Kohana::message('page_title', 'course_add.description');
+        
         $batches = ORM::factory('batch')->find_all();
         $view = View::factory('course/form')
             ->bind('form', $form)
             ->bind('users', $users)
             ->bind('batches', $batches)
             ->bind('course_id', $course_id)
-            ->bind('page_description', $page_description);
+            ;
         
         $this->content = $view;
     }
@@ -243,14 +243,14 @@ class Controller_Course extends Controller_Base {
             ->bind('user_ids', $user_ids);
         
         
-        $page_description = Kohana::message('page_title', 'course_add.description');
+        
         $batches = ORM::factory('batch')->find_all();
         $view = View::factory('course/form')
             ->bind('form', $form)
             ->bind('users', $users)
             ->bind('batches', $batches)
             ->bind('course_id', $id)
-            ->bind('page_description', $page_description);
+            ;
         
         $this->content = $view;
     }

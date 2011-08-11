@@ -1,7 +1,7 @@
 	<div class="r pagecontent">
 		<div class="pageTop">
-			<div class="pageTitle l">My Account</div>
-			<div class="pageDesc r">You can view and edit your account settings here.</div>
+			<div class="pageTitle l">replace_here_page_title</div>
+			<div class="pageDesc r">replace_here_page_description</div>
 			<div class="clear"></div>
 		</div><!-- pageTop -->
 		

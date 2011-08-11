@@ -84,6 +84,7 @@ class Controller_Batch extends Controller_Base
         $filter_name = $this->request->param('filter_name');
         $filter_url = URL::site('batch/index');
         
+       
         $view = View::factory('batch/list')
             ->bind('links', $links)        
             ->bind('table', $table)
@@ -149,7 +150,8 @@ class Controller_Batch extends Controller_Base
             ->bind('links', $links)
             ->bind('form', $form)
             ->bind('action', $action)
-            ->bind('id', $id);
+            ->bind('id', $id)
+            ;
             
         $this->content = $view;
                 

@@ -36,11 +36,14 @@ class Controller_Exam extends Controller_Base {
     	}
         
     	$user_id = $user->id;
-        
+        $page_description = Kohana::message('page_title', 'exam_index_schedule.description');
+        $page_title = Kohana::message('page_title', 'exam_index_schedule.title');
     	$view = View::factory('exam/schedule')
             ->bind('exams', $exams)
             ->bind('past_exams', $past_exams)
-            ->bind('user_id', $user_id);
+            ->bind('user_id', $user_id)
+            ->bind('page_description', $page_description)
+            ->bind('page_title', $page_title);
         
     	$this->content = $view;
     }

@@ -86,6 +86,7 @@ class Controller_Room extends Controller_Base {
         $filter_room_name = $this->request->param('filter_room_name');
         $filter_url = URL::site('room/index');
         
+        
         $view = View::factory('room/list')
                     ->bind('links', $links)        
                     ->bind('table', $table)
@@ -125,10 +126,11 @@ class Controller_Room extends Controller_Base {
         $links = array(
             'cancel' => Html::anchor('/room/', 'or cancel')
         );
-        
+       
         $view = View::factory('room/form')
                   ->bind('links', $links)
-                  ->bind('form', $form);
+                  ->bind('form', $form)
+                  ;
         $this->content = $view;
     }
     
@@ -192,7 +194,8 @@ class Controller_Room extends Controller_Base {
         
         $view = View::factory('room/form')
                   ->bind('links', $links)
-                  ->bind('form', $form);
+                  ->bind('form', $form)
+                  ;
         $this->content = $view;
         
         

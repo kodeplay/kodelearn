@@ -1,7 +1,7 @@
     <div class="r pagecontent">
         <div class="pageTop withBorder">
-            <div class="pageTitle l">Join Course</div>
-            <div class="pageDesc r">this is a test description this is a test description this is a test description this is a test description this is a test description </div>
+            <div class="pageTitle l">replace_here_page_title</div>
+            <div class="pageDesc r">replace_here_page_description</div>
             <div class="clear"></div>
         </div><!-- pageTop -->
     <br/><br/>

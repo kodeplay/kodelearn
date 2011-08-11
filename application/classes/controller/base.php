@@ -78,6 +78,12 @@ class Controller_Base extends Controller_Template {
             'media/javascript/jquery-ui-timepicker-addon.js',
 			'media/javascript/kodelearnUI.js'
         );
+        $controller = $this->request->controller();
+        $action = $this->request->action();
+        $page_description = Kohana::message('page_title', $controller.'_'.$action.'.description');
+        $page_title = Kohana::message('page_title', $controller.'_'.$action.'.title');
+        $this->content = str_replace('replace_here_page_description', $page_description, $this->content);
+        $this->content = str_replace('replace_here_page_title', $page_title, $this->content);
         $this->view->set('content', $this->content);
         $this->view->set('styles', $styles);
         $this->view->set('scripts', $scripts);

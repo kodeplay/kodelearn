@@ -1,7 +1,7 @@
 <div class="r pagecontent">
     <div class="pageTop withBorder">
         <div class="pageTitle l"><?php echo $examgroup->name; ?><span id="roleOf"></span></div>
-        <div class="pageDesc r">this is a test description this is a test description this is a test description this is a test description this is a test description </div>
+        <div class="pageDesc r">replace_here_page_description</div>
         <div class="clear"></div>
     </div><!-- pageTop -->
     <?php if ($success) {  ?>

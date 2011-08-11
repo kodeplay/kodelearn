@@ -1,7 +1,7 @@
 	<div class="r pagecontent">
 		<div class="pageTop">
-			<div class="pageTitle l">Users</div>
-			<div class="pageDesc r"><?php echo $page_description; ?></div>
+			<div class="pageTitle l">replace_here_page_title</div>
+			<div class="pageDesc r">replace_here_page_description</div>
 			<div class="clear"></div>
 		</div><!-- pageTop -->
 		
