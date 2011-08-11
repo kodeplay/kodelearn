@@ -59,7 +59,7 @@ class Controller_User extends Controller_Base {
             'Roll No'           => 'id',
             'Name'              => 'firstname',
             'Batch'             => '',
-            'Cources'           => '',
+            'Courses'           => '',
             'Actions'           => ''
         ));
         

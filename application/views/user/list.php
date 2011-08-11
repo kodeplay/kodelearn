@@ -18,7 +18,7 @@
 			<?php echo $table['heading'] ?>
             <tr class="filter" >
                  <td><input type="hidden" id="filter_url" value="<?php echo $filter_url ?>" /></td>
-                 <td><input type="text" name="filter_id" value="<?php echo $filter_id ?>" size="4" /></td>
+                 <td><input type="text" name="filter_id" value="<?php echo $filter_id ?>" style="width:40px;" /></td>
                  <td><input type="text" name="filter_name" value="<?php echo $filter_name ?>" /></td>
                  <td></td>
                  <td></td>
@@ -27,7 +27,7 @@
 			<?php foreach($users as $user) { ?>
 			<tr>
 				<td><input class="selected" name="selected[]" value="<?php echo $user->id ?>" type="checkbox" /></td>
-				<td><?php echo $user->id ?></td>
+				<td class="tac"><?php echo $user->id ?></td>
 				<td>
 					<div class="l w30"><img src="<?php echo $cacheimage->resize($user->avatar, 56, 56);?>" alt="User" /></div>
 					<div class="l">
