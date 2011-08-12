@@ -95,7 +95,7 @@ KODELEARN.modules.add('create_exam' , (function () {
                min: 0,
                max: 1439,
                step: 10,
-               values: [540, 1020],
+               values: [<?php echo $slider['start'] ?>, <?php echo $slider['end'] ?>],
                slide: this.slideTime,
                change: this.getRooms
            });

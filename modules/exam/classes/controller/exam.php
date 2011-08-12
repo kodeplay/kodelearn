@@ -201,6 +201,10 @@ class Controller_Exam extends Controller_Base {
         $links = array(
             'rooms'       => Html::anchor('/room/', 'Add Rooms', array('target' => '_blank')),
         );
+        
+        $silder['start'] = 540;
+        $silder['end'] = 620;
+        
         $view = View::factory('exam/form')
             ->bind('form', $form)
             ->bind('event_id', $event_id)
@@ -268,6 +272,10 @@ class Controller_Exam extends Controller_Base {
             'room_id'       => $event->room_id
         );
 
+        $silder['start'] = ((($event->eventstart) - (strtotime($saved_data['date']))) / 60 );
+        $silder['end'] = ((($event->eventend) - (strtotime($saved_data['date']))) / 60 );
+        
+        
         $results = Event::get_avaliable_rooms($event->eventstart, $event->eventend, $event->id);
         
         $rooms = array();
@@ -287,7 +295,8 @@ class Controller_Exam extends Controller_Base {
         $view = View::factory('exam/form')
             ->bind('form', $form)
             ->bind('event_id', $event_id)
-            ->bind('links', $links);
+            ->bind('links', $links)
+            ->bind('slider', $silder);
         $this->content = $view;
     }
     
