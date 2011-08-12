@@ -27,7 +27,7 @@
 			<?php foreach($users as $user) { ?>
 			<tr>
 				<td><input class="selected" name="selected[]" value="<?php echo $user->id ?>" type="checkbox" /></td>
-				<td><?php echo $user->id ?></td>
+				<td class="tac"><?php echo $user->id ?></td>
 				<td>
 					<div class="l w30"><img src="<?php echo $cacheimage->resize($user->avatar, 56, 56);?>" alt="User" /></div>
 					<div class="l">

@@ -59,7 +59,7 @@ class Controller_User extends Controller_Base {
             'Roll No'           => 'id',
             'Name'              => array('sort' => 'firstname', 'attributes' => array('width' => 330)),
             'Batch'             => array('sort' => '', 'attributes' => array('width' => 140)),
-            'Cources'           => array('sort' => '', 'attributes' => array('width' => 140)),
+            'Courses'           => array('sort' => '', 'attributes' => array('width' => 140)),
             'Actions'           => ''
         ));
         
