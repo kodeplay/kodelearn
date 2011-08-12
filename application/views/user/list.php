@@ -18,7 +18,7 @@
 			<?php echo $table['heading'] ?>
             <tr class="filter" >
                  <td><input type="hidden" id="filter_url" value="<?php echo $filter_url ?>" /></td>
-                 <td><input type="text" name="filter_id" value="<?php echo $filter_id ?>" style="width:40px;" /></td>
+                 <td><input type="text" name="filter_id" value="<?php echo $filter_id ?>" style="width: 40px;" /></td>
                  <td><input type="text" name="filter_name" value="<?php echo $filter_name ?>" /></td>
                  <td></td>
                  <td></td>

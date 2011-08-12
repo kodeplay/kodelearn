@@ -16,6 +16,7 @@ class Controller_Account extends Controller_Base {
                 	$user->firstname = $this->request->post('firstname');
                     $user->lastname = $this->request->post('lastname');
                     $user->email = $this->request->post('email');
+                    $user->about_me = $this->request->post('about_me');
                     if($this->request->post('password')){
                     	$user->password = Auth::instance()->hash($this->request->post('password'));
                     }
@@ -33,18 +34,21 @@ class Controller_Account extends Controller_Base {
             'firstname' => '',
             'lastname'  => '',
             'email'     => '',
+            'about_me'  => '',
         );
     	
         $form->saved_data = array(
             'firstname' => $user->firstname,
             'lastname'  => $user->lastname,
             'email'     => $user->email,
+            'about_me'  => $user->about_me,
         );
         $form->posted_data = $submitted ? $this->request->post() : array();
         $form->append('First Name', 'firstname', 'text');
         $form->append('Last Name', 'lastname', 'text');
         $form->append('Email', 'email', 'text');
         $form->append('Password', 'password', 'password');
+        $form->append('About me', 'about_me', 'textarea');
         $form->append('Confirm Password', 'confirm_password', 'password');
         $form->append('Save Changes', 'save', 'submit', array('attributes' => array('class' => 'button')));
         $form->process();

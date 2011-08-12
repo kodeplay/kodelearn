@@ -57,9 +57,9 @@ class Controller_User extends Controller_Base {
         
         $sorting = new Sort(array(
             'Roll No'           => 'id',
-            'Name'              => 'firstname',
-            'Batch'             => '',
-            'Courses'           => '',
+            'Name'              => array('sort' => 'firstname', 'attributes' => array('width' => 330)),
+            'Batch'             => array('sort' => '', 'attributes' => array('width' => 140)),
+            'Courses'           => array('sort' => '', 'attributes' => array('width' => 140)),
             'Actions'           => ''
         ));
         
