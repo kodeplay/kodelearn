@@ -36,7 +36,7 @@ class Controller_User extends Controller_Base {
         
         $pagination = Pagination::factory(array(
             'total_items'    => $count,
-            'items_per_page' => 5,
+            'items_per_page' => 50,
         ));
         
         if($this->request->param('filter_name')){
@@ -59,7 +59,7 @@ class Controller_User extends Controller_Base {
             'Roll No'           => 'id',
             'Name'              => array('sort' => 'firstname', 'attributes' => array('width' => 330)),
             'Batch'             => array('sort' => '', 'attributes' => array('width' => 140)),
-            'Cources'           => array('sort' => '', 'attributes' => array('width' => 140)),
+            'Courses'           => array('sort' => '', 'attributes' => array('width' => 140)),
             'Actions'           => ''
         ));
         

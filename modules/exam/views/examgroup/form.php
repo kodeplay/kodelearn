@@ -10,8 +10,7 @@
                 <td><?php echo $form->name->label(); ?></td>
                 <td><?php echo $form->name->element(); ?>
                 <span class="form-error"><?php echo $form->name->error(); ?></span></td>
-            </tr>
-            
+            </tr>            
             <tr>
                 <td></td>
                 <td>

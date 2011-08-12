@@ -38,6 +38,12 @@ class Examresult_Csv {
     private $_headings;
 
     /**
+     * Array of students list in an examwise array
+     * keys = exam_ids, values = array of user_ids applicable
+     */
+    private $_exam_wise_students = array();
+
+    /**
      * The exam marks array with exam_ids as the keys and total marks as the values
      */
     private $_exam_marks = array();
@@ -51,6 +57,7 @@ class Examresult_Csv {
         $this->_file = $files_arr;
         $this->_exams = $exams;
         $this->_students = $students;
+        $this->_exam_wise_students = $this->_get_exam_wise_students();        
         // assign exam marks array to an instance property for maximum marks validation
         $this->_exam_marks = $this->_exams->as_array('id', 'total_marks');
         if ($this->validate_filetype()) {
@@ -117,7 +124,8 @@ class Examresult_Csv {
         foreach ($this->_content as $row) {
             $user_id = $row[0];
             $marks = array_slice($row, 2);
-            foreach ($marks as $k=>$m) {                
+            foreach ($marks as $k=>$m) {
+                if ($m === '-') continue;
                 $exam_id = $exams[$k];
                 $data = array(
                     'exam_id' => $exam_id,
@@ -149,10 +157,24 @@ class Examresult_Csv {
         return $ordered_exams;
     }
 
+    /**
+     * Method to create the exam_wise_students and set it to the
+     * $_exam_wise_students property of the instance
+     */
+    private function _get_exam_wise_students() {
+        $arr = array();
+        foreach ($this->_exams as $exam) {
+            $users = $exam->course->users->find_all()->as_array('id');
+            $arr[$exam->id] = array_keys($users);
+        }
+        return $arr;
+    }
+
     private function validate_result($result) {
         return (
             $this->validate_marks($result) && 
-            $this->validate_student($result['user_id'])
+            $this->validate_student($result['user_id']) &&
+            $this->validate_student_marks($result['user_id'], $result['exam_id'], $result['marks'])
         );
     }
 
@@ -201,16 +223,38 @@ class Examresult_Csv {
         return true;
     }
 
+    /**
+     * Method to validate that a marks entered for a student are correct. So that
+     * even if the user replaces any of the '-' with a value it the upload fails &
+     * record does not get stored in the db
+     * is if student is eligible, marks cannot be '-' 
+     * whereas if student is not eligible, marks can only be '-'
+     * @param int $user_id
+     * @param int $exam_id
+     * @param string $marks
+     * @return boolean
+     * 
+     */
+    private function validate_student_marks($user_id, $exam_id, $marks) {
+        $student_eligible = in_array($user_id, $this->_exam_wise_students[$exam_id]);
+        if (!$student_eligible && $marks !== '-') {
+            $e = 'Exam Id %d is not applicable for Student %d. So value must be "-" in the csv';
+            $this->_errors['warning'] = sprintf($e, $exam_id, $user_id);
+            return false;
+        }
+        return true;
+    }
+
     /*
      * Method to get the matrix which will be finally put into the csv
      * @param array $students keys = student_ids, values = Student Names
      * @param array $exams {keys = exam_ids, values = Exam Names}
-     * @param array $results optional 
+     * @param array $results
      *           eg. array(
      *                 'student_id' => array('exam_id' => marks)
      *               )
      */
-    public static function matrix($students, $exams, $results=array()) {
+    public static function matrix($students, $exams, $results) {
         $matrix = array();
         // the first header line
         $matrix[0] = array_values($exams);
@@ -222,11 +266,7 @@ class Examresult_Csv {
                 $student_name                
             );
             foreach ($exams as $exam_id=>$exam_name) {
-                if ($results && isset($results[$student_id])) {
-                    $line[] = Arr::get($results[$student_id], $exam_id, '');
-                } else {
-                    $line[] = '';
-                }
+                $line[] = $results[$student_id][$exam_id];
             }
             $matrix[] = $line;           
         }

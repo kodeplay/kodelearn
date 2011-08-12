@@ -67,6 +67,7 @@
 				<a class="button" href="#" id="add_users"> Add</a>
 				<p class="tip">Please select the checkbox to assign users to course</p>
 			</p>
+			<p class="tip" style="display:none;" id="loading">Please wait...Loading Users</p>
     		<div id="assign-users-ajax">	
                 <?php echo $users ?>		  
     		</div>
@@ -83,15 +84,15 @@ KODELEARN.modules.add('assign_users' , (function () {
     return {
         init: function () { 
     	   $( "#tabs" ).tabs();
-
     	   $('#add_users').click(function(){
+	    	   $('#loading').fadeIn();
         	   var batch_id = $('#batch_id').val();
         	   var course_id = '<?php echo $course_id ?>';
         	   if(batch_id){
                    $.post(KODELEARN.config.base_url + "course/get_users", { "batch_id": batch_id, "course_id": course_id },
                            function(data){
                 	       	  $('#assign-users-ajax').html(data.response);
-                	       	  
+                	       	  $('#loading').fadeOut();     	       	  
                            }, "json");
         	   }
     	   });
