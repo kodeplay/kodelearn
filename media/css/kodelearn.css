@@ -409,6 +409,8 @@ select {	width: 210px;  }
 	border: 1px solid #c00000;
 }
 
+.formMessages.w90 { width: 90%; }
+
 .fmIcon {
 	display: block;
 	float: left;
