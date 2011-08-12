@@ -15,7 +15,9 @@
             
             <span class="clear">&nbsp;</span>
         </div><!-- topbar -->
-        
+        <?php if($msg == 1){?>
+            <div class="formMessages"><span class="fmIcon bad"></span> <span class="fmText">This grading period is assigned to some exam</span><span class="clear">&nbsp;</span></div>
+        <?php }?>
         <form name="examgroup" id="examgroup" method="POST" action="<?php echo $links['delete'] ?>">
         <table class="vm10 datatable fullwidth">
             <?php echo $table['heading'] ?>
