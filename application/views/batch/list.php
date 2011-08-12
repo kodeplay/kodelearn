@@ -6,8 +6,13 @@
 		</div><!-- pageTop -->
 		
 		<div class="topbar">
+			<?php if (Acl::instance()->is_allowed('batch_delete')){?>
 			<a onclick="$('#batch').submit();" class="pageAction r alert">Delete selected...</a>
-			<?php echo $links['add_batch']?>
+			<?php }?>
+			<?php //echo $links['add_batch']?>
+			<?php if (Acl::instance()->is_allowed('batch_create')) { ?>
+            <?php echo $links['add_batch']; ?>
+            <?php } ?>
 			<a href="#" class="pageAction l">Send message</a>
 			<span class="clear">&nbsp;</span>
 		</div><!-- topbar -->
@@ -27,7 +32,10 @@
 				<td><?php echo $batch->name ?></td>
 				<td><?php echo $batch->users;  ?></td>
 				<td>
-					<p><?php echo Html::anchor('/batch/edit/id/'.$batch->id, 'View/Edit')?></p>
+					<p><?php if (Acl::instance()->is_allowed('batch_edit')) { 
+                        echo Html::anchor('/batch/edit/id/'.$batch->id, 'View/Edit');
+                    } ?>
+					</p>
 				</td>
 			</tr>
 			<?php  } ?>

@@ -10,10 +10,14 @@ return array(
     ),
 
     'user' => array(
-        'manage_roles'
+        'upload_csv'
     ),
     
     'course' => array(
         'join'
+    ),
+    
+    'role' => array(
+        'set_permission'
     )
 );

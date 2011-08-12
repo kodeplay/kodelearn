@@ -5,13 +5,13 @@
         <div class="clear"></div>
     </div><!-- pageTop -->
     <?php if ($success) {  ?>
-    <div class="formMessages">     
+    <div class="formMessages w90">     
         <span class="fmIcon good"></span> <span class="fmText" ><?php echo $success ?></span>
         <span class="clear">&nbsp;</span>
     </div>
     <?php } ?>
     <?php if ($warning) { ?>
-    <div class="formMessages">
+    <div class="formMessages w90">
         <span class="fmIcon bad"></span> 
         <span class="fmText"><?php echo $warning; ?></span>
         <span class="clear">&nbsp;</span>

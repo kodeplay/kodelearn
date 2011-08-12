@@ -6,11 +6,19 @@
 		</div><!-- pageTop -->
 		
 		<div class="topbar">
-			<a onclick="$('#form').submit();" class="pageAction r alert">Delete selected...</a>
-			<?php echo $links['add']?>
+			<?php if( Acl::instance()->is_allowed('user_delete')){?>
+			     <a onclick="$('#form').submit();" class="pageAction r alert">Delete selected...</a>
+			<?php }?>
+			<?php if( Acl::instance()->is_allowed('user_create')){?>
+			     <?php echo $links['add']?>
+			<?php }?>
             <a href="#" class="pageAction l">Send message</a>
-            <?php echo $links['uploadcsv']?>
-            <?php echo $links['roles']?>
+            <?php if( Acl::instance()->is_allowed('user_upload_csv')){?>
+			     <?php echo $links['uploadcsv']?>
+			<?php }?>
+			<?php if( Acl::instance()->has_access('role')){?>
+                 <?php echo $links['roles']?>
+            <?php }?>
 			<span class="clear">&nbsp;</span>
 		</div><!-- topbar -->
         <form name="form" id="form" method="POST" action="<?php echo $links['delete'] ?>">
@@ -42,7 +50,11 @@
 				</td>
 				<td><?php echo implode(', ', $user->courses->find_all()->as_array(NULL, 'name')); ?></td>
 				<td>
-					<p><?php echo Html::anchor('/user/edit/id/'.$user->id, 'View/Edit')?></p>
+					<p>
+					   <?php if( Acl::instance()->is_allowed('user_edit')){?>
+				            <?php echo Html::anchor('/user/edit/id/'.$user->id, 'View/Edit')?>
+				       <?php }?>
+				    </p>
 					<p><a href="#">Send message</a></p>
 				</td>
 			</tr>

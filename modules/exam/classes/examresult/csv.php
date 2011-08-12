@@ -44,9 +44,14 @@ class Examresult_Csv {
     private $_exam_wise_students = array();
 
     /**
-     * The exam marks array with exam_ids as the keys and total marks as the values
+     * Easy lookup array with exam_ids as the keys and total marks as the values
      */
     private $_exam_marks = array();
+
+    /**
+     * Easy look up array with exam_ids as the keys and the names as the values
+     */
+    private $_exam_names = array();
 
     /**
      * @param array $files_arr eg. $_FILES['csv']
@@ -55,16 +60,17 @@ class Examresult_Csv {
      */
     public function __construct($files_arr, $exams, $students) {
         $this->_file = $files_arr;
-        $this->_exams = $exams;
+        $this->set_exams($exams);
         $this->_students = $students;
         $this->_exam_wise_students = $this->_get_exam_wise_students();        
-        // assign exam marks array to an instance property for maximum marks validation
-        $this->_exam_marks = $this->_exams->as_array('id', 'total_marks');
-        if ($this->validate_filetype()) {
+        try {
+            $this->validate_filetype();
             $data = $this->csvcontent();
             $this->_headings = array_shift($data);
             $this->_content = $data;
             $this->_datasets = $this->csv_to_datasets();
+        } catch (Examresult_Exception $e) {
+            $this->_errors['warning'] = $e->getMessage();
         }
     }
 
@@ -86,6 +92,17 @@ class Examresult_Csv {
      */
     public function datasets() {
         return $this->_datasets;
+    }
+
+    /**
+     * Method to set the exam instance variable and also for setting up
+     * the easy lookup exam arrays
+     * @param Database_Mysql_Result $exams
+     */
+    public function set_exams($exams) {
+        $this->_exams = $exams;
+        $this->_exam_marks = $this->_exams->as_array('id', 'total_marks');
+        $this->_exam_names = $this->_exams->as_array('id', 'name');
     }
     
     /**
@@ -152,6 +169,10 @@ class Examresult_Csv {
         $exam_names = array_slice($this->_headings, 2);
         $ordered_exams = array();
         foreach ($exam_names as $exam_name) {
+            if (!isset($exams[$exam_name])) {
+                $e = 'Exam "%s" not found in the selected grading period. Make sure the correct csv is uploaded';
+                throw new Examresult_Exception(sprintf($e, $exam_name));
+            }
             $ordered_exams[] = $exams[$exam_name];
         }
         return $ordered_exams;
@@ -188,8 +209,9 @@ class Examresult_Csv {
         if (isset($extension[1]) && strtolower($extension[1]) === "csv") {
             return true;
         } else {
-            $this->_errors['invalid_extension'] = 'Uploaded file not of type CSV';
-            return false;
+            $error = 'Uploaded file not of type CSV';
+            $this->_errors['invalid_extension'] = $error;
+            throw new Examresult_Exception($error);
         }
     }
 
@@ -202,10 +224,11 @@ class Examresult_Csv {
     private function validate_marks($result) {
         $total_marks = $this->_exam_marks[$result['exam_id']];
         if ($result['marks'] > $total_marks) {
-            $e = 'Marks entered for Student Id %d for %s are greater than total marks (%s)';
-            $exam_name = Arr::get($this->_exams->as_array('id', 'name'), $result['exam_id']);
-            $this->_errors['warning'] = sprintf($e, $result['user_id'], $exam_name, $total_marks);
-            return false;
+            $e = 'Marks entered for Student "%s" for "%s" are greater than total marks (%s)';
+            $exam_name = Arr::get($this->_exam_names, $result['exam_id']);
+            $student_name = Arr::get($this->_students, $result['user_id']);
+            $error = sprintf($e, $student_name, $exam_name, $total_marks);
+            throw new Examresult_Exception($error);
         }
         return true;
     }
@@ -216,9 +239,10 @@ class Examresult_Csv {
      */
     private function validate_student($user_id) {
         if (!isset($this->_students[$user_id])) {
-            $e = 'This result is not applicable for Student Id %d. Please recheck the csv file.';
-            $this->_errors['warning'] = sprintf($e, $user_id);
-            return false;
+            $e = 'This result is not applicable for Student "%s". Please recheck the csv file.';
+            $student_name = Arr::get($this->_students, $user_id);
+            $error = sprintf($e, $student_name);
+            throw new Examresult_Exception($error);
         }
         return true;
     }
@@ -233,14 +257,15 @@ class Examresult_Csv {
      * @param int $exam_id
      * @param string $marks
      * @return boolean
-     * 
      */
     private function validate_student_marks($user_id, $exam_id, $marks) {
         $student_eligible = in_array($user_id, $this->_exam_wise_students[$exam_id]);
         if (!$student_eligible && $marks !== '-') {
-            $e = 'Exam Id %d is not applicable for Student %d. So value must be "-" in the csv';
-            $this->_errors['warning'] = sprintf($e, $exam_id, $user_id);
-            return false;
+            $e = 'Exam "%s" is not applicable for Student "%s". So value must be "-" in the csv';
+            $student_name = Arr::get($this->_students, $user_id);
+            $exam_name = Arr::get($this->_exam_names, $exam_id);
+            $error = sprintf($e, $exam_name, $student_name);
+            throw new Examresult_Exception($error);
         }
         return true;
     }

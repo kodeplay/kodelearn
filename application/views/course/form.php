@@ -65,6 +65,7 @@
 				  <?php }?>
 				</select>
 				<a class="button" href="#" id="add_users"> Add</a>
+				<p class="tip">Please select the checkbox to assign users to course</p>
 			</p>
 			<p class="tip" style="display:none;" id="loading">Please wait...Loading Users</p>
     		<div id="assign-users-ajax">	
