@@ -26,7 +26,8 @@ class Controller_Examresult extends Controller_Base {
             if ($csv->validate()) {
                 $datasets = $csv->datasets();
                 Model_Examresult::save_results($datasets);
-                $success = 'Results uploaded successfully. Click here to view them';
+                $success = 'Results uploaded successfully. Click <a href="%s">here</a> to view them';
+                $success = sprintf($success, Url::site('examresult/edit/examgroup_id/' . $examgroup_id));
             } else {
                 $errors = array('csv_file' => $csv->errors('invalid_extension'));
                 $warning = $csv->errors('warning');
