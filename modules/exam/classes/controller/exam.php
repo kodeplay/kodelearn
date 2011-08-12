@@ -203,11 +203,12 @@ class Controller_Exam extends Controller_Base {
         );
         
         $silder['start'] = 540;
-        $silder['end'] = 620;
+        $silder['end'] = 600;
         
         $view = View::factory('exam/form')
             ->bind('form', $form)
             ->bind('event_id', $event_id)
+            ->bind('slider', $silder)
             ->bind('links', $links);
         
         $this->content = $view;

@@ -20,7 +20,7 @@
     <div class="buttons">
         <a href="<?php echo $csv_import; ?>" class="button">CSV Import</a>   
         <a class="button" onclick="$('#examresult-edit-form').submit();">Save</a>
-        <a href="#" class="button">Cancel</a>        
+        <a href="<?php echo $csv_import; ?>" class="button">Cancel</a>        
     </div>
     <form id="examresult-edit-form" method="post" action="<?php echo $edit_form_action; ?>">
         <table class="vm10 datatable fullwidth">
