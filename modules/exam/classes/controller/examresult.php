@@ -57,9 +57,10 @@ class Controller_Examresult extends Controller_Base {
         $examgroup_id = $this->request->param('examgroup_id');
         $examgroup = ORM::factory('examgroup', $examgroup_id);
         // get all the exams in this exam group
-        $exams = Model_Examgroup::get_exams($examgroup_id)
-            ->as_array('id', 'name');
-        if (!count($exams)) {
+        $exams = Model_Examgroup::get_exams($examgroup_id);
+        $exams_arr = $exams->as_array('id', 'name');
+        // if no exams found, redirect to nil exams page
+        if (!count($exams_arr)) {
             Session::instance()->set('examgroup_nil_exams', array(
                 'examgroup_id' => $examgroup_id,
                 'back_url' => Url::site('examresult/upload'),
@@ -69,33 +70,49 @@ class Controller_Examresult extends Controller_Base {
         }
         // get all students in this examgroup
         $students = Model_Examgroup::get_students($examgroup_id);
-        // var_dump($students); exit;
-        $examresults = ORM::factory('examresult')
-            ->where('exam_id', ' IN ', array_keys($exams))
-            ->find_all();
-        $results = array();
-        if ($examresults) {
-            foreach ($examresults as $modelobj) {
-                $user_id = $modelobj->user_id;
-                $exam_id = $modelobj->exam_id;
-                $marks = $modelobj->marks;
-                if (!isset($results[$user_id])) {
-                    $results[$user_id] = array();
-                }
-                $results[$user_id][$exam_id] = $marks;
-            }
-        }        
-        $matrix = Examresult_Csv::matrix($students, $exams, $results);
+        // get saved results
+        $results = Model_Examgroup::get_results($examgroup_id);
+        // get an array of default marks for a user-exam combination
+        $csv_default_values = $this->csv_default_values($students, $exams);
+        // create a final results array by merging the default array and saved data
+        foreach ($csv_default_values as $user_id=>$marks) {
+            $results[$user_id] = $results[$user_id] + $marks;
+        }
+        // get the matrix array 
+        $matrix = Examresult_Csv::matrix($students, $exams_arr, $results);
         // var_dump($matrix); exit; 
         $filename = Inflector::underscore($examgroup->name) . '_results.csv';
-        header( 'Content-Type: text/csv' );
-        header( 'Content-Disposition: attachment;filename='.$filename);
+        header('Content-Type: text/csv');
+        header('Content-Disposition: attachment;filename='.$filename);
         $fp = fopen('php://output', 'w');
         foreach ($matrix as $row) {
             fputcsv($fp, $row);
         }
         fclose($fp);
         exit;
+    }
+
+    /**
+     * Method to get the default values to be dislayed in the csv
+     * It will take into account whether a student is applicable for an exam and if not,
+     * will show a dash '-' in the csv for it.
+     * @param array $students (keys- user_ids, values=$names)
+     * @param Database_Mysql_Result $exams
+     */
+    private function csv_default_values($students, $exams) {
+        $default_values = array();
+        foreach ($students as $user_id=>$name) {
+            foreach ($exams as $exam) {
+                $users = $exam->course->users->find_all()->as_array('id');
+                $exam_students = array_keys($users);
+                if (!in_array($user_id, $exam_students)) {
+                    $default_values[$user_id][$exam->id] = '-';
+                    continue;
+                }
+                $default_values[$user_id][$exam->id] = 0;
+            }
+        }
+        return $default_values;
     }
 
     // only the administrator and the teacher will be permitted to do this
@@ -151,7 +168,6 @@ class Controller_Examresult extends Controller_Base {
         $examresults = ORM::factory('examresult')
             ->where('exam_id', ' IN ', array_keys($exams->as_array('id','name')))
             ->find_all();
-
         $default_exam_marks = $this->edit_default_values($students, $exams); 
         // var_dump($default_exam_marks); exit;
         $post_data = $this->request->post('result');
@@ -230,7 +246,6 @@ class Controller_Examresult extends Controller_Base {
     // view results of all users - so typically only the administrator and teacher 
     // will have this permission
     public function action_view() {
-
 
     }
 }
