@@ -78,7 +78,7 @@ class Model_Examgroup extends ORM {
                 }
                 $results[$user_id][$exam_id] = $marks;
             }
-        }
+        } 
         return $results;
     }
 }
