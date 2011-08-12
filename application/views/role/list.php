@@ -19,9 +19,15 @@
             <td><?php echo $role['name']; ?></td>
             <td><?php echo $role['num_users']; ?></td>
             <td>
-                <p><?php echo $role['action_edit']; ?></p>
-                <p><?php echo $role['action_permissions']; ?></p>
-                <p><?php if($role['num_users'] < 1){echo $role['action_delete'];} ?></p>
+                <p><?php if( Acl::instance()->is_allowed('role_edit')){?>
+                        <?php echo $role['action_edit']; ?>
+                <?php }?></p>
+                <p><?php if( Acl::instance()->is_allowed('role_set_permission')){?>
+                        <?php echo $role['action_permissions']; ?>
+                <?php }?></p>
+                <p><?php if( Acl::instance()->is_allowed('role_delete')){?>
+                        <?php if($role['num_users'] < 1){echo $role['action_delete'];} ?>
+                <?php }?></p>
             </td>
         </tr>
         <?php } ?>

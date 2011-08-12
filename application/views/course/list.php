@@ -12,7 +12,9 @@
             <?php if (Acl::instance()->is_allowed('course_create')) { ?>
             <?php echo $links['add']; ?>
             <?php } ?>
+            <?php if (Acl::instance()->is_allowed('course_join')) { ?>
              &nbsp;&nbsp;<?php echo $links['join']; ?>
+            <?php }?>
             <!--  <a href="#" class="pageAction c">Send message</a>--> 
            
                       

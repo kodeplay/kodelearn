@@ -36,7 +36,7 @@ class Controller_User extends Controller_Base {
         
         $pagination = Pagination::factory(array(
             'total_items'    => $count,
-            'items_per_page' => 5,
+            'items_per_page' => 50,
         ));
         
         if($this->request->param('filter_name')){
