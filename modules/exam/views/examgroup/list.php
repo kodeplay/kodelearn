@@ -6,8 +6,12 @@
         </div><!-- pageTop -->
         
         <div class="topbar">
-            <a onclick="$('#examgroup').submit();" class="pageAction r alert">Delete selected...</a>
-            <?php echo $links['add_examgroup']?>
+            <?php if( Acl::instance()->is_allowed('examgroup_delete')){?>
+                <a onclick="$('#examgroup').submit();" class="pageAction r alert">Delete selected...</a>
+            <?php }?>
+            <?php if( Acl::instance()->is_allowed('examgroup_create')){?>
+                <?php echo $links['add_examgroup']?>
+            <?php }?>
             
             <span class="clear">&nbsp;</span>
         </div><!-- topbar -->
@@ -25,7 +29,9 @@
                 <td><input type="checkbox" name="selected[]" class="selected" value="<?php echo $examgroup->id ?>" /></td>
                 <td><?php echo $examgroup->name;  ?></td>
                 <td>
-                    <p><?php echo Html::anchor('/examgroup/edit/id/'.$examgroup->id, 'View/Edit')?></p>
+                    <p><?php if( Acl::instance()->is_allowed('examgroup_edit')){?>
+                        <?php echo Html::anchor('/examgroup/edit/id/'.$examgroup->id, 'View/Edit')?>
+                    <?php }?></p>
                 </td>
             </tr>
             <?php  } ?>

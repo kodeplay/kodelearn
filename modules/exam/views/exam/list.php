@@ -5,10 +5,18 @@
             <div class="clear"></div>
         </div><!-- pageTop -->
         <div class="topbar">
-            <a onclick="$('#exam').submit();" class="pageAction r alert">Delete selected...</a>
-            <?php echo $links['add']?>
+            <?php if( Acl::instance()->is_allowed('exam_delete')){?>
+                <a onclick="$('#exam').submit();" class="pageAction r alert">Delete selected...</a>
+            <?php }?> 
+            <?php if( Acl::instance()->is_allowed('exam_create')){?>
+                <?php echo $links['add']?>
+            <?php }?>    
+            <?php if(Acl::instance()->has_access('examgroup')){?>
             <?php echo $links['examgroup']?>
+            <?php } ?>
+            <?php if(Acl::instance()->has_access('examresult')){?>
             <?php echo $links['examresult']?>
+            <?php } ?>
             <span class="clear">&nbsp;</span>
         </div><!-- topbar -->
         <form name="exam" id="exam" method="POST" action="<?php echo $links['delete'] ?>">
@@ -36,7 +44,9 @@
                 <td><?php echo $exam->passing_marks ?></td>
                 <td><?php echo ($exam->reminder)?'Yes':'No'; ?></td>
                 <td>
-                    <p><?php echo Html::anchor('/exam/edit/id/'.$exam->id, 'View/Edit')?></p>
+                    <p><?php if( Acl::instance()->is_allowed('exam_edit')){?>
+                        <?php echo Html::anchor('/exam/edit/id/'.$exam->id, 'View/Edit')?>
+                    <?php }?></p>
                 </td>
             </tr>
             <?php }?>
