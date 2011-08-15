@@ -96,6 +96,5 @@ class Model_User extends ORM {
         $user->find();
         
         return ($user->id !== null);
-    }
- 
+    }   
 }
