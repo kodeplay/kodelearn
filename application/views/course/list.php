@@ -6,16 +6,16 @@
         </div><!-- pageTop -->        
         
         <div class="topbar">
-            <?php if (Acl::instance()->is_allowed('course_create')) { ?>
-            <?php echo $links['add']; ?>
-            <?php } ?>
-             &nbsp;&nbsp;<?php echo $links['join']; ?>
-            <!--  <a href="#" class="pageAction c">Send message</a>--> 
-           
             <?php if (Acl::instance()->is_allowed('course_delete')) { ?>
             <a onclick="$('#course').submit();" class="pageAction r alert">Delete selected...</a>
             <?php } ?>  
-                      
+            <?php if (Acl::instance()->is_allowed('course_create')) { ?>
+            <?php echo $links['add']; ?>
+            <?php } ?>
+            <?php if (Acl::instance()->is_allowed('course_join')) { ?>
+             &nbsp;&nbsp;<?php echo $links['join']; ?>
+            <?php }?>
+            <!--  <a href="#" class="pageAction c">Send message</a>-->
             <span class="clear">&nbsp;</span>
         </div><!-- topbar -->
         

@@ -6,11 +6,19 @@
 		</div><!-- pageTop -->
 		
 		<div class="topbar">
-			<?php echo $links['add']?>
+			<?php if( Acl::instance()->is_allowed('user_delete')){?>
+			     <a onclick="$('#form').submit();" class="pageAction r alert">Delete selected...</a>
+			<?php }?>
+			<?php if( Acl::instance()->is_allowed('user_create')){?>
+			     <?php echo $links['add']?>
+			<?php }?>
             <a href="#" class="pageAction l">Send message</a>
-            <?php echo $links['uploadcsv']?>
-            <?php echo $links['roles']?>
-			<a onclick="$('#form').submit();" class="pageAction r alert">Delete selected...</a>
+            <?php if( Acl::instance()->is_allowed('user_upload_csv')){?>
+			     <?php echo $links['uploadcsv']?>
+			<?php }?>
+			<?php if( Acl::instance()->has_access('role')){?>
+                 <?php echo $links['roles']?>
+            <?php }?>
 			<span class="clear">&nbsp;</span>
 		</div><!-- topbar -->
         <form name="form" id="form" method="POST" action="<?php echo $links['delete'] ?>">
@@ -18,7 +26,7 @@
 			<?php echo $table['heading'] ?>
             <tr class="filter" >
                  <td><input type="hidden" id="filter_url" value="<?php echo $filter_url ?>" /></td>
-                 <td><input type="text" name="filter_id" value="<?php echo $filter_id ?>" size="4" /></td>
+                 <td><input type="text" name="filter_id" value="<?php echo $filter_id ?>" style="width: 40px;" /></td>
                  <td><input type="text" name="filter_name" value="<?php echo $filter_name ?>" /></td>
                  <td></td>
                  <td></td>
@@ -27,7 +35,7 @@
 			<?php foreach($users as $user) { ?>
 			<tr>
 				<td><input class="selected" name="selected[]" value="<?php echo $user->id ?>" type="checkbox" /></td>
-				<td><?php echo $user->id ?></td>
+				<td class="tac"><?php echo $user->id ?></td>
 				<td>
 					<div class="l w30"><img src="<?php echo $cacheimage->resize($user->avatar, 56, 56);?>" alt="User" /></div>
 					<div class="l">
@@ -42,7 +50,11 @@
 				</td>
 				<td><?php echo implode(', ', $user->courses->find_all()->as_array(NULL, 'name')); ?></td>
 				<td>
-					<p><?php echo Html::anchor('/user/edit/id/'.$user->id, 'View/Edit')?></p>
+					<p>
+					   <?php if( Acl::instance()->is_allowed('user_edit')){?>
+				            <?php echo Html::anchor('/user/edit/id/'.$user->id, 'View/Edit')?>
+				       <?php }?>
+				    </p>
 					<p><a href="#">Send message</a></p>
 				</td>
 			</tr>

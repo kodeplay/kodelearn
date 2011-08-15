@@ -42,8 +42,9 @@
 				</td>
 			</tr>
 			<tr>
-				<td><label for="otherd">Other details</label></td>
-				<td><textarea name="" id="otherd" cols="30" rows="10"></textarea></td>
+				<td><?php echo $form->about_me->label(); ?></td>
+				<td><?php echo $form->about_me->element(); ?>
+				<span class="form-error"><?php echo $form->about_me->error(); ?></span></td>
 			</tr>
 			<tr>
 				<td colspan="2">

@@ -23,15 +23,22 @@ class Controller_Exammarksheet extends Controller_Base {
     	$user = Auth::instance()->get_user();
         
         $course_ids = $user->courses->find_all()->as_array(NULL, 'id');
+        if($course_ids){
+            $exams = ORM::factory('exam');
+            $exams->where('course_id', 'IN', $course_ids)->group_by('examgroup_id');
+            $exams = $exams->find_all()->as_array(NULL, 'examgroup_id');
+            
+            if($exams){
+                $examgroups = ORM::factory('examgroup');
+                $examgroups->where('id', 'IN', $exams)->group_by('id');
+                $examgroups = $examgroups->find_all();
+            }else{
+                $examgroups="";
+            }
+        }else{
+           $examgroups="";
+        }
         
-        $exams = ORM::factory('exam');
-        $exams->where('course_id', 'IN', $course_ids)->group_by('examgroup_id');
-        $exams = $exams->find_all()->as_array(NULL, 'examgroup_id');
-        
-        $examgroups = ORM::factory('examgroup');
-        $examgroups->where('id', 'IN', $exams)->group_by('id');
-        $examgroups = $examgroups->find_all();
-    	
     	$view = View::factory('examresult/index')
     	               ->bind('examgroup', $examgroups);
     	

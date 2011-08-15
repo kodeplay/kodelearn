@@ -22,7 +22,10 @@ class Controller_User extends Controller_Base {
         $user = ORM::factory('user');
 
         if($this->request->param('filter_name')){
-            $user->where('users.firstname', 'LIKE', '%' . $this->request->param('filter_name') . '%');
+            $user->and_where_open()
+                 ->where('users.firstname', 'LIKE', '%' . $this->request->param('filter_name') . '%')
+                 ->or_where('users.lastname', 'LIKE', '%' . $this->request->param('filter_name') . '%')
+                 ->and_where_close();
         }
         
         if($this->request->param('filter_id')){
@@ -33,11 +36,14 @@ class Controller_User extends Controller_Base {
         
         $pagination = Pagination::factory(array(
             'total_items'    => $count,
-            'items_per_page' => 5,
+            'items_per_page' => 50,
         ));
         
         if($this->request->param('filter_name')){
-            $user->where('users.firstname', 'LIKE', '%' . $this->request->param('filter_name') . '%');
+            $user->and_where_open()
+                 ->where('users.firstname', 'LIKE', '%' . $this->request->param('filter_name') . '%')
+                 ->or_where('users.lastname', 'LIKE', '%' . $this->request->param('filter_name') . '%')
+                 ->and_where_close();
         }
         
         if($this->request->param('filter_id')){
@@ -51,9 +57,9 @@ class Controller_User extends Controller_Base {
         
         $sorting = new Sort(array(
             'Roll No'           => 'id',
-            'Name'              => 'firstname',
-            'Batch'             => '',
-            'Cources'           => '',
+            'Name'              => array('sort' => 'firstname', 'attributes' => array('width' => 330)),
+            'Batch'             => array('sort' => '', 'attributes' => array('width' => 140)),
+            'Courses'           => array('sort' => '', 'attributes' => array('width' => 140)),
             'Actions'           => ''
         ));
         

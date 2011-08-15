@@ -14,7 +14,9 @@ class Model_Course extends ORM {
             ->rule('name', 'not_empty')
             ->rule('start_date', 'not_empty')
             ->rule('start_date', 'date')
+            ->rule('end_date', 'date')
             ->rule('end_date', 'not_empty')
+            ->rule('end_date',  'Model_Course::validate_end_date', array(':value',':start_date'))
             ->rule('access_code', 'Model_Course::code_unique', array(':value',':course'))
             ->rule('name', 'min_length', array(':value', 3))
             ->rule('description', 'min_length', array(':value', 10))
@@ -93,6 +95,10 @@ class Model_Course extends ORM {
         $course->find();
         return ($course->id === null);
     }
+    
+    public static function validate_end_date($end_date, $start_date){
+    	return (strtotime($end_date) > strtotime($start_date) );
+    }
 
     /**
      * Method to get the students assigned to this course
@@ -111,6 +117,6 @@ class Model_Course extends ORM {
             ->on('users.id', ' = ', 'roles_users.user_id')
             ->where('roles_users.role_id', ' = ', $role->id)            
             ->find_all();
-        return $students;
+        return $students;        
     }
 }

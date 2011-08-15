@@ -8,7 +8,9 @@
     <div class="topbar">
         <a href="#" class="pageTab active">General</a>
         <a href="#" class="pageTab">Languages</a>
-        <a href="http://kodelearn.kp/location/index/" class="pageTab">Locations and rooms</a>
+        <?php if (Acl::instance()->has_access('location')) { ?>
+            <?php echo HTML::anchor('location','Locations and Rooms', array('class' => 'pageTab')); ?>
+        <?php }?>
     </div><!-- topbar -->
     
     <?php echo $form->startform(); ?>
