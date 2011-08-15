@@ -101,6 +101,21 @@ class Model_Course extends ORM {
     }
 
     /**
+     * Method to save the user to course assignments
+     * @param Model_Course $course
+     * @param Array $user_ids - Array of user_ids
+     * @return null
+     */
+    public static function assign_users($course, $user_ids) {
+        $course->remove('users');
+        if($user_ids) {
+            foreach($user_ids as $user_id){
+                $course->add('users', ORM::factory('user', $user_id));
+            }
+        }
+    }
+
+    /**
      * Method to get the users assigned to this course
      * if optional role_name is passed, from all users assigned to this course, 
      * get only those that have value of $role_name  their role.
