@@ -132,6 +132,7 @@ class Controller_Examresult extends Controller_Base {
         $results = array();
         // get all students in this examgroup
         $students = Model_Examgroup::get_students($examgroup_id);
+        // var_dump($students); exit;
         // get exam results
         $examresults = ORM::factory('examresult')
             ->where('exam_id', ' IN ', array_keys($exams->as_array('id','name')))

@@ -1,7 +1,6 @@
 <?php defined('SYSPATH') or die('No direct script access.');
 
 class Model_Examgroup extends ORM {
-
     
     public function validator($data) {
         return Validation::factory($data)
@@ -39,7 +38,8 @@ class Model_Examgroup extends ORM {
             ->find_all();        
         $students = array();
         foreach ($courses as $course) {
-            $users = $course->users->find_all();
+            // $users = $course->users->find_all();
+            $users = Model_Course::get_students($course);
             $course_students = array();
             foreach ($users as $user) {
                 $course_students[$user->id] = $user->firstname . ' ' . $user->lastname;

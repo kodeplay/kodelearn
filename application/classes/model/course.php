@@ -93,4 +93,24 @@ class Model_Course extends ORM {
         $course->find();
         return ($course->id === null);
     }
+
+    /**
+     * Method to get the students assigned to this course
+     * ie from all users assigned to this course, get only those that have
+     * 'student' as their role.
+     * @param mixed $course (int/Model_Course)
+     * @param Database_MySQL_Result $users
+     */
+    public static function get_students($course) {
+        if (is_int($course)) {
+            $course = ORM::factory('course', $course);
+        }
+        $role = Model_Role::from_name('student');
+        $students = $course->users
+            ->join('roles_users', 'INNER')
+            ->on('users.id', ' = ', 'roles_users.user_id')
+            ->where('roles_users.role_id', ' = ', $role->id)            
+            ->find_all();
+        return $students;
+    }
 }
