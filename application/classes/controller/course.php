@@ -114,6 +114,7 @@ class Controller_Course extends Controller_Base {
                 $course = ORM::factory('course');
                 $validator = $course->validator($this->request->post());
                 $validator->bind(':course', NULL);
+                $validator->bind(':start_date', $this->request->post('start_date'));
                 if ($validator->check()) {
                     $course->name = $this->request->post('name');
                     $course->description = $this->request->post('description');
@@ -207,6 +208,7 @@ class Controller_Course extends Controller_Base {
                 $submitted = true;
                 $validator = $course->validator($this->request->post());
                 $validator->bind(':course', $course);
+                $validator->bind(':start_date', $this->request->post('start_date'));
                 if ($validator->check()) {
                     $course->name = $this->request->post('name');
                     $course->description = $this->request->post('description');

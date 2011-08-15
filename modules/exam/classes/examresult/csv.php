@@ -38,9 +38,20 @@ class Examresult_Csv {
     private $_headings;
 
     /**
-     * The exam marks array with exam_ids as the keys and total marks as the values
+     * Array of students list in an examwise array
+     * keys = exam_ids, values = array of user_ids applicable
+     */
+    private $_exam_wise_students = array();
+
+    /**
+     * Easy lookup array with exam_ids as the keys and total marks as the values
      */
     private $_exam_marks = array();
+
+    /**
+     * Easy look up array with exam_ids as the keys and the names as the values
+     */
+    private $_exam_names = array();
 
     /**
      * @param array $files_arr eg. $_FILES['csv']
@@ -49,15 +60,17 @@ class Examresult_Csv {
      */
     public function __construct($files_arr, $exams, $students) {
         $this->_file = $files_arr;
-        $this->_exams = $exams;
+        $this->set_exams($exams);
         $this->_students = $students;
-        // assign exam marks array to an instance property for maximum marks validation
-        $this->_exam_marks = $this->_exams->as_array('id', 'total_marks');
-        if ($this->validate_filetype()) {
+        $this->_exam_wise_students = $this->_get_exam_wise_students();        
+        try {
+            $this->validate_filetype();
             $data = $this->csvcontent();
             $this->_headings = array_shift($data);
             $this->_content = $data;
             $this->_datasets = $this->csv_to_datasets();
+        } catch (Examresult_Exception $e) {
+            $this->_errors['warning'] = $e->getMessage();
         }
     }
 
@@ -79,6 +92,17 @@ class Examresult_Csv {
      */
     public function datasets() {
         return $this->_datasets;
+    }
+
+    /**
+     * Method to set the exam instance variable and also for setting up
+     * the easy lookup exam arrays
+     * @param Database_Mysql_Result $exams
+     */
+    public function set_exams($exams) {
+        $this->_exams = $exams;
+        $this->_exam_marks = $this->_exams->as_array('id', 'total_marks');
+        $this->_exam_names = $this->_exams->as_array('id', 'name');
     }
     
     /**
@@ -117,7 +141,8 @@ class Examresult_Csv {
         foreach ($this->_content as $row) {
             $user_id = $row[0];
             $marks = array_slice($row, 2);
-            foreach ($marks as $k=>$m) {                
+            foreach ($marks as $k=>$m) {
+                if ($m === '-') continue;
                 $exam_id = $exams[$k];
                 $data = array(
                     'exam_id' => $exam_id,
@@ -144,15 +169,33 @@ class Examresult_Csv {
         $exam_names = array_slice($this->_headings, 2);
         $ordered_exams = array();
         foreach ($exam_names as $exam_name) {
+            if (!isset($exams[$exam_name])) {
+                $e = 'Exam "%s" not found in the selected grading period. Make sure the correct csv is uploaded';
+                throw new Examresult_Exception(sprintf($e, $exam_name));
+            }
             $ordered_exams[] = $exams[$exam_name];
         }
         return $ordered_exams;
     }
 
+    /**
+     * Method to create the exam_wise_students and set it to the
+     * $_exam_wise_students property of the instance
+     */
+    private function _get_exam_wise_students() {
+        $arr = array();
+        foreach ($this->_exams as $exam) {
+            $users = $exam->course->users->find_all()->as_array('id');
+            $arr[$exam->id] = array_keys($users);
+        }
+        return $arr;
+    }
+
     private function validate_result($result) {
         return (
             $this->validate_marks($result) && 
-            $this->validate_student($result['user_id'])
+            $this->validate_student($result['user_id']) &&
+            $this->validate_student_marks($result['user_id'], $result['exam_id'], $result['marks'])
         );
     }
 
@@ -166,8 +209,9 @@ class Examresult_Csv {
         if (isset($extension[1]) && strtolower($extension[1]) === "csv") {
             return true;
         } else {
-            $this->_errors['invalid_extension'] = 'Uploaded file not of type CSV';
-            return false;
+            $error = 'Uploaded file not of type CSV';
+            $this->_errors['invalid_extension'] = $error;
+            throw new Examresult_Exception($error);
         }
     }
 
@@ -180,10 +224,11 @@ class Examresult_Csv {
     private function validate_marks($result) {
         $total_marks = $this->_exam_marks[$result['exam_id']];
         if ($result['marks'] > $total_marks) {
-            $e = 'Marks entered for Student Id %d for %s are greater than total marks (%s)';
-            $exam_name = Arr::get($this->_exams->as_array('id', 'name'), $result['exam_id']);
-            $this->_errors['warning'] = sprintf($e, $result['user_id'], $exam_name, $total_marks);
-            return false;
+            $e = 'Marks entered for Student "%s" for "%s" are greater than total marks (%s)';
+            $exam_name = Arr::get($this->_exam_names, $result['exam_id']);
+            $student_name = Arr::get($this->_students, $result['user_id']);
+            $error = sprintf($e, $student_name, $exam_name, $total_marks);
+            throw new Examresult_Exception($error);
         }
         return true;
     }
@@ -194,9 +239,33 @@ class Examresult_Csv {
      */
     private function validate_student($user_id) {
         if (!isset($this->_students[$user_id])) {
-            $e = 'This result is not applicable for Student Id %d. Please recheck the csv file.';
-            $this->_errors['warning'] = sprintf($e, $user_id);
-            return false;
+            $e = 'This result is not applicable for Student "%s". Please recheck the csv file.';
+            $student_name = Arr::get($this->_students, $user_id);
+            $error = sprintf($e, $student_name);
+            throw new Examresult_Exception($error);
+        }
+        return true;
+    }
+
+    /**
+     * Method to validate that a marks entered for a student are correct. So that
+     * even if the user replaces any of the '-' with a value it the upload fails &
+     * record does not get stored in the db
+     * is if student is eligible, marks cannot be '-' 
+     * whereas if student is not eligible, marks can only be '-'
+     * @param int $user_id
+     * @param int $exam_id
+     * @param string $marks
+     * @return boolean
+     */
+    private function validate_student_marks($user_id, $exam_id, $marks) {
+        $student_eligible = in_array($user_id, $this->_exam_wise_students[$exam_id]);
+        if (!$student_eligible && $marks !== '-') {
+            $e = 'Exam "%s" is not applicable for Student "%s". So value must be "-" in the csv';
+            $student_name = Arr::get($this->_students, $user_id);
+            $exam_name = Arr::get($this->_exam_names, $exam_id);
+            $error = sprintf($e, $exam_name, $student_name);
+            throw new Examresult_Exception($error);
         }
         return true;
     }
@@ -205,12 +274,12 @@ class Examresult_Csv {
      * Method to get the matrix which will be finally put into the csv
      * @param array $students keys = student_ids, values = Student Names
      * @param array $exams {keys = exam_ids, values = Exam Names}
-     * @param array $results optional 
+     * @param array $results
      *           eg. array(
      *                 'student_id' => array('exam_id' => marks)
      *               )
      */
-    public static function matrix($students, $exams, $results=array()) {
+    public static function matrix($students, $exams, $results) {
         $matrix = array();
         // the first header line
         $matrix[0] = array_values($exams);
@@ -222,11 +291,7 @@ class Examresult_Csv {
                 $student_name                
             );
             foreach ($exams as $exam_id=>$exam_name) {
-                if ($results && isset($results[$student_id])) {
-                    $line[] = Arr::get($results[$student_id], $exam_id, '');
-                } else {
-                    $line[] = '';
-                }
+                $line[] = $results[$student_id][$exam_id];
             }
             $matrix[] = $line;           
         }

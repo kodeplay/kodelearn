@@ -10,5 +10,8 @@ return array(
     ),
     'access_code' => array(
         'Model_Course::code_unique' => 'Access code is used in other course'
+    ),
+    'end_date' => array(
+        'Model_Course::validate_end_date' => 'End Date should be greater than Start Date'
     )
 );

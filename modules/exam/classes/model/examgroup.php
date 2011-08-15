@@ -1,7 +1,6 @@
 <?php defined('SYSPATH') or die('No direct script access.');
 
 class Model_Examgroup extends ORM {
-
     
     public function validator($data) {
         return Validation::factory($data)
@@ -19,6 +18,13 @@ class Model_Examgroup extends ORM {
             ->where('examgroup_id', ' = ', $examgroup_id)
             ->find_all();
         return $exams;
+    }
+
+    public static function has_exams($examgroup_id) {
+        $count = ORM::factory('exam')
+            ->where('examgroup_id', ' = ', $examgroup_id)
+            ->count_all();
+        return ($count > 0);
     }
 
     /**
@@ -49,5 +55,30 @@ class Model_Examgroup extends ORM {
             $students = $students + $course_students;
         }
         return $students;
+    }
+
+    public static function get_results($examgroup_id) {
+        $exams = self::get_exams($examgroup_id);
+        // handle the cas_e that no exam is added to this exam group yet
+        $exam_id_arr = $exams->as_array('id');
+        if (!$exam_id_arr) {
+            echo 'No exams found for the examgroup #' . $examgroup_id;
+        }
+        $examresults = ORM::factory('examresult')
+            ->where('exam_id', ' IN ', array_keys($exam_id_arr))
+            ->find_all();
+        $results = array();
+        if ($examresults) {
+            foreach ($examresults as $modelobj) {
+                $user_id = $modelobj->user_id;
+                $exam_id = $modelobj->exam_id;
+                $marks = $modelobj->marks;
+                if (!isset($results[$user_id])) {
+                    $results[$user_id] = array();
+                }
+                $results[$user_id][$exam_id] = $marks;
+            }
+        } 
+        return $results;
     }
 }

@@ -6,9 +6,15 @@
 		</div><!-- pageTop -->
 		
 		<div class="topbar">
-			<?php echo $links['add_location']?>
-			<?php echo $links['rooms']?>
-			<a onclick="$('#location').submit();" class="pageAction r alert">Delete selected...</a>
+			<?php if( Acl::instance()->is_allowed('location_delete')){?>
+			     <a onclick="$('#location').submit();" class="pageAction r alert">Delete selected...</a>
+			<?php }?>
+			<?php if( Acl::instance()->is_allowed('location_create')){?>
+			     <?php echo $links['add_location']?>
+			<?php }?>
+			<?php if (Acl::instance()->has_access('room')) { ?>
+			     <?php echo $links['rooms']?>
+			<?php }?>
 			<span class="clear">&nbsp;</span>
 		</div><!-- topbar -->
 		
@@ -36,7 +42,10 @@
     				<td><img src="<?php echo $image; ?>" alt="" id="photo" /><?php //echo $location->image;  ?></td>
     				<td><?php echo $location->room_count; ?></td>
     				<td>
-    					<p><?php echo Html::anchor('/location/edit/id/'.$location->id, 'View/Edit')?></p>
+    					<p><?php if( Acl::instance()->is_allowed('location_edit')){?>
+    					   <?php echo Html::anchor('/location/edit/id/'.$location->id, 'View/Edit')?>
+    					   <?php }?>
+    					</p>
     				</td>
     			</tr>
     			<?php  } ?>

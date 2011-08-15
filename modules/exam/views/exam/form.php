@@ -39,18 +39,19 @@
             <tr>
                 <td><?php echo 'Time' ?></td>
                 <td><?php echo $form->from->element(); ?>
-                    
-                    &nbsp;&nbsp;
-                    <?php echo $form->to->label(); ?>
-                    <?php echo $form->to->element(); ?>
+                    <?php echo $form->to->element(); ?><br/>
                 <span class="form-error"><?php echo $form->from->error(); ?></span>
                 <span class="form-error"><?php echo $form->to->error(); ?></span>
+                    <span id="time"></span><br/><br/>
+                    <div id="slider-range"></div>
                 </td>
             </tr>
             
             <tr>
                 <td><?php echo $form->room_id->label(); ?></td>
-                <td><?php echo $form->room_id->element(); ?>
+
+                <td><span id="loading">Please wait... Loading Rooms</span><br/>
+                <?php echo $form->room_id->element(); ?> &nbsp; &nbsp; <?php echo $links['rooms']; ?>
                 <span class="form-error"><?php echo $form->room_id->error(); ?></span></td>
             </tr>
             <tr>
@@ -82,7 +83,6 @@ KODELEARN.modules.add('create_exam' , (function () {
     
     return {
         init: function () { 
-    	   $('select[name="room_id"]').click(function(){  $('input[name="to"]').blur(); });
            $('input[name="to"]').blur(function(){
                var data = $('form').serializeArray();
                $.post(KODELEARN.config.base_url + "exam/get_avaliable_rooms",  data,
@@ -90,6 +90,58 @@ KODELEARN.modules.add('create_exam' , (function () {
                            $('select[name="room_id"]').replaceWith(data.element);
                        }, "json");
            });
+           $("#slider-range").slider({
+               range: true,
+               min: 0,
+               max: 1439,
+               step: 10,
+               values: [<?php echo $slider['start'] ?>, <?php echo $slider['end'] ?>],
+               slide: this.slideTime,
+               change: this.getRooms
+           });
+           
+        	this.slideTime();
+        	this.getRooms();
+        },
+        slideTime: function (event, ui){
+            if(typeof that === 'undefined') that = this;
+       	    var minutes0 = parseInt($("#slider-range").slider("values", 0) % 60);
+       	    var hours0 = parseInt($("#slider-range").slider("values", 0) / 60 % 24);
+       	    var minutes1 = parseInt($("#slider-range").slider("values", 1) % 60);
+       	    var hours1 = parseInt($("#slider-range").slider("values", 1) / 60 % 24);
+            $('input[name="from"]').val(that.getTime(hours0, minutes0));
+            $('input[name="to"]').val(that.getTime(hours1, minutes1));
+      	    $("#time").text(that.getTime(hours0, minutes0) + ' - ' + that.getTime(hours1, minutes1));
+        	},
+        getTime: function (hours, minutes) {
+        	    var time = null;
+        	    minutes = minutes + "";
+        	    if (hours < 12) {
+        	        time = "AM";
+        	    }
+        	    else {
+        	        time = "PM";
+        	    }
+        	    if (hours == 0) {
+        	        hours = 12;
+        	    }
+        	    if (hours > 12) {
+        	        hours = hours - 12;
+        	    }
+        	    if (minutes.length == 1) {
+        	        minutes = "0" + minutes;
+        	    }
+        	    return hours + ":" + minutes + " " + time;
+        	},
+        getRooms:   function (){
+            $('#loading').fadeIn();
+            $('select[name="room_id"]').empty();
+            var data = $('form').serializeArray();
+            $.post(KODELEARN.config.base_url + "exam/get_avaliable_rooms",  data,
+                    function(data){
+                        $('select[name="room_id"]').replaceWith(data.element);
+                        $('#loading').fadeOut();
+                    }, "json");
         }
     }; 
 })());
