@@ -26,4 +26,7 @@ return array(
     'agree' => array(
         'not_empty' => 'You must agree to the privacy policy',
     ),
+    'parentname' => array(
+    'not_empty' => 'Please enter parent\'s name',
+    ),
 );
