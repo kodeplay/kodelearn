@@ -33,6 +33,7 @@ class Model_User extends ORM {
             ->rule('email_parent', 'email')
             ->rule('firstname', 'not_empty')
             ->rule('lastname', 'not_empty')
+            ->rule('parentname', 'not_empty')
             ->rule('password', 'not_empty')
             ->rule('password', 'min_length', array(':value', 8))
             ->rule('confirm_password', 'matches', array(':validation', ':field', 'password'))

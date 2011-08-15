@@ -92,22 +92,55 @@ class Controller_Auth extends Controller_Base {
         }
     }
 
+    private function create_user($values, $role){
+    	$config_settings = Config::instance()->load('config');
+    	
+        if ($config_settings->user_approval) {
+            $values['status'] = 0;
+        }
+        $user = ORM::factory('user');
+        $user->values($values);
+        $user->save();
+        $user->add('roles', $role);
+        
+        return $user->id;
+    }
+    
     private function register() {
         $user = ORM::factory('user');
         $config_settings = Config::instance()->load('config');
         $auto_login = true;
         $validator = $user->validator_register($this->request->post());
         if ($validator->check()) {
-            $values = $validator->as_array();
-            $values['password'] =  Auth::instance()->hash($values['password']);
+        	
+        	//first create parent's account
+            $values = array(
+               'firstname' => $this->request->post('parentname'),
+               'lastname'  => $this->request->post('lastname'),
+               'email'     => $this->request->post('email_parent'),
+               'password'  => Auth::instance()->hash(rand(10000, 65000)),
+            );
+            
+            $role = Model_Role::from_name('Parent');
+
+            $user_id = $this->create_user($values, $role);
+           
+            $values = array(
+               'firstname' => $this->request->post('firstname'),
+               'lastname'  => $this->request->post('lastname'),
+               'email'     => $this->request->post('email'),
+               'password'  => Auth::instance()->hash($this->request->post('password')),
+               'parent_user_id' => $user_id
+            );
+            
+            $role = ORM::factory('role', $config_settings->default_role);
+
+            $user_id = $this->create_user($values, $role);
+            
             if ($config_settings->user_approval) {
-                $values['status'] = 0;
                 $auto_login = false;
             }
-            $user->values($values);
-            $user->save();
-            $role = ORM::factory('role', $config_settings->default_role);
-            $user->add('roles', $role);
+            
             if ($auto_login) {
                 Auth::instance()->login($validator['email'], $validator['password']);
                 Request::current()->redirect('home');
@@ -124,13 +157,14 @@ class Controller_Auth extends Controller_Base {
     private function form_register($submitted = false) {    	
         $action = 'auth/index';
         $form = new Stickyform($action, array(), ($submitted ? $this->_errors : array()));
-        $fields = array('email', 'email_parent', 'firstname', 'lastname', 'password', 'batch_id', 'course_id', 'agree');
+        $fields = array('email', 'email_parent', 'firstname', 'lastname', 'parentname', 'password', 'batch_id', 'course_id', 'agree');
         $form->default_data = array_fill_keys($fields, '');
         $form->posted_data = $submitted ? $this->request->post() : array();
         $form->append('Your Email', 'email', 'text')
             ->append('Parent\'s Email', 'email_parent', 'text')
             ->append('First Name', 'firstname', 'text')
             ->append('Last Name', 'lastname', 'text')
+            ->append('Parent\'s Name', 'parentname', 'text')
             ->append('Password', 'password', 'password')
             ->append('Confirm Password', 'confirm_password', 'password')
             ->append(
