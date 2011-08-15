@@ -101,6 +101,29 @@ class Model_Course extends ORM {
     }
 
     /**
+     * Method to get the users assigned to this course
+     * if optional role_name is passed, from all users assigned to this course, 
+     * get only those that have value of $role_name  their role.
+     * @param mixed $course (int/Model_Course)
+     * @param String $role_name default = null
+     * @param Database_MySQL_Result $users
+     */
+    public static function get_users($course, $role_name=null) {
+        $course = $course instanceof Model_Course ? $course : ORM::factory('course', (int)$course);
+        if ($role_name) {
+            $role = Model_Role::from_name($role_name);
+            $users = $course->users
+                ->join('roles_users', 'INNER')
+                ->on('users.id', ' = ', 'roles_users.user_id')
+                ->where('roles_users.role_id', ' = ', $role->id)            
+                ->find_all();
+        } else {
+            $users = $course->users->find_all();
+        }
+        return $users;
+    }
+
+    /**
      * Method to get the students assigned to this course
      * ie from all users assigned to this course, get only those that have
      * 'student' as their role.
@@ -108,15 +131,17 @@ class Model_Course extends ORM {
      * @param Database_MySQL_Result $users
      */
     public static function get_students($course) {
-        if (is_int($course)) {
-            $course = ORM::factory('course', $course);
-        }
-        $role = Model_Role::from_name('student');
-        $students = $course->users
-            ->join('roles_users', 'INNER')
-            ->on('users.id', ' = ', 'roles_users.user_id')
-            ->where('roles_users.role_id', ' = ', $role->id)            
-            ->find_all();
-        return $students;        
+        return self::get_users($course, 'student');
+    }
+
+    /**
+     * Method to get the teachers assigned to this course
+     * ie from all users assigned to this course, get only those that have
+     * 'teacher' as their role.
+     * @param mixed $course (int/Model_Course)
+     * @param Database_MySQL_Result $users
+     */
+    public static function get_teachers($course) {
+        return self::get_users($course, 'teacher');
     }
 }
