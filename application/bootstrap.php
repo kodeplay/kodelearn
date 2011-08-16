@@ -98,23 +98,24 @@ Kohana::$config->attach(new Config_File);
  * Enable modules. Modules are referenced by a relative or absolute path.
  */
 Kohana::modules(array(
-	'auth'          => MODPATH.'auth',       // Basic authentication
-	// 'cache'      => MODPATH.'cache',      // Caching with multiple backends
-	// 'codebench'  => MODPATH.'codebench',  // Benchmarking tool
-	'database'      => MODPATH.'database',   // Database access
-	'image'         => MODPATH.'image',      // Image manipulation
-	'orm'           => MODPATH.'orm',        // Object Relationship Mapping
-	'unittest'      => MODPATH.'unittest',   // Unit testing
-	// 'userguide'  => MODPATH.'userguide',  // User guide and API documentation
+    'auth'          => MODPATH.'auth',       // Basic authentication
+    // 'cache'      => MODPATH.'cache',      // Caching with multiple backends
+    // 'codebench'  => MODPATH.'codebench',  // Benchmarking tool
+    'database'      => MODPATH.'database',   // Database access
+    'image'         => MODPATH.'image',      // Image manipulation
+    'orm'           => MODPATH.'orm',        // Object Relationship Mapping
+    'unittest'      => MODPATH.'unittest',   // Unit testing
+    // 'userguide'  => MODPATH.'userguide',  // User guide and API documentation
     'stickyform'    => MODPATH.'stickyform', // The stickyform module
+    'breadcrumbs'   => MODPATH.'breadcrumbs', // The breadcrumbs module https://github.com/kodeplay/breadcrumbs
     'playground'    => MODPATH.'playground',  // HTML playground for nikhil
-	'sort'          => MODPATH.'sort', //for sorting
+    'sort'          => MODPATH.'sort', //for sorting
     'dynamicmenu'   => MODPATH.'dynamicmenu', // Dynamic menu model by kodeplay
     'pagination'    =>  MODPATH.'pagination', // for server side pagination
-	'cacheimage'    => MODPATH.'cacheimage', // for Image Caching
-	'email'         => MODPATH.'email', // for mailling
-	'exam'          => MODPATH.'exam',
-	'event'         => MODPATH.'event'
+    'cacheimage'    => MODPATH.'cacheimage', // for Image Caching
+    'email'         => MODPATH.'email', // for mailling
+    'exam'          => MODPATH.'exam',
+    'event'         => MODPATH.'event'
 ));
 
 /**
