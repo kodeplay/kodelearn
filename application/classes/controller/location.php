@@ -94,6 +94,12 @@ class Controller_Location extends Controller_Base {
                     ->bind('filter_url', $filter_url)
                     ;
         
+        Breadcrumbs::add(array(
+            'System', Url::site('system')
+        ));
+        Breadcrumbs::add(array(
+            'Location', Url::site('location')
+        ));            
         $this->content = $view; 
     }
     
@@ -136,7 +142,17 @@ class Controller_Location extends Controller_Base {
                   ->bind('image', $image)
                   ->bind('upload_url', $upload_url)
                   ;
-                  
+
+        Breadcrumbs::add(array(
+            'System', Url::site('system')
+        ));
+        Breadcrumbs::add(array(
+            'Location', Url::site('location')
+        ));
+        Breadcrumbs::add(array(
+            'Create', Url::site('location/add')
+        )); 
+               
         $this->content = $view;
     }
     
@@ -244,6 +260,15 @@ class Controller_Location extends Controller_Base {
                   ->bind('upload_url', $upload_url)
                   ;
                   
+        Breadcrumbs::add(array(
+            'System', Url::site('system')
+        ));
+        Breadcrumbs::add(array(
+            'Location', Url::site('location')
+        ));
+        Breadcrumbs::add(array(
+            'Edit', Url::site('location/edit/id/'.$id)
+        ));          
         $this->content = $view;
         
     }

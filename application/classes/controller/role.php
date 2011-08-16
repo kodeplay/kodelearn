@@ -20,6 +20,10 @@ class Controller_Role extends Controller_Base {
                 'action_permissions' => Html::anchor('role/permissions/' . $role->id, 'set permissions'),
             );
         }
+        Breadcrumbs::add(array(
+            'Role', Url::site('role')
+        ));
+        
         $this->content = $view;
     }
 
@@ -64,6 +68,12 @@ class Controller_Role extends Controller_Base {
                   ->bind('links', $links)
                   ->bind('form', $form)
                   ;
+        Breadcrumbs::add(array(
+            'Role', Url::site('role')
+        ));
+        Breadcrumbs::add(array(
+            'Edit', Url::site('role/edit/id/'.$id)
+        ));             
         $this->content = $view;
     }
 
@@ -136,6 +146,12 @@ class Controller_Role extends Controller_Base {
         // if yes, show a warning before user tries to deny all permissions
         $user_role_id = Auth::instance()->get_user()->roles->find()->id;
         $is_current_role = ($role_id == $user_role_id);
+        Breadcrumbs::add(array(
+            'Role', Url::site('role')
+        ));
+        Breadcrumbs::add(array(
+            'Set Permission', Url::site('role/permissions/'.$role_id)
+        ));   
         $this->content = $view; 
     }
 }

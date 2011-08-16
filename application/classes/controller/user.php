@@ -108,6 +108,10 @@ class Controller_User extends Controller_Base {
             ->bind('cacheimage', $cacheimage)
             ;
         
+        Breadcrumbs::add(array(
+            'User', Url::site('user')
+        ));
+            
         $this->content = $view;
     }
     
@@ -157,7 +161,12 @@ class Controller_User extends Controller_Base {
         $view = View::factory('user/form')
             ->bind('form', $form)
            ;
-            
+        Breadcrumbs::add(array(
+            'User', Url::site('user')
+        ));
+        Breadcrumbs::add(array(
+            'Create', Url::site('user/add')
+        ));    
         $this->content = $view;
     }
     
@@ -275,6 +284,12 @@ class Controller_User extends Controller_Base {
         $view = View::factory('user/form')
             ->bind('form', $form)
             ;
+        Breadcrumbs::add(array(
+            'User', Url::site('user')
+        ));
+        Breadcrumbs::add(array(
+            'Edit', Url::site('user/edit/id/'.$id)
+        ));    
         $this->content = $view;
     }
 
@@ -387,7 +402,12 @@ class Controller_User extends Controller_Base {
             ->bind('success', $this->success)
             ->bind('links', $links)
             ;
-        
+        Breadcrumbs::add(array(
+            'User', Url::site('user')
+        ));
+        Breadcrumbs::add(array(
+            'Upload csv', Url::site('user/uploadcsv')
+        ));
     	$this->content = $view;
         
     }

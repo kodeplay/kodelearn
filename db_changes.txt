@@ -187,10 +187,10 @@ CREATE TABLE IF NOT EXISTS `examresults` (
 -----------------------------------------------------------------------------------------------------------------
 
 ALTER TABLE `users`
-    ADD COLUMN `forgot_password_string`(200) NULL DEFAULT NULL AFTER `avatar`;
+    ADD COLUMN `forgot_password_string`varchar(200) NULL DEFAULT NULL AFTER `avatar`;
     
 ------------------------------------------------------------------------------------------------------------------
 
 ALTER TABLE `users`
-    ADD COLUMN `about_me`(256) NULL DEFAULT NULL AFTER `password`;    
+    ADD COLUMN `about_me`varchar(256) NULL DEFAULT '' AFTER `password`;    
 
