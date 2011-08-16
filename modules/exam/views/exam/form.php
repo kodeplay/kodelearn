@@ -73,7 +73,7 @@
                 </td>
             </tr>
         </table>
-        <div id="course_student" class="l" >Jimit is Great</div>
+        <div id="course_student" class="r" ></div>
         <?php echo $form->endForm(); ?>
     </div><!-- content -->
     
@@ -99,6 +99,7 @@ KODELEARN.modules.add('create_exam' , (function () {
                slide: this.slideTime,
                change: this.getRooms
            });
+           KODELEARN.getCourseStudents($('select[name="course_id"]').val(), 'course_student');
            $('select[name="course_id"]').change(function(){
                KODELEARN.getCourseStudents($(this).val(), 'course_student');
            });
