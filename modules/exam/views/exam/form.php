@@ -5,7 +5,7 @@
             <div class="clear"></div>
         </div><!-- pageTop -->
         <?php echo $form->startform(); ?>
-        <table class="formcontainer bm40">
+        <table class="formcontainer bm40 l">
             <tr>
                 <td><?php echo $form->name->label(); ?></td>
                 <td><?php echo $form->name->element(); ?>
@@ -73,8 +73,8 @@
                 </td>
             </tr>
         </table>
+        <div id="course_student" class="l" >Jimit is Great</div>
         <?php echo $form->endForm(); ?>
-        
     </div><!-- content -->
     
     <div class="clear"></div>
@@ -99,7 +99,9 @@ KODELEARN.modules.add('create_exam' , (function () {
                slide: this.slideTime,
                change: this.getRooms
            });
-           
+           $('select[name="course_id"]').change(function(){
+               KODELEARN.getCourseStudents($(this).val(), 'course_student');
+           });
         	this.slideTime();
         	this.getRooms();
         },

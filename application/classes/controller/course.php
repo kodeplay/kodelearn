@@ -365,6 +365,27 @@ class Controller_Course extends Controller_Base {
     	echo json_encode($json);
     }
     
+    public function action_get_students(){
+    	
+    	if(!$this->request->post('course_id')){
+	    	$response = '<p>No Course Selected</p>';
+	        echo json_encode(array('html' => $response));
+	        exit;
+    	}
+        $course = ORM::factory('course', $this->request->post('course_id'));
+        
+    	$users = Model_Course::get_students($course);
+
+        $cacheimage = CacheImage::instance();
+            	
+    	$view = View::factory('course/ajax_show_students')
+    	               ->bind('cacheimage', $cacheimage)
+    	               ->bind('course', $course)
+    	               ->bind('users', $users);
+    	
+        $response = $this->response->body($view)->body();
+        echo json_encode(array('html' => $response));
+    }
     
 }
 
