@@ -45,6 +45,15 @@ class Controller_Examresult extends Controller_Base {
             ->append('Upload', 'upload', 'submit', array('attributes' => array('class' => 'button')))
             ->process();
         $this->content = $view;
+
+        Breadcrumbs::add(array(
+            'Exams', Url::site('exam')
+        ));
+        
+        Breadcrumbs::add(array(
+            'Manage Results', Url::site('examresult/upload')
+        ));
+        
     }
 
     /**
@@ -154,6 +163,17 @@ class Controller_Examresult extends Controller_Base {
         }
         $results = $this->form($examresult);
         $this->content = $view;
+        Breadcrumbs::add(array(
+            'Exams', Url::site('exam')
+        ));
+        
+        Breadcrumbs::add(array(
+            'Manage Results', Url::site('examresult/upload')
+        ));
+
+        Breadcrumbs::add(array(
+            $examgroup->name, Url::site('examresult/edit/examgroup_id/' . $examgroup_id)
+        ));
     }
 
     /**

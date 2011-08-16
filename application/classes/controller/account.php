@@ -66,7 +66,11 @@ class Controller_Account extends Controller_Base {
                     ->bind('user', $user)
                     ->bind('avatar', $avatar);
                     
-		$this->content = $view;
+        Breadcrumbs::add(array(
+            'Profile', Url::site('account')
+        ));
+                    
+        $this->content = $view;
 	}
 	
 	public function action_uploadavatar(){

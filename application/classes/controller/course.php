@@ -92,6 +92,10 @@ class Controller_Course extends Controller_Base {
             ->bind('filter_url', $filter_url)
             ;
         
+        Breadcrumbs::add(array(
+            'Courses', Url::site('course')
+        ));
+        
         $this->content = $view;
     }
     
@@ -163,6 +167,15 @@ class Controller_Course extends Controller_Base {
             ->bind('teachers_table', $teachers_table)
             ->bind('batches', $batches)
             ->bind('course_id', $course_id);        
+        
+        Breadcrumbs::add(array(
+            'Courses', Url::site('course')
+        ));
+        
+        Breadcrumbs::add(array(
+            'Create', Url::site('course/add')
+        ));
+        
         $this->content = $view;
     }
     
@@ -245,7 +258,16 @@ class Controller_Course extends Controller_Base {
             ->bind('batches', $batches)
             ->bind('teachers_table', $teachers_table)
             ->bind('course_id', $id);        
-        $this->content = $view;
+        
+        Breadcrumbs::add(array(
+            'Courses', Url::site('course')
+        ));
+        
+        Breadcrumbs::add(array(
+            $course->name, Url::site('course/edit/id/'.$id)
+        ));
+        
+       $this->content = $view;
     }
     
     public function action_summary() {        
@@ -265,7 +287,17 @@ class Controller_Course extends Controller_Base {
     	$view = View::factory('course/summary')
     	               ->bind('course', $course)
     	               ->bind('count', $count);    	
-    	$this->content = $view;
+        
+
+        Breadcrumbs::add(array(
+            'Courses', Url::site('course')
+        ));
+        
+        Breadcrumbs::add(array(
+            $course->name, Url::site('course/summary/id/'.$id)
+        ));
+        
+        $this->content = $view;
     }
     
     public function action_get_users() {
@@ -306,6 +338,15 @@ class Controller_Course extends Controller_Base {
             exit;
     	}        
     	$view = View::factory('course/join');        
+        
+    	Breadcrumbs::add(array(
+            'Courses', Url::site('course')
+        ));
+        
+        Breadcrumbs::add(array(
+            'Join', Url::site('course/join')
+        ));
+        
     	$this->content = $view;
     }
     

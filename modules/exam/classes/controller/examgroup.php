@@ -91,6 +91,14 @@ class Controller_Examgroup extends Controller_Base {
                     ->bind('msg', $msg)
                     ;
         
+        Breadcrumbs::add(array(
+            'Exams', Url::site('exam')
+        ));
+            
+        Breadcrumbs::add(array(
+            'Grading Period', Url::site('examgroup')
+        ));
+                    
         $this->content = $view; 
     }
     
@@ -124,6 +132,19 @@ class Controller_Examgroup extends Controller_Base {
         $view = View::factory('examgroup/form')
                   ->bind('links', $links)
                   ->bind('form', $form);
+        
+        Breadcrumbs::add(array(
+            'Exams', Url::site('exam')
+        ));
+        
+        Breadcrumbs::add(array(
+            'Grading Period', Url::site('examgroup')
+        ));
+        
+        Breadcrumbs::add(array(
+            'Create', Url::site('examgroup/add')
+        ));
+        
         $this->content = $view;
     }
     
@@ -178,7 +199,20 @@ class Controller_Examgroup extends Controller_Base {
         $view = View::factory('examgroup/form')
                   ->bind('links', $links)
                   ->bind('form', $form);
+        
         $this->content = $view;
+        
+        Breadcrumbs::add(array(
+            'Exams', Url::site('exam')
+        ));
+        
+        Breadcrumbs::add(array(
+            'Grading Period', Url::site('examgroup')
+        ));
+        
+        Breadcrumbs::add(array(
+            'Edit', Url::site('examgroup/edit/id/'.$id)
+        ));
         
         
     }

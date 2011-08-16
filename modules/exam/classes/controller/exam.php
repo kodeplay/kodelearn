@@ -160,6 +160,10 @@ class Controller_Exam extends Controller_Base {
             ->bind('filter_url', $filter_url)
             ->bind('pagination', $pagination);
         
+        Breadcrumbs::add(array(
+            'Exams', Url::site('exam')
+        ));
+            
         $this->content = $view;
     }
     
@@ -214,6 +218,14 @@ class Controller_Exam extends Controller_Base {
             ->bind('slider', $silder)
             ->bind('links', $links);
         
+        Breadcrumbs::add(array(
+            'Exams', Url::site('exam')
+        ));
+            
+        Breadcrumbs::add(array(
+            'Create', Url::site('exam/add')
+        ));
+            
         $this->content = $view;
     }
 
@@ -301,6 +313,15 @@ class Controller_Exam extends Controller_Base {
             ->bind('event_id', $event_id)
             ->bind('links', $links)
             ->bind('slider', $silder);
+
+        Breadcrumbs::add(array(
+            'Exams', Url::site('exam')
+        ));
+            
+        Breadcrumbs::add(array(
+            'Edit', Url::site('exam/edit/id/' . $id)
+        ));
+            
         $this->content = $view;
     }
     
