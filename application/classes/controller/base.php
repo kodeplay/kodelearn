@@ -26,6 +26,7 @@ class Controller_Base extends Controller_Template {
         } else {
             $this->view = View::factory('template/content');
         }
+        Breadcrumbs::add(array('Home', Url::site('home')));
         return parent::before();
     }
 	
@@ -82,11 +83,15 @@ class Controller_Base extends Controller_Template {
         $action = $this->request->action();
         $page_description = Kohana::message('page_title', $controller.'_'.$action.'.description');
         $page_title = Kohana::message('page_title', $controller.'_'.$action.'.title');
+
+        $breadcrumbs = Breadcrumbs::render();
+        
         $this->content = str_replace('replace_here_page_description', $page_description, $this->content);
         $this->content = str_replace('replace_here_page_title', $page_title, $this->content);
         $this->view->set('content', $this->content);
         $this->view->set('styles', $styles);
         $this->view->set('scripts', $scripts);
+        $this->view->set('breadcrumbs', $breadcrumbs);            
         $this->menu_init();
         $this->response->body($this->view);
     }

@@ -55,6 +55,18 @@
                 </div><!-- roles -->
                 <div class="clear"></div>
             </div><!-- branding -->
+            
+            <!--<div class="breadcrumbs">
+	            <a href="#">Home</a>
+	            <span class="sep">&rarr;</span>
+	            <a href="#">Crumb 1</a>
+	            <span class="sep">&rarr;</span>
+	            <a href="#">Crumb 2</a>
+            </div>  breadcrumbs -->            
+            <?php echo $breadcrumbs; ?>
+            
+            <div class="clear"></div>
+            
 <SCRIPT LANGUAGE="JavaScript">
 datetoday = new Date();
 timenow=datetoday.getTime();

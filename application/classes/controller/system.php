@@ -12,8 +12,8 @@ class Controller_System extends Controller_Base {
             ;
         $institution = ORM::factory('institution', $id=1);
         $config = Config::instance();
-        $config_settings = $config->load('config')->as_array();    
-               
+        $config_settings = $config->load('config')->as_array();
+
         // if post, validate, save and redirect
         if ($this->request->method() === 'POST' && $this->request->post()) {
             $submitted = true;
@@ -31,8 +31,7 @@ class Controller_System extends Controller_Base {
             //echo $config_post['membership'];
             //exit;
             $validator = $institution->validator($this->request->post());
-            if ($validator->check()) {
-                
+            if ($validator->check()) {                
                 $institution->name = $this->request->post('name');
                 $institution->institution_type_id = $this->request->post('institutiontype_id');
                 $institution->logo = $this->request->post('logo');
@@ -44,23 +43,29 @@ class Controller_System extends Controller_Base {
                 exit;    
             } else {
                 $this->_errors = $validator->errors('institution');
-            }
-            
-            
+            }            
         }
         
         $upload_url = URL::site('system/uploadinst');
         $images = CacheImage::instance();
         $image = $images->resize($institution->logo, 100, 100);
         
-        $form = $this->form(array(
-            'name' => $institution->name, 
-            'institutiontype_id' => $institution->institution_type_id, 
-            'logo' => $institution->logo, 
-            'website' => $institution->website, 
-            'address' => $institution->address, 
-            'config' => $config_settings), $submitted);        
+        $form = $this->form(
+            array(
+                'name' => $institution->name, 
+                'institutiontype_id' => $institution->institution_type_id, 
+                'logo' => $institution->logo, 
+                'website' => $institution->website, 
+                'address' => $institution->address, 
+                'config' => $config_settings
+            ), 
+            $submitted
+        );        
 
+        Breadcrumbs::add(array(
+            'System', Url::site('system')
+        ));
+        
         $this->content = $view;
     }
     
