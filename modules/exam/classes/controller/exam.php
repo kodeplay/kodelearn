@@ -291,19 +291,7 @@ class Controller_Exam extends Controller_Base {
         $silder['start'] = ((($event->eventstart) - (strtotime($saved_data['date']))) / 60 );
         $silder['end'] = ((($event->eventend) - (strtotime($saved_data['date']))) / 60 );
         
-        
-        $results = Event::get_avaliable_rooms($event->eventstart, $event->eventend, $event->id);
-        
-        $rooms = array();
-        foreach($results as $room){
-            $rooms[$room->id] = $room->room_number . ', ' . $room->room_name;
-        }
-        
-        $room = ORM::factory('room', $event->room_id);
-        
-        $rooms[$room->id] = $room->room_number . ', ' . $room->room_name;
-        
-        $form = $this->form('exam/edit/id/' . $id, $submitted, $saved_data, $rooms);
+        $form = $this->form('exam/edit/id/' . $id, $submitted, $saved_data);
         $event_id = $exam->event_id;
         $links = array(
             'rooms'       => Html::anchor('/room/', 'Add Rooms', array('target' => '_blank')),
@@ -325,7 +313,7 @@ class Controller_Exam extends Controller_Base {
         $this->content = $view;
     }
     
-    private function form($action, $submitted = false, $saved_data = array(), $rooms = array()){
+    private function form($action, $submitted = false, $saved_data = array()){
         
         
         $examgroups = array();
@@ -363,7 +351,7 @@ class Controller_Exam extends Controller_Base {
         $form->append('Passing Marks', 'passing_marks', 'text');
         $form->append('Reminder', 'reminder', 'hidden');
         $form->append('Grading Period', 'examgroup_id', 'select', array('options' => $examgroups));
-        $form->append('Room', 'room_id', 'select', array('options' => $rooms));
+        $form->append('Room', 'room_id', 'select', array('options' => array()));
         $form->append('Course', 'course_id', 'select', array('options' => $courses));
         $form->append('Save', 'save', 'submit', array('attributes' => array('class' => 'button')));
         $form->process();
@@ -394,7 +382,15 @@ class Controller_Exam extends Controller_Base {
             $rooms[$room->id] = $room->room_number . ', ' . $room->room_name;
         }
         
-        $element =Form::select('room_id',$rooms);
+        $room_id = 0;
+        
+        if($event_id){
+        	$event = ORM::factory('event', $event_id);
+        	$room = ORM::factory('room', $event->room_id);
+        	$room_id = $room->id;
+        }
+        
+        $element = Form::select('room_id',$rooms, $room_id);
         
         echo json_encode(array('element' => $element));
         
