@@ -18,7 +18,8 @@
 		<div id="tabs">
 		  <ul>
 		      <li><a href="#form-details"> Course Details</a></li>
-		      <li><a href="#assign-users"> Assign Users</a></li>
+		      <li><a href="#assign-students"> Students</a></li>
+		      <li><a href="#assign-teachers"> Teachers</a></li>
 		  </ul>
 		
 		<div id="form-details">
@@ -55,7 +56,7 @@
 		</table>
 		</div>
 		
-		<div id="assign-users">
+		<div id="assign-students">
 			<p class="bm40">
 				Add users from Batch: 
 				<select id="batch_id">
@@ -68,8 +69,15 @@
 				<p class="tip">Please select the checkbox to assign users to course</p>
 			</p>
 			<p class="tip" style="display:none;" id="loading">Please wait...Loading Users</p>
-    		<div id="assign-users-ajax">	
+    		<div id="assign-students-ajax">	
                 <?php echo $users ?>		  
+    		</div>
+		</div>
+		
+		<div id="assign-teachers">
+			<p class="bm40">Please select Teachers who will teach this course:</p>
+    		<div id="assign-teachers-table">	
+                <?php echo $teachers_table; ?>		  
     		</div>
 		</div>
 		<?php echo $form->endForm(); ?>
@@ -90,10 +98,10 @@ KODELEARN.modules.add('assign_users' , (function () {
         	   var course_id = '<?php echo $course_id ?>';
         	   if(batch_id){
                    $.post(KODELEARN.config.base_url + "course/get_users", { "batch_id": batch_id, "course_id": course_id },
-                           function(data){
-                	       	  $('#assign-users-ajax').html(data.response);
-                	       	  $('#loading').fadeOut();     	       	  
-                           }, "json");
+                   function(data){
+        	       	  $('#assign-students-ajax').html(data.response);
+        	       	  $('#loading').fadeOut();     	       	  
+                   }, "json");
         	   }
     	   });
 

@@ -25,4 +25,15 @@ class Model_Role extends ORM {
             ->find();
         return $role;
     }
+
+    /**
+     * Method to get all the users of the specified role
+     * @param String $role_name
+     * @return Model_User $users
+     */
+    public static function get_users($role_name) {
+        $role = self::from_name($role_name);
+        $users = $role->users->find_all();
+        return $users;
+    }
 }
