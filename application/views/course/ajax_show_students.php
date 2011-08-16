@@ -1,5 +1,19 @@
-<?php echo $course->name ?> Students
+<p class="bold vpad10 borderbottom1"><?php echo $course->name ?> Students</p>
 
+<ul>
+    <?php foreach($users as $key=>$user){ ?>
+    <?php if(($key+1) <= 6){  ?>
+    <li class="vamid vm10">
+        <img src="<?php echo $cacheimage->resize($user->avatar, 40, 40);?>" />
+        <?php echo $user->firstname . ' ' . $user->lastname ?>
+    </li>
+    <?php } else { ?>
+</ul>
+        <p class="bold vpad10 borderbottom1 bordertop1"><?php echo HTML::anchor('course/edit/id/'.$course->id.'#assign-students', 'View')?> all <?php echo count($users)?> Students</p>
+    <?php break;?>
+    <?php } ?>
+    <?php } ?>
+<?php /*?>
 <table class="datatable ">
     <tr>
         <?php foreach($users as $key=>$user){ ?>
@@ -19,3 +33,5 @@
         <?php } ?>
     </tr>
 </table>
+*/
+?>
