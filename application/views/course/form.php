@@ -21,7 +21,7 @@
 		      <li><a href="#assign-students"> Students</a></li>
 		      <li><a href="#assign-teachers"> Teachers</a></li>
 		  </ul>
-		</div>
+		
 		<div id="form-details">
 		<table class="formcontainer vm40">
 			<tr>
@@ -81,7 +81,7 @@
     		</div>
 		</div>
 		<?php echo $form->endForm(); ?>
-		
+	</div>	
 	</div><!-- pagecontent -->
 	
 	<div class="clear"></div>

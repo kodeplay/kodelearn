@@ -148,6 +148,8 @@ class Controller_Course extends Controller_Base {
                 ->and_where('roles_users.role_id', ' = ', $student_role_id);
             $data = $users->find_all();
             $count = $users->count_all();
+        } else {
+        	$selected = array();
         }
         $course_id = 0;
         $users = View::factory('course/assign')
