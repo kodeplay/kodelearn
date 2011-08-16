@@ -141,5 +141,14 @@ class Email {
 
 		return Email::$mail->send($message);
 	}
+	
+	public static function send_mail($to, $subject, $message)
+	{
+	    $from = 'info@kodelearn.com';
+	    $html = false;
+	    Email::connect($config = NULL);
+	    Email::send($to, $from, $subject, $message, $html = false);
+	   
+	} 
 
 } // End email

@@ -114,15 +114,18 @@ class Controller_Auth extends Controller_Base {
         if ($validator->check()) {
         	
         	//first create parent's account
+        	$parent_password = rand(10000, 65000);
             $values = array(
                'firstname' => $this->request->post('parentname'),
                'lastname'  => $this->request->post('lastname'),
                'email'     => $this->request->post('email_parent'),
-               'password'  => Auth::instance()->hash(rand(10000, 65000)),
+               'password'  => Auth::instance()->hash($parent_password),
             );
+            $subject = "Parent email";
+            $message = "The password is ".$parent_password;
             
             $role = Model_Role::from_name('Parent');
-
+            Email::send_mail($this->request->post('email_parent'), $subject, $message);
             $user_id = $this->create_user($values, $role);
            
             $values = array(
@@ -218,14 +221,12 @@ class Controller_Auth extends Controller_Base {
             $user->save();
             //$user->email;
             
-            Email::connect($config = NULL);
+            //Email::connect($config = NULL);
             $to = $user->email;
-            $from = 'eric@kodelearn.com';
             $subject = 'Change password';
             $message = 'Link to change your password: http://kodelearn.kp/index.php/auth/changepassword/u/'.$forgot_password_string;
-            $html = false;
-
-            Email::send($to, $from, $subject, $message, $html = false);
+            
+            Email::send_mail($to, $subject, $message);
             
             return '<div class="formMessages" style="width:300px; height:50px"><span class="fmIcon good"></span> <span class="fmText">A link to reset your password has been sent at '. $user->email.'</span><span class="clear">&nbsp;</span></div>';
             
