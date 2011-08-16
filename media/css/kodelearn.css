@@ -756,25 +756,31 @@ select {	width: 210px;  }
 /* ..........................
 	Breadcrumbs
    ........................ */
-.breadcrumbs {
+#breadcrumbs {
 	padding: 7px 3px;
 	border-bottom: 1px solid #feb100;
 	color: #4c3d34;
 	font-size: 12px;
+        clear: both;
+        height: 16px;
 }
-.breadcrumbs .sep {
+
+#breadcrumbs li { 
+    float: left;
+}
+#breadcrumbs .sep {
 	font-family: Arial;
 	margin-left: 2px;
 	margin-right: 2px;
 	font-size: 13px;
 	padding-bottom: 3px;
 }
-.breadcrumbs a {
+#breadcrumbs a {
 	color: #4c3d34;
 	padding-left: 2px;
 	padding-right: 2px;
 }
-.breadcrumbs a:hover {
+#breadcrumbs a:hover {
 	border-bottom: 1px dotted #948b85;
 }
 
