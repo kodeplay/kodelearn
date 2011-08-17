@@ -183,3 +183,20 @@ CREATE TABLE IF NOT EXISTS `examresults` (
   `user_id` int(11) NOT NULL,
   `marks` float NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+------------------------------------------------------------------------------------------------------------------
+
+CREATE TABLE IF NOT EXISTS `attendence` (
+  `event_id` int(20) NOT NULL,
+  `user_id` int(20) NOT NULL,
+  `present` tinyint(1) NOT NULL,
+  KEY `event_id` (`event_id`),
+  KEY `user_id` (`user_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+ALTER TABLE `attendence`
+  ADD CONSTRAINT `attendence_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `attendence` (`user_id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `attendence_ibfk_1` FOREIGN KEY (`event_id`) REFERENCES `attendence` (`event_id`) ON DELETE CASCADE;
+
+-------------------------------------------------------------------------------------------------------------------
+
