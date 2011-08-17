@@ -2,5 +2,5 @@
 
 class Model_Event extends ORM {
 
-    
+	
 }
