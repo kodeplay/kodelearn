@@ -36,13 +36,14 @@ class Model_Examgroup extends ORM {
         $exams = self::get_exams($examgroup_id);
         // handle the cas_e that no exam is added to this exam group yet
         if (!$exams->as_array()) {
-            echo 'No exams found for the examgroup #' . $examgroup_id;
-        }
+            // echo 'No exams found for the examgroup #' . $examgroup_id;
+            return array();
+        } 
         $course_assoc = $exams->as_array('id', 'course_id');
         // get the courses
         $courses = ORM::factory('course')
             ->where('id', ' IN ', array_values($course_assoc))
-            ->find_all();        
+            ->find_all();
         $students = array();
         foreach ($courses as $course) {
             // $users = $course->users->find_all();
@@ -58,12 +59,19 @@ class Model_Examgroup extends ORM {
         return $students;
     }
 
+    /**
+     * Method to get examresults for all exams coming under this
+     * exam group
+     * @param int $examgroup_id
+     * @return array $examresults array('user_ids => array(exam_ids => marks))
+     */
     public static function get_results($examgroup_id) {
         $exams = self::get_exams($examgroup_id);
         // handle the cas_e that no exam is added to this exam group yet
         $exam_id_arr = $exams->as_array('id');
         if (!$exam_id_arr) {
-            echo 'No exams found for the examgroup #' . $examgroup_id;
+            // echo 'No exams found for the examgroup #' . $examgroup_id;
+            return array();
         }
         $examresults = ORM::factory('examresult')
             ->where('exam_id', ' IN ', array_keys($exam_id_arr))
