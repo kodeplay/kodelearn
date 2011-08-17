@@ -184,6 +184,7 @@ CREATE TABLE IF NOT EXISTS `examresults` (
   `marks` float NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+
 ------------------------------------------------------------------------------------------------------------------
 
 CREATE TABLE IF NOT EXISTS `attendence` (
@@ -198,5 +199,14 @@ ALTER TABLE `attendence`
   ADD CONSTRAINT `attendence_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `attendence` (`user_id`) ON DELETE CASCADE,
   ADD CONSTRAINT `attendence_ibfk_1` FOREIGN KEY (`event_id`) REFERENCES `attendence` (`event_id`) ON DELETE CASCADE;
 
--------------------------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------------------
+
+ALTER TABLE `users`
+    ADD COLUMN `forgot_password_string`varchar(200) NULL DEFAULT NULL AFTER `avatar`;
+    
+------------------------------------------------------------------------------------------------------------------
+
+ALTER TABLE `users`
+    ADD COLUMN `about_me`varchar(256) NULL DEFAULT '' AFTER `password`;    
+
 

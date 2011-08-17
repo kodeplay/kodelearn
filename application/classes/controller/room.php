@@ -96,6 +96,12 @@ class Controller_Room extends Controller_Base {
                     ->bind('filter_url', $filter_url)
                     ;
         
+        Breadcrumbs::add(array(
+            'System', Url::site('system')
+        ));
+        Breadcrumbs::add(array(
+            'Room', Url::site('room')
+        ));            
         $this->content = $view; 
     }
     
@@ -131,6 +137,15 @@ class Controller_Room extends Controller_Base {
                   ->bind('links', $links)
                   ->bind('form', $form)
                   ;
+        Breadcrumbs::add(array(
+            'System', Url::site('system')
+        ));
+        Breadcrumbs::add(array(
+            'Room', Url::site('room')
+        )); 
+        Breadcrumbs::add(array(
+            'Create', Url::site('room/add')
+        ));            
         $this->content = $view;
     }
     
@@ -196,6 +211,15 @@ class Controller_Room extends Controller_Base {
                   ->bind('links', $links)
                   ->bind('form', $form)
                   ;
+        Breadcrumbs::add(array(
+            'System', Url::site('system')
+        ));
+        Breadcrumbs::add(array(
+            'Room', Url::site('room')
+        )); 
+        Breadcrumbs::add(array(
+            'Edit', Url::site('room/edit/id/'.$id)
+        ));          
         $this->content = $view;
         
         

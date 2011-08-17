@@ -28,16 +28,33 @@ class DynamicMenu_Menu {
      * the global attributes specified by the instance variable will be overridden by this
      */
     public function add_link($url, $title, $sort_order=NULL, $attributes=array()) {
-        DynamicMenu_Filter::apply_filters('add_link', $this);
-        $attributes = array_merge($this->attributes, $attributes);
-        $anchor = Html::anchor($url, $title, $attributes);
-        $key = self::slugify($title);
-        $this->links[$key] = array(
-            'html' => $anchor,
-            'title' => $title,
-            'sort_order' => (int) $sort_order,
-        );
-        return $this;
+        if($this->position == 'sidemenu'){
+            if(Acl::instance()->has_access($url)){
+                DynamicMenu_Filter::apply_filters('add_link', $this);
+                $attributes = array_merge($this->attributes, $attributes);
+                $anchor = Html::anchor($url, $title, $attributes);
+                $key = self::slugify($title);
+                $this->links[$key] = array(
+                    'html' => $anchor,
+                    'title' => $title,
+                    'sort_order' => (int) $sort_order,
+                );
+                return $this;
+            } else {
+                return $this;
+            }
+        } else {
+            DynamicMenu_Filter::apply_filters('add_link', $this);
+            $attributes = array_merge($this->attributes, $attributes);
+            $anchor = Html::anchor($url, $title, $attributes);
+            $key = self::slugify($title);
+            $this->links[$key] = array(
+                'html' => $anchor,
+                'title' => $title,
+                'sort_order' => (int) $sort_order,
+            );
+            return $this;
+        }
     }
 
     public function set_attributes($attributes) {

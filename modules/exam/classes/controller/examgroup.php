@@ -7,6 +7,9 @@ class Controller_Examgroup extends Controller_Base {
     protected $_errors = array();
     
     public function action_index(){
+        
+        $msg = $this->request->param('msg');
+        
         if($this->request->param('sort')){
             $sort = $this->request->param('sort');
         } else {
@@ -85,8 +88,17 @@ class Controller_Examgroup extends Controller_Base {
                     ->bind('pagination', $pagination)
                     ->bind('filter_name', $filter_name)
                     ->bind('filter_url', $filter_url)
+                    ->bind('msg', $msg)
                     ;
         
+        Breadcrumbs::add(array(
+            'Exams', Url::site('exam')
+        ));
+            
+        Breadcrumbs::add(array(
+            'Grading Period', Url::site('examgroup')
+        ));
+                    
         $this->content = $view; 
     }
     
@@ -120,6 +132,19 @@ class Controller_Examgroup extends Controller_Base {
         $view = View::factory('examgroup/form')
                   ->bind('links', $links)
                   ->bind('form', $form);
+        
+        Breadcrumbs::add(array(
+            'Exams', Url::site('exam')
+        ));
+        
+        Breadcrumbs::add(array(
+            'Grading Period', Url::site('examgroup')
+        ));
+        
+        Breadcrumbs::add(array(
+            'Create', Url::site('examgroup/add')
+        ));
+        
         $this->content = $view;
     }
     
@@ -174,7 +199,20 @@ class Controller_Examgroup extends Controller_Base {
         $view = View::factory('examgroup/form')
                   ->bind('links', $links)
                   ->bind('form', $form);
+        
         $this->content = $view;
+        
+        Breadcrumbs::add(array(
+            'Exams', Url::site('exam')
+        ));
+        
+        Breadcrumbs::add(array(
+            'Grading Period', Url::site('examgroup')
+        ));
+        
+        Breadcrumbs::add(array(
+            'Edit', Url::site('examgroup/edit/id/'.$id)
+        ));
         
         
     }
@@ -182,9 +220,36 @@ class Controller_Examgroup extends Controller_Base {
     public function action_delete(){
         if($this->request->method() === 'POST' && $this->request->post('selected')){
             foreach($this->request->post('selected') as $id){
-                ORM::factory('examgroup', $id)->delete();
+                $exam = ORM::factory('exam');
+                $exam->where('examgroup_id', '=', $id);
+                $count = $exam->count_all();
+                if($count > 0){
+                   $msg = 1;
+                } else {
+                    ORM::factory('examgroup', $id)->delete();
+                    $msg = 0;
+                }
             }
         }
-        Request::current()->redirect('examgroup');
+        Request::current()->redirect('examgroup/index/msg/'.$msg);
+    }
+
+    public function action_nil_exams() {
+        $view = View::factory('examgroup/nil_exams')
+            ->bind('examgroup', $examgroup)
+            ->bind('back_url', $back_url)
+            ->bind('create_exam', $create_exam);
+        $session = Session::instance();
+        $session_data = $session->get('examgroup_nil_exams');
+        if (!$session_data) {
+            Request::current()->redirect('examgroup/index');
+        }
+        $examgroup_id = $session_data['examgroup_id'];
+        $back_url = $session_data['back_url'];
+        $create_exam = Url::site('exam/add');
+        // session data is not longer required
+        $session->delete('examgroup_nil_exams');
+        $examgroup = ORM::factory('examgroup', $examgroup_id);
+        $this->content = $view;
     }
 }

@@ -92,22 +92,58 @@ class Controller_Auth extends Controller_Base {
         }
     }
 
+    private function create_user($values, $role){
+    	$config_settings = Config::instance()->load('config');
+    	
+        if ($config_settings->user_approval) {
+            $values['status'] = 0;
+        }
+        $user = ORM::factory('user');
+        $user->values($values);
+        $user->save();
+        $user->add('roles', $role);
+        
+        return $user->id;
+    }
+    
     private function register() {
         $user = ORM::factory('user');
         $config_settings = Config::instance()->load('config');
         $auto_login = true;
         $validator = $user->validator_register($this->request->post());
         if ($validator->check()) {
-            $values = $validator->as_array();
-            $values['password'] =  Auth::instance()->hash($values['password']);
+        	
+        	//first create parent's account
+        	$parent_password = rand(10000, 65000);
+            $values = array(
+               'firstname' => $this->request->post('parentname'),
+               'lastname'  => $this->request->post('lastname'),
+               'email'     => $this->request->post('email_parent'),
+               'password'  => Auth::instance()->hash($parent_password),
+            );
+            $subject = "Parent email";
+            $message = "The password is ".$parent_password;
+            
+            $role = Model_Role::from_name('Parent');
+            Email::send_mail($this->request->post('email_parent'), $subject, $message);
+            $user_id = $this->create_user($values, $role);
+           
+            $values = array(
+               'firstname' => $this->request->post('firstname'),
+               'lastname'  => $this->request->post('lastname'),
+               'email'     => $this->request->post('email'),
+               'password'  => Auth::instance()->hash($this->request->post('password')),
+               'parent_user_id' => $user_id
+            );
+            
+            $role = ORM::factory('role', $config_settings->default_role);
+
+            $user_id = $this->create_user($values, $role);
+            
             if ($config_settings->user_approval) {
-                $values['status'] = 0;
                 $auto_login = false;
             }
-            $user->values($values);
-            $user->save();
-            $role = ORM::factory('role', $config_settings->default_role);
-            $user->add('roles', $role);
+            
             if ($auto_login) {
                 Auth::instance()->login($validator['email'], $validator['password']);
                 Request::current()->redirect('home');
@@ -124,13 +160,14 @@ class Controller_Auth extends Controller_Base {
     private function form_register($submitted = false) {    	
         $action = 'auth/index';
         $form = new Stickyform($action, array(), ($submitted ? $this->_errors : array()));
-        $fields = array('email', 'email_parent', 'firstname', 'lastname', 'password', 'batch_id', 'course_id', 'agree');
+        $fields = array('email', 'email_parent', 'firstname', 'lastname', 'parentname', 'password', 'batch_id', 'course_id', 'agree');
         $form->default_data = array_fill_keys($fields, '');
         $form->posted_data = $submitted ? $this->request->post() : array();
         $form->append('Your Email', 'email', 'text')
             ->append('Parent\'s Email', 'email_parent', 'text')
             ->append('First Name', 'firstname', 'text')
             ->append('Last Name', 'lastname', 'text')
+            ->append('Parent\'s Name', 'parentname', 'text')
             ->append('Password', 'password', 'password')
             ->append('Confirm Password', 'confirm_password', 'password')
             ->append(
@@ -184,14 +221,12 @@ class Controller_Auth extends Controller_Base {
             $user->save();
             //$user->email;
             
-            Email::connect($config = NULL);
+            //Email::connect($config = NULL);
             $to = $user->email;
-            $from = 'eric@kodelearn.com';
             $subject = 'Change password';
             $message = 'Link to change your password: http://kodelearn.kp/index.php/auth/changepassword/u/'.$forgot_password_string;
-            $html = false;
-
-            Email::send($to, $from, $subject, $message, $html = false);
+            
+            Email::send_mail($to, $subject, $message);
             
             return '<div class="formMessages" style="width:300px; height:50px"><span class="fmIcon good"></span> <span class="fmText">A link to reset your password has been sent at '. $user->email.'</span><span class="clear">&nbsp;</span></div>';
             

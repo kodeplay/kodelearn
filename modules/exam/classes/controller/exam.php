@@ -160,6 +160,10 @@ class Controller_Exam extends Controller_Base {
             ->bind('filter_url', $filter_url)
             ->bind('pagination', $pagination);
         
+        Breadcrumbs::add(array(
+            'Exams', Url::site('exam')
+        ));
+            
         $this->content = $view;
     }
     
@@ -185,7 +189,7 @@ class Controller_Exam extends Controller_Base {
                     
                     $from = strtotime($from);
                     $to = strtotime($to);
-                    
+
                     $event_exam->set_values($this->request->post());
                     $event_exam->set_value('eventstart', $from);
                     $event_exam->set_value('eventend', $to);
@@ -201,10 +205,27 @@ class Controller_Exam extends Controller_Base {
         
         $form = $this->form('exam/add', $submitted);
         $event_id = 0;
+        $links = array(
+            'rooms'       => Html::anchor('/room/', 'Add Rooms', array('target' => '_blank')),
+        );
+        
+        $silder['start'] = 540;
+        $silder['end'] = 600;
+        
         $view = View::factory('exam/form')
             ->bind('form', $form)
-            ->bind('event_id', $event_id);
+            ->bind('event_id', $event_id)
+            ->bind('slider', $silder)
+            ->bind('links', $links);
         
+        Breadcrumbs::add(array(
+            'Exams', Url::site('exam')
+        ));
+            
+        Breadcrumbs::add(array(
+            'Create', Url::site('exam/add')
+        ));
+            
         $this->content = $view;
     }
 
@@ -267,6 +288,10 @@ class Controller_Exam extends Controller_Base {
             'room_id'       => $event->room_id
         );
 
+        $silder['start'] = ((($event->eventstart) - (strtotime($saved_data['date']))) / 60 );
+        $silder['end'] = ((($event->eventend) - (strtotime($saved_data['date']))) / 60 );
+        
+        
         $results = Event::get_avaliable_rooms($event->eventstart, $event->eventend, $event->id);
         
         $rooms = array();
@@ -280,10 +305,23 @@ class Controller_Exam extends Controller_Base {
         
         $form = $this->form('exam/edit/id/' . $id, $submitted, $saved_data, $rooms);
         $event_id = $exam->event_id;
+        $links = array(
+            'rooms'       => Html::anchor('/room/', 'Add Rooms', array('target' => '_blank')),
+        );
         $view = View::factory('exam/form')
             ->bind('form', $form)
-            ->bind('event_id', $event_id);
-        
+            ->bind('event_id', $event_id)
+            ->bind('links', $links)
+            ->bind('slider', $silder);
+
+        Breadcrumbs::add(array(
+            'Exams', Url::site('exam')
+        ));
+            
+        Breadcrumbs::add(array(
+            'Edit', Url::site('exam/edit/id/' . $id)
+        ));
+            
         $this->content = $view;
     }
     
@@ -319,8 +357,8 @@ class Controller_Exam extends Controller_Base {
         $form->posted_data = $submitted ? $this->request->post() : array();
         $form->append('Name', 'name', 'text');
         $form->append('Date', 'date', 'text', array('attributes' => array('class' => 'date')));
-        $form->append('From', 'from', 'text', array('attributes' => array('class' => 'time', 'size' => '4', 'style' => 'min-width: 20px;')));
-        $form->append('To', 'to', 'text', array('attributes' => array('class' => 'time', 'size' => '4', 'style' => 'min-width: 20px;')));
+        $form->append('From', 'from', 'hidden');
+        $form->append('To', 'to', 'hidden');
         $form->append('Total Marks', 'total_marks', 'text');
         $form->append('Passing Marks', 'passing_marks', 'text');
         $form->append('Reminder', 'reminder', 'hidden');

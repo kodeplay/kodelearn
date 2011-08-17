@@ -6,9 +6,15 @@
         </div><!-- pageTop -->
         
         <div class="topbar">
-            <?php echo $links['add_room']?>
-            <?php echo $links['locations']?>
-            <a onclick="$('#room').submit();" class="pageAction r alert">Delete selected...</a>
+            <?php if( Acl::instance()->is_allowed('room_delete')){?>
+                <a onclick="$('#room').submit();" class="pageAction r alert">Delete selected...</a>
+            <?php }?>
+            <?php if( Acl::instance()->is_allowed('room_create')){?>
+                <?php echo $links['add_room']?>
+            <?php }?>    
+            <?php if (Acl::instance()->has_access('location')) { ?>
+                <?php echo $links['locations']?>
+            <?php }?>
             <span class="clear">&nbsp;</span>
         </div><!-- topbar -->
         
@@ -29,7 +35,9 @@
                 <td><?php echo $room->room_number;  ?></td>
                 <td><?php echo $room->name;  ?></td>
                 <td>
-                    <p><?php echo Html::anchor('/room/edit/id/'.$room->id, 'View/Edit')?></p>
+                    <p><?php if( Acl::instance()->is_allowed('room_edit')){?>
+                        <?php echo Html::anchor('/room/edit/id/'.$room->id, 'View/Edit')?>
+                    <?php }?></p>
                 </td>
             </tr>
             <?php  } ?>

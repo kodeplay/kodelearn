@@ -14,7 +14,9 @@ class Model_Course extends ORM {
             ->rule('name', 'not_empty')
             ->rule('start_date', 'not_empty')
             ->rule('start_date', 'date')
+            ->rule('end_date', 'date')
             ->rule('end_date', 'not_empty')
+            ->rule('end_date',  'Model_Course::validate_end_date', array(':value',':start_date'))
             ->rule('access_code', 'Model_Course::code_unique', array(':value',':course'))
             ->rule('name', 'min_length', array(':value', 3))
             ->rule('description', 'min_length', array(':value', 10))
@@ -92,5 +94,69 @@ class Model_Course extends ORM {
             $course->where('id', '!=', $course_object->id);    
         $course->find();
         return ($course->id === null);
+    }
+    
+    public static function validate_end_date($end_date, $start_date){
+    	return (strtotime($end_date) > strtotime($start_date) );
+    }
+
+    /**
+     * Method to save the user to course assignments
+     * @param Model_Course $course
+     * @param Array $user_ids - Array of user_ids
+     * @return null
+     */
+    public static function assign_users($course, $user_ids) {
+        $course->remove('users');
+        if($user_ids) {
+            foreach($user_ids as $user_id){
+                $course->add('users', ORM::factory('user', $user_id));
+            }
+        }
+    }
+
+    /**
+     * Method to get the users assigned to this course
+     * if optional role_name is passed, from all users assigned to this course, 
+     * get only those that have value of $role_name  their role.
+     * @param mixed $course (int/Model_Course)
+     * @param String $role_name default = null
+     * @param Database_MySQL_Result $users
+     */
+    public static function get_users($course, $role_name=null) {
+        $course = $course instanceof Model_Course ? $course : ORM::factory('course', (int)$course);
+        if ($role_name) {
+            $role = Model_Role::from_name($role_name);
+            $users = $course->users
+                ->join('roles_users', 'INNER')
+                ->on('users.id', ' = ', 'roles_users.user_id')
+                ->where('roles_users.role_id', ' = ', $role->id)            
+                ->find_all();
+        } else {
+            $users = $course->users->find_all();
+        }
+        return $users;
+    }
+
+    /**
+     * Method to get the students assigned to this course
+     * ie from all users assigned to this course, get only those that have
+     * 'student' as their role.
+     * @param mixed $course (int/Model_Course)
+     * @param Database_MySQL_Result $users
+     */
+    public static function get_students($course) {
+        return self::get_users($course, 'student');
+    }
+
+    /**
+     * Method to get the teachers assigned to this course
+     * ie from all users assigned to this course, get only those that have
+     * 'teacher' as their role.
+     * @param mixed $course (int/Model_Course)
+     * @param Database_MySQL_Result $users
+     */
+    public static function get_teachers($course) {
+        return self::get_users($course, 'teacher');
     }
 }

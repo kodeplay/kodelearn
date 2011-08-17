@@ -94,6 +94,10 @@ class Controller_Batch extends Controller_Base
             ->bind('filter_url', $filter_url)
             ;
         
+        Breadcrumbs::add(array(
+            'Batches', Url::site('batch')
+        ));
+            
         $this->content = $view;	
     }
     
@@ -117,6 +121,14 @@ class Controller_Batch extends Controller_Base
                 }
             }
         }
+        
+        Breadcrumbs::add(array(
+            'Batches', Url::site('batch')
+        ));
+        
+        Breadcrumbs::add(array(
+            'Create', Url::site('batch/add')
+        ));
         
         $this->form('batch/add', $submitted);
         
@@ -181,6 +193,14 @@ class Controller_Batch extends Controller_Base
                 }
             }
         }
+        
+        Breadcrumbs::add(array(
+            'Batches', Url::site('batch')
+        ));
+        
+        Breadcrumbs::add(array(
+            'Edit', Url::site('batch/edit/id/'.$id )
+        ));
         
         $this->form('batch/edit/id/'.$id ,$submitted, array('name' => $batch->name, 'description' => $batch->description));
         

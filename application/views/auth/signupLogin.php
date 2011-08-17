@@ -37,6 +37,13 @@
                 </td>
             </tr>
             <tr>
+                <td class="tar"><?php echo $form_register->parentname->label(); ?></td>
+                <td>
+                    <?php echo $form_register->parentname->element(); ?>
+                    <span class="form-error"><?php echo $form_register->parentname->error(); ?></span>
+                </td>
+            </tr>
+            <tr>
                 <td class="tar"><?php echo $form_register->password->label(); ?></td>
                 <td>
                     <?php echo $form_register->password->element(); ?>

@@ -19,12 +19,11 @@ return array(
     ),
     'user_index' => array(
         'description'     => 'This is a user list page you can view the list of all users here.',
-        'title'           => 'Course', 
+        'title'           => 'Users', 
     ),
     'user_add' => array(
         'description'     => 'Create a new user here.',
-        'title'           => 'Create a new user',
-        
+        'title'           => 'Create a new user',        
     ),
     'user_edit' => array(
         'description'     => 'View/Edit here.',

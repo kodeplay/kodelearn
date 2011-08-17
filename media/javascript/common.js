@@ -103,6 +103,16 @@ KODELEARN.modules.add('filter', (function () {
 				});
 				location = url;
 			});
+			$('tr.filter td input').keypress(function(e){
+				var key;      
+			     if(window.event)
+			          key = window.event.keyCode; //IE
+			     else
+			          key = e.which; //firefox      
+
+			     return (key != 13);
+			});
+			
 	}
 	};
 	
@@ -125,5 +135,15 @@ KODELEARN.modules.add('toggle_buttons', (function () {
 	
 })());
 
+KODELEARN.getCourseStudents = function(courseId, container){
+	
+	$('#' + container).html('<p class="tip">Please wait... Loading Course Students</p>');
+	
+    $.post(KODELEARN.config.base_url + "course/get_students",  {'course_id' : courseId},
+            function(data){
+    			$('#' + container).html(data.html);
+            }, "json");
 
+	
+};
 
