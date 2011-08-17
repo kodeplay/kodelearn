@@ -8,7 +8,7 @@ class Controller_Location extends Controller_Base {
 
     
     public function action_index(){
-        
+        $msg = $this->request->param('msg');
         
         if($this->request->param('sort')){
             $sort = $this->request->param('sort');
@@ -92,6 +92,7 @@ class Controller_Location extends Controller_Base {
                     ->bind('pagination', $pagination)
                     ->bind('filter_name', $filter_name)
                     ->bind('filter_url', $filter_url)
+                    ->bind('msg', $msg)
                     ;
         
         Breadcrumbs::add(array(
@@ -275,11 +276,22 @@ class Controller_Location extends Controller_Base {
     
     public function action_delete(){
         if($this->request->method() === 'POST' && $this->request->post('selected')){
+            $msg = 0;
             foreach($this->request->post('selected') as $location_id){
-                ORM::factory('location', $location_id)->delete();
+                $room = ORM::factory('room');
+                $room->where('location_id', '=', $location_id);
+                $rooms = $room->find();
+                if($rooms == ""){
+                    ORM::factory('location', $location_id)->delete();
+                     
+                } else {
+                    $msg++ ;
+                    
+                }
+                
             }
         }
-        Request::current()->redirect('location');
+        Request::current()->redirect('location/index/msg/'.$msg);
     }
     
 }
