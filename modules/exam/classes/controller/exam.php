@@ -245,7 +245,7 @@ class Controller_Exam extends Controller_Base {
                 $validator = $exam->validator($this->request->post());
                 $validator->bind(':to', $this->request->post('to'));
                 if ($validator->check()) {
-                    $event_exam = Event::factory('exam');
+                    $event_exam = Event_Abstract::factory('exam');
 
                     $from = $this->request->post('date') . ' ' . $this->request->post('from');
                     if(!(strtotime($from)))
@@ -292,7 +292,7 @@ class Controller_Exam extends Controller_Base {
         $silder['end'] = ((($event->eventend) - (strtotime($saved_data['date']))) / 60 );
         
         
-        $results = Event::get_avaliable_rooms($event->eventstart, $event->eventend, $event->id);
+        $results = Event_Abstract::get_avaliable_rooms($event->eventstart, $event->eventend, $event->id);
         
         $rooms = array();
         foreach($results as $room){
@@ -387,7 +387,7 @@ class Controller_Exam extends Controller_Base {
         
         $event_id = $this->request->post('event_id');
         
-        $results = Event::get_avaliable_rooms($from, $to, $event_id);
+        $results = Event_Abstract::get_avaliable_rooms($from, $to, $event_id);
         
         $rooms = array();
         foreach($results as $room){
