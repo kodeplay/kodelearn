@@ -10,3 +10,6 @@
 [submodule "modules/breadcrumbs"]
 	path = modules/breadcrumbs
 	url = git@github.com:kodeplay/breadcrumbs.git
+[submodule "modules/calendar"]
+	path = modules/calendar
+	url = git@vineet-desktop.local:/home/git/repos/kohana_calendar.git
