@@ -134,5 +134,9 @@ return array(
         'description'     => 'You can view and edit your account settings here.',
         'title'           => 'My Account',
     ),
+    'attendence_index' => array(
+        'description'     => 'You can view and edit your attendence here.',
+        'title'           => 'Attendence',
+    ),
     
 );
