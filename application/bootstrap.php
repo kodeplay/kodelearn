@@ -117,6 +117,7 @@ Kohana::modules(array(
     'exam'          => MODPATH.'exam',
     'event'         => MODPATH.'event',
     'calendar'      => MODPATH.'calendar', // Kohana Calendar
+    'lecture'       => MODPATH.'lecture',    
 ));
 
 /**
