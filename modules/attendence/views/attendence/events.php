@@ -1,23 +1,27 @@
   
-  <?php if($exams && (count($exams)>0)){?>
+  <?php if($lecture_exam_data_all){?>
   <table class="vm10 datatable fullwidth">
         <tr>
             <th>
-                Name
+                Event
             </th>
             <th>
-                Start
+                Start Time
             </th>
             <th>
-                End
+                End Time
+            </th>
+            <th>
+                Action
             </th>
         </tr>
         
-            <?php foreach($exams as $exam){ ?>
+            <?php foreach($lecture_exam_data_all as $lecture_exam_data){ ?>
                 <tr>
-                    <td><?php echo $exam->name; ?> (<?php echo $exam->eventtype; ?>)</td>
-                    <td><?php echo date('d M Y h:i A', $exam->eventstart) ?></td>
-                    <td><?php echo date('d M Y h:i A', $exam->eventend) ?></td>
+                    <td><?php echo $lecture_exam_data['name']; ?> (<?php echo $lecture_exam_data['eventtype']; ?>)</td>
+                    <td><?php echo date('h:i A', $lecture_exam_data['eventstart']) ?></td>
+                    <td><?php echo date('h:i A', $lecture_exam_data['eventend']) ?></td>
+                    <td><a href="<?php echo 'attendence/add/id/'.$lecture_exam_data['id'].'/type/'.$lecture_exam_data['eventtype']; ?>">Add</a></td>
                 </tr>
                 
             <?php }?>

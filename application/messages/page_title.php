@@ -135,8 +135,12 @@ return array(
         'title'           => 'My Account',
     ),
     'attendence_index' => array(
-        'description'     => 'You can view and edit your attendence here.',
+        'description'     => 'You can view and edit attendence here.',
         'title'           => 'Attendence',
+    ),
+    'attendence_add' => array(
+        'description'     => 'You can add/edit attendence here.',
+        'title'           => 'Attendence for {event}',
     ),
     
 );
