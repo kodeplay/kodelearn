@@ -51,7 +51,7 @@
                                 <td></td>
                             </tr>
                             <tr>
-                                <td><input type="checkbox" name="days[monday]"/></td>
+                                <td><input type="checkbox" name="days[Monday]" <?php echo (isset($days['Monday'])) ? 'checked="checked"' : ''?> /></td>
                                 <td>Monday</td>
                                 <td><input type="hidden" name="monday[from]" id="monday_slider_from"/>
                                     <input type="hidden" name="monday[to]" id="monday_slider_to"/>
@@ -59,7 +59,7 @@
                                     <div id="monday_slider"></div></td>
                             </tr>
                             <tr>
-                                <td><input type="checkbox" name="days[tuesday]"/></td>
+                                <td><input type="checkbox" name="days[Tuesday]" <?php echo (isset($days['Tuesday'])) ? 'checked="checked"' : ''?> /></td>
                                 <td>Tuesday</td>
                                 <td><input type="hidden" name="tuesday[from]" id="tuesday_slider_from"/>
                                     <input type="hidden" name="tuesday[to]" id="tuesday_slider_to"/>
@@ -67,7 +67,7 @@
                                     <div id="tuesday_slider"></div></td>
                             </tr>
                             <tr>
-                                <td><input type="checkbox" name="days[wednesday]"/></td>
+                                <td><input type="checkbox" name="days[Wednesday]" <?php echo (isset($days['Wednesday'])) ? 'checked="checked"' : ''?> /></td>
                                 <td>Wednesday</td>
                                 <td><input type="hidden" name="wednesday[from]" id="wednesday_slider_from"/>
                                     <input type="hidden" name="wednesday[to]" id="wednesday_slider_to"/>
@@ -75,7 +75,7 @@
                                     <div id="wednesday_slider"></div></td>
                             </tr>
                             <tr>
-                                <td><input type="checkbox" name="days[thursday]"/></td>
+                                <td><input type="checkbox" name="days[Thursday]" <?php echo (isset($days['Thursday'])) ? 'checked="checked"' : ''?> /></td>
                                 <td>Thursday</td>
                                 <td><input type="hidden" name="thursday[from]" id="thursday_slider_from"/>
                                     <input type="hidden" name="thursday[to]" id="thursday_slider_to"/>
@@ -83,7 +83,7 @@
                                     <div id="thursday_slider"></div></td>
                             </tr>
                             <tr>
-                                <td><input type="checkbox" name="days[friday]"/></td>
+                                <td><input type="checkbox" name="days[Friday]" <?php echo (isset($days['Friday'])) ? 'checked="checked"' : ''?> /></td>
                                 <td>Friday</td>
                                 <td><input type="hidden" name="friday[from]" id="friday_slider_from"/>
                                     <input type="hidden" name="friday[to]" id="friday_slider_to"/>
@@ -91,7 +91,7 @@
                                     <div id="friday_slider"></div></td>
                             </tr>
                             <tr>
-                                <td><input type="checkbox" name="days[saturday]"/></td>
+                                <td><input type="checkbox" name="days[Saturday]" <?php echo (isset($days['Saturday'])) ? 'checked="checked"' : ''?> /></td>
                                 <td>Saturday</td>
                                 <td><input type="hidden" name="saturday[from]" id="saturday_slider_from"/>
                                     <input type="hidden" name="saturday[to]" id="saturday_slider_to"/>
@@ -99,7 +99,7 @@
                                     <div id="saturday_slider"></div></td>
                             </tr>
                             <tr>
-                                <td><input type="checkbox" name="days[sunday]"/></td>
+                                <td><input type="checkbox" name="days[Sunday]" <?php echo (isset($days['Sunday'])) ? 'checked="checked"' : ''?> /></td>
                                 <td>Sunday</td>
                                 <td><input type="hidden" name="sunday[from]" id="sunday_slider_from"/>
                                     <input type="hidden" name="sunday[to]" id="sunday_slider_to"/>
@@ -107,9 +107,7 @@
                                     <div id="sunday_slider"></div></td>
                             </tr>
                         </table>
-                        
-                        <span id="once_slider_time"></span><br/><br/>
-                        <div id="once_slider"></div>
+                        <span class="form-error"><?php echo (isset($errors['days'])) ? $errors['days'] : ''; ?></span>
                     </div>
                 
                 </td>
@@ -141,15 +139,20 @@ KODELEARN.modules.add('create_lecture' , (function () {
         sliders: ['once_slider','monday_slider','tuesday_slider','wednesday_slider','thursday_slider','friday_slider','saturday_slider','sunday_slider'],
         
         init: function () { 
+            <?php foreach($slider as $key=>$value){ ?>
+        
+	            $("#" + "<?php echo $key ?>").slider({
+	                range: true,
+	                min: 0,
+	                max: 1439,
+	                step: 10,
+	                values: [<?php echo $value['from']?>, <?php echo $value['to']?>],
+	                slide: this.slideTime
+	            });
+            <?php }?>
+        
            for(var i = 0; i < this.sliders.length; i++){
-        	   $("#" + this.sliders[i]).slider({
-                   range: true,
-                   min: 0,
-                   max: 1439,
-                   step: 10,
-                   values: [300, 540],
-                   slide: this.slideTime
-               });
+        	   
            }
            for(var i = 0; i < this.sliders.length; i++){
         	    var event = {target: document.getElementById(this.sliders[i])};

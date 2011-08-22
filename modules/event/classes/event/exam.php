@@ -26,7 +26,14 @@ class Event_Exam extends Event_Abstract {
 
         $exam = ORM::factory('exam', $id);
 
-        parent::update($exam->event_id);
+        $event = new Event_Abstract();
+        
+        $event->set_eventtype('exam');
+
+        $event->set_eventstart($this->_values['eventstart']);
+        $event->set_eventend($this->_values['eventend']);
+        $event->set_room_id($this->_values['room_id']);
+        $event->update($exam->event_id);
 
         $exam->values($this->_values);
 
