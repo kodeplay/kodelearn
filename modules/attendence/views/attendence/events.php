@@ -21,7 +21,7 @@
                     <td><?php echo $lecture_exam_data['name']; ?> (<?php echo $lecture_exam_data['eventtype']; ?>)</td>
                     <td><?php echo date('h:i A', $lecture_exam_data['eventstart']) ?></td>
                     <td><?php echo date('h:i A', $lecture_exam_data['eventend']) ?></td>
-                    <td><a href="<?php echo 'attendence/add/id/'.$lecture_exam_data['id'].'/type/'.$lecture_exam_data['eventtype']; ?>">Add</a></td>
+                    <td><a href="<?php echo 'attendence/add/id/'.$lecture_exam_data['id'].'/type/'.$lecture_exam_data['eventtype'].'/event_id/'.$lecture_exam_data['event_id']; ?>">Add</a></td>
                 </tr>
                 
             <?php }?>
