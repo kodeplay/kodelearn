@@ -67,8 +67,8 @@ class Controller_Base extends Controller_Template {
         $title   = 'Kode Learn';
         $styles = array(
             'media/css/reset.css' => 'screen',
-            'media/css/components.css' => 'screen',
             'media/css/kodelearn.css' => 'screen',
+            'media/css/components.css' => 'screen',
             'media/css/jquery-ui-1.8.14.custom.css' => 'screen'
         );
         $scripts = array(

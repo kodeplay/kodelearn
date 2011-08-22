@@ -134,5 +134,14 @@ return array(
         'description'     => 'You can view and edit your account settings here.',
         'title'           => 'My Account',
     ),
+    'lecture_index' => array(
+        'description'     => 'This is the Lectures page you can view the list of all Lectures here.',
+        'title'           => 'Lectures',
+    ),
+    
+    'lecture_add' => array(
+        'description'     => 'You can Create a new lecture here.',
+        'title'           => 'Create a Lecture',
+    ),
     
 );

@@ -1,11 +1,53 @@
 <?php defined('SYSPATH') or die('No direct access allowed.');
 
-abstract class Event_Abstract {
+class Event_Abstract {
     
     protected $_values;
     
-    protected $_type;
-
+    private $_eventtype;
+    
+    private $_eventstart;
+    
+    private $_eventend;
+    
+    private $_room_id;
+    
+    public function get_room_id(){
+      return $this->_room_id;
+    }
+    
+    public function set_room_id($value){
+      $this->_room_id = $value;
+    }
+       
+     
+    public function get_eventend(){
+      return $this->_eventend;
+    }
+    
+    public function set_eventend($value){
+      $this->_eventend = $value;
+    }
+       
+     
+    public function get_eventstart(){
+      return $this->_eventstart;
+    }
+    
+    public function set_eventstart($value){
+      $this->_eventstart = $value;
+    }
+       
+     
+    public function get_eventtype(){
+      return $this->_eventtype;
+    }
+    
+    public function set_eventtype($value){
+      $this->_eventtype = $value;
+    }
+    
+    
     public static function factory($type){
         $file = MODPATH . 'event/classes/event/' . $type . '.php';
         
@@ -31,11 +73,15 @@ abstract class Event_Abstract {
     
     public function add(){
         
-        $this->set_value('eventtype', $this->_type);
-        
         $event = ORM::factory('event');
         
-        $event->values($this->_values);
+        $event->eventtype = $this->_eventtype;
+        
+        $event->eventstart = $this->_eventstart;
+        
+        $event->eventend = $this->_eventend;
+        
+        $event->room_id = $this->_room_id;
         
         $event->save();
         

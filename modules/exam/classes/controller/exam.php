@@ -177,7 +177,7 @@ class Controller_Exam extends Controller_Base {
                 $validator = $exam->validator($this->request->post());
                 $validator->bind(':to', $this->request->post('to'));
                 if ($validator->check()) {
-                    $event_exam = Event::factory('exam');
+                    $event_exam = Event_Abstract::factory('exam');
 
                     $from = $this->request->post('date') . ' ' . $this->request->post('from');
                     if(!(strtotime($from)))
