@@ -138,10 +138,17 @@ return array(
         'description'     => 'This is the Lectures page you can view the list of all Lectures here.',
         'title'           => 'Lectures',
     ),
-    
     'lecture_add' => array(
         'description'     => 'You can Create a new lecture here.',
         'title'           => 'Create a Lecture',
+    ),
+    'attendence_index' => array(
+        'description'     => 'You can view and edit attendence here.',
+        'title'           => 'Attendence',
+    ),
+    'attendence_add' => array(
+        'description'     => 'You can add/edit attendence here.',
+        'title'           => 'Attendence for {event}',
     ),
     
 );

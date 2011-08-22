@@ -15,6 +15,7 @@
 	8.		Signup form styles
 	9.		Role actions permissions
 	10.		News feed
+        11.             Calendar styling
 	END.	Developer styles
 	
    ............................. */
@@ -221,6 +222,9 @@ a{ color: #427693; }
 	width: 772px;
 }
 
+.pagecontent.one_column { 
+    width: 99%;
+}
 
 .sidebar {
 	width: 175px;
@@ -783,6 +787,17 @@ select {	width: 210px;  }
 #breadcrumbs a:hover {
 	border-bottom: 1px dotted #948b85;
 }
+
+/* ..........................
+	Calendar styling
+   ........................ */
+table.calendar { width: 100%; }
+table.calendar caption { background: #e1e1e1; height: 40px; padding-top: 10px; font-size: 18px; color: #4c3d34; }
+table.calendar th { height: 30px; padding-top:10px; background: #eae3e0; border: 1px solid #D7C2B5; }
+table.calendar td { width: 14%; height: 80px; cursor: pointer; }
+table.calendar td.today { background: #eae3e0; }
+table.calendar td:hover { background: #f1edd3; }
+
 
 
 /* ..........................

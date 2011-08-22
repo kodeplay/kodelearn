@@ -111,12 +111,14 @@ Kohana::modules(array(
     'playground'    => MODPATH.'playground',  // HTML playground for nikhil
     'sort'          => MODPATH.'sort', //for sorting
     'dynamicmenu'   => MODPATH.'dynamicmenu', // Dynamic menu model by kodeplay
-    'pagination'    =>  MODPATH.'pagination', // for server side pagination
+    'pagination'    => MODPATH.'pagination', // for server side pagination
     'cacheimage'    => MODPATH.'cacheimage', // for Image Caching
     'email'         => MODPATH.'email', // for mailling
     'exam'          => MODPATH.'exam',
-    'lecture'       => MODPATH.'lecture',
-    'event'         => MODPATH.'event'
+    'event'         => MODPATH.'event',
+    'calendar'      => MODPATH.'calendar', // Kohana Calendar
+    'lecture'       => MODPATH.'lecture',    
+    'attendence'    => MODPATH.'attendence'
 ));
 
 /**

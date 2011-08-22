@@ -21,10 +21,11 @@ class Controller_Base extends Controller_Template {
         // create a new Config reader and attach to the Config instance
         $config = Config::instance();
         $config->attach(new Config_Database());
-        if (!$this->request->is_ajax()) {
-            $this->view = View::factory($this->template);
-        } else {
+        $this->template_filter();
+        if ($this->request->is_ajax() || !$this->request->is_initial()) {
             $this->view = View::factory('template/content');
+        } else {
+            $this->view = View::factory($this->template);
         }
         Breadcrumbs::add(array('Home', Url::site('home')));
         return parent::before();
@@ -44,7 +45,6 @@ class Controller_Base extends Controller_Template {
      */
     protected function auth_filter() {
         $logged_in = Auth::instance()->logged_in();        
-        $this->template = !$logged_in ? 'template/template' : 'template/logged_template';
         $controller = $this->request->controller();
         $action = $this->request->action();
         if (!$logged_in && $controller !== 'auth') {
@@ -62,38 +62,50 @@ class Controller_Base extends Controller_Template {
             Request::current()->redirect('error/access_denied');
         }
     }
+
+    /**
+     * Method to decide and set the template that will be used.
+     * The decision will be taken depending upon whether the user is logged in 
+     * or not
+     */
+    protected function template_filter() {
+        $logged_in = Auth::instance()->logged_in();        
+        $this->template = !$logged_in ? 'template/template' : 'template/logged_template';
+    }
     
     public function after() {
-        $title   = 'Kode Learn';
-        $styles = array(
-            'media/css/reset.css' => 'screen',
-            'media/css/kodelearn.css' => 'screen',
-            'media/css/components.css' => 'screen',
-            'media/css/jquery-ui-1.8.14.custom.css' => 'screen'
-        );
-        $scripts = array(
-            'media/javascript/jquery-1.6.2.min.js',
-            'media/javascript/common.js',
-            'media/javascript/ajaxupload.js',
-            'media/javascript/jquery-ui-1.8.14.custom.min.js',
-            'media/javascript/jquery-ui-timepicker-addon.js',
-            'media/javascript/kodelearnUI.js'
-        );
         $controller = $this->request->controller();
         $action = $this->request->action();
         $page_description = Kohana::message('page_title', $controller.'_'.$action.'.description');
         $page_title = Kohana::message('page_title', $controller.'_'.$action.'.title');
-
-        $breadcrumbs = Breadcrumbs::render();
-        
+        $breadcrumbs = Breadcrumbs::render();        
         $this->content = str_replace('replace_here_page_description', $page_description, $this->content);
         $this->content = str_replace('replace_here_page_title', $page_title, $this->content);
-        $this->view->set('content', $this->content);
-        $this->view->set('styles', $styles);
-        $this->view->set('scripts', $scripts);
-        $this->view->set('breadcrumbs', $breadcrumbs);            
-        $this->menu_init();
-        $this->response->body($this->view);
+        if ($this->request->is_ajax() || !$this->request->is_initial()) {
+            $this->response->body($this->content);
+        } else {
+            $title   = 'Kode Learn';
+            $styles = array(
+                'media/css/reset.css' => 'screen',
+                'media/css/components.css' => 'screen',
+                'media/css/kodelearn.css' => 'screen',
+                'media/css/jquery-ui-1.8.14.custom.css' => 'screen'
+            );
+            $scripts = array(
+                'media/javascript/jquery-1.6.2.min.js',
+                'media/javascript/common.js',
+                'media/javascript/ajaxupload.js',
+                'media/javascript/jquery-ui-1.8.14.custom.min.js',
+                'media/javascript/jquery-ui-timepicker-addon.js',
+                'media/javascript/kodelearnUI.js'
+            );
+            $this->view->set('content', $this->content);
+            $this->view->set('styles', $styles);
+            $this->view->set('scripts', $scripts);
+            $this->view->set('breadcrumbs', $breadcrumbs);            
+            $this->menu_init();
+            $this->response->body($this->view);
+        }
     }
 
     protected function menu_init() {

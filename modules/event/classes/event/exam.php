@@ -1,7 +1,6 @@
 <?php defined('SYSPATH') or die('No direct access allowed.');
 
 class Event_Exam extends Event_Abstract {
-    
     public function add(){
         
     	$event = new Event_Abstract();
@@ -14,23 +13,23 @@ class Event_Exam extends Event_Abstract {
         $event_id = $event->add();
        
         $this->set_value('event_id', $event_id);
-        
+
         $exam = ORM::factory('exam');
-        
+
         $exam->values($this->_values);
-        
+
         $exam->save();
-        
+
     }
-    
+
     public function update($id){
-        
+
         $exam = ORM::factory('exam', $id);
-        
+
         parent::update($exam->event_id);
-        
+
         $exam->values($this->_values);
-        
+
         $exam->save();
     }
 }
