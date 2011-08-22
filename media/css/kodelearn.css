@@ -41,8 +41,14 @@ body {
 	border-bottom-right-radius: 8px;
 	background: #fff;
 	margin-bottom: 40px;
+	height: auto; 
+	overflow: hidden;
 }
+
 a{ color: #427693; }
+
+.bdTop {	border-top: 1px solid #4c3d34;	}
+.bdBottom {	border-bottom: 1px solid #4c3d34;	}
 
 
 /* .......................
@@ -412,6 +418,7 @@ select {	width: 210px;  }
 	background: #f4dcdc;
 	border: 1px solid #c00000;
 }
+tr.bad { background: #f4dcdc; }
 
 .formMessages.w90 { width: 90%; }
 
@@ -798,16 +805,25 @@ table.calendar td { width: 14%; height: 80px; cursor: pointer; }
 table.calendar td.today { background: #eae3e0; }
 table.calendar td:hover { background: #f1edd3; }
 
-
+/* ..........................
+	Attendance
+   ........................ */
+.attendanceBadge {
+	font-weight:bold;
+}
+.attendanceBadge.absent {
+	color:#c00000;
+}
+.attendanceBadge.present {
+	color: #68751a;
+}
 
 /* ..........................
 	Developer section
    ........................ */
 
 .buttons { height: 15px; width: 98%; padding:25px 0 15px; text-align: right; }
-/* TIP: Add text align rules ONLY if you are sure that the selector will have that value for text align in ALL instances. Prefer using the class "tar" defined in components.css in other cases.*/
 #sbName { margin: 6px; }
-.container { height: auto; overflow: hidden; }
 #upcoming_exams li {
     font-size: 15px;
     margin-bottom: 20px;
@@ -816,9 +832,4 @@ table.calendar td:hover { background: #f1edd3; }
 #upcoming_exams li ul {
 	margin-top: 10px;
 }
-
-/** ......... error row ............ */
-tr.bad { background: #f4dcdc; }
-
 #examresult-edit-form input[type="text"] { width: 30px; }
-

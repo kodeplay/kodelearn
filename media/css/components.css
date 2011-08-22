@@ -6,7 +6,7 @@
 
 .l {	float: left;	}
 .r {	float: right;	}
-.dib {	display: inline-block;	}
+.dib {	display: inline-block;	zoom: 1; }
 .db {	display: block; }
 .di {	display: inline; }
 .hidden {	display: none; }
