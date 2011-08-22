@@ -114,8 +114,14 @@ class Event_Abstract {
         
         $event = ORM::factory('event', $id);
         
-        $event->values($this->_values);
+        $event->eventtype = $this->_eventtype;
         
+        $event->eventstart = $this->_eventstart;
+        
+        $event->eventend = $this->_eventend;
+        
+        $event->room_id = $this->_room_id;
+                
         $event->save();
         
     }

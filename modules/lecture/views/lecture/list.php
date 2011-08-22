@@ -41,7 +41,7 @@
                     <?php }?>
                 </td>
                 <td>
-                    <p><a href="#">View/ Edit</a></p>
+                    <p><?php echo Html::anchor('/lecture/edit/id/' . $lecture->id, 'View/Edit')?></p>
                 </td>
             </tr>
            <?php } ?>

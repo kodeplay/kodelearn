@@ -83,56 +83,59 @@ class Controller_Lecture extends Controller_Base {
         
         if($this->request->method() === 'POST' && $this->request->post()){
             if (Arr::get($this->request->post(), 'save') !== null){
-                	
+                
+            	$data = Stickyform::ungroup_params(($this->request->post()));
+            	
                 $submitted = true;
-                $lecture = ORM::factory('lecture');
-                $data = Stickyform::ungroup_params(($this->request->post()));
-                $validator = $lecture->validator($data);
-                if($this->request->post('type') == 'once'){
-                    $validator->rule('once_date', 'not_empty')
-                              ->rule('once_date', 'date');
-                } else {
-                	$validator->rule('repeat_from', 'not_empty')
-                              ->rule('repeat_from', 'date')
-                              ->rule('repeat_to', 'not_empty')
-                              ->rule('repeat_to', 'date')
-                              ->rule('repeat_from', 'Model_Lecture::date_check', array(':value',$data['repeat_to']));
-                }
-                
-                if($this->request->post('type') == 'once'){
-                    $data['when'] = '';
-                    $data['start_date'] = strtotime($data['once_date']) + ($data['once_from'] * 60);
-                    $data['end_date'] = strtotime($data['once_date']) + ($data['once_to'] * 60);
-                    
-                } else {
-                	$date_range = $this->request->post('repeat');
-                    $data['start_date'] = strtotime($date_range['from']);
-                    $data['end_date'] = strtotime($date_range['to']) ;
-                	
-                	$days = array();
-                	foreach($this->request->post('days') as $day=>$value){
-                		$time = $this->request->post($day);
-                		$days[$day] = $time['from'] . ':' . $time['to'];
-                	}
-                	
-                    $data['when'] = serialize($days);
-                }
-                
-                $event_lecture = new Event_Lecture();
-                $event_lecture->set_values($data);
-                $event_lecture->add();
-                Request::current()->redirect('lecture');
-                exit;
-                
-            } else {
-                $this->_errors = $validator->errors('lecture');
+                if ($this->validate($data)) {
+	                if($this->request->post('type') == 'once'){
+	                    $data['when'] = '';
+	                    $data['start_date'] = strtotime($data['once_date']) + ($data['once_from'] * 60);
+	                    $data['end_date'] = strtotime($data['once_date']) + ($data['once_to'] * 60);
+	                    
+	                } else {
+	                	$date_range = $this->request->post('repeat');
+	                    $data['start_date'] = strtotime($date_range['from']);
+	                    $data['end_date'] = strtotime($date_range['to']) ;
+	                	
+	                	$days = array();
+	                	foreach($this->request->post('days') as $day=>$value){
+	                		$time = $this->request->post(strtolower($day));
+	                		$days[$day] = $time['from'] . ':' . $time['to'];
+	                	}
+	                	
+	                    $data['when'] = serialize($days);
+	                }
+	                
+	                $event_lecture = new Event_Lecture();
+	                $event_lecture->set_values(array_merge($this->request->post(), $data));
+	                $event_lecture->add();
+	                Request::current()->redirect('lecture');
+	                exit;
+                } 
             }
         }
         
         $form = $this->form('lecture/add', $submitted);
 
+        $days = array();
+        
+        $slider = array(
+            'once_slider' => array('from' => 600, 'to' => 800),
+            'monday_slider' => array('from' => 600, 'to' => 800),
+            'tuesday_slider' => array('from' => 600, 'to' => 800),
+            'wednesday_slider' => array('from' => 600, 'to' => 800),
+            'thursday_slider' => array('from' => 600, 'to' => 800),
+            'friday_slider' => array('from' => 600, 'to' => 800),
+            'saturday_slider' => array('from' => 600, 'to' => 800),
+            'sunday_slider' => array('from' => 600, 'to' => 800)
+        );
+        
         $view = View::factory('lecture/form')
-            ->bind('form', $form);
+            ->bind('form', $form)
+            ->bind('errors', $this->_errors)
+            ->bind('slider', $slider)
+            ->bind('days', $days);
         
         Breadcrumbs::add(array(
             'Lectures', Url::site('lecture')
@@ -144,6 +147,33 @@ class Controller_Lecture extends Controller_Base {
             
         $this->content = $view;
     	
+    }
+    
+    private function validate($data){
+    	$lecture = ORM::factory('lecture');
+        $validator = $lecture->validator($data);
+        if($this->request->post('type') == 'once'){
+            $validator->rule('once_date', 'not_empty')
+                      ->rule('once_date', 'date');
+        } else {
+            $validator->rule('repeat_from', 'not_empty')
+                      ->rule('repeat_from', 'date')
+                      ->rule('repeat_to', 'not_empty')
+                      ->rule('repeat_to', 'date')
+                      ->rule('repeat_from', 'Model_Lecture::date_check', array(':value',$data['repeat_to']));
+        }
+        
+        if($validator->check()){
+        	if($this->request->post('type') == 'repeat' AND (!$this->request->post('days'))){
+        		$this->_errors = array('days' => 'Please select atleast one day');
+        		return false;
+        	} 
+            return true;	
+        } else {
+            $this->_errors = $validator->errors('lecture');
+            return false;
+        }
+        
     }
 
     private function form($action, $submitted = false, $saved_data = array()){
@@ -187,5 +217,116 @@ class Controller_Lecture extends Controller_Base {
         
         return $form;
         
+    }
+    
+    public function action_edit(){
+    	
+    	$id = $this->request->param('id');
+    	if(!$id)
+    	   Request::current()->redirect('lecture');
+        
+        $lecture = ORM::factory('lecture', $id);
+        $submitted = FALSE;
+        
+        if($this->request->method() === 'POST' && $this->request->post()){
+            if (Arr::get($this->request->post(), 'save') !== null){
+                
+                $data = Stickyform::ungroup_params(($this->request->post()));
+                
+                $submitted = true;
+                if ($this->validate($data)) {
+                    if($this->request->post('type') == 'once'){
+                        $data['when'] = '';
+                        $data['start_date'] = strtotime($data['once_date']) + ($data['once_from'] * 60);
+                        $data['end_date'] = strtotime($data['once_date']) + ($data['once_to'] * 60);
+                        
+                    } else {
+                        $date_range = $this->request->post('repeat');
+                        $data['start_date'] = strtotime($date_range['from']);
+                        $data['end_date'] = strtotime($date_range['to']) ;
+                        
+                        $days = array();
+                        foreach($this->request->post('days') as $day=>$value){
+                            $time = $this->request->post(strtolower($day));
+                            $days[$day] = $time['from'] . ':' . $time['to'];
+                        }
+                        
+                        $data['when'] = serialize($days);
+                    }
+                    
+                    $event_lecture = new Event_Lecture();
+                    $event_lecture->set_values(array_merge($this->request->post(), $data));
+                    $event_lecture->update($id);
+                    Request::current()->redirect('lecture');
+                    exit;
+                } 
+            }
+        }
+        
+        $slider = array(
+            'once_slider' => array('from' => 600, 'to' => 800),
+            'monday_slider' => array('from' => 600, 'to' => 800),
+            'tuesday_slider' => array('from' => 600, 'to' => 800),
+            'wednesday_slider' => array('from' => 600, 'to' => 800),
+            'thursday_slider' => array('from' => 600, 'to' => 800),
+            'friday_slider' => array('from' => 600, 'to' => 800),
+            'saturday_slider' => array('from' => 600, 'to' => 800),
+            'sunday_slider' => array('from' => 600, 'to' => 800)
+        );
+        
+        $saved_data = array(
+            'name'          => $lecture->name,
+            'user_id'       => $lecture->user_id,
+            'course_id'     => $lecture->course_id,
+            'room_id'       => $lecture->room_id,
+            'type'          => $lecture->type
+        );
+        
+        if($lecture->type == 'once'){
+	        $saved_data = array_merge(array(
+	            'once_date'     => date('Y-m-d', $lecture->start_date),
+	            'repeat_from'   => '',
+	            'repeat_to'     => '',
+	        ) , $saved_data);
+	        $days = array();
+	        
+	        $saved_slider = array('once_slider' => array(
+	           'from'  => ($lecture->start_date - strtotime(date('Y-m-d', $lecture->start_date))) / 60,
+	           'to'    => ($lecture->end_date - strtotime(date('Y-m-d', $lecture->end_date))) / 60
+	        ));
+        } else {
+        	$saved_data = array_merge(array(
+                'once_date'     => '',
+                'repeat_from'   => date('Y-m-d', $lecture->start_date),
+                'repeat_to'     => date('Y-m-d', $lecture->end_date),
+            ) , $saved_data);
+            
+            $days = unserialize($lecture->when);
+            
+            $saved_slider = array();
+            foreach($days as $day=>$time){
+            	$range = explode(':', $time);
+            	$saved_slider[strtolower($day) . '_slider'] = array('from' => $range[0], 'to' => $range[1] );
+            }
+        }
+        
+        $form = $this->form('lecture/edit/id/' . $id, $submitted, $saved_data);
+
+        $slider = array_merge($slider, $saved_slider);
+        
+        $view = View::factory('lecture/form')
+            ->bind('form', $form)
+            ->bind('slider', $slider)
+            ->bind('days', $days);
+        
+        Breadcrumbs::add(array(
+            'Lectures', Url::site('lecture')
+        ));
+            
+        Breadcrumbs::add(array(
+            'Edit', Url::site('lecture/edit/id/' . $id)
+        ));
+            
+        $this->content = $view;        
     }
 }
