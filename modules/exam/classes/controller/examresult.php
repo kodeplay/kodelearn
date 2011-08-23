@@ -191,11 +191,11 @@ class Controller_Examresult extends Controller_Base {
         $post_data = $post_data === null ? array() : $post_data;
         foreach ($students as $user_id=>$name) {
             $exam_marks = $default_exam_marks[$user_id];
-            $saved_marks = $examresults[$user_id];
+            $saved_marks = Arr::get($examresults, $user_id, array());
             foreach ($exams as $exam) {
                 $exam_id = $exam->id;
                 // posted value if present else saved value
-                $marks = isset($post_data[$exam_id][$user_id]) ? $post_data[$exam_id][$user_id] : $saved_marks[$exam_id];
+                $marks = isset($post_data[$exam_id][$user_id]) ? $post_data[$exam_id][$user_id] : Arr::get($saved_marks, $exam_id, 0);
                 $exam_marks[$exam_id]['marks'] = $marks;
             }
             $results[] = array(

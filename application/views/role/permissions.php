@@ -98,7 +98,7 @@ KODELEARN.modules.add('acl', (function () {
             $(".saveAcl").click(function () {
                 $("form#acl-form").submit();
             });        
-        },
+        }
     }
 })());
 </script>

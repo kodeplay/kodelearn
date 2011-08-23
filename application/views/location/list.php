@@ -17,7 +17,9 @@
 			<?php }?>
 			<span class="clear">&nbsp;</span>
 		</div><!-- topbar -->
-		
+		<?php if($msg > 0){?>
+            <div class="formMessages"><span class="fmIcon bad"></span> <span class="fmText">Location assigned to some room(s)</span><span class="clear">&nbsp;</span></div>
+        <?php }?>
 		<form name="location" id="location" method="POST" action="<?php echo $links['delete'] ?>">
 		
     		<table class="vm10 datatable fullwidth">
