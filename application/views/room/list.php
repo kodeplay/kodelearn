@@ -17,7 +17,9 @@
             <?php }?>
             <span class="clear">&nbsp;</span>
         </div><!-- topbar -->
-        
+         <?php if($msg > 0){?>
+            <div class="formMessages"><span class="fmIcon bad"></span> <span class="fmText">Room assigned to some event(s)</span><span class="clear">&nbsp;</span></div>
+        <?php }?>
         <form name="room" id="room" method="POST" action="<?php echo $links['delete'] ?>">
         <table class="vm10 datatable fullwidth">
             <?php echo $table['heading'] ?>
