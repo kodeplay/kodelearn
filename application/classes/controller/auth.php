@@ -183,6 +183,7 @@ class Controller_Auth extends Controller_Base {
     public function action_logout() {
         
         Auth::instance()->logout();
+        unset($_SESSION['date']);
         Request::current()->redirect('auth');
         
     }
