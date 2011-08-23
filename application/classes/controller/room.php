@@ -8,7 +8,7 @@ class Controller_Room extends Controller_Base {
 
     
     public function action_index(){
-        
+        $msg = $this->request->param('msg');
         
         if($this->request->param('sort')){
             $sort = $this->request->param('sort');
@@ -94,6 +94,7 @@ class Controller_Room extends Controller_Base {
                     ->bind('pagination', $pagination)
                     ->bind('filter_room_name', $filter_room_name)
                     ->bind('filter_url', $filter_url)
+                    ->bind('msg', $msg)
                     ;
         
         Breadcrumbs::add(array(
@@ -227,11 +228,26 @@ class Controller_Room extends Controller_Base {
     
     public function action_delete(){
         if($this->request->method() === 'POST' && $this->request->post('selected')){
+            $msg = 0;
             foreach($this->request->post('selected') as $id){
-                ORM::factory('room', $id)->delete();
+                $event = ORM::factory('event');
+                $event->select('exams.id')
+                      ->join('exams','inner')
+                      ->on('exams.event_id','=','events.id');
+                $event->where('room_id', '=', $id);
+                $events = $event->find();
+                
+                if($events == ""){
+                     ORM::factory('room', $id)->delete();
+                     
+                } else {
+                    $msg++ ;
+                    
+                }
             }
+            
         }
-        Request::current()->redirect('room');
+        Request::current()->redirect('room/index/msg/'.$msg);
     }
     
 }
