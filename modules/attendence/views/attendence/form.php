@@ -7,7 +7,7 @@
         <div class="pageContent">
            <form name="attendence" id="attendence" method="POST" action="<?php echo $data['add'] ?>">
             <?php if($users){?>
-            <input type="hidden" name="id" id="id" value="<?php echo $data['id']; ?>">
+            <input type="hidden" name="id" id="id" value="<?php echo $data['event_id']; ?>">
             <input type="hidden" name="course_id" id="course_id" value="<?php echo $data['course_id']; ?>">
             <a href="#" onclick="$('#attendence').submit();" class = 'createButton l'>Save</a>
             <br/>

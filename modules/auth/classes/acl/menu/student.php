@@ -11,7 +11,8 @@ class Acl_Menu_Student extends Acl_Menu {
         $sidemenu = DynamicMenu::factory('sidemenu');
         $sidemenu->add_link('course', 'Courses', 1)
             //->add_link('lecture', 'Lectures', 2)
-            ->add_link('exam', 'Exam', 3);
+            ->add_link('exam', 'Exam', 2)
+            ->add_link('attendence', 'Attendene', 3);
             //->add_link('calender', 'Calender', 4);
         $myaccount = DynamicMenu::factory('myaccount');
         $myaccount->add_link('account', 'Account', 0)

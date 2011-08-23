@@ -13,6 +13,118 @@ class Controller_Attendence extends Controller_Base {
         }
     }
     
+    private function get_single_attendence() {
+        $date_to = date('Y-m-d');
+        $date_to_full = date('Y-m-d 23:59');
+        $date_to_string = strtotime($date_to_full);
+        $date_from_string = $date_to_string - 604800;
+        $date_from = date('Y-m-d',$date_from_string); 
+        
+        $user = Auth::instance()->get_user();
+       
+        $course = ORM::factory('course');
+        $course->join('courses_users','inner')
+               ->on('courses_users.course_id','=','id');
+        $course->where('courses_users.user_id', '=', $user->id);
+        $courses = $course->find_all()->as_array('id','name');
+         
+        $attendence = $this->get_atendence_data($user->id, $date_from_string, $date_to_string);
+        
+        $attendence_list = View::factory('attendence/user_view_list')
+            ->bind('attendence', $attendence)
+            ;
+        $view = View::factory('attendence/user_view')
+            ->bind('attendence_list', $attendence_list)
+            ->bind('date_from', $date_from)
+            ->bind('courses', $courses)
+            ->bind('date_to', $date_to);
+        
+        Breadcrumbs::add(array(
+            'Attendence', Url::site('attendence')
+        ));
+            
+        $this->content = $view;
+    }
+    
+    private function get_atendence_data($id, $date_from_string, $date_to_string, $course_id = ""){
+        $event_exam = ORM::factory('event');
+        $event_exam->select('attendences.*','exams.*');
+        $event_exam->join('attendences','left')
+              ->on('attendences.event_id','=','events.id')
+              ->join('exams','left')
+              ->on('exams.event_id','=','events.id');
+        $event_exam->where('attendences.user_id','=',$id)
+              ->where('events.eventstart','BETWEEN',array($date_from_string,$date_to_string))
+              ->where('events.eventtype','=','exam');
+              
+        if($course_id != "" && $course_id != '0'){
+            $event_exam->where('exams.course_id','=',$course_id);
+        } 
+        $event_exams = $event_exam->find_all();
+        $exam_total = count($event_exams);
+        $p = 0;
+        foreach($event_exams as $event_exam){
+            if($event_exam->present == '1'){
+                $p++;
+            }
+        }
+        $exam_persent ="";
+        if($exam_total > 0){
+            $exam_persent = ($p/$exam_total)*100;
+        } 
+        
+        $event_lecture = ORM::factory('event');
+        $event_lecture->select('attendences.*','lectures.*');
+        $event_lecture->join('lectures_events','left')
+                      ->on('lectures_events.event_id','=','events.id')
+                      ->join('attendences','left')
+                      ->on('attendences.event_id','=','events.id')
+                      ->join('lectures','left')
+                      ->on('lectures.id','=','lectures_events.lecture_id');
+        $event_lecture->where('attendences.user_id','=',$id)
+              ->where('events.eventstart','BETWEEN',array($date_from_string,$date_to_string))
+              ->where('events.eventtype','=','lecture');
+              
+        if($course_id != "" && $course_id != '0'){
+            $event_lecture->where('lectures.course_id','=',$course_id);
+        }        
+        $event_lectures = $event_lecture->find_all();
+        $lecture_total = count($event_lectures);
+        $p = 0;
+        foreach($event_lectures as $event_lecture){
+            if($event_lecture->present == '1'){
+                $p++;
+            }
+        }
+        $lecture_persent ="";
+        if($lecture_total > 0){
+            $lecture_persent = ($p/$lecture_total)*100;
+        } 
+        
+        $attendence = array(
+            'event_exams'       => $event_exams,
+            'event_lectures'    => $event_lectures,
+            'exam_persent'      => $exam_persent,
+            'lecture_persent'   => $lecture_persent
+            );
+        return $attendence;
+    }
+    
+    public function action_get_attendence_exam_lecture() {
+        $user = Auth::instance()->get_user();
+        $course = $this->request->post('course');
+        $date_from = $this->request->post('date_from');
+        $date_to = $this->request->post('date_to');
+        $date_from_string = strtotime($date_from);
+        $date_to_string = strtotime($date_to) + 86400;
+        $attendence = $this->get_atendence_data($user->id, $date_from_string, $date_to_string, $course);
+        $view = View::factory('attendence/user_view_list')
+            ->bind('attendence', $attendence)
+            ;
+        $response = $this->response->body($view)->body();
+        echo json_encode(array('response' => $response));
+    }
+    
     private function get_attendence_list() {
         $date = date('Y-m-d');
         $lecture_exam_data_all = $this->get_event_data($date);
@@ -69,7 +181,7 @@ class Controller_Attendence extends Controller_Base {
         $lectures="";
         if($lecture_id){    
             $lecture = ORM::factory('lecture');
-            $lecture->select('events.eventstart','events.eventend','events.eventtype');
+            $lecture->select('events.eventstart','events.eventend','events.eventtype','lectures_events.event_id');
             $lecture->join('lectures_events','left')
                     ->on('id','=','lectures_events.lecture_id')
                     ->join('events','left')
@@ -87,6 +199,7 @@ class Controller_Attendence extends Controller_Base {
                 $lecture_exam_data['eventend'] = $exam_data->eventend;
                 $lecture_exam_data['eventtype'] = $exam_data->eventtype;
                 $lecture_exam_data['id'] = $exam_data->id;
+                $lecture_exam_data['event_id'] = $exam_data->event_id;
                 $lecture_exam_data_all[] = $lecture_exam_data;
             }
         }
@@ -98,6 +211,7 @@ class Controller_Attendence extends Controller_Base {
                 $lecture_exam_data['eventend'] = $lecture_data->eventend;
                 $lecture_exam_data['eventtype'] = $lecture_data->eventtype;
                 $lecture_exam_data['id'] = $lecture_data->id;
+                $lecture_exam_data['event_id'] = $lecture_data->event_id;
                 $lecture_exam_data_all[] = $lecture_exam_data;
             }
         }
@@ -132,7 +246,8 @@ class Controller_Attendence extends Controller_Base {
         }
         $id = $this->request->param('id');
         $type = $this->request->param('type');
-        if(!$id || !$type){
+        $param_event_id = $this->request->param('event_id');
+        if(!$id || !$type || !$param_event_id){
             Request::current()->redirect('attendence');
         }
         
@@ -157,13 +272,14 @@ class Controller_Attendence extends Controller_Base {
         
         $page_title = str_replace('{event}', $event, $page_title);
         $assigned_attendence = ORM::factory('attendence');
-        $assigned_attendence->where('event_id', '=', $id);
+        $assigned_attendence->where('event_id', '=', $param_event_id);
         $assigned_attendences = $assigned_attendence->find_all()->as_array('user_id','present');
         
         $data = array(
             'add'       => URL::site('/attendence/add'),
             'id'        => $id,
-            'course_id' => $cid
+            'course_id' => $cid,
+            'event_id'  => $param_event_id
         );
         $view = View::factory('attendence/form')
             ->bind('users', $users)
