@@ -209,4 +209,32 @@ ALTER TABLE `users`
 ALTER TABLE `users`
     ADD COLUMN `about_me`varchar(256) NULL DEFAULT '' AFTER `password`;    
 
+----------------------------------------Lectures------------------------------------------------------------------
+CREATE TABLE `lectures` (
+    `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+    `name` VARCHAR(50) NOT NULL DEFAULT '' COLLATE 'latin1_swedish_ci',
+    `course_id` INT(11) UNSIGNED NOT NULL,
+    `user_id` INT(11) UNSIGNED NOT NULL,
+    `room_id` INT(11) UNSIGNED NOT NULL,
+    `type` ENUM('once','repeat') NOT NULL DEFAULT 'once' COLLATE 'latin1_swedish_ci',
+    `when` VARCHAR(255) NOT NULL COMMENT 'It will sotre the unserialized array of the days of the lecture with time if the lecture is repeating',
+    `start_date` VARCHAR(15) NOT NULL,
+    `end_date` VARCHAR(15) NOT NULL,
+    PRIMARY KEY (`id`),
+    INDEX `FK_lectures_courses` (`course_id`),
+    CONSTRAINT `FK_lectures_courses` FOREIGN KEY (`course_id`) REFERENCES `courses` (`id`) ON DELETE CASCADE
+)
+COLLATE='utf8_general_ci'
+ENGINE=InnoDB;
+
+CREATE TABLE `lectures_events` (
+    `lecture_id` INT(11) UNSIGNED NOT NULL,
+    `event_id` INT(11) UNSIGNED NOT NULL,
+    INDEX `FK_lectures_events_lectures` (`lecture_id`),
+    INDEX `FK_lectures_events_events` (`event_id`),
+    CONSTRAINT `FK_lectures_events_events` FOREIGN KEY (`event_id`) REFERENCES `events` (`id`) ON DELETE CASCADE,
+    CONSTRAINT `FK_lectures_events_lectures` FOREIGN KEY (`lecture_id`) REFERENCES `lectures` (`id`) ON DELETE CASCADE
+)
+COLLATE='utf8_general_ci'
+ENGINE=InnoDB;
 
