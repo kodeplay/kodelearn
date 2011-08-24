@@ -804,6 +804,7 @@ table.calendar th { height: 30px; padding-top:10px; background: #eae3e0; border:
 table.calendar td { width: 14%; height: 80px; cursor: pointer; }
 table.calendar td.today { background: #eae3e0; }
 table.calendar td:hover { background: #f1edd3; }
+table.calendar td ul.output { margin-top: 10px; }
 
 /* ..........................
 	Attendance
