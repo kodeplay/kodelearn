@@ -2,7 +2,14 @@
 
 class Model_Room extends ORM {
 
-    
+
+    protected $_has_many = array(
+        'events' => array(
+            'model' => 'event', 
+            'foreign_key' => 'room_id'
+        )
+    );
+
     public function validator($data) {
         return Validation::factory($data)
             ->rule('room_name', 'not_empty')

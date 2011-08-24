@@ -8,5 +8,11 @@ class Model_Event extends ORM {
             'through' => 'lectures_events',
         ),
     );      
-	
+
+    protected $_belongs_to = array(
+        'room' => array(
+            'model' => 'room', 
+            'foreign_key' => 'room_id'
+        )
+    );
 }

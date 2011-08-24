@@ -83,13 +83,6 @@ KODELEARN.modules.add('create_exam' , (function () {
     
     return {
         init: function () { 
-           $('input[name="to"]').blur(function(){
-               var data = $('form').serializeArray();
-               $.post(KODELEARN.config.base_url + "exam/get_avaliable_rooms",  data,
-                       function(data){
-                           $('select[name="room_id"]').replaceWith(data.element);
-                       }, "json");
-           });
            $("#slider-range").slider({
                range: true,
                min: 0,
@@ -97,14 +90,14 @@ KODELEARN.modules.add('create_exam' , (function () {
                step: 10,
                values: [<?php echo $slider['start'] ?>, <?php echo $slider['end'] ?>],
                slide: this.slideTime,
-               change: this.getRooms
+               change: KODELEARN.getAvaliableRooms
            });
            KODELEARN.getCourseStudents($('select[name="course_id"]').val(), 'course_student');
            $('select[name="course_id"]').change(function(){
                KODELEARN.getCourseStudents($(this).val(), 'course_student');
            });
         	this.slideTime();
-        	this.getRooms();
+        	KODELEARN.getAvaliableRooms();
         },
         slideTime: function (event, ui){
             if(typeof that === 'undefined') that = this;
@@ -135,17 +128,7 @@ KODELEARN.modules.add('create_exam' , (function () {
         	        minutes = "0" + minutes;
         	    }
         	    return hours + ":" + minutes + " " + time;
-        	},
-        getRooms:   function (){
-            $('#loading').fadeIn();
-            $('select[name="room_id"]').empty();
-            var data = $('form').serializeArray();
-            $.post(KODELEARN.config.base_url + "exam/get_avaliable_rooms",  data,
-                    function(data){
-                        $('select[name="room_id"]').replaceWith(data.element);
-                        $('#loading').fadeOut();
-                    }, "json");
-        }
+        	}
     }; 
 })());
 

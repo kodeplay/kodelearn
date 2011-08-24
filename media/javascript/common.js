@@ -146,4 +146,23 @@ KODELEARN.getCourseStudents = function(courseId, container){
 
 	
 };
+KODELEARN.getAvaliableRooms = function (){
+    $('#loading').fadeIn();
+    $('select[name="room_id"]').empty();
+    var data = $('form').serializeArray();
+    $.post(KODELEARN.config.base_url + "event/get_avaliable_rooms",  data,
+            function(data){
+                $('select[name="room_id"]').replaceWith(data.element);
+                $('#loading').fadeOut();
+            }, "json");
+};
+
+function ajaxRequest(controller,action){	
+	
+	var l = new ajaxLoad({
+		'controller' : controller,
+		'action' : action
+	});	
+	
+}
 

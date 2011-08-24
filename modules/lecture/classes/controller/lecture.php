@@ -61,7 +61,7 @@ class Controller_Lecture extends Controller_Base {
         
         $links = array(
             'add'       => Html::anchor('/lecture/add/', 'Create a Lecture', array('class' => 'createButton l')),
-            'delete'    => URL::site('/exam/delete/'),
+            'delete'    => URL::site('/lecture/delete/'),
         );
         
         $view = View::factory('lecture/list')
@@ -107,9 +107,16 @@ class Controller_Lecture extends Controller_Base {
 	                    $data['when'] = serialize($days);
 	                }
 	                
-	                $event_lecture = new Event_Lecture();
-	                $event_lecture->set_values(array_merge($this->request->post(), $data));
-	                $event_lecture->add();
+	                $lecture = ORM::factory('lecture');
+	                
+	                $lecture->values($data);
+	                
+	                $lecture->save();
+	                
+	                $this->remove_events($lecture);
+	                
+	                $this->create_events(array_merge($this->request->post(), $data), $lecture);
+	                
 	                Request::current()->redirect('lecture');
 	                exit;
                 } 
@@ -254,9 +261,16 @@ class Controller_Lecture extends Controller_Base {
                         $data['when'] = serialize($days);
                     }
                     
-                    $event_lecture = new Event_Lecture();
-                    $event_lecture->set_values(array_merge($this->request->post(), $data));
-                    $event_lecture->update($id);
+                    $lecture = ORM::factory('lecture', $id);
+                    
+                    $lecture->values($data);
+                    
+                    $lecture->save();
+                    
+                    $this->remove_events($lecture);
+                    
+                    $this->create_events(array_merge($this->request->post(), $data), $lecture);
+
                     Request::current()->redirect('lecture');
                     exit;
                 } 
@@ -328,5 +342,101 @@ class Controller_Lecture extends Controller_Base {
         ));
             
         $this->content = $view;        
+    }
+    
+    public function action_delete(){
+        if($this->request->method() === 'POST' && $this->request->post('selected')){
+            foreach($this->request->post('selected') as $lecture_id){
+                $lecture = ORM::factory('lecture', $lecture_id);
+                $this->remove_events($lecture);
+                $lecture->delete();
+            }
+        }
+        Request::current()->redirect('lecture');
+    }
+    
+    public function action_schedule(){
+    	
+    	$id = $this->request->param('id');
+    	if(!$id)
+    	   Request::current()->redirect('lecture');
+    	   
+    	$lecture = ORM::factory('lecture', $id);
+    	
+    	$events = $lecture->events
+//    	          ->select(array('SELECT COUNT(*) FROM `events` e WHERE (e.eventstart BETWEEN events.eventstart AND events.eventend OR e.eventend BETWEEN events.eventstart AND events.eventend) AND e.room_id = events.room_id', 'conflict'))
+    	          ->find_all()->as_array();
+    	
+    	$view = View::factory('lecture/schedule')
+    	               ->bind('lecture', $lecture)
+    	               ->bind('events', $events);
+    	
+        Breadcrumbs::add(array(
+            'Lectures', Url::site('lecture')
+        ));
+    	
+        $this->content = $view;
+    }
+    private function remove_events($lecture){
+        
+        $events = $lecture->events->find_all()->as_array(NULL, 'id');
+        
+        foreach($events as $event_id){
+            $event = ORM::factory('event', $event_id);
+            $event->delete();
+        }
+        
+        $lecture->remove('events');
+    }
+    
+    private function create_events($data, $lecture){
+        
+        if($data['type'] == 'once'){
+            
+        	$event_lecture = new Event_Lecture();
+        	
+        	$values = array(
+        	   'eventstart'    => $data['start_date'],
+        	   'eventend'      => $data['end_date'],
+        	   'room_id'       => $data['room_id'],
+        	
+        	);
+        	
+        	$event_lecture->set_values($values);
+        	
+        	$event_id = $event_lecture->add();
+            
+            $lecture->add('events', ORM::factory('event', $event_id));
+            
+        } else {
+            foreach($data['days'] as $day => $value){
+                
+                $iterator = $data['start_date'];
+                $i = 1;
+                $endtime = $data['end_date'] + 86399; // This will add the seconds of the day till 23:59:59
+                while(($iterator = (strtotime('+'.$i.' ' . $day, $data['start_date']) + ($data[strtolower($day)]['from'] * 60))) < ($endtime)){
+                    $eventstart = $iterator ;
+                    $eventend =  ($iterator + (60 * ($data[strtolower($day)]['to'] - $data[strtolower($day)]['from'])));
+
+                    $event_lecture = new Event_Lecture();
+                    
+                    $values = array(
+                       'eventstart'    => $eventstart,
+                       'eventend'      => $eventend,
+                       'room_id'       => $data['room_id'],
+                    
+                    );
+                    
+                    $event_lecture->set_values($values);
+                    
+                    $event_id = $event_lecture->add();
+                    
+                    $lecture->add('events', ORM::factory('event', $event_id));
+                    
+                    $i++;
+                }
+                
+            }
+        }
     }
 }

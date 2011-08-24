@@ -308,7 +308,7 @@ a{ color: #427693; }
 }
 .formcontainer td {	
 	padding: 10px 5px; 
-	vertical-align: top;
+	vertical-align: middle;
 }
 .smallTextBoxes input[type="text"] {
 	padding: 3px;
