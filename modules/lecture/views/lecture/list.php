@@ -5,16 +5,16 @@
             <div class="clear"></div>
         </div><!-- pageTop -->
         <div class="topbar">
-            <a href="#" class="pageAction r alert">Delete selected...</a>
+             <a onclick="$('#lecture').submit();" class="pageAction r alert">Delete selected...</a>
              <?php echo $links['add']?>
             <span class="clear">&nbsp;</span>
         </div><!-- topbar -->
-        
+        <form name="lecture" id="lecture" method="POST" action="<?php echo $links['delete'] ?>">
         <table class="vm10 datatable fullwidth">
            <?php echo $table['heading']?>
            <?php foreach($table['data'] as $lecture){ ?>
             <tr>
-                <td><input type="checkbox" /></td>
+                <td><input type="checkbox" name="selected[]" value="<?php echo $lecture->id ?>" /></td>
                 <td><?php echo $lecture->name ?></td>
                 <td><?php echo $lecture->course_name ?></td>
                 <td><?php echo $lecture->firstname . ' ' . $lecture->lastname ?></td>
@@ -42,6 +42,7 @@
                 </td>
                 <td>
                     <p><?php echo Html::anchor('/lecture/edit/id/' . $lecture->id, 'View/Edit')?></p>
+                    <p><?php echo Html::anchor('/lecture/schedule/id/' . $lecture->id, 'Schedule')?></p>
                 </td>
             </tr>
            <?php } ?>
@@ -51,32 +52,5 @@
                 </td>
             </tr>
         </table>
+        </form>
     </div>
-<?php 
-
-/*
-$days = array(
-    'monday'    => '540:620',
-    'tuesday'   => '590:710',
-    'wednesday' => '800:920',
-    'thursday'  => '750:950',
-    'friday'    => '1000:1200',
-    'saturday'  => '440:550',
-    'sunday'    => '480:840',
-);
-echo '<pre>';
-print_r($days);
-echo (serialize($days));
-echo '<br/> Every <br/>';
-foreach($days as $day=>$time){
-	$timing = explode(':',$time);
-	echo $day . ' ---- ' . date('h:i A', strtotime(date('Y-m-d')) + ($timing[0] * 60)) .  ' to ' . date('h:i A', strtotime(date('Y-m-d')) + ($timing[1] * 60)) .  '<br/>';
-}
-
-echo '</pre>';
-exit;
-*/
-?>    
-    
-    
-    

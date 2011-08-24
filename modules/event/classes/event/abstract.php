@@ -1,6 +1,6 @@
 <?php defined('SYSPATH') or die('No direct access allowed.');
 
-class Event_Abstract {
+abstract class Event_Abstract {
     
     protected $_values;
     
@@ -75,13 +75,7 @@ class Event_Abstract {
         
         $event = ORM::factory('event');
         
-        $event->eventtype = $this->_eventtype;
-        
-        $event->eventstart = $this->_eventstart;
-        
-        $event->eventend = $this->_eventend;
-        
-        $event->room_id = $this->_room_id;
+        $event->values($this->_values);
         
         $event->save();
         
@@ -114,14 +108,8 @@ class Event_Abstract {
         
         $event = ORM::factory('event', $id);
         
-        $event->eventtype = $this->_eventtype;
+        $event->values($this->_values);
         
-        $event->eventstart = $this->_eventstart;
-        
-        $event->eventend = $this->_eventend;
-        
-        $event->room_id = $this->_room_id;
-                
         $event->save();
         
     }
