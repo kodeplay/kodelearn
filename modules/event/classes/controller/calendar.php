@@ -62,9 +62,8 @@ class Controller_Calendar extends Controller_Base {
         $day = $this->request->param('day', date('d'));
         $date = date('Y-m-d', mktime(0, 0, 0, (int)$month, (int)$day, $year));
         $events = Model_Event::daily_events($date);
-        
         $view = View::factory('calendar/day_events')
-            ->set('name', $this->request->post('name'));
+            ->set('date', $date);
         $this->content = $view;
     }
 }
