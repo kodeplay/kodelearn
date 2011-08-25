@@ -4,13 +4,19 @@ abstract class Event_Abstract {
     
     protected $_values;
     
-    private $_eventtype;
+    protected $_eventtype;
     
-    private $_eventstart;
+    protected $_eventstart;
     
-    private $_eventend;
+    protected $_eventend;
     
-    private $_room_id;
+    protected $_room_id;
+
+    protected $_event_id;
+
+    public function __construct($event_id = null) {
+        $this->_event_id = $event_id;
+    }
     
     public function get_room_id(){
       return $this->_room_id;
@@ -48,12 +54,12 @@ abstract class Event_Abstract {
     }
     
     
-    public static function factory($type){
+    public static function factory($type, $event_id = null){
         $file = MODPATH . 'event/classes/event/' . $type . '.php';
         
         if(file_exists($file)){
             $class = 'Event_' . $type;
-            return new $class;
+            return new $class($event_id);
         } else {
             throw new Event_Exception('Class Event_ ' . $type . ' not found');
         }
@@ -112,6 +118,5 @@ abstract class Event_Abstract {
         
         $event->save();
         
-    }
-    
+    } 
 }
