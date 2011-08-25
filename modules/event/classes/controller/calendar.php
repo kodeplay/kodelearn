@@ -18,7 +18,8 @@ class Controller_Calendar extends Controller_Base {
         $day_events = array();
         // loop though events and group events by day and event types
         foreach ($event as $e) {
-            $day = date('d', $e->eventstart);
+            $day = date('j', $e->eventstart);
+            // echo 'date(\'j\', '. $e->eventstart .') = ' . $day . '=' . date('Y-m-d H:i:s', $e->eventstart) . ' <br/>';
             if (!isset($day_events[$day][$e->eventtype])) {
                 $day_events[$day][$e->eventtype] = array();
             }
@@ -28,7 +29,7 @@ class Controller_Calendar extends Controller_Base {
         }
         if ($day_events) {
             foreach ($day_events as $day=>$types) {
-                $timestamp = mktime(0, 0, 0, $month, $day, $year);
+                $timestamp = mktime(0, 0, 0, $month, (int)$day, $year);
                 foreach ($types as $type=>$events) {
                     $count = count($events);
                     $type = $count > 1 ? Inflector::plural($type) : $type;
@@ -62,8 +63,13 @@ class Controller_Calendar extends Controller_Base {
         $day = $this->request->param('day', date('d'));
         $date = date('Y-m-d', mktime(0, 0, 0, (int)$month, (int)$day, $year));
         $events = Model_Event::daily_events($date);
+        $day_events = array();
+        foreach ($events as $event) {
+            $day_events[] = Event_Calendar::factory($event->eventtype)->day_event($event);
+        }
         $view = View::factory('calendar/day_events')
-            ->set('date', $date);
+            ->set('date', $date)
+            ->set('day_events', $day_events);        
         $this->content = $view;
     }
 }
