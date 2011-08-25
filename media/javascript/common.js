@@ -17,7 +17,6 @@ $(document).ready(function() {
  */
 var KODELEARN = KODELEARN || { };
 
-
 KODELEARN.config = {
     
     base_url:  'http://kodelearn.kp/'
@@ -173,19 +172,29 @@ KODELEARN.modules.add('calendar', (function () {
 	},
         day_events: function () {
 	    $(".calendar>tbody>tr>td").click(function () {
+                var html = $(this).data('events_html');
+                // if cached, inject into the container and return
+                if (html) {
+                    $("#day-events").html(html);
+                    return true;
+                }
                 var id = $(this).attr('id'),
                 date = id.split('-').slice(1),
                 year = date[0],
                 month = date[1],
                 day = date[2],
                 // supress request in case no event present
-                events = $(this).children().filter('ul').length;
+                events = $(this).children().filter('ul').length,
+                that = this;
                 if (events) {
-                    var details = new ajaxLoad({
+                    var request = new ajaxLoad({
                         'container': '#day-events',
                         'controller': 'calendar',
                         'action': 'day_events/year/'+year+'/month/'+month+'/day/'+day,
-                        'callback': function (resp) { }                        
+                        'callback': function (resp) { 
+                            // cache results (entire html) in data
+                            $(that).data('events_html', resp);
+                        }                        
                     });
                 } else {
                     $("#day-events").html('<h1>Events for '+date.join('-')+'</h1><ul><li>No events scheduled.</li></ul>');
