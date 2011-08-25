@@ -26,8 +26,8 @@ class Controller_Base extends Controller_Template {
             $this->view = View::factory('template/content');
         } else {
             $this->view = View::factory($this->template);
+            Breadcrumbs::add(array('Home', Url::site('home')));
         }
-        Breadcrumbs::add(array('Home', Url::site('home')));
         return parent::before();
     }
 	
