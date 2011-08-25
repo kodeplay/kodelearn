@@ -44,4 +44,21 @@ class Model_Exam extends ORM {
         $users = $exam->course->users->find_all();
         return $users;
     }
+
+    public function __toString() {
+        return ucfirst($this->name);
+    }
+
+    /**
+     * Method to return an anchor tag with exam name the text and 
+     * link to the exam details page
+     */
+    public function toLink() {
+        if (Acl::instance()->is_allowed('exam_edit')) {
+            $url = Url::site('exam/edit/id/');
+        } else {
+            $url = Url::site('exam');
+        }
+        return Html::anchor($url, (string)$this);
+    }
 }

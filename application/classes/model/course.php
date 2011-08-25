@@ -159,4 +159,16 @@ class Model_Course extends ORM {
     public static function get_teachers($course) {
         return self::get_users($course, 'teacher');
     }
+
+    public function __toString() {
+        return $this->name;
+    }
+
+    /**
+     * Method to return an anchor tag with room_name as the text and 
+     * link to the room as href
+     */
+    public function toLink() {
+        return Html::anchor(Url::site('course/summary/id/'.$this->id), $this->name);
+    }
 }
