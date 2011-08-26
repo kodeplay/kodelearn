@@ -16,6 +16,14 @@ class Model_Event extends ORM {
         )
     );
 
+    public function validator($data) {
+        return Validation::factory($data)
+            ->rule('date', 'date')
+            ->rule('date', 'not_empty')
+            ->rule('from', 'not_empty')
+            ->rule('to', 'not_empty');
+    }
+
     /**
      * Method to get all the events in the specified month of the year
      * @param int $month 0 < $month < 12

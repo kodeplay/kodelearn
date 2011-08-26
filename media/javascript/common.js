@@ -134,27 +134,125 @@ KODELEARN.modules.add('toggle_buttons', (function () {
     
 })());
 
-KODELEARN.getCourseStudents = function(courseId, container){
-    
-    $('#' + container).html('<p class="tip">Please wait... Loading Course Students</p>');
-    
-    $.post(KODELEARN.config.base_url + "course/get_students",  {'course_id' : courseId},
-           function(data){
-    	       $('#' + container).html(data.html);
-           }, "json");
+KODELEARN.modules.add('time_slider', (function () {
+	
+	return {
+		init: function () {
+			//do something
+		},
+		getTime: function (hours, minutes) {
+    	    var time = null;
+    	    minutes = minutes + "";
+    	    if (hours < 12) {
+    	        time = "AM";
+    	    }
+    	    else {
+    	        time = "PM";
+    	    }
+    	    if (hours == 0) {
+    	        hours = 12;
+    	    }
+    	    if (hours > 12) {
+    	        hours = hours - 12;
+    	    }
+    	    if (minutes.length == 1) {
+    	        minutes = "0" + minutes;
+    	    }
+    	    return hours + ":" + minutes + " " + time;
+    	},
+        slideTime: function (event, ui){
+        	var that = KODELEARN.modules.get('time_slider');
+            var minutes0 = parseInt($("#" + event.target.id).slider("values", 0) % 60);
+            var hours0 = parseInt($("#" + event.target.id).slider("values", 0) / 60 % 24);
+            var minutes1 = parseInt($("#" + event.target.id).slider("values", 1) % 60);
+            var hours1 = parseInt($("#" + event.target.id).slider("values", 1) / 60 % 24);
+            $("#" + event.target.id + "_from").val(parseInt($("#" + event.target.id).slider("values", 0)));
+            $("#" + event.target.id + "_to").val(parseInt($("#" + event.target.id).slider("values", 1)));
+            $("#" + event.target.id + "_time").text(that.getTime(hours0, minutes0) + ' - ' + that.getTime(hours1, minutes1));
+        }		
+	};
 
-    
-};
-KODELEARN.getAvaliableRooms = function (){
-    $('#loading').fadeIn();
-    $('select[name="room_id"]').empty();
-    var data = $('form').serializeArray();
-    $.post(KODELEARN.config.base_url + "event/get_avaliable_rooms",  data,
-           function(data){
-               $('select[name="room_id"]').replaceWith(data.element);
-               $('#loading').fadeOut();
-           }, "json");
-};
+})());
+
+;
+KODELEARN.modules.add('course', (function () {
+	
+	return {
+		init: function () {
+			//do something
+		},
+		getCourseStudents : function(courseId, container){
+			
+			$('#' + container).html('<p class="tip">Please wait... Loading Course Students</p>');
+			
+		    $.post(KODELEARN.config.base_url + "course/get_students",  {'course_id' : courseId},
+		            function(data){
+		    			$('#' + container).html(data.html);
+		            }, "json");
+
+			
+		}
+	};
+
+})());
+KODELEARN.modules.add('ajax_message', (function () {
+	return {
+		init : function () {
+		
+		},
+		showAjaxError: function (beforeDiv,msgArr){
+			
+			$('#warning').remove();
+			var warning = '<div class="block-error" id="error"><ul>';
+			
+			for(var i = 0; i < msgArr.length ; i++ ){		
+			  warning += '<li>'+msgArr[i]+'</li>';	
+			}		
+			
+			warning += '</ul></div>';
+			beforeDiv.before(warning);
+			scroll(0,0);
+			$('#error').slideDown(200);
+			setTimeout('$("#error").slideUp()', 3000);
+			
+		},
+		showAjaxSuccess : function (beforeDiv,msgArr){
+			
+			$('#warning').remove();
+			var warning = '<div class="block-success" id="success"><ul>';
+			
+			for(var i = 0; i < msgArr.length ; i++ ){		
+			  warning += '<li>'+msgArr[i]+'</li>';	
+			}		
+			
+			warning += '</ul></div>';
+			beforeDiv.before(warning);
+			scroll(0,0);
+			$('#success').slideDown(200);
+			setTimeout('$("#success").slideUp()', 2000);
+			
+		}	
+	};
+})());
+
+KODELEARN.modules.add('rooms', (function () {
+	
+	return {
+		init: function () {
+			//do something
+		},
+		getAvaliableRooms: function (data){
+			$('#loading').fadeIn();
+			var data = $('form').serializeArray();
+			$.post(KODELEARN.config.base_url + "event/get_avaliable_rooms",  data, function(data){
+				$('select[name="room_id"]').replaceWith(data.element);
+				$('#loading').fadeOut();
+			}, "json");
+		}
+	};
+
+})());
+
 
 function ajaxRequest(controller,action){	
     

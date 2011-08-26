@@ -839,3 +839,27 @@ table.calendar td ul.output { margin-top: 10px; color: #427693; }
 	margin-top: 10px;
 }
 #examresult-edit-form input[type="text"] { width: 30px; }
+
+.block-success{
+	clear:both; 
+	display:none; 
+	width:98%; 
+	height:auto; 
+	padding:5px 0; 
+	border:1px solid #a5bd71; 
+	background:#e4f1c9; 
+	margin:0 auto; 
+	text-align:center; 
+	color:#000
+}
+.block-error{
+	display:none;
+	width:98%;
+	height:auto;
+	padding:5px 0;
+	border:1px solid red;
+	background:#ffdfe0;
+	margin:0 auto;
+	color:red
+}
+.block-error ul{list-style:none; padding-left: 10px;}
