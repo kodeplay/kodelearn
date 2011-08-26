@@ -25,6 +25,7 @@
         </table>
 <?php } else {
     echo "No records for lecture";
+    echo "<br>";
 }
 if(count($attendence['event_exams']) > 0){
 ?>
@@ -53,6 +54,7 @@ if(count($attendence['event_exams']) > 0){
             
         </table>
  <?php } else { 
+    echo "<br>"; 
     echo "No records for exam";    
      
  }?>
