@@ -60,6 +60,7 @@ class Controller_Attendence extends Controller_Base {
         if($course_id != "" && $course_id != '0'){
             $event_exam->where('exams.course_id','=',$course_id);
         } 
+        $event_exam->order_by('events.eventstart', 'DESC');
         $event_exams = $event_exam->find_all();
         $exam_total = count($event_exams);
         $p = 0;
@@ -87,7 +88,8 @@ class Controller_Attendence extends Controller_Base {
               
         if($course_id != "" && $course_id != '0'){
             $event_lecture->where('lectures.course_id','=',$course_id);
-        }        
+        }   
+        $event_lecture->order_by('events.eventstart', 'DESC');     
         $event_lectures = $event_lecture->find_all();
         $lecture_total = count($event_lectures);
         $p = 0;
@@ -126,7 +128,12 @@ class Controller_Attendence extends Controller_Base {
     }
     
     private function get_attendence_list() {
-        $date = date('Y-m-d');
+        
+        if(isset($_SESSION['date'])){
+            $date = $_SESSION['date'];
+        }else{
+            $date = date('Y-m-d');
+        }
         $lecture_exam_data_all = $this->get_event_data($date);
         
         $users = View::factory('attendence/events')
@@ -144,6 +151,7 @@ class Controller_Attendence extends Controller_Base {
     }
     
     public function action_get_events() {
+        $_SESSION['date'] = $this->request->post('date');
         $date = $this->request->post('date');
         $lecture_exam_data_all = $this->get_event_data($date);
         $view = View::factory('attendence/events')

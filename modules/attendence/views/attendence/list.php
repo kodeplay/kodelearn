@@ -6,7 +6,7 @@
         </div><!-- pageTop -->
         <div class="pageContent">
             <p class="bm40">
-                <input type="text" name="date" id="date" class="date" value="<?php echo $date; ?>"></input>
+                <input type="text" name="date" id="date"  value="<?php echo $date; ?>"></input>
                 <!-- <a class="button" href="#" id="add_users"> Add</a> -->
             </p>
             
@@ -18,8 +18,13 @@
     </div>    
     <div class="clear"></div>
 <script type="text/javascript"><!--
+$(document).ready(function() {
+	$( "#date" ).datepicker({ maxDate: +0 });
+});
+
 $('#date').change(function(){
 	$('#loading').fadeIn();
+	
     var date = $('#date').val();
     
     if(date){
