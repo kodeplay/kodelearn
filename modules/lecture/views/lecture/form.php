@@ -29,7 +29,7 @@
             <tr>
                 <td valign="top"><label for="type">Type</label></td>
                 <td width="500">
-                    <input type="radio" name="type" value="once" <?php echo ($form->get_value('type') == 'once')?'checked="checked"':''?> onclick="showType()" />Once <input type="radio" name="type" value="repeat" <?php echo ($form->get_value('type') == 'repeat')?'checked="checked"':''?> onclick="showType()"/> Repeat
+                    <input type="radio" name="type" value="once" <?php echo ($form->get_value('type') == 'once')?'checked="checked"':''?> />Once <input type="radio" name="type" value="repeat" <?php echo ($form->get_value('type') == 'repeat')?'checked="checked"':''?> /> Repeat
                     <div id="once" class="vm10 hidden typedetails">
                         <?php echo $form->once_date->label(); ?> <?php echo $form->once_date->element(); ?><br/>
                         <span class="form-error"><?php echo $form->once_date->error(); ?></span>
@@ -126,12 +126,6 @@
     <div class="clear"></div>
 <script type="text/javascript"><!--
 
-function showType(){
-	var type = $('input[name="type"]:checked').val();
-    $('.typedetails').hide();
-	$('#' + type).show();
-}
-
 KODELEARN.modules.add('create_lecture' , (function () {    
     
     return {
@@ -147,48 +141,21 @@ KODELEARN.modules.add('create_lecture' , (function () {
 	                max: 1439,
 	                step: 10,
 	                values: [<?php echo $value['from']?>, <?php echo $value['to']?>],
-	                slide: this.slideTime
+	                slide: KODELEARN.modules.get('time_slider').slideTime
 	            });
             <?php }?>
         
            for(var i = 0; i < this.sliders.length; i++){
-        	   
-           }
-           for(var i = 0; i < this.sliders.length; i++){
         	    var event = {target: document.getElementById(this.sliders[i])};
-        	    this.slideTime(event);
+        	    KODELEARN.modules.get('time_slider').slideTime(event);
            }
-           showType();
+           this.showType();
+           $('input[name="type"]').click(function(){ KODELEARN.modules.get('create_lecture').showType(); });
         },
-        slideTime: function (event, ui){
-            if(typeof that === 'undefined') that = this;
-            var minutes0 = parseInt($("#" + event.target.id).slider("values", 0) % 60);
-            var hours0 = parseInt($("#" + event.target.id).slider("values", 0) / 60 % 24);
-            var minutes1 = parseInt($("#" + event.target.id).slider("values", 1) % 60);
-            var hours1 = parseInt($("#" + event.target.id).slider("values", 1) / 60 % 24);
-            $("#" + event.target.id + "_from").val(parseInt($("#" + event.target.id).slider("values", 0)));
-            $("#" + event.target.id + "_to").val(parseInt($("#" + event.target.id).slider("values", 1)));
-            $("#" + event.target.id + "_time").text(that.getTime(hours0, minutes0) + ' - ' + that.getTime(hours1, minutes1));
-        },
-        getTime: function (hours, minutes) {
-                var time = null;
-                minutes = minutes + "";
-                if (hours < 12) {
-                    time = "AM";
-                }
-                else {
-                    time = "PM";
-                }
-                if (hours == 0) {
-                    hours = 12;
-                }
-                if (hours > 12) {
-                    hours = hours - 12;
-                }
-                if (minutes.length == 1) {
-                    minutes = "0" + minutes;
-                }
-                return hours + ":" + minutes + " " + time;
+        showType: function () {
+            var type = $('input[name="type"]:checked').val();
+            $('.typedetails').hide();
+            $('#' + type).show();
         }
     }; 
 })());

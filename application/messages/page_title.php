@@ -142,6 +142,14 @@ return array(
         'description'     => 'You can Create a new lecture here.',
         'title'           => 'Create a Lecture',
     ),
+    'lecture_edit' => array(
+        'description'     => 'You can edit a lecture here.',
+        'title'           => 'Edit a Lecture',
+    ),
+    'lecture_schedule' => array(
+        'description'     => 'You can plan a schedule of a Lecture.',
+        'title'           => 'Schedule',
+    ),
     'attendence_index' => array(
         'description'     => 'You can view and edit attendence here.',
         'title'           => 'Attendence',

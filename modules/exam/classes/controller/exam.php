@@ -177,24 +177,23 @@ class Controller_Exam extends Controller_Base {
                 $validator = $exam->validator($this->request->post());
                 $validator->bind(':to', $this->request->post('to'));
                 if ($validator->check()) {
-                    $event_exam = Event_Abstract::factory('exam');
 
-                    $from = $this->request->post('date') . ' ' . $this->request->post('from');
-                    if(!(strtotime($from)))
-                        $from = $this->request->post('date') . ' 00:00';
+                    $from = strtotime($this->request->post('date')) + ($this->request->post('from') * 60); 
+                    $to = strtotime($this->request->post('date')) + ($this->request->post('to') * 60); 
                     
-                    $to = $this->request->post('date') . ' ' . $this->request->post('to'); 
-                    if(!(strtotime($to)))
-                        $to = $this->request->post('date') . ' 00:00';
-                    
-                    $from = strtotime($from);
-                    $to = strtotime($to);
+                    $event_exam = Event_Abstract::factory('exam');
 
                     $event_exam->set_values($this->request->post());
                     $event_exam->set_value('eventstart', $from);
                     $event_exam->set_value('eventend', $to);
-                    $event_exam->add();
-
+                    $event_id = $event_exam->add();
+			
+			        $exam = ORM::factory('exam');
+			
+			        $exam->values(array_merge($this->request->post(),array('event_id' => $event_id) ));
+			
+			        $exam->save();
+			                    
                     Request::current()->redirect('exam');
                     exit;
                 } else {
@@ -245,23 +244,22 @@ class Controller_Exam extends Controller_Base {
                 $validator = $exam->validator($this->request->post());
                 $validator->bind(':to', $this->request->post('to'));
                 if ($validator->check()) {
-                    $event_exam = Event_Abstract::factory('exam');
 
-                    $from = $this->request->post('date') . ' ' . $this->request->post('from');
-                    if(!(strtotime($from)))
-                        $from = $this->request->post('date') . ' 00:00';
+                	$from = strtotime($this->request->post('date')) + ($this->request->post('from') * 60); 
+                    $to = strtotime($this->request->post('date')) + ($this->request->post('to') * 60); 
                     
-                    $to = $this->request->post('date') . ' ' . $this->request->post('to'); 
-                    if(!(strtotime($to)))
-                        $to = $this->request->post('date') . ' 00:00';
-                    
-                    $from = strtotime($from);
-                    $to = strtotime($to);
-                    
+			        $exam = ORM::factory('exam', $id);
+			
+			        $exam->values($this->request->post());
+			
+			        $exam->save();
+			                    
+                    $event_exam = Event_Abstract::factory('exam');
                     $event_exam->set_values($this->request->post());
                     $event_exam->set_value('eventstart', $from);
                     $event_exam->set_value('eventend', $to);
-                    $event_exam->update($id);
+                    
+                    $event_exam->update($exam->event_id);
 
                     Request::current()->redirect('exam');
                     exit;
@@ -345,8 +343,8 @@ class Controller_Exam extends Controller_Base {
         $form->posted_data = $submitted ? $this->request->post() : array();
         $form->append('Name', 'name', 'text');
         $form->append('Date', 'date', 'text', array('attributes' => array('class' => 'date')));
-        $form->append('From', 'from', 'hidden');
-        $form->append('To', 'to', 'hidden');
+        $form->append('From', 'from', 'hidden', array('attributes' => array('id' => 'slider-range_from')));
+        $form->append('To', 'to', 'hidden', array('attributes' => array('id' => 'slider-range_to')));
         $form->append('Total Marks', 'total_marks', 'text');
         $form->append('Passing Marks', 'passing_marks', 'text');
         $form->append('Reminder', 'reminder', 'hidden');
@@ -360,46 +358,12 @@ class Controller_Exam extends Controller_Base {
         
     }
     
-    public function action_get_avaliable_rooms(){
-        
-        $from = $this->request->post('date') . ' ' . $this->request->post('from');
-        if(!(strtotime($from)))
-            $from = $this->request->post('date') . ' 00:00';
-        
-        $to = $this->request->post('date') . ' ' . $this->request->post('to'); 
-        if(!(strtotime($to)))
-            $to = $this->request->post('date') . ' 00:00';
-        
-        $from = strtotime($from);
-        $to = strtotime($to);
-        
-        $event_id = $this->request->post('event_id');
-        
-        $results = Event_Abstract::get_avaliable_rooms($from, $to, $event_id);
-        
-        $rooms = array();
-        foreach($results as $room){
-            $rooms[$room->id] = $room->room_number . ', ' . $room->room_name;
-        }
-        
-        $room_id = 0;
-        
-        if($event_id){
-        	$event = ORM::factory('event', $event_id);
-        	$room = ORM::factory('room', $event->room_id);
-        	$room_id = $room->id;
-        }
-        
-        $element = Form::select('room_id',$rooms, $room_id);
-        
-        echo json_encode(array('element' => $element));
-        
-    }
-    
     public function action_delete(){
         if($this->request->method() === 'POST' && $this->request->post('selected')){
             foreach($this->request->post('selected') as $exam_id){
-                ORM::factory('exam', $exam_id)->delete();
+            	$exam = ORM::factory('exam', $exam_id);
+            	ORM::factory('event', $exam->event_id);
+            	$exam->delete();
             }
         }
         Request::current()->redirect('exam');

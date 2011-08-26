@@ -1,16 +1,22 @@
 <?php defined('SYSPATH') or die('No direct access allowed.');
 
-class Event_Abstract {
+abstract class Event_Abstract {
     
     protected $_values;
     
-    private $_eventtype;
+    protected $_eventtype;
     
-    private $_eventstart;
+    protected $_eventstart;
     
-    private $_eventend;
+    protected $_eventend;
     
-    private $_room_id;
+    protected $_room_id;
+
+    protected $_event_id;
+
+    public function __construct($event_id = null) {
+        $this->_event_id = $event_id;
+    }
     
     public function get_room_id(){
       return $this->_room_id;
@@ -48,12 +54,12 @@ class Event_Abstract {
     }
     
     
-    public static function factory($type){
+    public static function factory($type, $event_id = null){
         $file = MODPATH . 'event/classes/event/' . $type . '.php';
         
         if(file_exists($file)){
             $class = 'Event_' . $type;
-            return new $class;
+            return new $class($event_id);
         } else {
             throw new Event_Exception('Class Event_ ' . $type . ' not found');
         }
@@ -75,13 +81,7 @@ class Event_Abstract {
         
         $event = ORM::factory('event');
         
-        $event->eventtype = $this->_eventtype;
-        
-        $event->eventstart = $this->_eventstart;
-        
-        $event->eventend = $this->_eventend;
-        
-        $event->room_id = $this->_room_id;
+        $event->values($this->_values);
         
         $event->save();
         
@@ -94,13 +94,13 @@ class Event_Abstract {
         $event = ORM::factory('event');
         $event->and_where_open()
             ->where('events.eventstart', 'BETWEEN', array($from, $to))
-            ->and_where('events.eventend', 'BETWEEN', array($from, $to))
+            ->or_where('events.eventend', 'BETWEEN', array($from, $to))
             ->and_where_close();
         if($event_id){
             $event->and_where('events.id', '!=', $event_id);
         }
         $occupied_room_ids = $event->find_all()->as_array(NULL, 'room_id');
-        
+
         $room = ORM::factory('room');
         if($occupied_room_ids)
             $room->where('id', 'NOT IN', $occupied_room_ids);
@@ -114,16 +114,9 @@ class Event_Abstract {
         
         $event = ORM::factory('event', $id);
         
-        $event->eventtype = $this->_eventtype;
+        $event->values($this->_values);
         
-        $event->eventstart = $this->_eventstart;
-        
-        $event->eventend = $this->_eventend;
-        
-        $event->room_id = $this->_room_id;
-                
         $event->save();
         
-    }
-    
+    } 
 }

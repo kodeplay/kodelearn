@@ -1,6 +1,8 @@
 <?php defined('SYSPATH') or die('No direct script access.');
 
 class Model_Examgroup extends ORM {
+
+    protected $_has_many = array('exam' => array('model' => 'exam'));
     
     public function validator($data) {
         return Validation::factory($data)
@@ -89,5 +91,22 @@ class Model_Examgroup extends ORM {
             }
         } 
         return $results;
+    }
+
+    public function __toString() {
+        return ucfirst($this->name);
+    }
+
+    /**
+     * Method to return an anchor tag with exam name the text and 
+     * link to the exam details page
+     */
+    public function toLink() {
+        if (Acl::instance()->is_allowed('exam_edit')) {
+            $url = Url::site('examgroup/edit/id/');
+        } else {
+            $url = Url::site('examgroup');
+        }
+        return Html::anchor($url, (string) $this);
     }
 }

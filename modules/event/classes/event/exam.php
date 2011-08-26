@@ -3,40 +3,15 @@
 class Event_Exam extends Event_Abstract {
     public function add(){
         
-    	$event = new Event_Abstract();
-    	
-    	$event->set_eventtype('exam');
-    	
-        $event->set_eventstart($this->_values['eventstart']);
-        $event->set_eventend($this->_values['eventend']);
-        $event->set_room_id($this->_values['room_id']);
-        $event_id = $event->add();
+    	$this->set_value('eventtype', 'exam');
        
-        $this->set_value('event_id', $event_id);
-
-        $exam = ORM::factory('exam');
-
-        $exam->values($this->_values);
-
-        $exam->save();
-
+    	return parent::add();
+    	
     }
 
     public function update($id){
 
-        $exam = ORM::factory('exam', $id);
+        parent::update($id);
 
-        $event = new Event_Abstract();
-        
-        $event->set_eventtype('exam');
-
-        $event->set_eventstart($this->_values['eventstart']);
-        $event->set_eventend($this->_values['eventend']);
-        $event->set_room_id($this->_values['room_id']);
-        $event->update($exam->event_id);
-
-        $exam->values($this->_values);
-
-        $exam->save();
     }
 }

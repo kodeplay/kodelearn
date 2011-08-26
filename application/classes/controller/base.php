@@ -26,8 +26,8 @@ class Controller_Base extends Controller_Template {
             $this->view = View::factory('template/content');
         } else {
             $this->view = View::factory($this->template);
+            Breadcrumbs::add(array('Home', Url::site('home')));
         }
-        Breadcrumbs::add(array('Home', Url::site('home')));
         return parent::before();
     }
 	
@@ -94,6 +94,8 @@ class Controller_Base extends Controller_Template {
             $scripts = array(
                 'media/javascript/jquery-1.6.2.min.js',
                 'media/javascript/common.js',
+                'media/javascript/classes.js',
+                'media/javascript/events.js',
                 'media/javascript/ajaxupload.js',
                 'media/javascript/jquery-ui-1.8.14.custom.min.js',
                 'media/javascript/jquery-ui-timepicker-addon.js',

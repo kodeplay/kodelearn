@@ -8,7 +8,7 @@
     <div class="l w69 pad5">
         <?php echo $calendar_markup; ?>
     </div>
-    <div class="r w29 debug">
+    <div class="r w29" id="day-events">
         <?php echo $day_events; ?>
     </div>  
 </div>
