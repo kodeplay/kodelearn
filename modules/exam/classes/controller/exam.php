@@ -22,12 +22,12 @@ class Controller_Exam extends Controller_Base {
     	if($course_ids){
             $exams = ORM::factory('exam')
                 ->join('events')->on('exams.event_id', '=', 'events.id')
-                ->where('course_id', 'IN', $course_ids)
+                ->where('exams.course_id', 'IN', $course_ids)
                 ->and_where('events.eventstart', '>', time())
                 ->find_all();
             $past_exams = ORM::factory('exam')
                 ->join('events')->on('exams.event_id', '=', 'events.id')
-                ->where('course_id', 'IN', $course_ids)
+                ->where('exams.course_id', 'IN', $course_ids)
                 ->and_where('events.eventstart', '<', time())
                 ->find_all();
     	} else {

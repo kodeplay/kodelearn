@@ -32,13 +32,28 @@ class Model_Event extends ORM {
      */
     public static function monthly_events($month, $year) {
         // first date of the month
-        $first = date("M-d-Y", mktime(0, 0, 0, $month, 1, $year));
+        $first = mktime(0, 0, 0, $month, 1, $year);
         // last date of the month
-        $last = date("M-d-Y", mktime(0, 0, 0, $month+1, 1, $year));
-        // get the events having startdate in this month
-        $event = ORM::factory('event')
-            ->where('eventstart', 'BETWEEN', array(strtotime($first), strtotime($last)))
-            ->find_all();
+        $last = mktime(0, 0, 0, $month+1, 1, $year);
+        // find out the padding days from previous and next months and also consider them
+        $padding_days = array(
+            'prev' => (int)date('N', $first)%7,
+            'next' => 7 - (int) date('N', $last)
+        );
+        $first = $first - $padding_days['prev'] * (60*60*24);
+        $last = $last + $padding_days['next'] * (60*60*24);
+        $user = Acl::instance()->relevant_user();
+        if ($user instanceof Model_User) {
+            $courses = $user->courses->find_all()->as_array(null, 'id');
+            $event = ORM::factory('event')
+                ->where('eventstart', 'BETWEEN', array($first, $last))
+                ->where('events.course_id', 'IN', DB::expr('(' . implode(", ", $courses) . ')'))
+                ->find_all();
+        } else {
+            $event = ORM::factory('event')
+                ->where('eventstart', 'BETWEEN', array($first, $last))
+                ->find_all();
+        }
         return $event;
     }
 

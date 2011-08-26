@@ -14,11 +14,12 @@ class Controller_Calendar extends Controller_Base {
         $month = Arr::get($_GET, 'month', date('m'));
         $year = Arr::get($_GET, 'year', date('Y'));
         $calendar = new Calendar($month, $year);
+        $calendar->standard('prev-next');
         $event = Model_Event::monthly_events($month, $year);
         $day_events = array();
         // loop though events and group events by day and event types
         foreach ($event as $e) {
-            $day = date('j', $e->eventstart);
+            $day = date('j-m', $e->eventstart);
             // echo 'date(\'j\', '. $e->eventstart .') = ' . $day . '=' . date('Y-m-d H:i:s', $e->eventstart) . ' <br/>';
             if (!isset($day_events[$day][$e->eventtype])) {
                 $day_events[$day][$e->eventtype] = array();
@@ -28,7 +29,8 @@ class Controller_Calendar extends Controller_Base {
             );
         }
         if ($day_events) {
-            foreach ($day_events as $day=>$types) {
+            foreach ($day_events as $daymonth=>$types) {
+                list($day, $month) = explode("-", $daymonth);                
                 $timestamp = mktime(0, 0, 0, $month, (int)$day, $year);
                 foreach ($types as $type=>$events) {
                     $count = count($events);
@@ -48,7 +50,7 @@ class Controller_Calendar extends Controller_Base {
         );
         $calendar_markup = $calendar->render();
         Breadcrumbs::add(array(
-            'Calendar', Url::site('Calendar')
+            'Calendar', Url::site(sprintf('calendar?month=%s&year=%s', $month, $year))
         ));
         $day_events = Request::factory('calendar/day_events')
             ->method(Request::GET)

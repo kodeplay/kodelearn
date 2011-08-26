@@ -271,6 +271,7 @@ KODELEARN.modules.add('calendar', (function () {
         day_events: function () {
 	    $(".calendar>tbody>tr>td").click(function () {
                 var html = $(this).data('events_html');
+                $(".calendar>tbody>tr>td").removeClass('curr');
                 // if cached, inject into the container and return
                 if (html) {
                     $("#day-events").html(html);
@@ -291,7 +292,7 @@ KODELEARN.modules.add('calendar', (function () {
                         'action': 'day_events/year/'+year+'/month/'+month+'/day/'+day,
                         'callback': function (resp) { 
                             // cache results (entire html) in data
-                            $(that).data('events_html', resp);
+                            $(that).data('events_html', resp).addClass('curr');
                         }                        
                     });
                 } else {
