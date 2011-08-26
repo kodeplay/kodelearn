@@ -20,7 +20,7 @@ class Controller_Attendence extends Controller_Base {
         $date_from_string = $date_to_string - 604800;
         $date_from = date('Y-m-d',$date_from_string); 
         
-        $user = Auth::instance()->get_user();
+        $user = Acl::instance()->relevant_user();
        
         $course = ORM::factory('course');
         $course->join('courses_users','inner')
