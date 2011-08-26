@@ -15,4 +15,12 @@ class Model_Event extends ORM {
             'foreign_key' => 'room_id'
         )
     );
+
+    public function validator($data) {
+        return Validation::factory($data)
+            ->rule('date', 'date')
+            ->rule('date', 'not_empty')
+            ->rule('from', 'not_empty')
+            ->rule('to', 'not_empty');
+    }
 }

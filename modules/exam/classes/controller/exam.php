@@ -178,17 +178,9 @@ class Controller_Exam extends Controller_Base {
                 $validator->bind(':to', $this->request->post('to'));
                 if ($validator->check()) {
 
-                    $from = $this->request->post('date') . ' ' . $this->request->post('from');
-                    if(!(strtotime($from)))
-                        $from = $this->request->post('date') . ' 00:00';
+                    $from = strtotime($this->request->post('date')) + ($this->request->post('from') * 60); 
+                    $to = strtotime($this->request->post('date')) + ($this->request->post('to') * 60); 
                     
-                    $to = $this->request->post('date') . ' ' . $this->request->post('to'); 
-                    if(!(strtotime($to)))
-                        $to = $this->request->post('date') . ' 00:00';
-                    
-                    $from = strtotime($from);
-                    $to = strtotime($to);
-
                     $event_exam = Event_Abstract::factory('exam');
 
                     $event_exam->set_values($this->request->post());
@@ -253,16 +245,8 @@ class Controller_Exam extends Controller_Base {
                 $validator->bind(':to', $this->request->post('to'));
                 if ($validator->check()) {
 
-                    $from = $this->request->post('date') . ' ' . $this->request->post('from');
-                    if(!(strtotime($from)))
-                        $from = $this->request->post('date') . ' 00:00';
-                    
-                    $to = $this->request->post('date') . ' ' . $this->request->post('to'); 
-                    if(!(strtotime($to)))
-                        $to = $this->request->post('date') . ' 00:00';
-                    
-                    $from = strtotime($from);
-                    $to = strtotime($to);
+                	$from = strtotime($this->request->post('date')) + ($this->request->post('from') * 60); 
+                    $to = strtotime($this->request->post('date')) + ($this->request->post('to') * 60); 
                     
 			        $exam = ORM::factory('exam', $id);
 			
@@ -359,8 +343,8 @@ class Controller_Exam extends Controller_Base {
         $form->posted_data = $submitted ? $this->request->post() : array();
         $form->append('Name', 'name', 'text');
         $form->append('Date', 'date', 'text', array('attributes' => array('class' => 'date')));
-        $form->append('From', 'from', 'hidden');
-        $form->append('To', 'to', 'hidden');
+        $form->append('From', 'from', 'hidden', array('attributes' => array('id' => 'slider-range_from')));
+        $form->append('To', 'to', 'hidden', array('attributes' => array('id' => 'slider-range_to')));
         $form->append('Total Marks', 'total_marks', 'text');
         $form->append('Passing Marks', 'passing_marks', 'text');
         $form->append('Reminder', 'reminder', 'hidden');

@@ -88,13 +88,13 @@ abstract class Event_Abstract {
         $event = ORM::factory('event');
         $event->and_where_open()
             ->where('events.eventstart', 'BETWEEN', array($from, $to))
-            ->and_where('events.eventend', 'BETWEEN', array($from, $to))
+            ->or_where('events.eventend', 'BETWEEN', array($from, $to))
             ->and_where_close();
         if($event_id){
             $event->and_where('events.id', '!=', $event_id);
         }
         $occupied_room_ids = $event->find_all()->as_array(NULL, 'room_id');
-        
+
         $room = ORM::factory('room');
         if($occupied_room_ids)
             $room->where('id', 'NOT IN', $occupied_room_ids);

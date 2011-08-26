@@ -1,39 +1,5 @@
 
-function showAjaxError(beforeDiv,msgArr){
-	
-	$('#warning').remove();
-	var warning = '<div class="block-error" id="error"><ul>';
-	
-	for(var i = 0; i < msgArr.length ; i++ ){		
-	  warning += '<li>'+msgArr[i]+'</li>';	
-	}		
-	
-	warning += '</ul></div>';
-	console.log(beforeDiv);
-	beforeDiv.before(warning);
-	scroll(0,0);
-	$('#error').slideDown(200);
-	setTimeout('$("#error").slideUp()', 2000);
-	
-}
 
-function showAjaxSuccess(beforeDiv,msgArr){
-	
-	$('#warning').remove();
-	var warning = '<div class="block-success" id="success"><ul>';
-	
-	for(var i = 0; i < msgArr.length ; i++ ){		
-	  warning += '<li>'+msgArr[i]+'</li>';	
-	}		
-	
-	warning += '</ul></div>';
-	console.log(beforeDiv);
-	beforeDiv.before(warning);
-	scroll(0,0);
-	$('#success').slideDown(200);
-	setTimeout('$("#success").slideUp()', 2000);
-	
-}
 
 
 var ajaxLoad = function(opts){
