@@ -265,16 +265,21 @@ function ajaxRequest(controller,action){
 KODELEARN.modules.add('calendar', (function () {
     
     return {
+
 	init: function () {
             this.day_events();
+            this.ajaxify();
 	},
+
         day_events: function () {
-	    $(".calendar>tbody>tr>td").click(function () {
+            var $days = $(".calendar>tbody>tr>td"),
+            $eventlist = $("#day-events");
+	    $days.unbind('click').bind('click', function () {
                 var html = $(this).data('events_html');
-                $(".calendar>tbody>tr>td").removeClass('curr');
+                $days.removeClass('curr');
                 // if cached, inject into the container and return
                 if (html) {
-                    $("#day-events").html(html);
+                    $eventlist.html(html);
                     return true;
                 }
                 var id = $(this).attr('id'),
@@ -296,11 +301,56 @@ KODELEARN.modules.add('calendar', (function () {
                         }                        
                     });
                 } else {
-                    $("#day-events").html('<h1>Events for '+date.join('-')+'</h1><ul><li>No events scheduled.</li></ul>');
+                    $eventlist.html('<h1>Events for '+date.join('-')+'</h1><ul><li>No events scheduled.</li></ul>');
                 }
             });
+        },
+
+        /**
+         * Method to convert the prev and next month links to ajax actions
+         */
+        ajaxify: function () {
+            var $prev = $(".calendar>caption>span.prev>a"),
+            $next = $(".calendar>caption>span.next>a"),
+            urlhelper = KODELEARN.helpers.url,
+            that = this,
+            cb = function (e) {
+                e.preventDefault();
+                var month = urlhelper.get_param('month', $(this).attr('href')),
+                year = urlhelper.get_param('year', $(this).attr('href'));
+                new ajaxLoad({
+                    'container': '#calendar-wrapper',
+                    'controller': 'calendar',
+                    'action': 'calendar?month='+month+'&year='+year,
+                    'callback': function (resp) {
+                        that.day_events();
+                        that.ajaxify();
+                    }
+                });
+            };
+            $next.unbind('click').bind('click', cb);
+            $prev.unbind('click').bind('click', cb);
         }
     };
     
 })());
 
+KODELEARN.helpers = { };
+
+KODELEARN.helpers.url = {
+    
+    // get the GET params from the url as an object
+    get_param: function (name, url) {
+        name = name.replace(/[\[]/, "\\\[").replace(/[\]]/, "\\\]");
+        var regexS = "[\\?&]" + name + "=([^&#]*)";
+        var regex = new RegExp(regexS);
+        url = !url ? window.location.href : url;
+        var results = regex.exec(url);
+        if (results == null) {
+            return "";
+        }
+        else {
+            return decodeURIComponent(results[1].replace(/\+/g, " "));
+        }
+    }
+}
