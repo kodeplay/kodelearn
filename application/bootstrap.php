@@ -22,7 +22,7 @@ else
  * @see  http://kohanaframework.org/guide/using.configuration
  * @see  http://php.net/timezones
  */
-date_default_timezone_set('Kolkata/India');
+date_default_timezone_set('Asia/Kolkata');
 
 /**
  * Set the default locale.
