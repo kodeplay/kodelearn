@@ -24,7 +24,7 @@
             
                 <?php foreach($users as $user){ ?>
                     <tr>
-                        <td><?php echo $user->firstname; ?></td>
+                        <td><?php echo $user->firstname." ".$user->lastname; ?></td>
                         <?php if($assigned_attendences){?>
                             <?php if(array_key_exists($user->id, $assigned_attendences) && $assigned_attendences[$user->id] == '1'){?>
                                 <td><input class="selected" type="checkbox" value="<?php echo $user->id; ?>" name="selected[]" checked></td>

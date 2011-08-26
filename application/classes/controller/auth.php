@@ -262,7 +262,7 @@ class Controller_Auth extends Controller_Base {
                     $user->password = $values['password'];
                     $user->forgot_password_string = "";
                     $user->save();
-                    $display_msg = '<div class="formMessages" style="width:380px; height:30px"><span class="fmIcon good"></span> <span class="fmText">Your password has been changed successfully. Please click here to <a href="http://kodelearn.kp/index.php/auth/index">login</a></span><span class="clear">&nbsp;</span></div>';
+                    $display_msg = '<div class="formMessages" style="width:380px; height:30px"><span class="fmIcon good"></span> <span class="fmText">Your password has been changed successfully. Please click here to <a href="'. Url::site("auth"). '">login</a></span><span class="clear">&nbsp;</span></div>';
                     
                 } else {
                     

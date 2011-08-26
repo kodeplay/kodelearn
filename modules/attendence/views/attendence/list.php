@@ -9,8 +9,9 @@
                 <input type="text" name="date" id="date"  value="<?php echo $date; ?>"></input>
                 <!-- <a class="button" href="#" id="add_users"> Add</a> -->
             </p>
-            
-            <p class="tip" style="display:none;" id="loading">Please wait...Loading Users</p>
+            <div style="height:10px;">
+                <p class="tip" style="display:none;" id="loading">Please wait...Loading Events</p>
+            </div>
             <div id="events-ajax"> 
                 <?php echo $users ?>          
             </div>

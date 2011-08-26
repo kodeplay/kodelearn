@@ -176,6 +176,7 @@ class Controller_Exam extends Controller_Base {
                 $exam = ORM::factory('exam');
                 $validator = $exam->validator($this->request->post());
                 $validator->bind(':to', $this->request->post('to'));
+                $validator->bind(':total_marks', $this->request->post('total_marks'));
                 if ($validator->check()) {
 
                     $from = strtotime($this->request->post('date')) + ($this->request->post('from') * 60); 
@@ -243,6 +244,7 @@ class Controller_Exam extends Controller_Base {
                 $exam = ORM::factory('exam');
                 $validator = $exam->validator($this->request->post());
                 $validator->bind(':to', $this->request->post('to'));
+                $validator->bind(':total_marks', $this->request->post('total_marks'));
                 if ($validator->check()) {
 
                 	$from = strtotime($this->request->post('date')) + ($this->request->post('from') * 60); 
