@@ -113,7 +113,7 @@ class Controller_Attendence extends Controller_Base {
     }
     
     public function action_get_attendence_exam_lecture() {
-        $user = Auth::instance()->get_user();
+        $user = Acl::instance()->relevant_user();
         $course = $this->request->post('course');
         $date_from = $this->request->post('date_from');
         $date_to = $this->request->post('date_to');
