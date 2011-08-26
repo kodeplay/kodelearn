@@ -804,6 +804,12 @@ table.calendar th { height: 30px; padding-top:10px; background: #eae3e0; border:
 table.calendar td { width: 14%; height: 80px; cursor: pointer; }
 table.calendar td.today { background: #eae3e0; }
 table.calendar td:hover { background: #f1edd3; }
+table.calendar td ul.output { margin-top: 10px; color: #427693; }
+#day-events { border: 1px solid #d7c2b5; }
+#day-events h1 { padding: 10px 15px; font-size: 18px; border-bottom: 1px solid #feb100; }
+#day-events ul { padding: 10px 5px; } 
+#day-events ul li { padding: 15px 10px; margin-bottom: 1px; border-bottom: 1px solid #d7c2b5; }
+#day-events ul li:hover { background: #f1edd3; border: 1px dashed #666; cursor: pointer; }
 
 /* ..........................
 	Attendance
