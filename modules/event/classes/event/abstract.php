@@ -91,16 +91,21 @@ abstract class Event_Abstract {
     
     public static function get_avaliable_rooms($from, $to, $event_id = FALSE){
 
-        $event = ORM::factory('event');
-        $event->and_where_open()
-            ->where('events.eventstart', 'BETWEEN', array($from, $to))
-            ->or_where('events.eventend', 'BETWEEN', array($from, $to))
-            ->and_where_close();
-        if($event_id){
-            $event->and_where('events.id', '!=', $event_id);
-        }
-        $occupied_room_ids = $event->find_all()->as_array(NULL, 'room_id');
+    	$sql = 'SELECT `events`.* FROM `events` WHERE ((`events`.`eventstart` BETWEEN :from AND :to OR `events`.`eventend` BETWEEN :from AND :to) OR (:from BETWEEN `events`.`eventstart` AND `events`.`eventend` OR :to BETWEEN `events`.`eventstart` AND `events`.`eventend`)) ';
+    	
+    	if($event_id){
+    		$sql .= ' AND `events`.id != ' . (int) $event_id;
+    	}
 
+		$query = DB::query(Database::SELECT, $sql);
+		 
+		$query->parameters(array(
+		    ':from' => $from,
+		    ':to' => $to,
+		));
+
+		$occupied_room_ids = $query->execute()->as_array(NULL, 'room_id');
+    	
         $room = ORM::factory('room');
         if($occupied_room_ids)
             $room->where('id', 'NOT IN', $occupied_room_ids);

@@ -4,6 +4,7 @@ Events.edit = function(eventId) {
 	
     $.get(KODELEARN.config.base_url + "event/edit/id/" + eventId,  {},
             function(html){
+    			$('#event_from').remove();
     			$('#edit_event').html(html);
             }, "html");
 };
@@ -15,7 +16,7 @@ Events.save = function() {
     			if(data.success){
     				var msg = data.message;
     				KODELEARN.modules.get('ajax_message').showAjaxSuccess($("#event_form"),msg);
-    				
+    				setTimeout('window.location.reload()', 2500);
     			} else {
     				msg = data.errors;
     				KODELEARN.modules.get('ajax_message').showAjaxError($("#event_form"),msg);

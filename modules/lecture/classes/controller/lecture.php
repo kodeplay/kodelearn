@@ -125,17 +125,17 @@ class Controller_Lecture extends Controller_Base {
         
         $form = $this->form('lecture/add', $submitted);
 
-        $days = array();
+        $days = ($this->request->post('days')) ? $this->request->post('days') : array();
         
         $slider = array(
             'once_slider' => array('from' => 600, 'to' => 800),
-            'monday_slider' => array('from' => 600, 'to' => 800),
-            'tuesday_slider' => array('from' => 600, 'to' => 800),
-            'wednesday_slider' => array('from' => 600, 'to' => 800),
-            'thursday_slider' => array('from' => 600, 'to' => 800),
-            'friday_slider' => array('from' => 600, 'to' => 800),
-            'saturday_slider' => array('from' => 600, 'to' => 800),
-            'sunday_slider' => array('from' => 600, 'to' => 800)
+            'monday_slider' => ($this->request->post('monday')) ? $this->request->post('monday') : array('from' => 600, 'to' => 800),
+            'tuesday_slider' => ($this->request->post('tuesday')) ? $this->request->post('tuesday') : array('from' => 600, 'to' => 800),
+            'wednesday_slider' => ($this->request->post('wednesday')) ? $this->request->post('wednesday') : array('from' => 600, 'to' => 800),
+            'thursday_slider' => ($this->request->post('thursday')) ? $this->request->post('thursday') : array('from' => 600, 'to' => 800),
+            'friday_slider' => ($this->request->post('friday')) ? $this->request->post('friday') : array('from' => 600, 'to' => 800),
+            'saturday_slider' => ($this->request->post('saturday')) ? $this->request->post('saturday') : array('from' => 600, 'to' => 800),
+            'sunday_slider' => ($this->request->post('sunday')) ? $this->request->post('sunday') : array('from' => 600, 'to' => 800)
         );
         
         $view = View::factory('lecture/form')
