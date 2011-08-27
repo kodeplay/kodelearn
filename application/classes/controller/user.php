@@ -128,7 +128,8 @@ class Controller_User extends Controller_Base {
                     $user->firstname = $this->request->post('firstname');
                     $user->lastname = $this->request->post('lastname');
                     $user->email = $this->request->post('email');
-                    $user->password = Auth::instance()->hash(rand(10000, 65000));
+                    $password = rand(10000, 65000);
+                    $user->password = Auth::instance()->hash($password);
                     $user->status = $this->request->post('status');
                     $role = ORM::factory('role', $this->request->post('role_id'));
                     $user->save();
@@ -147,6 +148,7 @@ class Controller_User extends Controller_Base {
                             $user->add('courses', $course);
                         }
                     }
+                    self::notify_by_email($user, $password);
                     Request::current()->redirect('user');
                     exit;
                 } else {
@@ -221,8 +223,9 @@ class Controller_User extends Controller_Base {
         $submitted = false;
         
         $id = $this->request->param('id');
-        if(!$id)
+        if (!$id) {
             Request::current()->redirect('user');
+        }
         
         $user = ORM::factory('user', $id);
 
@@ -277,9 +280,7 @@ class Controller_User extends Controller_Base {
             'course_id' => $user->courses->find_all()->as_array(NULL, 'id'),
             'status' => (int) $user->status,
         ));        
-        //$heading[] = "View/Edit ".$user->firstname."'s Profile";
-        
-        
+        //$heading[] = "View/Edit ".$user->firstname."'s Profile";        
         
         $view = View::factory('user/form')
             ->bind('form', $form)
@@ -338,7 +339,8 @@ class Controller_User extends Controller_Base {
                             $user->firstname = $data['firstname'];
                             $user->lastname = $data['lastname'];
                             $user->email = $data['email'];
-                            $user->password = Auth::instance()->hash(rand(10000, 65000));
+                            $password = rand(10000, 65000);
+                            $user->password = Auth::instance()->hash($password);
                             $role = ORM::factory('role', $this->request->post('role_id'));
                             $user->save();
                             $user->add('roles', $role);
@@ -349,6 +351,8 @@ class Controller_User extends Controller_Base {
                                     $user->add('batches', $batch);
                                 }
                             }
+                            // send email
+                            self::notify_by_email($user, $password);
                             $records_added += 1;	
                         } else {
                             $this->error['warning'] = "There was an error on line # " . $key . " Records Added " . $records_added;
@@ -411,5 +415,20 @@ class Controller_User extends Controller_Base {
     	$this->content = $view;
         
     }
-    
+
+    private static function notify_by_email($user, $password) {
+        $subject = "Your Kodelearn Account Details";
+        $message = "Dear {name}, <br/>
+                    Your account has been created on Kodelearn successfully.<br/>
+                    Please use the following details to login to your account <br/> <br/>
+                    Email: {email}, <br/>
+                    Password: {password} <br/> <br/>
+                    Best Regards, <br/>
+                    Kodelearn Team.";
+        $search = array('{name}', '{email}', '{password}');
+        $replace = array($user->firstname . ' ' . $user->lastname, $user->email, $password);
+        $message = str_replace($search, $replace, $message);
+        $html = true;
+        Email::send_mail($user->email, $subject, $message, $html);
+    }    
 }
