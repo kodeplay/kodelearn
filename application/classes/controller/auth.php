@@ -122,10 +122,14 @@ class Controller_Auth extends Controller_Base {
                'password'  => Auth::instance()->hash($parent_password),
             );
             $subject = "Parent email";
-            $message = "The password is ".$parent_password;
-            
+            $message  = "<b>Dear ". $this->request->post('parentname') ." ". $this->request->post('lastname') .",<br><br>";
+            $message .= "Your child '". $this->request->post('firstname') ." ". $this->request->post('lastname') ."' has registered on Kodelearn. <br>The link to access your account is ".Url::site("auth")." <br>";
+            $message .= "User name : ". $this->request->post('email_parent') ."<br>"; 
+            $message .= "Password : ". $parent_password ."<br><br><br>";
+            $message .=  "Thanks,<br> Kodelearn team";
+            $html = true;
             $role = Model_Role::from_name('Parent');
-            Email::send_mail($this->request->post('email_parent'), $subject, $message);
+            Email::send_mail($this->request->post('email_parent'), $subject, $message, $html);
             $user_id = $this->create_user($values, $role);
            
             $values = array(

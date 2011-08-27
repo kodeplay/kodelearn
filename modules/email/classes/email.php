@@ -142,12 +142,11 @@ class Email {
 		return Email::$mail->send($message);
 	}
 	
-	public static function send_mail($to, $subject, $message)
+	public static function send_mail($to, $subject, $message, $html = false)
 	{
 	    $from = 'info@kodelearn.com';
-	    $html = false;
 	    Email::connect($config = NULL);
-	    Email::send($to, $from, $subject, $message, $html = false);
+	    Email::send($to, $from, $subject, $message, $html);
 	   
 	} 
 

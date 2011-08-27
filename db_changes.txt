@@ -195,9 +195,6 @@ CREATE TABLE IF NOT EXISTS `attendences` (
   KEY `user_id` (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-ALTER TABLE `attendences`
-  ADD CONSTRAINT `attendences_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `attendences` (`user_id`) ON DELETE CASCADE,
-  ADD CONSTRAINT `attendences_ibfk_1` FOREIGN KEY (`event_id`) REFERENCES `attendences` (`event_id`) ON DELETE CASCADE;
 
 -----------------------------------------------------------------------------------------------------------------
 
