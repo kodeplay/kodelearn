@@ -36,7 +36,8 @@
         	        Events.save();
                 },
                 Cancel: function() {
-                    $( this ).dialog( "close" );
+                    $( this ).dialog( "destroy" );
+                    $('#event_from').remove();
                 }
             }
 

@@ -9,8 +9,27 @@ class Controller_Calendar extends Controller_Base {
 
     public function action_index() {
         $view = View::factory('calendar/index')
-            ->bind('calendar_markup', $calendar_markup)
+            ->bind('calendar', $calendar)
             ->bind('day_events', $day_events);
+        $month = Arr::get($_GET, 'month', date('m'));
+        $year = Arr::get($_GET, 'year', date('Y'));
+        Breadcrumbs::add(array(
+            'Calendar', Url::site(sprintf('calendar?month=%s&year=%s', $month, $year))
+        ));
+        $calendar = Request::factory('calendar/calendar')
+            ->method(Request::GET)
+            ->execute()
+            ->body();
+        $day_events = Request::factory('calendar/day_events')
+            ->method(Request::GET)
+            ->execute()
+            ->body();
+        $this->content = $view;
+    }
+
+    public function action_calendar() {
+        $view = View::factory('calendar/calendar')
+            ->bind('calendar', $calendar_markup);
         $month = Arr::get($_GET, 'month', date('m'));
         $year = Arr::get($_GET, 'year', date('Y'));
         $calendar = new Calendar($month, $year);
@@ -49,14 +68,7 @@ class Controller_Calendar extends Controller_Base {
             ->add_class('today')
         );
         $calendar_markup = $calendar->render();
-        Breadcrumbs::add(array(
-            'Calendar', Url::site(sprintf('calendar?month=%s&year=%s', $month, $year))
-        ));
-        $day_events = Request::factory('calendar/day_events')
-            ->method(Request::GET)
-            ->execute()
-            ->body();
-        $this->content = $view;
+        $this->content = $view;        
     }
 
     public function action_day_events() {
@@ -71,7 +83,7 @@ class Controller_Calendar extends Controller_Base {
         }
         $view = View::factory('calendar/day_events')
             ->set('date', $date)
-            ->set('day_events', $day_events);        
+            ->set('day_events', $day_events);
         $this->content = $view;
     }
 }

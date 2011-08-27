@@ -74,7 +74,7 @@ ajaxLoad.prototype.before = function() {
 
 ajaxLoad.prototype.request = function() {
     var o = this;
-    var url = KODELEARN.config.base_url+""+this.options.controller+"/"+this.options.action+"/";
+    var url = KODELEARN.config.base_url+""+this.options.controller+"/"+this.options.action;
     $.get(url,function(resp) {
 	if ('html' == o.options.response) {
 	    $(o.options.container).html(resp);
@@ -95,6 +95,8 @@ function showSuccess() {
     var msg = ['Your Settings are saved Successfully', 'Now you can login using your new password'];
     showAjaxSuccess($("#foo"),msg);
 }
+
+
 
 
 

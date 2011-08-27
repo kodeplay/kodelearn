@@ -1,6 +1,8 @@
 <?php defined('SYSPATH') or die('No direct script access.');
 
 class Model_Lecture extends ORM {
+
+    protected $_belongs_to = array('course' => array());
 	
     protected $_has_many = array(
         'events' => array(

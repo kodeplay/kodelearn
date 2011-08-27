@@ -5,8 +5,8 @@
         <div class="pageDesc r">replace_here_page_description</div>
         <div class="clear"></div>
     </div><!-- pageTop --> 
-    <div class="l w69 pad5">
-        <?php echo $calendar_markup; ?>
+    <div class="l w69 pad5" id="calendar-wrapper">
+        <?php echo $calendar; ?>
     </div>
     <div class="r w29" id="day-events">
         <?php echo $day_events; ?>
