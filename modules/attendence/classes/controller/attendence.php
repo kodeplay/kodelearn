@@ -284,12 +284,15 @@ class Controller_Attendence extends Controller_Base {
             $cid = $lecture->course_id;
             $event = $lecture->name;
         }
+        $course = ORM::factory('course',$cid);
+        $users = Model_Course::get_students($course);
         
+        /*
         $user = ORM::factory('user');
         $user->join('courses_users','left')
              ->on('courses_users.user_id','=','id');
         $user->where('courses_users.course_id','=',$cid); 
-        $users = $user->find_all();
+        $users = $user->find_all();*/
         
         $page_title = Kohana::message('page_title', 'attendence_add.title');
         

@@ -10,6 +10,7 @@
             <input type="hidden" name="id" id="id" value="<?php echo $data['event_id']; ?>">
             <input type="hidden" name="course_id" id="course_id" value="<?php echo $data['course_id']; ?>">
             <a href="#" onclick="$('#attendence').submit();" class = 'createButton l'>Save</a>
+            <a href="<?php echo Url::site('attendence'); ?>" class = 'button r'>Cancel</a>
             <br/>
             <table class="vm10 datatable fullwidth">
             <tr>
