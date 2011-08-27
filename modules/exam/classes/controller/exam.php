@@ -22,12 +22,12 @@ class Controller_Exam extends Controller_Base {
     	if($course_ids){
             $exams = ORM::factory('exam')
                 ->join('events')->on('exams.event_id', '=', 'events.id')
-                ->where('course_id', 'IN', $course_ids)
+                ->where('exams.course_id', 'IN', $course_ids)
                 ->and_where('events.eventstart', '>', time())
                 ->find_all();
             $past_exams = ORM::factory('exam')
                 ->join('events')->on('exams.event_id', '=', 'events.id')
-                ->where('course_id', 'IN', $course_ids)
+                ->where('exams.course_id', 'IN', $course_ids)
                 ->and_where('events.eventstart', '<', time())
                 ->find_all();
     	} else {
@@ -176,6 +176,7 @@ class Controller_Exam extends Controller_Base {
                 $exam = ORM::factory('exam');
                 $validator = $exam->validator($this->request->post());
                 $validator->bind(':to', $this->request->post('to'));
+                $validator->bind(':total_marks', $this->request->post('total_marks'));
                 if ($validator->check()) {
 
                     $from = strtotime($this->request->post('date')) + ($this->request->post('from') * 60); 
@@ -243,6 +244,7 @@ class Controller_Exam extends Controller_Base {
                 $exam = ORM::factory('exam');
                 $validator = $exam->validator($this->request->post());
                 $validator->bind(':to', $this->request->post('to'));
+                $validator->bind(':total_marks', $this->request->post('total_marks'));
                 if ($validator->check()) {
 
                 	$from = strtotime($this->request->post('date')) + ($this->request->post('from') * 60); 

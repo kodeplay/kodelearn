@@ -18,6 +18,7 @@ class Model_Exam extends ORM {
             ->rule('from', 'not_empty')
             ->rule('to', 'not_empty')
             ->rule('from', 'Model_Exam::time_check', array(':value',':to'))
+            ->rule('passing_marks', 'Model_Exam::marks_check', array(':value',':total_marks'))
             ->rule('passing_marks', 'digit')
             ->rule('name', 'min_length', array(':value', 3));
     }
@@ -28,6 +29,15 @@ class Model_Exam extends ORM {
         $s_to = strtotime($to);
         
         if($s_from > $s_to){
+            return false;
+        } else {
+            return true;
+        }
+    }
+    
+    public static function marks_check($passing_marks, $total_marks = NULL) {
+        
+        if($passing_marks > $total_marks){
             return false;
         } else {
             return true;

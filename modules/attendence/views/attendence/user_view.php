@@ -19,7 +19,9 @@
                 </select> <!-- course -->
             </p>
             
-            <p class="tip" style="display:none;" id="loading">Please wait...Loading Users</p>
+            <div style="height:10px;">
+                <p class="tip" style="display:none;" id="loading">Please wait...Loading attendence</p>
+            </div>
             <div id="events-ajax"> 
                 <?php echo $attendence_list ?>          
             </div>

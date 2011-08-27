@@ -225,7 +225,7 @@ class Controller_Auth extends Controller_Base {
             //Email::connect($config = NULL);
             $to = $user->email;
             $subject = 'Change password';
-            $message = 'Link to change your password: http://kodelearn.kp/index.php/auth/changepassword/u/'.$forgot_password_string;
+            $message = 'Link to change your password: '. Url::site("auth").'/changepassword/u/'.$forgot_password_string;
             
             Email::send_mail($to, $subject, $message);
             
@@ -242,7 +242,7 @@ class Controller_Auth extends Controller_Base {
     public function action_changepassword(){
         $u = $this->request->param('u');
         if(!$u){
-            echo "Not a valid link. Clik here to go <a href='http://kodelearn.kp/index.php/auth/index'>home</a>";
+            echo "Not a valid link. Clik here to go <a href='".Url::site('auth')."'>home</a>";
             exit;
         }
         $user = ORM::factory('user');
@@ -262,7 +262,7 @@ class Controller_Auth extends Controller_Base {
                     $user->password = $values['password'];
                     $user->forgot_password_string = "";
                     $user->save();
-                    $display_msg = '<div class="formMessages" style="width:380px; height:30px"><span class="fmIcon good"></span> <span class="fmText">Your password has been changed successfully. Please click here to <a href="http://kodelearn.kp/index.php/auth/index">login</a></span><span class="clear">&nbsp;</span></div>';
+                    $display_msg = '<div class="formMessages" style="width:380px; height:30px"><span class="fmIcon good"></span> <span class="fmText">Your password has been changed successfully. Please click here to <a href="'. Url::site("auth"). '">login</a></span><span class="clear">&nbsp;</span></div>';
                     
                 } else {
                     
@@ -281,7 +281,7 @@ class Controller_Auth extends Controller_Base {
             $this->content = $view;
             
         } else {
-            echo "Not a valid link. Clik here to go <a href='http://kodelearn.kp/index.php/auth/index'>home</a>";
+            echo "Not a valid link. Clik here to go <a href='".Url::site('auth')."'>home</a>";
             exit;     
         }
        
