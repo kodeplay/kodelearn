@@ -198,7 +198,7 @@ class Controller_Attendence extends Controller_Base {
             $lectures = $lecture->find_all();
         }
         $lecture_exam_data_all = array();
-        
+        $assigned_attendence = ORM::factory('attendence');
         if($exams && (count($exams)>0)){ 
             foreach($exams as $exam_data){
                 $lecture_exam_data = array();
@@ -208,6 +208,14 @@ class Controller_Attendence extends Controller_Base {
                 $lecture_exam_data['eventtype'] = $exam_data->eventtype;
                 $lecture_exam_data['id'] = $exam_data->id;
                 $lecture_exam_data['event_id'] = $exam_data->event_id;
+                
+                $assigned_attendence->where('event_id', '=', $exam_data->event_id);
+                $assigned_attendences = $assigned_attendence->find_all()->as_array('user_id','present');
+                if($assigned_attendences){
+                    $lecture_exam_data['assigned'] = "assigned";
+                } else {
+                    $lecture_exam_data['assigned'] = "not_assigned";   
+                }
                 $lecture_exam_data_all[] = $lecture_exam_data;
             }
         }
@@ -220,6 +228,13 @@ class Controller_Attendence extends Controller_Base {
                 $lecture_exam_data['eventtype'] = $lecture_data->eventtype;
                 $lecture_exam_data['id'] = $lecture_data->id;
                 $lecture_exam_data['event_id'] = $lecture_data->event_id;
+                $assigned_attendence->where('event_id', '=', $lecture_data->event_id);
+                $assigned_attendences = $assigned_attendence->find_all()->as_array('user_id','present');
+                if($assigned_attendences){
+                    $lecture_exam_data['assigned'] = "assigned";
+                } else {
+                    $lecture_exam_data['assigned'] = "not_assigned";   
+                }
                 $lecture_exam_data_all[] = $lecture_exam_data;
             }
         }
