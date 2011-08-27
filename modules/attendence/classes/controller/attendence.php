@@ -198,7 +198,7 @@ class Controller_Attendence extends Controller_Base {
             $lectures = $lecture->find_all();
         }
         $lecture_exam_data_all = array();
-        
+        $assigned_attendence = ORM::factory('attendence');
         if($exams && (count($exams)>0)){ 
             foreach($exams as $exam_data){
                 $lecture_exam_data = array();
@@ -208,6 +208,14 @@ class Controller_Attendence extends Controller_Base {
                 $lecture_exam_data['eventtype'] = $exam_data->eventtype;
                 $lecture_exam_data['id'] = $exam_data->id;
                 $lecture_exam_data['event_id'] = $exam_data->event_id;
+                
+                $assigned_attendence->where('event_id', '=', $exam_data->event_id);
+                $assigned_attendences = $assigned_attendence->find_all()->as_array('user_id','present');
+                if($assigned_attendences){
+                    $lecture_exam_data['assigned'] = "assigned";
+                } else {
+                    $lecture_exam_data['assigned'] = "not_assigned";   
+                }
                 $lecture_exam_data_all[] = $lecture_exam_data;
             }
         }
@@ -220,6 +228,13 @@ class Controller_Attendence extends Controller_Base {
                 $lecture_exam_data['eventtype'] = $lecture_data->eventtype;
                 $lecture_exam_data['id'] = $lecture_data->id;
                 $lecture_exam_data['event_id'] = $lecture_data->event_id;
+                $assigned_attendence->where('event_id', '=', $lecture_data->event_id);
+                $assigned_attendences = $assigned_attendence->find_all()->as_array('user_id','present');
+                if($assigned_attendences){
+                    $lecture_exam_data['assigned'] = "assigned";
+                } else {
+                    $lecture_exam_data['assigned'] = "not_assigned";   
+                }
                 $lecture_exam_data_all[] = $lecture_exam_data;
             }
         }
@@ -269,12 +284,15 @@ class Controller_Attendence extends Controller_Base {
             $cid = $lecture->course_id;
             $event = $lecture->name;
         }
+        $course = ORM::factory('course',$cid);
+        $users = Model_Course::get_students($course);
         
+        /*
         $user = ORM::factory('user');
         $user->join('courses_users','left')
              ->on('courses_users.user_id','=','id');
         $user->where('courses_users.course_id','=',$cid); 
-        $users = $user->find_all();
+        $users = $user->find_all();*/
         
         $page_title = Kohana::message('page_title', 'attendence_add.title');
         
