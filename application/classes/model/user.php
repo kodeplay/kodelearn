@@ -23,6 +23,10 @@ class Model_User extends ORM {
             ->rule('email', 'email')
             ->rule('password', 'not_empty');
     }
+    
+    public static function validate_parent_email($parent_email, $email){
+    	return ($parent_email !== $email); 
+    }
 
     public function validator_register($data) {
         return Validation::factory($data)
@@ -30,6 +34,7 @@ class Model_User extends ORM {
             ->rule('email', 'email')
             ->rule('email', 'Model_User::email_unique')
             ->rule('email_parent', 'not_empty')
+            ->rule('email_parent', 'Model_User::validate_parent_email', array(':value', ':email'))
             ->rule('email_parent', 'email')
             ->rule('firstname', 'not_empty')
             ->rule('lastname', 'not_empty')

@@ -107,30 +107,38 @@ class Controller_Auth extends Controller_Base {
     }
     
     private function register() {
+    	
         $user = ORM::factory('user');
         $config_settings = Config::instance()->load('config');
         $auto_login = true;
         $validator = $user->validator_register($this->request->post());
+        $validator->bind(':email', $this->request->post('email'));
+        
         if ($validator->check()) {
         	
-        	//first create parent's account
-        	$parent_password = rand(10000, 65000);
-            $values = array(
-               'firstname' => $this->request->post('parentname'),
-               'lastname'  => $this->request->post('lastname'),
-               'email'     => $this->request->post('email_parent'),
-               'password'  => Auth::instance()->hash($parent_password),
-            );
             $subject = "Parent email";
             $message  = "<b>Dear ". $this->request->post('parentname') ." ". $this->request->post('lastname') .",<br><br>";
             $message .= "Your child '". $this->request->post('firstname') ." ". $this->request->post('lastname') ."' has registered on Kodelearn. <br>The link to access your account is ".Url::site("auth")." <br>";
-            $message .= "User name : ". $this->request->post('email_parent') ."<br>"; 
-            $message .= "Password : ". $parent_password ."<br><br><br>";
-            $message .=  "Thanks,<br> Kodelearn team";
+        	//first check if parent's account exists
+        	$parent = ORM::factory('user')->where('email', '=', $this->request->post('email_parent'))->find();
+        	$user_id = $parent->id;
+        	if(!$parent->id){
+	        	$parent_password = rand(10000, 65000);
+	            $values = array(
+	               'firstname' => $this->request->post('parentname'),
+	               'lastname'  => $this->request->post('lastname'),
+	               'email'     => $this->request->post('email_parent'),
+	               'password'  => Auth::instance()->hash($parent_password),
+	            );
+	            $role = Model_Role::from_name('Parent');
+	            $user_id = $this->create_user($values, $role);
+	            $message .= "User name : ". $this->request->post('email_parent') ."<br>"; 
+	            $message .= "Password : ". $parent_password ."<br>";
+        		
+        	}
+            $message .=  "<br><br>Thanks,<br> Kodelearn team";
             $html = true;
-            $role = Model_Role::from_name('Parent');
             Email::send_mail($this->request->post('email_parent'), $subject, $message, $html);
-            $user_id = $this->create_user($values, $role);
            
             $values = array(
                'firstname' => $this->request->post('firstname'),

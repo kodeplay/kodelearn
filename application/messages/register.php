@@ -10,6 +10,7 @@ return array(
     'email_parent' => array(
         'not_empty' => 'Please enter an email address',
         'email'     => 'Email not valid',
+        'Model_User::validate_parent_email' => "Parent Email cannot be same"
     ),
     'firstname' => array(
         'not_empty' => 'Please enter your firstname',
