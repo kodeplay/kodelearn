@@ -65,6 +65,7 @@ class Model_Event extends ORM {
     public static function daily_events($date) {
         $event = ORM::factory('event')
             ->where(DB::expr('DATE(FROM_UNIXTIME(eventstart))'), ' = ', $date)
+            ->order_by('eventstart', 'ASC')
             ->find_all();
         return $event;
     }
