@@ -235,3 +235,7 @@ CREATE TABLE `lectures_events` (
 COLLATE='utf8_general_ci'
 ENGINE=InnoDB;
 
+-----------------------------------------------------------------------------------------------------------------------
+
+ALTER TABLE `events`
+      ADD COLUMN `course_id` INT NOT NULL DEFAULT 0 AFTER `description`
