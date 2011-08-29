@@ -363,13 +363,15 @@ class Controller_Lecture extends Controller_Base {
     	   
     	$lecture = ORM::factory('lecture', $id);
     	
+    	$conflict_event_ids = Event_Abstract::get_room_conflict_events();
+    	
     	$events = $lecture->events
-//    	          ->select(array('SELECT COUNT(*) FROM `events` e WHERE (e.eventstart BETWEEN events.eventstart AND events.eventend OR e.eventend BETWEEN events.eventstart AND events.eventend) AND e.room_id = events.room_id', 'conflict'))
     	          ->find_all()->as_array();
     	
     	$view = View::factory('lecture/schedule')
     	               ->bind('lecture', $lecture)
-    	               ->bind('events', $events);
+    	               ->bind('events', $events)
+    	               ->bind('conflict_event_ids', $conflict_event_ids);
     	
         Breadcrumbs::add(array(
             'Lectures', Url::site('lecture')
