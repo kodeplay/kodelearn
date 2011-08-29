@@ -28,7 +28,7 @@ class Model_Room extends ORM {
      */
     public function toLink() {
         if (Acl::instance()->is_allowed('exam_edit')) {
-            $url = Url::site('room/edit/id/');
+            $url = Url::site('room/edit/id/'.$this->id);
         } else {
             $url = Url::site('room');
         }
