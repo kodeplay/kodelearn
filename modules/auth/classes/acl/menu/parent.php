@@ -10,8 +10,6 @@ class Acl_Menu_Parent extends Acl_Menu {
             ->add_link('auth/logout', 'Logout');
         $sidemenu = DynamicMenu::factory('sidemenu');
         $sidemenu->add_link('course', 'Courses', 1)
-
-            ->add_link('exam', 'Exam', 2)
             ->add_link('attendence', 'Attendence', 3)
             ->add_link('calendar', 'Calendar', 4);
         $myaccount = DynamicMenu::factory('myaccount');

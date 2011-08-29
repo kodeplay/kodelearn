@@ -16,8 +16,9 @@ abstract class Acl_Menu {
     }
 
     public function get($name) {
-        
-        return Arr::get($this->menu_collection, $name);
+        $menu = Arr::get($this->menu_collection, $name);
+        $menu->extend_links(Arr::get(DynamicMenu::$extended, $name, array()));
+        return $menu;
     }
 
     public function set($name, DynamicMenu_Menu $menu) {

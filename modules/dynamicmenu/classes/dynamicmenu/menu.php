@@ -69,6 +69,16 @@ class DynamicMenu_Menu {
         return $this->links;
     }
 
+    public function extend_links($links) {
+        if (!$links) {
+            return True;
+        } 
+        foreach ($links as $link) {
+            list($url, $title, $sort_order, $attributes) = $link;
+            $this->add_link($url, $title, $sort_order, $attributes);
+        }
+    }
+
     /**
      * Return the links in the menu as an array
      * @return Array 
