@@ -55,8 +55,7 @@ abstract class Event_Abstract {
     
     
     public static function factory($type, $event_id = null){
-        $file = MODPATH . 'event/classes/event/' . $type . '.php';
-        
+        $file = MODPATH . $type . '/classes/event/' . $type . '.php';        
         if(file_exists($file)){
             $class = 'Event_' . $type;
             return new $class($event_id);
