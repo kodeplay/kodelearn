@@ -89,6 +89,14 @@ abstract class Event_Abstract {
         
     }
     
+    public static function get_room_conflict_events(){
+    	$sql = "SELECT e1.id FROM `events` e1 JOIN `events` e2 WHERE ((e1.eventstart BETWEEN e2.eventstart AND e2.eventend OR e1.eventend BETWEEN e2.eventstart AND e2.eventend) OR (e2.eventstart BETWEEN e1.eventstart AND e1.eventend OR e2.eventend BETWEEN e1.eventstart AND e1.eventend)) AND e1.id != e2.id  AND e1.room_id = e2.room_id ";
+    	
+    	$query = DB::query(Database::SELECT, $sql);
+    	
+    	return $query->execute()->as_array(NULL, 'id');
+    } 
+    
     public static function get_avaliable_rooms($from, $to, $event_id = FALSE){
 
     	$sql = 'SELECT `events`.* FROM `events` WHERE ((`events`.`eventstart` BETWEEN :from AND :to OR `events`.`eventend` BETWEEN :from AND :to) OR (:from BETWEEN `events`.`eventstart` AND `events`.`eventend` OR :to BETWEEN `events`.`eventstart` AND `events`.`eventend`)) ';

@@ -2,11 +2,13 @@
 <html>
 
     <head>
-        <title>KodeLearn - Header after logging in</title>
+        <title><?php ECHO $title ?></title>
         <?php foreach ($styles as $file => $type) echo HTML::style($file, array('media' => $type)), PHP_EOL ?>
         <?php foreach ($scripts as $file) echo HTML::script($file), PHP_EOL ?>
     </head>
     <body>
+<div id="ajax-loader"><img src="<?php echo URL::base() ?>media/image/ajax-loader.gif" alt="loading" title="loading.."/></div>
+
         <div class="menubar">
             <div class="wrap twhite">
                 <ul class="lsNone l">

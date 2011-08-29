@@ -64,7 +64,7 @@ var ajaxLoad = function(opts) {
 ajaxLoad.prototype.before = function() {
 
     if (this.options.loadingGif) {
-	$("#ajax-loader").show();
+    	$("#ajax-loader").show();
     }
 
     if (typeof this.options.onBefore == 'function') {
