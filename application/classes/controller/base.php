@@ -121,10 +121,10 @@ class Controller_Base extends Controller_Template {
         if (!Auth::instance()->logged_in()) {
             $role = 'guest';
         } else {
-            $role = Acl::instance()->role()->name;
             $user = Auth::instance()->get_user();
+            $role = $user->role()->name;
             $username = Auth::instance()->get_user()->firstname;
-            if ('student' === strtolower($role)) {
+            if ($user->is_role('student')) {
                 $avatar = Auth::instance()->get_user()->avatar;
                 $avatar = $avatar === null ? '' : $avatar;
                 $this->view->set('avatar', CacheImage::instance()->resize($avatar, 72, 72));

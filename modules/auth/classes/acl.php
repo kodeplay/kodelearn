@@ -47,7 +47,7 @@ class Acl {
         if ($user === NULL) {
             return;
         }
-        $this->_role = ORM::factory('role', $user->roles->find());
+        $this->_role = $user->role();
         $permissions = $this->_role->permissions && $this->_role->permissions !== NULL ? unserialize($this->_role->permissions) : array();
         $this->_permissions = self::acl_array($permissions);
     }

@@ -16,6 +16,51 @@ class Model_User extends ORM {
             'through' => 'roles_users',
         ),
     );      
+
+    /**
+     * Method to get the fullname of the user
+     * @return String fullname
+     */
+    public function fullname() {
+        return $this->firstname . ' ' . $this->lastname;
+    }
+
+    /**
+     * Method to get the role of the user
+     * @return Model_Role
+     */      
+    public function role() {
+        return $this->roles->find();
+    }
+
+    /**
+     * Method to get all the batches to which this user belongs
+     * @return Database_MySQL_Result $batches
+     */
+    public function batches() {
+        return $this->batches->find_all();
+    }
+
+    /**
+     * Method to get all the courses to which this user has access
+     * @return Database_MySQL_Result $courses
+     */
+    public function courses() {
+        return $this->courses->find_all();
+    }
+
+    /**
+     * Method to confirm the role of the user
+     * @param String $role_name - Name of the role to confirm
+     * @return Boolean Whether the role is correct
+     */
+    public function is_role($role_name) {
+        return strtolower($this->role()->name) === strtolower($role_name);
+    }
+
+    public function __toString() {
+        return $this->fullname();
+    }
     
     public function validator_login($data) {
         return Validation::factory($data)

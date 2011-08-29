@@ -14,6 +14,10 @@ class Model_Role extends ORM {
             ->rule('name', 'not_empty');            
     }
 
+    public function __toString() {
+        return $this->name;
+    }
+
     /**
      * Method to get the role object from its name
      * @param String $name
