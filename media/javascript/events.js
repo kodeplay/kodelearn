@@ -1,11 +1,12 @@
 var Events = { };
 
 Events.edit = function(eventId) {
-	
+	$("#ajax-loader").show();
     $.get(KODELEARN.config.base_url + "event/edit/id/" + eventId,  {},
             function(html){
     			$('#event_from').remove();
     			$('#edit_event').html(html);
+    			$("#ajax-loader").hide();
             }, "html");
 };
 

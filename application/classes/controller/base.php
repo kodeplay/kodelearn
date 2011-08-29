@@ -104,6 +104,7 @@ class Controller_Base extends Controller_Template {
             $this->view->set('content', $this->content);
             $this->view->set('styles', $styles);
             $this->view->set('scripts', $scripts);
+            $this->view->set('title', $title . ' - ' . $page_title);
             $this->view->set('breadcrumbs', $breadcrumbs);            
             $this->menu_init();
             $this->response->body($this->view);
