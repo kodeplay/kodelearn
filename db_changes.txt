@@ -238,4 +238,4 @@ ENGINE=InnoDB;
 -----------------------------------------------------------------------------------------------------------------------
 
 ALTER TABLE `events`
-      ADD COLUMN `course_id` INT NOT NULL DEFAULT 0 AFTER `description`
+      ADD COLUMN `course_id` INT NOT NULL DEFAULT 0 AFTER `room_id`
