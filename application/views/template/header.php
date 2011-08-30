@@ -14,7 +14,9 @@
                 <ul class="lsNone l">
                     <li class="menu l selected"><?php echo $topmenu->home; ?></li>
                     <li class="menu l"><?php echo $topmenu->profile; ?></li>
+                    <?php if ($topmenu->has_link('inbox')) { ?>
                     <li class="menu l"><?php echo $topmenu->inbox; ?></li>
+                    <?php } ?>
                     <li class="clear"></li>
                 </ul>
                 <?php //$b = time(); $hour = date("g:i",$b); $m = date ("A", $b); if ($m == "AM") { if ($hour == 12) { $msg = "Good Evening!"; } elseif ($hour < 4) { $msg = "Good Evening!"; } elseif ($hour > 3) { $msg = "Good Morning!"; } } elseif ($m == "PM") { if ($hour == 12) { $msg = "Good Afternoon!"; } elseif ($hour < 5) { $msg = "Good Afternoon!"; } elseif ($hour > 4) { $msg = "Good Evening!"; } } ?> 

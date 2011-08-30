@@ -87,7 +87,10 @@ class Acl {
         if (Acl_Config::is_resource_ignored($resource)) {
             return true;
         }
-        $levels = $this->_permissions[$resource];
+        $levels = Arr::get($this->_permissions, $resource, null);
+        if (is_null($levels)) {
+            return False;
+        }
         foreach ($levels as $level=>$permit) {
             // if atleast one is permitted then allow access
             if ($permit) {

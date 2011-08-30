@@ -34,6 +34,18 @@ class DynamicMenu_MenuTest extends Kohana_UnitTest_TestCase {
         $this->assertEquals($attributes, $menu->get_attributes());
     }
 
+    public function test_slugify() {
+        // converts space to underscore
+        $this->assertEquals('normal_string', DynamicMenu_Menu::slugify('normal string'));
+        // converts hyphen to underscore
+        $this->assertEquals('hyphened_string', DynamicMenu_Menu::slugify('hyphened-string'));
+        // converts caps to lowercase
+        $this->assertEquals('normal_title', DynamicMenu_Menu::slugify('Normal Title'));
+        // any other special character to no space
+        $this->assertEquals('havingsymbol', DynamicMenu_Menu::slugify('having@symbol'));
+        $this->assertEquals('quotedstring', DynamicMenu_Menu::slugify('quoted\'string'));        
+    }
+
     public function test_add_link() {
         $menu = new DynamicMenu_Menu('sidebar');
         $attributes = array(
@@ -65,5 +77,14 @@ class DynamicMenu_MenuTest extends Kohana_UnitTest_TestCase {
         foreach ($links as $k=>$link) {
             $this->assertEquals($ls[$i++],$k);             
         }        
+    }
+
+    public function test_has_link() {
+        $menu = new DynamicMenu_Menu('sidebar');
+        $menu->add_link('http://kodeplay.com', 'kodeplay', 3, array());
+        $menu->add_link('http://vineetnaik.me', 'vineet\'s blog', 1, array());
+        $menu->add_link('http://github.com', 'Github', 2, array());
+        $this->assertTrue($menu->has_link('kodeplay'));
+        $this->assertTrue($menu->has_link('vineets_blog'));
     }
 }
