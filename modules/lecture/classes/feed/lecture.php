@@ -10,7 +10,7 @@ class Feed_Lecture extends Feed {
     
     public function render(){
     	
-        $view = View::factory('feed/'.$this->action)
+        $view = View::factory('feed/'.$this->type . '_' . $this->action)
                ->bind('lecture', $lecture)
                ->bind('user', $user);
                
@@ -22,7 +22,7 @@ class Feed_Lecture extends Feed {
     		$view->bind('event', $event);
     	}
         $user = ORM::factory('user', $this->actor_id);
-        
+       
         return $view->render();
     }
     
