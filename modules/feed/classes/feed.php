@@ -68,10 +68,16 @@ abstract class Feed {
 	}
 	
 	public function load($id){
-		$feed = ORM::factory('feed', $id);
+        $feed = ORM::factory('feed', $id);
+        
+        $this->id = $id;
+        $this->type = $feed->type;
+        $this->action = $feed->action;
+        $this->respective_id  = $feed->respective_id ;
+        $this->actor_id  = $feed->actor_id ;
 	}
 	
-	public static function factory($type, $id){
+	public static function factory($type, $id = NULL){
 		
         $file = MODPATH . $type . '/classes/feed/' . $type . '.php';        
         if(file_exists($file)){

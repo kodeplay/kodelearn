@@ -3,13 +3,9 @@
 class Feed_Exam extends Feed {
     
     public function __construct($id){
-    	$feed = ORM::factory('feed', $id);
-    	
-    	$this->id = $id;
-    	$this->type = $feed->type;
-    	$this->action = $feed->action;
-    	$this->respective_id  = $feed->respective_id ;
-    	$this->actor_id  = $feed->actor_id ;
+    	if($id){
+    		$this->load($id);
+    	}
     }
     
     public function render(){
