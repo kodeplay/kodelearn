@@ -17,6 +17,7 @@ class DynamicMenu_Menu {
      */
     public function __construct($position) {
         $this->position = $position;
+        $this->extend_links(Arr::get(DynamicMenu::$extended, $position, array()));
     }
 
     /**
@@ -69,7 +70,10 @@ class DynamicMenu_Menu {
         return $this->links;
     }
 
-    public function extend_links($links) {
+    /**
+     * Add the links specified by the modules in init.php files
+     */
+    private function extend_links($links) {
         if (!$links) {
             return True;
         } 

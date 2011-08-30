@@ -4,6 +4,10 @@ class DynamicMenu {
 
     private static $collection;
 
+    /**
+     * Array to store the menu link arrays added by the modules
+     * in their init.php files.
+     */
     public static $extended = array();
 
     public function __construct() {
@@ -26,6 +30,11 @@ class DynamicMenu {
      * @return None
      */
     public static function extend($arr) {
-        self::$extended = array_merge(self::$extended, $arr);
+        foreach ($arr as $menu=>$links) {
+            if (!isset(self::$extended[$menu])) {
+                self::$extended[$menu] = array();
+            }
+            self::$extended[$menu] = array_merge(self::$extended[$menu], $links);            
+        }
     }
 }

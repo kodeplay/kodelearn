@@ -11,6 +11,20 @@ class DynamicMenu_MenuTest extends Kohana_UnitTest_TestCase {
         $this->assertEquals(0, count($menu->get_attributes()));
     }
 
+    public function test_init_with_extended_links() {
+        DynamicMenu::extend(array(
+            'somerandommenu' => array(
+                array('http://google.com', 'Google', 1, array()),
+            ),
+        ));
+        $menu = new DynamicMenu_Menu('somerandommenu');
+        $this->assertInstanceOf('DynamicMenu_Menu', $menu);
+        $this->assertFalse(0 === count($menu->get_links()));
+        $this->assertEquals(1, count($menu->get_links()));
+        // menu attributes are still unaffected
+        $this->assertEquals(0, count($menu->get_attributes()));
+    }
+
     public function test_set_attributes() {
         $menu = new DynamicMenu_Menu('sidebar');
         $attributes = array(
