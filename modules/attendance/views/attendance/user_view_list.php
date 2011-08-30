@@ -1,12 +1,12 @@
-<?php if(count($attendence['event_lectures']) > 0) { ?>
-<div class="tm40 bold vpad10 tac bdTop bdBottom">Your attendance for lecture: <span id="attPerc"><?php echo round($attendence['lecture_persent'],2); ?></span>%</div>
+<?php if(count($attendance['event_lectures']) > 0) { ?>
+<div class="tm40 bold vpad10 tac bdTop bdBottom">Your attendance for lecture: <span id="attPerc"><?php echo round($attendance['lecture_persent'],2); ?></span>%</div>
         <table class="datatable vm smallTextBoxes fullwidth">
             <tr>
                 <th class="w20">Date</th>
                 <th>Lecture</th>
                 <th>Attendance</th>
             </tr>
-            <?php foreach($attendence['event_lectures'] as $event_lecture){ ?>
+            <?php foreach($attendance['event_lectures'] as $event_lecture){ ?>
             <tr>
                 <td><?php echo date('M d Y',$event_lecture->eventstart); ?></td>
                 <td><?php echo $event_lecture->name; ?></td>
@@ -27,16 +27,16 @@
     echo "No records for lecture";
     echo "<br>";
 }
-if(count($attendence['event_exams']) > 0){
+if(count($attendance['event_exams']) > 0){
 ?>
-<div class="tm40 bold vpad10 tac bdTop bdBottom">Your attendance for exam: <span id="attPerc"><?php echo round($attendence['exam_persent'],2); ?></span>%</div>
+<div class="tm40 bold vpad10 tac bdTop bdBottom">Your attendance for exam: <span id="attPerc"><?php echo round($attendance['exam_persent'],2); ?></span>%</div>
         <table class="datatable vm smallTextBoxes fullwidth">
             <tr>
                 <th class="w20">Date</th>
                 <th>Exam</th>
                 <th>Attendance</th>
             </tr>
-            <?php foreach($attendence['event_exams'] as $event_exam){ ?>
+            <?php foreach($attendance['event_exams'] as $event_exam){ ?>
             <tr>
                 <td><?php echo date('M d Y',$event_exam->eventstart); ?></td>
                 <td><?php echo $event_exam->name; ?></td>

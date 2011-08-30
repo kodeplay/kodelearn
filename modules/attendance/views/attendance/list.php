@@ -29,7 +29,7 @@ $('#date').change(function(){
     var date = $('#date').val();
     
     if(date){
-        $.post(KODELEARN.config.base_url + "attendence/get_events", { "date": date },
+        $.post(KODELEARN.config.base_url + "attendance/get_events", { "date": date },
         function(data){
            $('#events-ajax').html(data.response);
            $('#loading').fadeOut();                

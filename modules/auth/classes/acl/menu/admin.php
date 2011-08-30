@@ -15,7 +15,7 @@ class Acl_Menu_Admin extends Acl_Menu {
             ->add_link('course', 'Courses', 3)
             ->add_link('lecture', 'Lectures', 4)
             ->add_link('exam', 'Exam', 5)
-            ->add_link('attendence', 'Attendence', 6)
+            ->add_link('attendance', 'Attendance', 6)
             ->add_link('calendar', 'Calendar', 7);
         $myaccount = DynamicMenu::factory('myaccount');
         $myaccount->add_link('system', 'Setting', 0)
