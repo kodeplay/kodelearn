@@ -5,12 +5,16 @@
             <div class="clear"></div>
         </div><!-- pageTop -->
         <div class="pageContent">
+            <?php if($users){?>
+            <div class="buttons">
+                <a href="#" onclick="$('#attendance').submit();" class = "button">Save</a>
+                <a href="<?php echo Url::site('attendance'); ?>" class = "button">Cancel</a>
+            </div>
+            <?php } ?>
            <form name="attendance" id="attendance" method="POST" action="<?php echo $data['add'] ?>">
             <?php if($users){?>
             <input type="hidden" name="id" id="id" value="<?php echo $data['event_id']; ?>">
             <input type="hidden" name="course_id" id="course_id" value="<?php echo $data['course_id']; ?>">
-            <a href="#" onclick="$('#attendance').submit();" class = 'createButton l'>Save</a>
-            <a href="<?php echo Url::site('attendance'); ?>" class = 'button r'>Cancel</a>
             <br/>
             <table class="vm10 datatable fullwidth">
             <tr>
