@@ -12,8 +12,7 @@ class Acl_Menu_Teacher extends Acl_Menu {
         $sidemenu->add_link('user', 'Users', 0)
             ->add_link('batch', 'Batches', 1)
             ->add_link('system', 'System', 2)
-            ->add_link('course', 'Courses', 3)
-            ->add_link('calendar', 'Calendar', 6);
+            ->add_link('course', 'Courses', 3);
         $myaccount = DynamicMenu::factory('myaccount');
         $myaccount->add_link('account', 'Account', 0)
             ->add_link('auth/logout', 'Logout', 1);    
