@@ -150,13 +150,12 @@ return array(
         'description'     => 'You can plan a schedule of a Lecture.',
         'title'           => 'Schedule',
     ),
-    'attendence_index' => array(
-        'description'     => 'You can view and edit attendence here.',
-        'title'           => 'Attendence',
+    'attendance_index' => array(
+        'description'     => 'You can view and edit attendance here.',
+        'title'           => 'Attendance',
     ),
-    'attendence_add' => array(
-        'description'     => 'You can add/edit attendence here.',
-        'title'           => 'Attendence for {event}',
-    ),
-    
+    'attendance_add' => array(
+        'description'     => 'You can add/edit attendance here.',
+        'title'           => 'Attendance for {event}',
+    ),    
 );
