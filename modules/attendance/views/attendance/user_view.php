@@ -20,10 +20,10 @@
             </p>
             
             <div style="height:10px;">
-                <p class="tip" style="display:none;" id="loading">Please wait...Loading attendence</p>
+                <p class="tip" style="display:none;" id="loading">Please wait...Loading attendance</p>
             </div>
             <div id="events-ajax"> 
-                <?php echo $attendence_list ?>          
+                <?php echo $attendance_list ?>          
             </div>
         </div>
     </div>    
@@ -51,7 +51,7 @@ function test(){
     var date_to = $('#date_to').val();
     
     if(date_from){
-        $.post(KODELEARN.config.base_url + "attendence/get_attendence_exam_lecture", { "course": course, "date_from": date_from, "date_to": date_to},
+        $.post(KODELEARN.config.base_url + "attendance/get_attendance_exam_lecture", { "course": course, "date_from": date_from, "date_to": date_to},
         function(data){
            $('#events-ajax').html(data.response);
            $('#loading').fadeOut();                

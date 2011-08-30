@@ -9,18 +9,22 @@ abstract class DynamicMenu_Filter {
     );
 
     public static function add(DynamicMenu_Filter $filter) {
-        self::$filter[] = $filter;
+        self::$filters[] = $filter;
     }
 
-    public static function apply_filters($type, DynamicMenu_Menu $menu) {
+    public static function apply_filters($type, $args) {
         if (!in_array($type, self::$types)) {
             throw new Exception('Filter of type ' . $type . ' not supported in DynamicMenu_Filter');
         }
         if (self::$filters) {
             foreach (self::$filters as $filter) {
-                $filter->{'filter_'.$type}();
+                $flag = $filter->{'filter_'.$type}($args);
+                if (!$flag) {
+                    return False;
+                }
             }
         }
+        return True;
     }
 
     public function __construct() {
@@ -31,5 +35,5 @@ abstract class DynamicMenu_Filter {
      * @param String resource
      * @return Boolean true if link to be added false if not
      */
-    abstract protected function filter_add_link($url, $title);
+    abstract protected function filter_add_link($args);
 }

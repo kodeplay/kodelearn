@@ -17,6 +17,7 @@ class DynamicMenu_Menu {
      */
     public function __construct($position) {
         $this->position = $position;
+        $this->extend_links(Arr::get(DynamicMenu::$extended, $position, array()));
     }
 
     /**
@@ -28,33 +29,19 @@ class DynamicMenu_Menu {
      * the global attributes specified by the instance variable will be overridden by this
      */
     public function add_link($url, $title, $sort_order=NULL, $attributes=array()) {
-        if($this->position == 'sidemenu'){
-            if(Acl::instance()->has_access($url)){
-                DynamicMenu_Filter::apply_filters('add_link', $this);
-                $attributes = array_merge($this->attributes, $attributes);
-                $anchor = Html::anchor($url, $title, $attributes);
-                $key = self::slugify($title);
-                $this->links[$key] = array(
-                    'html' => $anchor,
-                    'title' => $title,
-                    'sort_order' => (int) $sort_order,
-                );
-                return $this;
-            } else {
-                return $this;
-            }
-        } else {
-            DynamicMenu_Filter::apply_filters('add_link', $this);
-            $attributes = array_merge($this->attributes, $attributes);
-            $anchor = Html::anchor($url, $title, $attributes);
-            $key = self::slugify($title);
-            $this->links[$key] = array(
-                'html' => $anchor,
-                'title' => $title,
-                'sort_order' => (int) $sort_order,
-            );
+        $filter_pass = DynamicMenu_Filter::apply_filters('add_link', func_get_args());
+        if (!$filter_pass) {
             return $this;
         }
+        $attributes = array_merge($this->attributes, $attributes);
+        $anchor = Html::anchor($url, $title, $attributes);
+        $key = self::slugify($title);
+        $this->links[$key] = array(
+            'html' => $anchor,
+            'title' => $title,
+            'sort_order' => (int) $sort_order,
+        );
+        return $this;
     }
 
     public function set_attributes($attributes) {
@@ -70,12 +57,35 @@ class DynamicMenu_Menu {
     }
 
     /**
+     * Add the links specified by the modules in init.php files
+     */
+    private function extend_links($links) {
+        if (!$links) {
+            return True;
+        } 
+        foreach ($links as $link) {
+            list($url, $title, $sort_order, $attributes) = $link;
+            $this->add_link($url, $title, $sort_order, $attributes);
+        }
+    }
+
+    /**
      * Return the links in the menu as an array
      * @return Array 
      */
     public function as_array() {
         uasort($this->links, 'DynamicMenu_Menu::sort_by');
         return $this->links;
+    }
+
+    /**
+     * Method to find out if a link is present in the menu
+     * This will be used before rendering in the views
+     * @param String $key should be slugified title
+     * @param Boolean
+     */
+    public function has_link($key) {
+        return isset($this->links[$key]);
     }
 
     private static function sort_by($a, $b) {
@@ -90,10 +100,10 @@ class DynamicMenu_Menu {
      * eg. vineetnaik's blog will be slugified to,
      * vineetnaiks_blog
      */
-    private static function slugify($str) {
+    public static function slugify($str) {
         $str = Url::title($str);
         return str_replace(array('-', '.'), '_', $str);        
-    }
+    }    
 
     public function __get($key) {
         return $this->links[$key]['html'];
