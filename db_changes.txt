@@ -242,4 +242,4 @@ ALTER TABLE `events`
 
 -----------------------------------------------------------------------------------------------------------------------
 
-RENAME TABLE `kodelearn_heavy`.`attendences` TO `kodelearn_heavy`.`attendances` ;
+RENAME TABLE `attendences` TO `attendances` ;

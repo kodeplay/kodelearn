@@ -71,4 +71,5 @@ class Model_Exam extends ORM {
         }
         return Html::anchor($url, (string)$this);
     }
+    
 }

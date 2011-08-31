@@ -69,4 +69,14 @@ class Model_Event extends ORM {
             ->find_all();
         return $event;
     }
+    
+    public function get_Attendance(){
+        $user = Auth::instance()->get_user();
+        $attendance = ORM::factory('attendance');
+        $attendance->where('attendances.user_id','=',$user->id)
+                   ->where('attendances.event_id','=',$this->id)     ;
+        $attendances = $attendance->find();
+        return $attendances;
+    }
+    
 }
