@@ -10,14 +10,34 @@ return array(
     ),
 
     'user' => array(
-        'upload_csv'
+        'levels' => array(
+            'upload_csv',
+        )
     ),
     
     'course' => array(
-        'join'
+        'levels' => array(
+            'join',
+        )
     ),
     
     'role' => array(
-        'set_permission'
-    )
+        'levels' => array(
+            'set_permission',
+        )
+    ),
+    
+    'calendar' => array(
+        'inherit_default' => false,
+        'levels' => array(
+            'view',
+        ),
+    ),
+
+    'feed' => array(
+        'inherit_default' => false,
+        'levels' => array(
+            'view',
+        )
+    ),
 );
