@@ -1,7 +1,6 @@
 <?php defined('SYSPATH') or die('No direct access allowed.');
 
-return array(
-    
+return array(    
     'default' => array(
         'view',
         'create',
@@ -26,18 +25,8 @@ return array(
             'set_permission',
         )
     ),
-    
-    'calendar' => array(
-        'inherit_default' => false,
-        'levels' => array(
-            'view',
-        ),
-    ),
 
-    'feed' => array(
-        'inherit_default' => false,
-        'levels' => array(
-            'view',
-        )
+    'play' => array(
+        'ignore' => true,
     ),
 );

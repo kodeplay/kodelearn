@@ -19,7 +19,6 @@ class Acl_Config {
         'auth',
         'base',
         'home',
-        'play',
         'rest',
         'template',
         'unittest',
@@ -47,10 +46,23 @@ class Acl_Config {
      */
     public function __construct($file = 'acl') {
         $this->_config = Kohana::config('acl');
-        $this->_acl = $this->_config->getArrayCopy();
-        $this->_default = array_shift($this->_acl);        
-        $this->merge_resources();
-        $this->merge_default_levels();
+        $this->_acl = $this->_config->getArrayCopy();        
+        $this->_default = $this->_acl['default'];
+        unset($this->_acl['default']);
+        $this->merge_ignored()
+            ->merge_resources()
+            ->merge_default_levels();
+    }
+
+    public function merge_ignored() {
+        foreach ($this->_config as $resource=>$config) {
+            if (!empty($config['ignore'])) {
+                self::$ignoredControllers[] = $resource;
+                // remove this resource from the $this->_acl array
+                unset($this->_acl[$resource]);
+            }
+        }
+        return $this;
     }
 
     /**
@@ -62,10 +74,13 @@ class Acl_Config {
         $controllers = Kohana::list_files('classes/controller');
         foreach ($controllers as $controller) {            
             $resource = basename($controller, '.php');
-            if (!array_key_exists($resource, $this->_acl) && !in_array($resource, self::$ignoredControllers)) {
-                $this->_acl[$resource] = array();                
+            if (self::is_resource_ignored($resource) || array_key_exists($resource, $this->_acl)) {
+                continue;
             }
+            $this->_acl[$resource] = array();
         }
+        ksort($this->_acl);
+        return $this;
     }
 
     /**
@@ -83,6 +98,7 @@ class Acl_Config {
             }
             $this->_acl[$resource] = array_merge($this->_default, $levels);
         }
+        return $this;
     }
     
     /**
