@@ -29,7 +29,8 @@ class DynamicMenu_Menu {
      * the global attributes specified by the instance variable will be overridden by this
      */
     public function add_link($url, $title, $sort_order=NULL, $attributes=array()) {
-        $filter_pass = DynamicMenu_Filter::apply_filters('add_link', func_get_args());
+        $args = func_get_args();
+    	$filter_pass = DynamicMenu_Filter::apply_filters('add_link', $args);
         if (!$filter_pass) {
             return $this;
         }

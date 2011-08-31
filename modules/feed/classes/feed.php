@@ -73,8 +73,9 @@ abstract class Feed {
         $this->id = $id;
         $this->type = $feed->type;
         $this->action = $feed->action;
-        $this->respective_id  = $feed->respective_id ;
-        $this->actor_id  = $feed->actor_id ;
+        $this->respective_id  = $feed->respective_id;
+        $this->actor_id  = $feed->actor_id;
+        $this->course_id = $feed->course_id;
 	}
 	
 	public static function factory($type, $id = NULL){

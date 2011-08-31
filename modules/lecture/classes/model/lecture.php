@@ -32,5 +32,14 @@ class Model_Lecture extends ORM {
             return true;
         }
     }
-
+    
+    public function __toString(){
+    	return ucfirst($this->name);
+    }
+    
+    public static function get_lecture_from_event($event_id){
+    	$lecture = ORM::factory('lecture')->join('lectures_events')->on('lecture_id', '=', 'id')->where('event_id', '=', $event_id)->find();
+    	
+    	return $lecture;
+    }
 }

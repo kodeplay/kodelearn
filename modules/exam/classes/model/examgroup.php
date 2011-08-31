@@ -109,4 +109,36 @@ class Model_Examgroup extends ORM {
         }
         return Html::anchor($url, (string) $this);
     }
+    
+    public function get_ExamGroupPercent(){
+        $user = Auth::instance()->get_user();
+            $examresult = ORM::factory('examresult');
+            $examresult->select('examgroups.*','exams.total_marks','exams.passing_marks');
+            $examresult->join('exams','left')
+                        ->on('exams.id','=','exam_id')
+                        ->join('examgroups','left')
+                        ->on('examgroups.id','=','exams.examgroup_id')
+                        ->where('examresults.user_id','=',$user->id)
+                        ->where('examgroups.id','=',$this->id)
+                        ;
+            $examresults = $examresult->find_all();
+            $total_marks=0;
+            $passing_marks=0;
+            $marks=0;
+            foreach($examresults as $examresult){
+                $total_marks = $total_marks + $examresult->total_marks;
+                $passing_marks = $passing_marks + $examresult->passing_marks;
+                $marks = $marks + $examresult->marks;
+                $name = $examresult->name;
+            }
+            $percent = ($marks/$total_marks)*100;
+            $passing_percent = ($passing_marks/$total_marks)*100;
+            $result= array(
+                'name'               => $name,
+                'percent'            => $percent,
+                'passing_percent'    => $passing_percent
+            );
+
+            return $result;
+    }
 }
