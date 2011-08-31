@@ -2,7 +2,7 @@
 
 class Feed_Exam extends Feed {
     
-    public function __construct($id){
+    public function __construct($id = NULL){
     	if($id){
     		$this->load($id);
     	}
@@ -35,7 +35,11 @@ class Feed_Exam extends Feed {
         }
         
         return $view->render();
-        //return $this->type . ' ' . $this->action .' '. $this->id;
+    }
+    
+    public function save(){
+    	$this->type = 'exam';
+    	parent::save();
     }
     
 }

@@ -2,7 +2,7 @@
 
 class Feed_Lecture extends Feed {
     
-    public function __construct($id){
+    public function __construct($id = NULL){
     	if($id){
     		$this->load($id);
     	}
@@ -27,4 +27,8 @@ class Feed_Lecture extends Feed {
         return $view->render();
     }
     
+    public function save(){
+    	$this->type = 'lecture';
+        parent::save();
+    }
 }
