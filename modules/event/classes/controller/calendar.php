@@ -79,7 +79,7 @@ class Controller_Calendar extends Controller_Base {
         $events = Model_Event::daily_events($date);
         $day_events = array();
         foreach ($events as $event) {
-            $day_events[] = Event_Calendar::factory($event->eventtype)->day_event($event);
+            $day_events[] = Calendar_Event::factory($event->eventtype)->day_event($event);
         }
         $view = View::factory('calendar/day_events')
             ->set('date', $date)
