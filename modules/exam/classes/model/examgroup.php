@@ -32,9 +32,10 @@ class Model_Examgroup extends ORM {
     /**
      * Method to get all users for an examgroup
      * @param int $examgroup_id
-     * @return array eg. array(10 => 'Students Name')
+     * @param string $return_type (array|object)
+     * @return array eg. (array(10 => 'Students Name') | array of user objects)
      */
-    public static function get_students($examgroup_id) {
+    public static function get_students($examgroup_id, $return_type = 'array') {
         $exams = self::get_exams($examgroup_id);
         // handle the cas_e that no exam is added to this exam group yet
         if (!$exams->as_array()) {
@@ -47,18 +48,22 @@ class Model_Examgroup extends ORM {
             ->where('id', ' IN ', array_values($course_assoc))
             ->find_all();
         $students = array();
+        $students_object = array();
         foreach ($courses as $course) {
-            // $users = $course->users->find_all();
             $users = Model_Course::get_students($course);
             $course_students = array();
             foreach ($users as $user) {
                 $course_students[$user->id] = $user->firstname . ' ' . $user->lastname;
+	            $students_object[] = $user;
             }
             // concat arrays with students instead of array_merge
             // so that re-indexing doesn't happen
             $students = $students + $course_students;
         }
-        return $students;
+        if($return_type == 'array'){
+	        return $students;
+        } 
+        return $students_object;
     }
 
     /**
@@ -122,6 +127,8 @@ class Model_Examgroup extends ORM {
                         ->where('examgroups.id','=',$this->id)
                         ;
             $examresults = $examresult->find_all();
+            $name = $this->name;
+
             $total_marks=0;
             $passing_marks=0;
             $marks=0;
@@ -129,10 +136,9 @@ class Model_Examgroup extends ORM {
                 $total_marks = $total_marks + $examresult->total_marks;
                 $passing_marks = $passing_marks + $examresult->passing_marks;
                 $marks = $marks + $examresult->marks;
-                $name = $examresult->name;
             }
-            $percent = ($marks/$total_marks)*100;
-            $passing_percent = ($passing_marks/$total_marks)*100;
+            $percent = ($marks)?($marks/$total_marks)*100:0;
+            $passing_percent = ($passing_marks)?($passing_marks/$total_marks)*100:0;
             $result= array(
                 'name'               => $name,
                 'percent'            => $percent,

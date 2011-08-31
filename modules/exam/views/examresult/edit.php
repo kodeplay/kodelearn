@@ -18,7 +18,7 @@
     </div>
     <?php } ?>
     <div class="buttons">
-        <a href="<?php echo $csv_import; ?>" class="button">CSV Import</a>   
+        <a href="<?php echo $publish; ?>" class="button">Publish</a>   
         <a class="button" onclick="$('#examresult-edit-form').submit();">Save</a>
         <a href="<?php echo $csv_import; ?>" class="button">Cancel</a>        
     </div>
