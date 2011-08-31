@@ -81,7 +81,8 @@ abstract class Feed {
 	public static function factory($type, $id = NULL){
 		
         $file = MODPATH . $type . '/classes/feed/' . $type . '.php';        
-        if(file_exists($file)){
+        $file_feed = MODPATH . 'feed/classes/feed/' . $type . '.php';    
+        if(file_exists($file) || file_exists($file_feed)){
             $class = 'Feed_' . $type;
             return new $class($id);
         } else {
