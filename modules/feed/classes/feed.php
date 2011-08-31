@@ -112,7 +112,7 @@ abstract class Feed {
 	 * @param array $users array of user object
 	 * 
 	 */
-	public function subscribe_users(array $users = array()){
+	public function subscribe_users($users = array()){
 		if(!$users){
 			$course = ORM::factory('course', $this->course_id);
 			$users = Model_Course::get_students($course);

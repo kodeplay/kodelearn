@@ -2,7 +2,7 @@
 
 class Feed_Attendance extends Feed {
     
-    public function __construct($id){
+    public function __construct($id = NULL){
         if($id){
             $this->load($id);
         }
@@ -25,6 +25,11 @@ class Feed_Attendance extends Feed {
                ->bind('attendance', $attendance);
                
         return $view->render();
+    }
+    
+    public function save(){
+        $this->type = 'attendance';
+        parent::save();
     }
     
 }
