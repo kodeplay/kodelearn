@@ -17,10 +17,13 @@ class Feed_Batch extends Feed {
                     ->where('batch_id', '=', $this->respective_id)
                     ->execute()->count();
         
+        $span = Date::fuzzy_span($this->time);
+        
         $view = View::factory('feed/'.$this->type . '_' . $this->action)
                ->bind('user', $user)
                ->bind('count_user', $count_user)
-               ->bind('batch', $batch);
+               ->bind('batch', $batch)
+               ->bind('span', $span);
                
         return $view->render();
     }

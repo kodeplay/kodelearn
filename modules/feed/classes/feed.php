@@ -14,6 +14,16 @@ abstract class Feed {
 	
 	protected $actor_id;
 	
+	protected $time;
+	
+    public function get_time(){
+      return $this->time;
+    }
+    
+    public function set_time($value){
+      $this->time = $value;
+    }
+	
 	public function get_actor_id(){
 	  return $this->actor_id;
 	}
@@ -76,6 +86,7 @@ abstract class Feed {
         $this->respective_id  = $feed->respective_id;
         $this->actor_id  = $feed->actor_id;
         $this->course_id = $feed->course_id;
+        $this->time = $feed->time;
 	}
 	
 	public static function factory($type, $id = NULL){

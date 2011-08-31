@@ -9,6 +9,7 @@ class Feed_Exam extends Feed {
     }
     
     public function render(){
+        $span = Date::fuzzy_span($this->time);
         if($this->action == "publish_result"){
             $examgroup = ORM::factory('examgroup', $this->respective_id);
             $percent = $examgroup->get_ExamGroupPercent();            
@@ -19,7 +20,7 @@ class Feed_Exam extends Feed {
                    ->bind('user', $user)
                    ->bind('percent', $percent)
                    ->bind('id', $this->respective_id)
-                   ;
+                   ->bind('span', $span);
         } else {
             $exam = ORM::factory('exam', $this->respective_id);
             $user = ORM::factory('user', $this->actor_id);
@@ -29,7 +30,7 @@ class Feed_Exam extends Feed {
                    ->bind('exam', $exam)
                    ->bind('user', $user)
                    ->bind('event', $event)
-                   ;
+                   ->bind('span', $span);
             
         }
         
