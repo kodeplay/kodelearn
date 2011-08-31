@@ -30,7 +30,8 @@
                                 <td><?php echo $day ?></td>
                                 <td><?php echo date('h:i A', strtotime(date('Y-m-d')) + ($timing[0] * 60)) .  ' to ' . date('h:i A', strtotime(date('Y-m-d')) + ($timing[1] * 60)) ?></td>
                             </tr>
-                        <?php }?>
+                        <?php }?><br>
+                <p class = "h6 tlGray"><?php echo $span; ?></p>
                     </table>
                     <?php }?>
             </td>

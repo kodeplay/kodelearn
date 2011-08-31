@@ -16,7 +16,8 @@
                 <?php } else {?>
                     You have <span class="tRed">failed</span> with <span class="tRed"><?php echo round($percent['percent'],2); ?> %</span>
                 <?php } ?>
-                </p>
+                </p><br>
+                <p class = "h6 tlGray"><?php echo $span; ?></p>
             </td>
         </tr>
     </table>

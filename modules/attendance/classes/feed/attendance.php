@@ -18,11 +18,14 @@ class Feed_Attendance extends Feed {
         $dynamic_object = new $class($this->respective_id);
         $event_details = $dynamic_object->get_event_details();
         
+        $span = Date::fuzzy_span($this->time);
+        
         $view = View::factory('feed/'.$this->type . '_' . $this->action)
                ->bind('user', $user)
                ->bind('event', $event)
                ->bind('event_details', $event_details)
-               ->bind('attendance', $attendance);
+               ->bind('attendance', $attendance)
+               ->bind('span', $span);
                
         return $view->render();
     }
