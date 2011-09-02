@@ -5,7 +5,7 @@ class Acl_Menu_Admin extends Acl_Menu {
     public function __construct() {
         DynamicMenu_Filter::add(new Acl_Menu_Filter());
         $topmenu = DynamicMenu::factory('topmenu');
-        $topmenu->add_link('home', 'Home')
+        $topmenu->add_link('feed', 'Home')
             ->add_link('account', 'Profile')
             ->add_link('inbox', 'Inbox')
             ->add_link('auth/logout', 'Logout');

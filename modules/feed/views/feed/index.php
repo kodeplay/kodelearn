@@ -12,6 +12,10 @@
                     <?php echo $feed_html; ?>
                 </div>
             <?php }?>
+            <?php } else {?>
+                <div class="vpad10">
+                    No feed
+                </div>
             <?php }?>
         </div>
     </div>
