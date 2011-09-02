@@ -32,7 +32,8 @@
                             </tr>
                         <?php }?>
                     </table>
-                    <?php }?>
+                    <?php }?><br>
+                <p class = "h6 tlGray"><?php echo $span; ?></p>
             </td>
         </tr>
     </table>

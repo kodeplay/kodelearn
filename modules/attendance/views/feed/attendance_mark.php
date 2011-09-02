@@ -11,8 +11,9 @@
             </td>
             <td class="vatop">
                 <p class="h3"><?php echo $user->fullname(); ?></p><br>
-                <p class="h5 lh140 tRed" >The <?php echo $lecture ?> Lecture On <?php echo date('d-m-Y h:i A',$event->eventstart) ?> has been cancelled.</p>
-                <br>
+                <p class="h5 lh140" >Has marked you <?php if($attendance->present == "1") { ?><span class='tGreen'>present</span><?php } else { ?><span class='tRed'>absent</span><?php }?> for <?php echo $event->eventtype." ".$event_details->name; ?> <br>
+                Held on <?php echo date('d M Y',$event->eventstart); ?>
+                </p><br>
                 <p class = "h6 tlGray"><?php echo $span; ?></p>
             </td>
         </tr>

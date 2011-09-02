@@ -134,6 +134,7 @@ class Controller_Examresult extends Controller_Base {
             ->bind('examgroup', $examgroup)
             ->bind('edit_form_action', $action)
             ->bind('csv_import', $csv_import)
+            ->bind('publish', $publish)
             ->bind('success', $success)
             ->bind('warning', $warning);
         if ($this->request->method() === 'POST' && $this->request->post()) {
@@ -150,6 +151,7 @@ class Controller_Examresult extends Controller_Base {
         $examgroup_id = $this->request->param('examgroup_id');
         $action = Url::site('examresult/edit/examgroup_id/'.$examgroup_id);
         $csv_import = Url::site('examresult/upload/examgroup_id/'.$examgroup_id);
+        $publish = Url::site('examresult/publish/examgroup_id/'.$examgroup_id);
         $examresult = new Examgroup_Examresult($examgroup_id);
         $examgroup = $examresult->examgroup();
         // get all the exams in this exam group
@@ -260,6 +262,21 @@ class Controller_Examresult extends Controller_Base {
         return $sets;
     }
 
+    public function action_publish(){
+    	
+    	$examgroup_id = $this->request->param('examgroup_id');
+    	
+    	$users = Model_Examgroup::get_students($examgroup_id, 'object');
+    	
+        $feed = new Feed_Exam();
+                    
+        $feed->set_action('publish_result');
+        $feed->set_respective_id($examgroup_id);
+        $feed->set_actor_id(Auth::instance()->get_user()->id); 
+        $feed->save();
+        $feed->subscribe_users($users);
+    }
+    
     // view results of all users - so typically only the administrator and teacher 
     // will have this permission
     public function action_view() {

@@ -10,9 +10,19 @@ abstract class Feed {
 	
 	protected $respective_id;
 	
-	protected $course_id;
+	protected $course_id = 0;
 	
 	protected $actor_id;
+	
+	protected $time;
+	
+    public function get_time(){
+      return $this->time;
+    }
+    
+    public function set_time($value){
+      $this->time = $value;
+    }
 	
 	public function get_actor_id(){
 	  return $this->actor_id;
@@ -76,12 +86,14 @@ abstract class Feed {
         $this->respective_id  = $feed->respective_id;
         $this->actor_id  = $feed->actor_id;
         $this->course_id = $feed->course_id;
+        $this->time = $feed->time;
 	}
 	
 	public static function factory($type, $id = NULL){
 		
         $file = MODPATH . $type . '/classes/feed/' . $type . '.php';        
-        if(file_exists($file)){
+        $file_feed = MODPATH . 'feed/classes/feed/' . $type . '.php';    
+        if(file_exists($file) || file_exists($file_feed)){
             $class = 'Feed_' . $type;
             return new $class($id);
         } else {
@@ -92,6 +104,35 @@ abstract class Feed {
 	
 	public function render(){
 		return $this->type . ' ' . $this->action;
+	}
+	
+	public function save(){
+		$feed = ORM::factory('feed');
+		
+		$feed->type = $this->type;
+		$feed->action = $this->action;
+		$feed->respective_id = $this->respective_id;
+		$feed->actor_id = $this->actor_id;
+		$feed->course_id = $this->course_id;
+		$feed->time = time();
+		$feed->save();
+		$this->load($feed->id);
+	}
+	/*
+	 * Method will subscribe users to get feed.
+	 * @param array $users array of user object
+	 * 
+	 */
+	public function subscribe_users($users = array()){
+		if(!$users){
+			$course = ORM::factory('course', $this->course_id);
+			$users = Model_Course::get_students($course);
+		}
+		$feed = ORM::factory('feed', $this->id);
+		foreach($users as $user){
+			$feed->add('users', $user);
+		}
+		
 	}
 	
 }

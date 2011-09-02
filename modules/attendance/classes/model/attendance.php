@@ -8,4 +8,6 @@ class Model_Attendance extends ORM {
         ),
     ); 
     
+    
+    
 }

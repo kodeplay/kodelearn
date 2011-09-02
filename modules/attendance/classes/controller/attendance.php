@@ -266,6 +266,14 @@ class Controller_Attendance extends Controller_Base {
                    $attendance->save();
                 }
             }
+            
+            $feed = new Feed_Attendance();
+                    
+            $feed->set_action('mark');
+            $feed->set_respective_id($event_id);
+            $feed->set_actor_id(Auth::instance()->get_user()->id); 
+            $feed->save();
+            $feed->subscribe_users($users);
         }
         $id = $this->request->param('id');
         $type = $this->request->param('type');

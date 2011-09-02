@@ -195,6 +195,15 @@ class Controller_Exam extends Controller_Base {
 			
 			        $exam->save();
 			                    
+			        $feed = new Feed_Exam();
+			        
+			        $feed->set_action('add');
+			        $feed->set_course_id($this->request->post('course_id'));
+			        $feed->set_respective_id($exam->id);
+			        $feed->set_actor_id(Auth::instance()->get_user()->id); 
+			        $feed->save();
+			        $feed->subscribe_users();
+			        
                     Request::current()->redirect('exam');
                     exit;
                 } else {
@@ -263,6 +272,15 @@ class Controller_Exam extends Controller_Base {
                     
                     $event_exam->update($exam->event_id);
 
+                    $feed = new Feed_Exam();
+                    
+                    $feed->set_action('edit');
+                    $feed->set_course_id($this->request->post('course_id'));
+                    $feed->set_respective_id($exam->id);
+                    $feed->set_actor_id(Auth::instance()->get_user()->id); 
+                    $feed->save();
+                    $feed->subscribe_users();
+                    
                     Request::current()->redirect('exam');
                     exit;
                 } else {

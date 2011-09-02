@@ -113,7 +113,16 @@ class Controller_Lecture extends Controller_Base {
 	                
 	                $lecture->save();
 	                
-	                $this->remove_events($lecture);
+                    $feed = new Feed_Lecture();
+                    
+                    $feed->set_action('add');
+                    $feed->set_course_id($this->request->post('course_id'));
+                    $feed->set_respective_id($lecture->id);
+                    $feed->set_actor_id(Auth::instance()->get_user()->id); 
+                    $feed->save();
+                    $feed->subscribe_users();
+	                
+                    $this->remove_events($lecture);
 	                
 	                $this->create_events(array_merge($this->request->post(), $data), $lecture);
 	                
