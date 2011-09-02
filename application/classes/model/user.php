@@ -61,6 +61,14 @@ class Model_User extends ORM {
     public function __toString() {
         return $this->fullname();
     }
+
+    /**
+     * Method to check that the user is currently logged in user
+     */
+    public function is_current() {
+        $current = Auth::instance()->get_user();
+        return $this->id === $current->id;
+    }
     
     public function validator_login($data) {
         return Validation::factory($data)
