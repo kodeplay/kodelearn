@@ -25,7 +25,25 @@ class Model_Event extends ORM {
     }
 
     /**
+     * Method to get the teacher associated with this event
+     * In case- no teacher is associated, then return 0
+     * @return mixed (null|Model_User)
+     */
+    public function associated_teacher() {
+        $event = Event_Abstract::factory($this->eventtype, $this->id);
+        if (method_exists($event, 'associated_teacher')) {
+            return $event->associated_teacher();
+        }
+        return null;
+    }
+
+    public function is_cancelled() {
+        return (bool) $this->cancel;
+    }
+
+    /**
      * Method to get all the events in the specified month of the year
+     * excluding the cancelled events
      * @param int $month 0 < $month < 12
      * @param int $year > 1970 due to unix time stamp
      * @return Database_MySQL_Result
@@ -48,10 +66,12 @@ class Model_Event extends ORM {
             $event = ORM::factory('event')
                 ->where('eventstart', 'BETWEEN', array($first, $last))
                 ->where('events.course_id', 'IN', DB::expr('(' . implode(", ", $courses) . ')'))
+                ->where('events.cancel', ' = ', 0)
                 ->find_all();
         } else {
             $event = ORM::factory('event')
                 ->where('eventstart', 'BETWEEN', array($first, $last))
+                ->where('events.cancel', ' = ', 0)
                 ->find_all();
         }
         return $event;
@@ -59,14 +79,25 @@ class Model_Event extends ORM {
 
     /**
      * Method to get all the events happening on a date
+     * including the cancelled events and indicate if its cancelled
      * @param date format: 'YYYY-mm-dd'
      * @return Database_MySQL_Result
      */
     public static function daily_events($date) {
-        $event = ORM::factory('event')
-            ->where(DB::expr('DATE(FROM_UNIXTIME(eventstart))'), ' = ', $date)
-            ->order_by('eventstart', 'ASC')
-            ->find_all();
+        $user = Acl::instance()->relevant_user();
+        if ($user instanceof Model_User) {
+            $courses = $user->courses->find_all()->as_array(null, 'id');
+            $event = ORM::factory('event')
+                ->where(DB::expr('DATE(FROM_UNIXTIME(eventstart))'), ' = ', $date)
+                ->where('events.course_id', 'IN', DB::expr('(' . implode(", ", $courses) . ')'))
+                ->order_by('eventstart', 'ASC')
+                ->find_all();
+        } else {
+            $event = ORM::factory('event')
+                ->where(DB::expr('DATE(FROM_UNIXTIME(eventstart))'), ' = ', $date)
+                ->order_by('eventstart', 'ASC')
+                ->find_all();
+        }
         return $event;
     }
     

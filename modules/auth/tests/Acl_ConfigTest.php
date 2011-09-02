@@ -45,6 +45,18 @@ class Acl_ConfigTest extends Kohana_UnitTest_TestCase {
         $acl = $this->acl_config->acl('guitar');
     }
 
+    public function test_merge_default_levels() {
+        $acl = $this->acl_config->acl();
+        $config = $this->acl_config->config()->getArrayCopy();
+        $default = $config['default'];
+        // with inherit_default not set (equivalent to true)
+        $this->assertTrue(Arr::get($config['user'], 'inherit_default', true));
+        $this->assertEquals(count($default) + count($config['user']['levels']), count($acl['user']));
+        // with inherit_default set to false 
+        $this->assertFalse(Arr::get($config['calendar'], 'inherit_default', true));
+        $this->assertEquals(count($config['calendar']['levels']), count($acl['calendar']));
+    }
+
     public function test_merge_levels() {
         // first check the behavior of merge_levels being invoked
         // internally from construct ie merge default with specified
@@ -53,17 +65,15 @@ class Acl_ConfigTest extends Kohana_UnitTest_TestCase {
         foreach ($config as $k=>$v) {
             if ($k !== 'default') {
                 $resource = $k;
-                $levels = $v;                 
+                $count = Arr::get($v, 'inherit_default', true) ? count($config['default']) : 0;
+                $levels = $v['levels'];
+                $count += count($levels);
+                break;
             }
         }
-        $default = $this->acl_config->get_default();
-        // check if merge_levels works when invoked publicly
-        $acl = $this->acl_config->acl();
-        $merged = array_merge($default, $levels);
-        $this->assertEquals($merged, $acl[$resource]);
-        // now merge one level into this by passing a string
         $new_level = 'send_email';
         $this->acl_config->merge_levels($resource, $new_level);
+        $count += 1; // 1 level added
         // check if new level has been added to acl
         $acl = $this->acl_config->acl($resource);
         $this->assertEquals($new_level, array_pop($acl));
@@ -76,9 +86,19 @@ class Acl_ConfigTest extends Kohana_UnitTest_TestCase {
         $this->acl_config->merge_levels($resource, $more_levels);
         $acl = $this->acl_config->acl($resource);
         $i = count($more_levels);
+        $count += $i;
         while ($i > 0) {
-            $this->assertEquals($more_levels[--$i], array_pop($acl));            
+            $this->assertEquals($more_levels[--$i], array_pop($acl));
         }
+        // again check by passing an array that the previously added levels remain and are not overwritten
+        $some_more_levels = array(
+            'play_piano',
+            'watch_tv',
+        );
+        $this->acl_config->merge_levels($resource, $some_more_levels);
+        $acl = $this->acl_config->acl($resource);
+        $count += count($some_more_levels);
+        $this->assertEquals($count, count($acl));
     }
 
     /**

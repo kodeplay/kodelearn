@@ -245,3 +245,37 @@ ALTER TABLE `events`
 RENAME TABLE `attendences` TO `attendances` ;
 
 
+
+-----------------------------------------------------------------------------------------------------------------------
+
+ALTER TABLE `events`
+      ADD COLUMN `cancel` INT NOT NULL DEFAULT 0 AFTER `course_id`
+
+-----------------------------------------------------------------------------------------------------------------------
+CREATE TABLE `feeds` (
+    `id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+    `type` VARCHAR(50) NOT NULL DEFAULT '',
+    `action` VARCHAR(50) NOT NULL DEFAULT '',
+    `respective_id` INT(11) UNSIGNED NOT NULL DEFAULT '0',
+    `course_id` INT(11) UNSIGNED NOT NULL DEFAULT '0',
+    `actor_id` INT(11) UNSIGNED NOT NULL,
+    `time` VARCHAR(15) NOT NULL,
+    PRIMARY KEY (`id`),
+    INDEX `FK_feed_courses` (`course_id`),
+    INDEX `FK_feed_users` (`actor_id`),
+    CONSTRAINT `FK_feed_users` FOREIGN KEY (`actor_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
+)
+COLLATE='utf8_general_ci'
+ENGINE=InnoDB;
+
+CREATE TABLE `feeds_users` (
+    `feed_id` INT(11) UNSIGNED NOT NULL,
+    `user_id` INT(11) UNSIGNED NOT NULL,
+    INDEX `FK_feed_users_feed` (`feed_id`),
+    INDEX `FK_feed_users_users` (`user_id`),
+    CONSTRAINT `FK_feed_users_feed` FOREIGN KEY (`feed_id`) REFERENCES `feeds` (`id`) ON DELETE CASCADE,
+    CONSTRAINT `FK_feed_users_users` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
+)
+COLLATE='utf8_general_ci'
+ENGINE=InnoDB;
+

@@ -66,6 +66,7 @@
 .lh140 { line-height: 140%; }
 .breakword {	word-wrap: break-word; }
 .underline {	text-decoration: underline; }
+.strike { text-decoration: line-through; }
 
 .h1 {	font-size: 24px;	}
 .h2 {	font-size: 18px;	}

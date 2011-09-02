@@ -12,6 +12,9 @@ class Acl_Menu_Filter extends DynamicMenu_Filter {
     protected function filter_add_link($args) {
         $url = $args[0];
         list($controller) = explode("/", $url, 1);
+        if ($url === 'auth/logout') {
+            return True;
+        }
         return Acl::instance()->has_access($controller);
     }
 }

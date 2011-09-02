@@ -55,6 +55,10 @@ class Controller_Base extends Controller_Template {
         }
     }    
 
+    /**
+     * Check if the role of the current user is allowed to access this page
+     * otherwise redirect to the access denied page.
+     */
     protected function acl_filter() {
         $resource = $this->request->controller();
         $acl = Acl::instance();
@@ -72,7 +76,7 @@ class Controller_Base extends Controller_Template {
         $logged_in = Auth::instance()->logged_in();        
         $this->template = !$logged_in ? 'template/template' : 'template/logged_template';
     }
-    
+
     public function after() {
         $controller = $this->request->controller();
         $action = $this->request->action();

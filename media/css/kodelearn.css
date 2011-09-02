@@ -16,6 +16,7 @@
 	9.		Role actions permissions
 	10.		News feed
         11.             Calendar styling
+        12.             Overridden jquery-ui styles
 	END.	Developer styles
 	
    ............................. */
@@ -742,6 +743,8 @@ tr.bad { background: #f4dcdc; }
 	box-shadow: 0 0 8px #4f6473; 
 }
 
+#calendar-jumper select { width: 120px; }
+
 
 /* ..........................
 	Rank badges
@@ -811,6 +814,8 @@ table.calendar td ul.output { margin-top: 10px; color: #427693; }
 #day-events ul { padding: 10px 5px; } 
 #day-events ul li { padding: 15px 10px; margin-bottom: 1px; border-bottom: 1px solid #d7c2b5; }
 #day-events ul li:hover { background: #f1edd3; border: 1px dashed #666; cursor: pointer; }
+#day-events ul li.cancelled { background: #F4DCDC; }
+#day-events ul li.cancelled span.cancelled { color: #ff0000; }
 
 /* ..........................
 	Attendance
@@ -824,6 +829,11 @@ table.calendar td ul.output { margin-top: 10px; color: #427693; }
 .attendanceBadge.present {
 	color: #68751a;
 }
+
+/* ......................................
+	Overridden jquery-ui styles
+   .................................... */
+.ui-slider { z-index: 0; }
 
 /* ..........................
 	Developer section
