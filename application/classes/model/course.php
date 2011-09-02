@@ -107,10 +107,30 @@ class Model_Course extends ORM {
      * @return null
      */
     public static function assign_users($course, $user_ids) {
+       
+        $feed_exist = ORM::factory('course');
+        $feed_exist->select('courses_users.user_id')
+                   ->join('courses_users','right')
+                   ->on('course_id','=','id')
+                    ->where('course_id','=',$course->id)
+                  ;
+        $feed_exists = $feed_exist->find_all()->as_array(null,'user_id');
+        $new_feed = array_diff($user_ids,$feed_exists);
+        
+        $feed = new Feed_Course();
+        $feed->set_action('student_add');
+        $feed->set_course_id('0');
+        $feed->set_respective_id($course->id);
+        $feed->set_actor_id(Auth::instance()->get_user()->id); 
+        $feed->save();
+        $feed->subscribe_users($new_feed);
+        
         $course->remove('users');
         if($user_ids) {
+            
             foreach($user_ids as $user_id){
                 $course->add('users', ORM::factory('user', $user_id));
+                
             }
         }
     }

@@ -743,6 +743,8 @@ tr.bad { background: #f4dcdc; }
 	box-shadow: 0 0 8px #4f6473; 
 }
 
+#calendar-jumper select { width: 120px; }
+
 
 /* ..........................
 	Rank badges

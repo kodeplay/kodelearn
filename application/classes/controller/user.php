@@ -136,16 +136,30 @@ class Controller_User extends Controller_Base {
                     $user->add('roles', $role);
                     
                     if($this->request->post('batch_id')){
+                        $feed = new Feed_Batch();
                         foreach($this->request->post('batch_id') as $batch_id){
                             $batch = ORM::factory('batch', $batch_id);
                             $user->add('batches', $batch);
+                            $feed->set_action('add');
+                            $feed->set_course_id('0');
+                            $feed->set_respective_id($batch_id);
+                            $feed->set_actor_id(Auth::instance()->get_user()->id); 
+                            $feed->save();
+                            $feed->subscribe_users(array('0' => $user->id));
                         }
                     }
                     
                     if($this->request->post('course_id')){
+                        $feed = new Feed_Course();
                         foreach($this->request->post('course_id') as $course_id){
                             $course = ORM::factory('course', $course_id);
                             $user->add('courses', $course);
+                            $feed->set_action('student_add');
+                            $feed->set_course_id('0');
+                            $feed->set_respective_id($course_id);
+                            $feed->set_actor_id(Auth::instance()->get_user()->id); 
+                            $feed->save();
+                            $feed->subscribe_users(array('0' => $user->id));
                         }
                     }
                     self::notify_by_email($user, $password);
@@ -248,17 +262,50 @@ class Controller_User extends Controller_Base {
                     //removing the previous batches assigned
                     $user->remove('batches');
                     if($this->request->post('batch_id')){
+                        $feed = new Feed_Batch();
                         foreach($this->request->post('batch_id') as $batch_id){
                             $batch = ORM::factory('batch', $batch_id);
                             $user->add('batches', $batch);
+                            $feed_exist = ORM::factory('feed');
+                            $feed_exist->join('feeds_users','left')
+                                             ->on('feeds_users.feed_id','=','feeds.id')
+                                             ->where('feeds.type','=','batch')
+                                             ->where('feeds.respective_id','=',$batch_id)
+                                             ->where('feeds_users.user_id','=',$user->id);
+                            $feed_exists = $feed_exist->find();
+                            if(!$feed_exists->id){
+                                $feed->set_action('add');
+                                $feed->set_course_id('0');
+                                $feed->set_respective_id($batch_id);
+                                $feed->set_actor_id(Auth::instance()->get_user()->id); 
+                                $feed->save();
+                                $feed->subscribe_users(array('0' => $user->id));       
+                            }
+                               
                         }
                     }
                     //removing the previous courses assigned
                     $user->remove('courses');
                     if($this->request->post('course_id')){
+                        $feed = new Feed_Course();
                         foreach($this->request->post('course_id') as $course_id){
                             $course = ORM::factory('course', $course_id);
                             $user->add('courses', $course);
+                            $feed_exist = ORM::factory('feed');
+                            $feed_exist->join('feeds_users','left')
+                                             ->on('feeds_users.feed_id','=','feeds.id')
+                                             ->where('feeds.type','=','course')
+                                             ->where('feeds.respective_id','=',$course_id)
+                                             ->where('feeds_users.user_id','=',$user->id);
+                            $feed_exists = $feed_exist->find();
+                            if(!$feed_exists->id){
+                                $feed->set_action('student_add');
+                                $feed->set_course_id('0');
+                                $feed->set_respective_id($course_id);
+                                $feed->set_actor_id(Auth::instance()->get_user()->id); 
+                                $feed->save();
+                                $feed->subscribe_users(array('0' => $user->id));       
+                            }
                         }
                     }
                     
@@ -324,6 +371,8 @@ class Controller_User extends Controller_Base {
 
                     $records_added = 0;
                     $error = 0;
+                    
+                    $user_id = array();
                     foreach($filedata as $key => $row){
                     	$data = array(
                             'firstname' => isset($row[0]) ? $row[0] : '',
@@ -344,7 +393,8 @@ class Controller_User extends Controller_Base {
                             $role = ORM::factory('role', $this->request->post('role_id'));
                             $user->save();
                             $user->add('roles', $role);
-                            
+                            $user_id[] = $user->id;
+                             
                             if(($this->request->post('batch_id'))){
                                 foreach($this->request->post('batch_id') as $batch_id){
                                     $batch = ORM::factory('batch', $batch_id);
@@ -361,8 +411,21 @@ class Controller_User extends Controller_Base {
                             break;
                         }
                     }
+                    
+                    
                     if(!$error){
                         $this->success = "Users uploaded successfully. Records Added " . $records_added ;
+                        $feed = new Feed_Batch();
+                        if(($this->request->post('batch_id'))){
+                            foreach($this->request->post('batch_id') as $batch_id){
+                                $feed->set_action('add');
+                                $feed->set_course_id('0');
+                                $feed->set_respective_id($batch_id);
+                                $feed->set_actor_id(Auth::instance()->get_user()->id); 
+                                $feed->save();
+                                $feed->subscribe_users($user_id);
+                            }
+                        }
                     }
                     
                     fclose($handle);

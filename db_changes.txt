@@ -244,6 +244,8 @@ ALTER TABLE `events`
 
 RENAME TABLE `attendences` TO `attendances` ;
 
+
+
 -----------------------------------------------------------------------------------------------------------------------
 
 ALTER TABLE `events`
@@ -276,3 +278,4 @@ CREATE TABLE `feeds_users` (
 )
 COLLATE='utf8_general_ci'
 ENGINE=InnoDB;
+
