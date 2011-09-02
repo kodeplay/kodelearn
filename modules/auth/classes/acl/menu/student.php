@@ -4,7 +4,7 @@ class Acl_Menu_Student extends Acl_Menu {
 
     public function __construct() {
         $topmenu = DynamicMenu::factory('topmenu');
-        $topmenu->add_link('feed', 'Home')
+        $topmenu->add_link('home', 'Home')
             ->add_link('account', 'Profile')
             ->add_link('inbox', 'Inbox')
             ->add_link('auth/logout', 'Logout');

@@ -3,7 +3,16 @@
 class Controller_Home extends Controller_Base {
     
     public function action_index() {
-        $this->content = '';
+    	
+    	$feeds = Request::factory('feed')
+            ->method(Request::GET)
+            ->execute()
+            ->body();
+    	
+    	
+    	$view = View::factory('home/index')
+    	               ->bind('feeds', $feeds);
+        $this->content = $view;
     }
     
     public function action_logout() {
