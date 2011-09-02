@@ -25,6 +25,19 @@ class Model_Event extends ORM {
     }
 
     /**
+     * Method to get the teacher associated with this event
+     * In case- no teacher is associated, then return 0
+     * @return mixed (null|Model_User)
+     */
+    public function associated_teacher() {
+        $event = Event_Abstract::factory($this->eventtype, $this->id);
+        if (method_exists($event, 'associated_teacher')) {
+            return $event->associated_teacher();
+        }
+        return null;
+    }
+
+    /**
      * Method to get all the events in the specified month of the year
      * @param int $month 0 < $month < 12
      * @param int $year > 1970 due to unix time stamp

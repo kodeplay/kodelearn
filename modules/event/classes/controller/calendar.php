@@ -39,7 +39,6 @@ class Controller_Calendar extends Controller_Base {
         // loop though events and group events by day and event types
         foreach ($event as $e) {
             $day = date('j-m', $e->eventstart);
-            // echo 'date(\'j\', '. $e->eventstart .') = ' . $day . '=' . date('Y-m-d H:i:s', $e->eventstart) . ' <br/>';
             if (!isset($day_events[$day][$e->eventtype])) {
                 $day_events[$day][$e->eventtype] = array();
             }
