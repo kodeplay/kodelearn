@@ -279,6 +279,7 @@ KODELEARN.modules.add('calendar', (function () {
                 $days.removeClass('curr');
                 // if cached, inject into the container and return
                 if (html) {
+                    $(this).addClass('curr');
                     $eventlist.html(html);
                     return true;
                 }
