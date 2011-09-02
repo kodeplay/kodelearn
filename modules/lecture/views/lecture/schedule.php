@@ -12,11 +12,17 @@
                 <th>Action</th>
             </tr>
             <?php foreach($events as $event){ ?>
-            <tr class="<?php echo (in_array($event->id, $conflict_event_ids)) ? 'tRed':''; ?>">
+            <tr class="<?php echo (in_array($event->id, $conflict_event_ids)) ? 'tRed':''; ?> <?php echo ($event->cancel)?'tlBrown blBlue':'' ?>">
                 <td><p><?php echo date('d M Y, l', $event->eventstart)?></p>
                     <p><?php echo date('h:i a', $event->eventstart)?> to <?php echo date('h:i a', $event->eventend)?> </p></td>
                 <td><?php echo $event->room->room_number . ', ' . $event->room->room_name ?></td>
-                <td><a href="#" onclick="Events.edit(<?php echo $event->id ?>)" >Edit</a></td>
+                <td>
+                    <?php if(!$event->cancel){ ?>
+                        <a href="#" onclick="Events.edit(<?php echo $event->id ?>)" >Edit</a>
+                    <?php } else {?>
+                    Canceled
+                    <?php }?>
+                </td>
             </tr>
             <?php }?>
         </table>

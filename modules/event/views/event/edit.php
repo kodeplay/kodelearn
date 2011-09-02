@@ -17,6 +17,10 @@
                     <?php echo $form->to->element(); ?><br/><span id="slider-range_time"></span><br/><br/>
                     <div id="slider-range"></div></td>
             </tr>
+            <tr>
+                <td><?php echo $form->cancel->label(); ?></td>
+                <td><?php echo $form->cancel->element(); ?></td>
+            </tr>
         </table>
     
     </form>
