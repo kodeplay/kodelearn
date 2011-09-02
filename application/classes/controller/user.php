@@ -162,7 +162,7 @@ class Controller_User extends Controller_Base {
         
         $view = View::factory('user/form')
             ->bind('form', $form)
-           ;
+            ->set('page_title', 'Create a new user');
         Breadcrumbs::add(array(
             'User', Url::site('user')
         ));
@@ -284,7 +284,7 @@ class Controller_User extends Controller_Base {
         
         $view = View::factory('user/form')
             ->bind('form', $form)
-            ;
+            ->set('page_title', sprintf('View/Edit %s\'s profile', $user->fullname()));
         Breadcrumbs::add(array(
             'User', Url::site('user')
         ));
