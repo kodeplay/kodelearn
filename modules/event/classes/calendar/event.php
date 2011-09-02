@@ -7,18 +7,18 @@
  * This is behaviour is implemented in static factory function
  * 
  */
-class Event_Calendar {
+class Calendar_Event {
 
     protected $_instance = null;
 
     public static function factory($type) {
-        $file = MODPATH . $type . '/classes/' . $type . '/calendar.php';
+        $file = MODPATH . $type . '/classes/calendar/' . $type . '.php';
         if(file_exists($file)){
-            $class = ucfirst($type) . '_Calendar';
+            $class = 'Calendar' . '_' . ucfirst($type);
             return new $class($type);
         } else {
             $type = 'event';
-            return new Event_Calendar($type);
+            return new Calendar_Event($type);
         }
     }
 

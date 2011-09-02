@@ -1,7 +1,6 @@
 <?php defined('SYSPATH') or die('No direct access allowed.');
 
-return array(
-    
+return array(    
     'default' => array(
         'view',
         'create',
@@ -10,14 +9,24 @@ return array(
     ),
 
     'user' => array(
-        'upload_csv'
+        'levels' => array(
+            'upload_csv',
+        )
     ),
     
     'course' => array(
-        'join'
+        'levels' => array(
+            'join',
+        )
     ),
     
     'role' => array(
-        'set_permission'
-    )
+        'levels' => array(
+            'set_permission',
+        )
+    ),
+
+    'play' => array(
+        'ignore' => true,
+    ),
 );

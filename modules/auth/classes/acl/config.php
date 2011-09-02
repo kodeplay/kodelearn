@@ -19,7 +19,6 @@ class Acl_Config {
         'auth',
         'base',
         'home',
-        'play',
         'rest',
         'template',
         'unittest',
@@ -47,12 +46,23 @@ class Acl_Config {
      */
     public function __construct($file = 'acl') {
         $this->_config = Kohana::config('acl');
-        $this->_acl = $this->_config->getArrayCopy();
-        $this->_default = array_shift($this->_acl);
-        $this->merge_resources();
-        foreach ($this->_acl as $resource=>$levels) {
-            $this->merge_levels($resource, $levels);
+        $this->_acl = $this->_config->getArrayCopy();        
+        $this->_default = $this->_acl['default'];
+        unset($this->_acl['default']);
+        $this->merge_ignored()
+            ->merge_resources()
+            ->merge_default_levels();
+    }
+
+    public function merge_ignored() {
+        foreach ($this->_config as $resource=>$config) {
+            if (!empty($config['ignore'])) {
+                self::$ignoredControllers[] = $resource;
+                // remove this resource from the $this->_acl array
+                unset($this->_acl[$resource]);
+            }
         }
+        return $this;
     }
 
     /**
@@ -64,15 +74,36 @@ class Acl_Config {
         $controllers = Kohana::list_files('classes/controller');
         foreach ($controllers as $controller) {            
             $resource = basename($controller, '.php');
-            if (!array_key_exists($resource, $this->_acl) && !in_array($resource, self::$ignoredControllers)) {
-                $this->_acl[$resource] = array();                
+            if (self::is_resource_ignored($resource) || array_key_exists($resource, $this->_acl)) {
+                continue;
             }
+            $this->_acl[$resource] = array();
         }
+        ksort($this->_acl);
+        return $this;
+    }
+
+    /**
+     * Method to merge the default levels into all the resources
+     * Hence it must be called after merging resources
+     * in cas e the inherit_defaults flag exists and set to false, defaults will not be merged
+     */
+    public function merge_default_levels() {
+        foreach ($this->_acl as $resource=>$config) {
+            $levels = Arr::get($config, 'levels', array());
+            $inherit_default = Arr::get($config, 'inherit_default', true);
+            if (!$inherit_default) {
+                $this->_acl[$resource] = $levels;
+                continue;
+            }
+            $this->_acl[$resource] = array_merge($this->_default, $levels);
+        }
+        return $this;
     }
     
     /**
-     * Method to merge the default access levels with the resource
-     * specific access levels
+     * Method to merge other access levels with the already existing access levels
+     * for a resource on the fly
      * @param String $resource
      * @param mixed (string|array) $levels 
      * @throws Acl_Exception if resource not found in config
@@ -82,7 +113,7 @@ class Acl_Config {
             throw new Acl_Exception('Resource ' . $resource . ' not found in config file');
         }
         if (is_array($levels)) {
-            $this->_acl[$resource] = array_merge($this->_default, $levels);
+            $this->_acl[$resource] = array_merge($this->_acl[$resource], $levels);
         } else {
             $this->_acl[$resource][] = $levels;
         }
