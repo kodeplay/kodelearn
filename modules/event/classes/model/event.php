@@ -37,8 +37,13 @@ class Model_Event extends ORM {
         return null;
     }
 
+    public function is_cancelled() {
+        return (bool) $this->cancel;
+    }
+
     /**
      * Method to get all the events in the specified month of the year
+     * excluding the cancelled events
      * @param int $month 0 < $month < 12
      * @param int $year > 1970 due to unix time stamp
      * @return Database_MySQL_Result
@@ -61,10 +66,12 @@ class Model_Event extends ORM {
             $event = ORM::factory('event')
                 ->where('eventstart', 'BETWEEN', array($first, $last))
                 ->where('events.course_id', 'IN', DB::expr('(' . implode(", ", $courses) . ')'))
+                ->where('events.cancel', ' = ', 0)
                 ->find_all();
         } else {
             $event = ORM::factory('event')
                 ->where('eventstart', 'BETWEEN', array($first, $last))
+                ->where('events.cancel', ' = ', 0)
                 ->find_all();
         }
         return $event;
@@ -72,6 +79,7 @@ class Model_Event extends ORM {
 
     /**
      * Method to get all the events happening on a date
+     * including the cancelled events and indicate if its cancelled
      * @param date format: 'YYYY-mm-dd'
      * @return Database_MySQL_Result
      */
