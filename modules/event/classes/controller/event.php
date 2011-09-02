@@ -16,7 +16,19 @@ class Controller_Event extends Controller_Base {
                 $event->room_id = $this->request->post('room_id');
             	$event->eventstart = $from;
             	$event->eventend = $to;
+            	$event->cancel = (int) $this->request->post('cancel');
             	$event->save();
+            	
+            	if($this->request->post('cancel')){
+                    $feed = new Feed_Lecture();
+                    
+                    $feed->set_action('canceled');
+                    $feed->set_course_id($event->course_id);
+                    $feed->set_respective_id($event->id);
+                    $feed->set_actor_id(Auth::instance()->get_user()->id); 
+                    $feed->save();
+                    $feed->subscribe_users();
+            	}
             	
                 $json = array(
             	   'success'   => 1,
@@ -44,17 +56,19 @@ class Controller_Event extends Controller_Base {
 		    'room_id'       => '',
             'from'          => '',
             'to'            => '',
+		    'cancel'        => '1'
 		);
 
-        $form->saved_data = array('date' => date('Y-m-d', $event->eventstart));
+        $form->saved_data = array('date' => date('Y-m-d', $event->eventstart), 'cancel' => $event->cancel);
         
         $form->append('Date', 'date', 'text', array('attributes' => array('class' => 'date')));
         $form->append('Room', 'room_id', 'select', array('options' => array()));
         $form->append('From', 'from', 'hidden', array('attributes' => array('id' => 'slider-range_from')));
         $form->append('To', 'to', 'hidden', array('attributes' => array('id' => 'slider-range_to')));
+        $form->append('Cancel', 'cancel', 'checkbox', array('attributes' => array('value' => 1)));
         
         $form->process();
-        
+
         $slider = array(
             'start' => ($event->eventstart - strtotime(date('Y-m-d', $event->eventstart))) / 60,
             'end' => ($event->eventend - strtotime(date('Y-m-d', $event->eventend))) / 60
