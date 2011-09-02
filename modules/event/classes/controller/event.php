@@ -58,6 +58,14 @@ class Controller_Event extends Controller_Base {
             'to'            => '',
 		    'cancel'        => '1'
 		);
+		
+		$conflict_event = $event->get_conflict_event();
+        $event_details = array();
+        if($conflict_event){
+			$class = 'Event_'.$conflict_event->eventtype;
+	        $dynamic_object = new $class($conflict_event->id);
+	        $event_details = $dynamic_object->get_event_details();		
+        }
 
         $form->saved_data = array('date' => date('Y-m-d', $event->eventstart), 'cancel' => $event->cancel);
         
@@ -77,7 +85,9 @@ class Controller_Event extends Controller_Base {
         $view = View::factory('event/edit')
 		               ->bind('event', $event)
 		               ->bind('form', $form)
-		               ->bind('slider', $slider);
+		               ->bind('slider', $slider)
+		               ->bind('conflict_event', $conflict_event)
+		               ->bind('event_details', $event_details);
 		
 		$this->content = $view;
 	}

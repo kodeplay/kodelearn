@@ -24,3 +24,10 @@ Events.save = function() {
     			}
     }, "json");
 };
+
+Events.switchEvent = function(eventId){
+	$('#event_from').dialog( "destroy" );
+	$('#event_from').remove();
+	this.edit(eventId);
+	
+};

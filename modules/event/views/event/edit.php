@@ -1,5 +1,6 @@
 <div id="event_from" title="Edit Event">
     <form id="event_form" name="event">
+    <div class="l">
         <span id="loading">Please wait... Loading Rooms</span>
         <input type="hidden" name="event_id" value="<?php echo $event->id ?>" />
         <table class="formcontainer bm40">
@@ -22,7 +23,14 @@
                 <td><?php echo $form->cancel->element(); ?></td>
             </tr>
         </table>
-    
+    </div>
+    <?php if($conflict_event){ ?>
+    <div class="l tRed">
+        Conflict With:<br/>
+        <?php echo ucfirst($conflict_event->eventtype) ?>: <?php echo $event_details->name ?> 
+        <a href="#" onclick="Events.switchEvent(<?php echo $conflict_event->id ?>)">Edit this instead</a>
+    </div>
+    <?php } ?>
     </form>
 </div>
 

@@ -110,4 +110,26 @@ class Model_Event extends ORM {
         return $attendances;
     }
     
+    public function get_conflict_event(){
+    	
+        $sql = 'SELECT `events`.* FROM `events` WHERE ((`events`.`eventstart` BETWEEN :from AND :to OR `events`.`eventend` BETWEEN :from AND :to) OR (:from BETWEEN `events`.`eventstart` AND `events`.`eventend` OR :to BETWEEN `events`.`eventstart` AND `events`.`eventend`)) AND `events`.cancel = 0';
+        
+        $sql .= ' AND `events`.id != ' . (int) $this->id;
+
+        $query = DB::query(Database::SELECT, $sql);
+         
+        $query->parameters(array(
+            ':from' => $this->eventstart,
+            ':to' => $this->eventend,
+        ));    	
+        
+        $result = $query->execute()->as_array(NULL, 'id');
+        
+        if($result){
+        	return ORM::factory('event', $result[0]);
+        } else {
+        	return false;
+        }
+    }
+    
 }
