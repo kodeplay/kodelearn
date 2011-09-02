@@ -10,7 +10,11 @@ class Controller_Calendar extends Controller_Base {
     public function action_index() {
         $view = View::factory('calendar/index')
             ->bind('calendar', $calendar)
-            ->bind('day_events', $day_events);
+            ->bind('day_events', $day_events)
+            ->bind('month', $month)
+            ->bind('year', $year)
+            ->bind('months', $months)
+            ->bind('years', $years);
         $month = Arr::get($_GET, 'month', date('m'));
         $year = Arr::get($_GET, 'year', date('Y'));
         Breadcrumbs::add(array(
@@ -24,6 +28,10 @@ class Controller_Calendar extends Controller_Base {
             ->method(Request::GET)
             ->execute()
             ->body();
+        $months = array_map(array(__CLASS__, 'month_names'), Date::months());
+        // var_dump($months); exit;
+        $present_year = date('Y');
+        $years = range($present_year-10, $present_year+10);
         $this->content = $view;
     }
 
@@ -84,5 +92,9 @@ class Controller_Calendar extends Controller_Base {
             ->set('date', $date)
             ->set('day_events', $day_events);
         $this->content = $view;
+    }
+
+    public static function month_names($m) {
+        return date('F', mktime(0, 0, 0, (int)$m, 1));
     }
 }

@@ -269,6 +269,7 @@ KODELEARN.modules.add('calendar', (function () {
 	init: function () {
             this.day_events();
             this.ajaxify();
+            this.jumper();
 	},
 
         day_events: function () {
@@ -331,6 +332,23 @@ KODELEARN.modules.add('calendar', (function () {
             };
             $next.unbind('click').bind('click', cb);
             $prev.unbind('click').bind('click', cb);
+        },
+
+        jumper: function () {
+            var that = this;
+            $("#calendar-jumper>a.button").click(function () {
+                var month = $("select[name='jump_month']").val(),
+                year = $("select[name='jump_year']").val();
+                new ajaxLoad({
+                    'container': '#calendar-wrapper',
+                    'controller': 'calendar',
+                    'action': 'calendar?month='+month+'&year='+year,
+                    'callback': function (resp) {
+                        that.day_events();
+                        that.ajaxify();
+                    }
+                });
+            });
         }
     };
     
