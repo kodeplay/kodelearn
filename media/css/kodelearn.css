@@ -16,6 +16,7 @@
 	9.		Role actions permissions
 	10.		News feed
         11.             Calendar styling
+        12.             Overridden jquery-ui styles
 	END.	Developer styles
 	
    ............................. */
@@ -824,6 +825,11 @@ table.calendar td ul.output { margin-top: 10px; color: #427693; }
 .attendanceBadge.present {
 	color: #68751a;
 }
+
+/* ......................................
+	Overridden jquery-ui styles
+   .................................... */
+.ui-slider { z-index: 0; }
 
 /* ..........................
 	Developer section

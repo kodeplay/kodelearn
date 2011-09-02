@@ -63,10 +63,20 @@ class Model_Event extends ORM {
      * @return Database_MySQL_Result
      */
     public static function daily_events($date) {
-        $event = ORM::factory('event')
-            ->where(DB::expr('DATE(FROM_UNIXTIME(eventstart))'), ' = ', $date)
-            ->order_by('eventstart', 'ASC')
-            ->find_all();
+        $user = Acl::instance()->relevant_user();
+        if ($user instanceof Model_User) {
+            $courses = $user->courses->find_all()->as_array(null, 'id');
+            $event = ORM::factory('event')
+                ->where(DB::expr('DATE(FROM_UNIXTIME(eventstart))'), ' = ', $date)
+                ->where('events.course_id', 'IN', DB::expr('(' . implode(", ", $courses) . ')'))
+                ->order_by('eventstart', 'ASC')
+                ->find_all();
+        } else {
+            $event = ORM::factory('event')
+                ->where(DB::expr('DATE(FROM_UNIXTIME(eventstart))'), ' = ', $date)
+                ->order_by('eventstart', 'ASC')
+                ->find_all();
+        }
         return $event;
     }
     
