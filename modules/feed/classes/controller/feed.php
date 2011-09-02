@@ -14,7 +14,11 @@ class Controller_Feed extends Controller_Base {
     	
     	$view = View::factory('feed/index')
     	               ->bind('feeds', $feeds);
-    	               
+
+    	Breadcrumbs::add(array(
+            'Feeds', Url::site('feed')
+        ));
+                       
     	$this->content = $view;
     }
 }

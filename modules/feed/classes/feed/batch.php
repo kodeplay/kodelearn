@@ -2,7 +2,7 @@
 
 class Feed_Batch extends Feed {
     
-    public function __construct($id){
+    public function __construct($id = NULL){
         if($id){
             $this->load($id);
         }
@@ -26,6 +26,11 @@ class Feed_Batch extends Feed {
                ->bind('span', $span);
                
         return $view->render();
+    }
+    
+    public function save(){
+        $this->type = 'batch';
+        parent::save();
     }
     
 }
