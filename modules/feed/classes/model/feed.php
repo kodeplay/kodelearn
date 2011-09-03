@@ -7,7 +7,8 @@ class Model_Feed extends ORM {
             'model'   => 'user',
             'through' => 'feeds_users',
         ),
-    );      
+    );
+          
 	/*
 	 * This will see for the role of the user and depending on that all the feeds of the user will be loaded
 	 * 
@@ -23,7 +24,7 @@ class Model_Feed extends ORM {
 		$user = Acl::instance()->relevant_user();
 		
 		if(!$user)
-		  return array();
+		  $user = Auth::instance()->get_user();
 		  
 		$feeds = ORM::factory('feed')
 		               ->join('feeds_users')
@@ -37,4 +38,21 @@ class Model_Feed extends ORM {
 	   return $feeds;
 		
 	}
+	
+	public static function get_total_feeds(){
+        
+		$user = Acl::instance()->relevant_user();
+        
+        if(!$user)
+          $user = Auth::instance()->get_user();
+          
+        $feeds = ORM::factory('feed')
+                       ->join('feeds_users')
+                       ->on('feeds.id', '=', 'feeds_users.feed_id')
+                       ->where('feeds_users.user_id', '=', $user->id)
+                       ->count_all();
+               
+       return $feeds;
+		
+	} 
 }

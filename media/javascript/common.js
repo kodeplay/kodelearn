@@ -373,3 +373,21 @@ KODELEARN.helpers.url = {
         }
     }
 }
+
+var Feeds = { };
+
+Feeds.show = function(d,m,y) {
+	$("#ajax-loader").show();
+	$.get(KODELEARN.config.base_url + "calendar/day_events/year/"+ y +"/month/"+ m +"/day/"+ d,  {},
+	
+            function(html){
+    			
+    			$('#edit_event').html(html);
+    			$("#ajax-loader").hide();
+            }, "html");
+	$( "#edit_event" ).dialog({
+        resizable: false,
+        modal: true
+        
+    });return false;
+};

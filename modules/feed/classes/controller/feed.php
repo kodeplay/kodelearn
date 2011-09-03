@@ -8,9 +8,11 @@ class Controller_Feed extends Controller_Base {
             ->method(Request::GET)
             ->execute()
             ->body();
-    	
-    	$view = View::factory('feed/index')
-    	               ->bind('feeds', $feeds);
+
+        $total_feeds = Model_Feed::get_total_feeds();
+        $view = View::factory('feed/index')
+    	               ->bind('feeds', $feeds)
+    	               ->bind('total_feeds', $total_feeds);
 
     	Breadcrumbs::add(array(
             'Feeds', Url::site('feed')
