@@ -14,8 +14,8 @@
                 <p class="h5 lh140" >Has added <?php echo $lecture ?> Lecture for <?php echo $lecture->course->toLink() ?></p>
                 <p class="h5 lh140" >It is scheduled on</p>
                 <?php if($lecture->type == 'once') {?>
-                <p class="h5 lh140 bold"><?php echo date('d M Y ', $lecture->start_date) . '';
-                        echo date('h:i A ', $lecture->start_date) . ' to ' . date('h:i A ', $lecture->end_date);  ?></p>
+                <p class="h5 lh140 bold"><a class = "crsrPoint" onclick="Feeds.show('<?php echo date("d", $lecture->start_date); ?>','<?php echo date("m", $lecture->start_date); ?>','<?php echo date("Y", $lecture->start_date); ?>')"><?php echo date('d M Y ', $lecture->start_date) . '';
+                        echo date('h:i A ', $lecture->start_date) . ' to ' . date('h:i A ', $lecture->end_date);  ?></a></p>
                 <?php } else {
                         $days = unserialize($lecture->when);
                     ?>

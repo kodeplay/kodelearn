@@ -18,4 +18,8 @@
                 </div>
             <?php }?>
         </div>
+        <div id="edit_event"></div>
     </div>
+    
+   
+    

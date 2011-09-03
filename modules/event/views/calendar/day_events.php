@@ -1,3 +1,4 @@
+
 <h1>Events for <?php echo $date  ; ?></h1>
 <ul>
     <?php if ($day_events) { 
@@ -9,3 +10,4 @@
     }
     ?>
 </ul>
+
