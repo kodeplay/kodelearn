@@ -12,6 +12,7 @@ class Feed_Exam extends Feed {
         $span = Date::fuzzy_span($this->time);
         if($this->action == "publish_result"){
             $examgroup = ORM::factory('examgroup', $this->respective_id);
+            if($this->check_deleted($examgroup)) return View::factory('feed/unavaliable')->render();
             $percent = $examgroup->get_ExamGroupPercent();            
             
             $user = ORM::factory('user', $this->actor_id);
@@ -23,6 +24,7 @@ class Feed_Exam extends Feed {
                    ->bind('span', $span);
         } else {
             $exam = ORM::factory('exam', $this->respective_id);
+            if($this->check_deleted($exam)) return View::factory('feed/unavaliable')->render();
             $user = ORM::factory('user', $this->actor_id);
             $event = ORM::factory('event', $exam->event_id);
             

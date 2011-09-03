@@ -12,6 +12,7 @@ class Feed_Batch extends Feed {
         $user = ORM::factory('user', $this->actor_id);
         
         $batch = ORM::factory('batch',$this->respective_id);
+        if($this->check_deleted($batch)) return View::factory('feed/unavaliable')->render();
         $count_user = DB::select('*')
                     ->from('batches_users')
                     ->where('batch_id', '=', $this->respective_id)

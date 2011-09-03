@@ -135,4 +135,19 @@ abstract class Feed {
 		
 	}
 	
+	public function check_deleted($object){
+		
+		if($object->id === NULL){
+			$this->delete();
+			return true;
+		} else {
+			return false;
+		}
+		
+	}
+	
+	public function delete(){
+		ORM::factory('feed', $this->id)->delete();
+	}
+	
 }

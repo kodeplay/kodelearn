@@ -12,6 +12,7 @@ class Feed_Course extends Feed {
         $user = ORM::factory('user', $this->actor_id);
         
         $course = ORM::factory('course',$this->respective_id);
+        if($this->check_deleted($course)) return View::factory('feed/unavaliable')->render();
         $count_user = DB::select('*')
                     ->from('courses_users')
                     ->where('course_id', '=', $this->respective_id)
