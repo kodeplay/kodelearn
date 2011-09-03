@@ -9,15 +9,13 @@ class Controller_Auth extends Controller_Base {
         if($cookie){
             $token = ORM::factory('user_token');
             $token->where('token', ' = ', $cookie)
-            ->find();
+                ->find();
             $user = ORM::factory('user');
             $user->where('id', ' = ', $token->user_id)
-            ->find();
-                        
+                ->find();                        
             Auth::instance()->login_cookie($user->email, $user->password);
             Request::current()->redirect('home');
-            exit;
-            
+            exit;            
         }
         $posted_login = array();
         $posted_register = array();
@@ -25,16 +23,14 @@ class Controller_Auth extends Controller_Base {
         $submitted_form = '';
         $display = "none";
         $login_msg = "";
-        if ($this->request->method() === 'POST' && $this->request->post()) {
-            
+        if ($this->request->method() === 'POST' && $this->request->post()) {            
             if (Arr::get($this->request->post(), 'login') !== null) {
                 $submitted_form = 'login';
                 $login_msg = $this->login();
             } elseif (Arr::get($this->request->post(), 'register') !== null) {
                 $submitted_form = 'register';
                 $this->register();
-            } elseif (Arr::get($this->request->post(), 'forgot_password') !== null) {
-                
+            } elseif (Arr::get($this->request->post(), 'forgot_password') !== null) {                
                 $display = "block";
                 $submitted_form = 'forgot_password';
                 $display_success = $this->forgot_password();
@@ -52,7 +48,7 @@ class Controller_Auth extends Controller_Base {
         $form_register = $this->form_register(($submitted_form === 'register'));
         $form_forgot_password = $this->form_forgot_password(($submitted_form === 'forgot_password'));
         $links = array(
-            'forgot_password_link' => Html::anchor('#', 'Forgot Password', array('class' => 'tdblue bold', 'onclick' => 'forgotPassword();'))
+            'forgot_password_link' => Html::anchor('#password_recovery', 'Forgot Password', array('class' => 'tdblue bold', 'onclick' => 'forgotPassword();'))
         );
         $this->content = $view;
     }
@@ -209,8 +205,7 @@ class Controller_Auth extends Controller_Base {
         $action = 'auth/index';
         $form = new Stickyform($action, array(), ($submitted ? $this->_errors : array()));
         $form->default_data = array(
-            'email' => '',
-            
+            'email' => '',            
         );
         $form->posted_data = $submitted ? $this->request->post() : array();
         $form->append('Email', 'email', 'text');
@@ -241,13 +236,14 @@ class Controller_Auth extends Controller_Base {
             
             Email::send_mail($to, $subject, $message);
             
-            return '<div class="formMessages" style="width:300px; height:50px"><span class="fmIcon good"></span> <span class="fmText">A link to reset your password has been sent at '. $user->email.'</span><span class="clear">&nbsp;</span></div>';
+            return '<div class="formMessages" style="width:300px; height:50px">
+                        <span class="fmIcon good"></span> 
+                        <span class="fmText">A link to reset your password has been sent at '. $user->email.'</span>
+                        <span class="clear"></span>
+                   </div>';
             
-        } else {
-           
-            $this->_errors = $validator->errors('register');
-            
-            
+        } else {           
+            $this->_errors = $validator->errors('register');            
         }
     }
     
