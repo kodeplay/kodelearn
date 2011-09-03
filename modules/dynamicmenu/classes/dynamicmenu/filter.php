@@ -2,7 +2,7 @@
 
 abstract class DynamicMenu_Filter {
 
-    protected static $filters = array();
+    private static $filters = array();
 
     protected static $types = array(
         'add_link',        
