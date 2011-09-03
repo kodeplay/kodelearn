@@ -3,42 +3,6 @@
  * @author Team Kodeplay
  */
 
-function showAjaxError(beforeDiv,msgArr) {
-
-    $('#warning').remove();
-    var warning = '<div class="block-error" id="error"><ul>';
-
-    for (var i = 0; i < msgArr.length ; i++ ) {
-	warning += '<li>'+msgArr[i]+'</li>';
-    }
-
-    warning += '</ul></div>';
-    console.log(beforeDiv);
-    beforeDiv.before(warning);
-    scroll(0,0);
-    $('#error').slideDown(200);
-    setTimeout('$("#error").slideUp()', 2000);
-
-}
-
-function showAjaxSuccess(beforeDiv,msgArr) {
-
-    $('#warning').remove();
-    var warning = '<div class="block-success" id="success"><ul>';
-
-    for (var i = 0; i < msgArr.length ; i++ ) {
-	warning += '<li>'+msgArr[i]+'</li>';
-    }
-
-    warning += '</ul></div>';
-    console.log(beforeDiv);
-    beforeDiv.before(warning);
-    scroll(0,0);
-    $('#success').slideDown(200);
-    setTimeout('$("#success").slideUp()', 2000);
-
-}
-
 
 var ajaxLoad = function(opts) {
 
@@ -86,17 +50,49 @@ ajaxLoad.prototype.request = function() {
     });
 };
 
-function showError() {
-    var msg = ['Please enter first name', 'Please Enter Last Name'];
-    showAjaxError($("#foo"),msg);
-}
-
-function showSuccess() {
-    var msg = ['Your Settings are saved Successfully', 'Now you can login using your new password'];
-    showAjaxSuccess($("#foo"),msg);
-}
-
-
-
-
+var verticalScroll = function(opts){
+	
+	this.options = {
+			$link : $("#vert-link"),
+			controller : 'ajax',
+			action:'',
+			$appendTO: $('#middle'),
+			height:'auto',
+			width:'auto',
+		    start : 0,    //from where fetching of data will take place
+			response : 'html' //how the response id going to be
+	};
+	
+	$.extend(this.options,opts);
+	
+	if((this.options.action == '' || this.options.action == null)){
+		alert('if');
+		return false;
+	}
+	
+	var that = this;
+	
+	this.options.$link.bind('click',function(){
+		
+		var url = KODELEARN.config.base_url+that.options.controller+"/"+that.options.action+"/start/"+that.options.start;
+		
+		$("#ajax-loader").show();
+		
+		$.get(url, function(data){
+			
+			html = '<div>' + data + '</div>';
+			
+			if($(html).children().size()){
+				that.options.start = that.options.start + 5;
+				that.options.$appendTO.append(data);
+			}
+			else {
+				that.options.$link.parent().remove();
+			}
+		}, 'html');
+		
+		$("#ajax-loader").hide();
+		
+	});	
+};
 

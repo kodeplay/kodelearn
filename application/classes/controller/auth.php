@@ -15,7 +15,7 @@ class Controller_Auth extends Controller_Base {
             ->find();
                         
             Auth::instance()->login_cookie($user->email, $user->password);
-            Request::current()->redirect('feed');
+            Request::current()->redirect('home');
             exit;
             
         }
@@ -84,7 +84,7 @@ class Controller_Auth extends Controller_Base {
             && $log_chk) {
              
                 
-                Request::current()->redirect('feed');
+                Request::current()->redirect('home');
             exit;
         } else {
             $this->_errors = $validator->errors('login');
@@ -158,7 +158,7 @@ class Controller_Auth extends Controller_Base {
             
             if ($auto_login) {
                 Auth::instance()->login($validator['email'], $validator['password']);
-                Request::current()->redirect('feed');
+                Request::current()->redirect('home');
                 exit;
             } else {
                 echo 'Your account is pending the administrators approval';

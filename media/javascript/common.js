@@ -387,7 +387,7 @@ Feeds.show = function(d,m,y) {
             }, "html");
 	$( "#edit_event" ).dialog({
         resizable: false,
-        modal: true,
+        modal: true
         
     });return false;
 };
