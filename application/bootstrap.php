@@ -121,6 +121,7 @@ Kohana::modules(array(
     'attendance'    => MODPATH.'attendance',
     'feed'          => MODPATH.'feed',
     'document'      => MODPATH.'document',
+    'post'          => MODPATH.'post',
 ));
 
 /**
