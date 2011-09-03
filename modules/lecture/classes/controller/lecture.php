@@ -17,8 +17,8 @@ class Controller_Lecture extends Controller_Base {
         }
         
         $lecture = ORM::factory('lecture')
-                         ->join('courses')
-                         ->on('courses.id', '=', 'lectures.course_id');
+            ->join('courses')
+            ->on('courses.id', '=', 'lectures.course_id');
         
         $count = $lecture->count_all();
         
@@ -69,50 +69,50 @@ class Controller_Lecture extends Controller_Base {
             ->bind('table', $table)
             ->bind('count', $count)
             ->bind('pagination', $pagination);
-    	    	
+        
         Breadcrumbs::add(array(
             'Lectures', Url::site('lecture')
         ));
-    	
+        
         $this->content = $view;
     }
     
     public function action_add(){
-    	
+        
         $submitted = FALSE;
         
         if($this->request->method() === 'POST' && $this->request->post()){
             if (Arr::get($this->request->post(), 'save') !== null){
                 
             	$data = Stickyform::ungroup_params(($this->request->post()));
-            	
+                
                 $submitted = true;
                 if ($this->validate($data)) {
-	                if($this->request->post('type') == 'once'){
-	                    $data['when'] = '';
-	                    $data['start_date'] = strtotime($data['once_date']) + ($data['once_from'] * 60);
-	                    $data['end_date'] = strtotime($data['once_date']) + ($data['once_to'] * 60);
-	                    
-	                } else {
-	                	$date_range = $this->request->post('repeat');
-	                    $data['start_date'] = strtotime($date_range['from']);
-	                    $data['end_date'] = strtotime($date_range['to']) ;
-	                	
-	                	$days = array();
-	                	foreach($this->request->post('days') as $day=>$value){
-	                		$time = $this->request->post(strtolower($day));
-	                		$days[$day] = $time['from'] . ':' . $time['to'];
-	                	}
-	                	
-	                    $data['when'] = serialize($days);
-	                }
-	                
-	                $lecture = ORM::factory('lecture');
-	                
-	                $lecture->values($data);
-	                
-	                $lecture->save();
-	                
+                    if($this->request->post('type') == 'once'){
+                        $data['when'] = '';
+                        $data['start_date'] = strtotime($data['once_date']) + ($data['once_from'] * 60);
+                        $data['end_date'] = strtotime($data['once_date']) + ($data['once_to'] * 60);
+                        
+                    } else {
+                        $date_range = $this->request->post('repeat');
+                        $data['start_date'] = strtotime($date_range['from']);
+                        $data['end_date'] = strtotime($date_range['to']) ;
+                        
+                        $days = array();
+                        foreach($this->request->post('days') as $day=>$value){
+                            $time = $this->request->post(strtolower($day));
+                            $days[$day] = $time['from'] . ':' . $time['to'];
+                        }
+                        
+                        $data['when'] = serialize($days);
+                    }
+
+                    $lecture = ORM::factory('lecture');
+                    
+                    $lecture->values($data);
+                    
+                    $lecture->save();
+                    
                     $feed = new Feed_Lecture();
                     
                     $feed->set_action('add');
@@ -121,13 +121,13 @@ class Controller_Lecture extends Controller_Base {
                     $feed->set_actor_id(Auth::instance()->get_user()->id); 
                     $feed->save();
                     $feed->subscribe_users();
-	                
+                    
                     $this->remove_events($lecture);
-	                
-	                $this->create_events(array_merge($this->request->post(), $data), $lecture);
-	                
-	                Request::current()->redirect('lecture');
-	                exit;
+                    
+                    $this->create_events(array_merge($this->request->post(), $data), $lecture);
+                    
+                    Request::current()->redirect('lecture');
+                    exit;
                 } 
             }
         }
@@ -156,13 +156,13 @@ class Controller_Lecture extends Controller_Base {
         Breadcrumbs::add(array(
             'Lectures', Url::site('lecture')
         ));
-            
+        
         Breadcrumbs::add(array(
             'Create', Url::site('lecture/add')
         ));
-            
+        
         $this->content = $view;
-    	
+        
     }
     
     private function validate($data){
@@ -170,20 +170,20 @@ class Controller_Lecture extends Controller_Base {
         $validator = $lecture->validator($data);
         if($this->request->post('type') == 'once'){
             $validator->rule('once_date', 'not_empty')
-                      ->rule('once_date', 'date');
+                ->rule('once_date', 'date');
         } else {
             $validator->rule('repeat_from', 'not_empty')
-                      ->rule('repeat_from', 'date')
-                      ->rule('repeat_to', 'not_empty')
-                      ->rule('repeat_to', 'date')
-                      ->rule('repeat_from', 'Model_Lecture::date_check', array(':value',$data['repeat_to']));
+                ->rule('repeat_from', 'date')
+                ->rule('repeat_to', 'not_empty')
+                ->rule('repeat_to', 'date')
+                ->rule('repeat_from', 'Model_Lecture::date_check', array(':value',$data['repeat_to']));
         }
         
         if($validator->check()){
-        	if($this->request->post('type') == 'repeat' AND (!$this->request->post('days'))){
-        		$this->_errors = array('days' => 'Please select atleast one day');
-        		return false;
-        	} 
+            if($this->request->post('type') == 'repeat' AND (!$this->request->post('days'))){
+                $this->_errors = array('days' => 'Please select atleast one day');
+                return false;
+            } 
             return true;	
         } else {
             $this->_errors = $validator->errors('lecture');
@@ -203,7 +203,7 @@ class Controller_Lecture extends Controller_Base {
         
         $rooms = array();
         foreach(ORM::factory('room')->find_all() as $room){
-        	$rooms[$room->id] = $room->room_number . ', ' . $room->room_name;
+            $rooms[$room->id] = $room->room_number . ', ' . $room->room_name;
         }
 
         $form = new Stickyform($action, array(), ($submitted ? $this->_errors : array()));
@@ -236,10 +236,10 @@ class Controller_Lecture extends Controller_Base {
     }
     
     public function action_edit(){
-    	
+        
     	$id = $this->request->param('id');
     	if(!$id)
-    	   Request::current()->redirect('lecture');
+            Request::current()->redirect('lecture');
         
         $lecture = ORM::factory('lecture', $id);
         $submitted = FALSE;
@@ -306,19 +306,19 @@ class Controller_Lecture extends Controller_Base {
         );
         
         if($lecture->type == 'once'){
-	        $saved_data = array_merge(array(
-	            'once_date'     => date('Y-m-d', $lecture->start_date),
-	            'repeat_from'   => '',
-	            'repeat_to'     => '',
-	        ) , $saved_data);
-	        $days = array();
-	        
-	        $saved_slider = array('once_slider' => array(
-	           'from'  => ($lecture->start_date - strtotime(date('Y-m-d', $lecture->start_date))) / 60,
-	           'to'    => ($lecture->end_date - strtotime(date('Y-m-d', $lecture->end_date))) / 60
-	        ));
+            $saved_data = array_merge(array(
+                'once_date'     => date('Y-m-d', $lecture->start_date),
+                'repeat_from'   => '',
+                'repeat_to'     => '',
+            ) , $saved_data);
+            $days = array();
+            
+            $saved_slider = array('once_slider' => array(
+                'from'  => ($lecture->start_date - strtotime(date('Y-m-d', $lecture->start_date))) / 60,
+                'to'    => ($lecture->end_date - strtotime(date('Y-m-d', $lecture->end_date))) / 60
+            ));
         } else {
-        	$saved_data = array_merge(array(
+            $saved_data = array_merge(array(
                 'once_date'     => '',
                 'repeat_from'   => date('Y-m-d', $lecture->start_date),
                 'repeat_to'     => date('Y-m-d', $lecture->end_date),
@@ -345,11 +345,11 @@ class Controller_Lecture extends Controller_Base {
         Breadcrumbs::add(array(
             'Lectures', Url::site('lecture')
         ));
-            
+        
         Breadcrumbs::add(array(
             'Edit', Url::site('lecture/edit/id/' . $id)
         ));
-            
+        
         $this->content = $view;        
     }
     
@@ -365,27 +365,27 @@ class Controller_Lecture extends Controller_Base {
     }
     
     public function action_schedule(){
-    	
+        
     	$id = $this->request->param('id');
     	if(!$id)
-    	   Request::current()->redirect('lecture');
-    	   
+            Request::current()->redirect('lecture');
+        
     	$lecture = ORM::factory('lecture', $id);
-    	
+        
     	$conflict_event_ids = Event_Abstract::get_room_conflict_events();
-    	
+        
     	$events = $lecture->events
-    	          ->find_all()->as_array();
-    	
+            ->find_all()->as_array();
+        
     	$view = View::factory('lecture/schedule')
-    	               ->bind('lecture', $lecture)
-    	               ->bind('events', $events)
-    	               ->bind('conflict_event_ids', $conflict_event_ids);
-    	
+            ->bind('lecture', $lecture)
+            ->bind('events', $events)
+            ->bind('conflict_event_ids', $conflict_event_ids);
+        
         Breadcrumbs::add(array(
             'Lectures', Url::site('lecture')
         ));
-    	
+        
         $this->content = $view;
     }
     private function remove_events($lecture){
@@ -404,18 +404,18 @@ class Controller_Lecture extends Controller_Base {
         
         if($data['type'] == 'once'){
             
-        	$event_lecture = new Event_Lecture();
-        	
-        	$values = array(
-        	   'eventstart'    => $data['start_date'],
-        	   'eventend'      => $data['end_date'],
-        	   'room_id'       => $data['room_id'],
-        	
-        	);
-        	
-        	$event_lecture->set_values($values);
-        	
-        	$event_id = $event_lecture->add();
+            $event_lecture = new Event_Lecture();
+            
+            $values = array(
+                'eventstart'    => $data['start_date'],
+                'eventend'      => $data['end_date'],
+                'room_id'       => $data['room_id'],
+                'course_id'     => $data['course_id'],                
+            );
+            
+            $event_lecture->set_values($values);
+            
+            $event_id = $event_lecture->add();
             
             $lecture->add('events', ORM::factory('event', $event_id));
             
@@ -432,10 +432,10 @@ class Controller_Lecture extends Controller_Base {
                     $event_lecture = new Event_Lecture();
                     
                     $values = array(
-                       'eventstart'    => $eventstart,
-                       'eventend'      => $eventend,
-                       'room_id'       => $data['room_id'],
-                    
+                        'eventstart'    => $eventstart,
+                        'eventend'      => $eventend,
+                        'room_id'       => $data['room_id'],
+                        'course_id'     => $data['course_id'],                              
                     );
                     
                     $event_lecture->set_values($values);
@@ -445,8 +445,7 @@ class Controller_Lecture extends Controller_Base {
                     $lecture->add('events', ORM::factory('event', $event_id));
                     
                     $i++;
-                }
-                
+                }                
             }
         }
     }

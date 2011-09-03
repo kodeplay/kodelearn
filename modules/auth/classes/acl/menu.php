@@ -11,6 +11,10 @@ abstract class Acl_Menu {
 
     protected $menu_collection = array();
 
+    public function __construct() {
+        DynamicMenu_Filter::add(new Acl_Menu_Filter());
+    }
+
     public function has_menu($name) {
         return (isset($this->menu_collection[$name]) && $this->menu_collection[$name] instanceof Acl_Menu);
     }

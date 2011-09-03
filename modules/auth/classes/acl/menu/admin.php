@@ -3,7 +3,7 @@
 class Acl_Menu_Admin extends Acl_Menu {
 
     public function __construct() {
-        DynamicMenu_Filter::add(new Acl_Menu_Filter());
+        parent::__construct();
         $topmenu = DynamicMenu::factory('topmenu');
         $topmenu->add_link('home', 'Home')
             ->add_link('account', 'Profile')
