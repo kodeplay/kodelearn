@@ -884,3 +884,18 @@ table.calendar td ul.output { margin-top: 10px; color: #427693; }
     z-index: 2000;
 }
 #feeds div {border-bottom: 1px solid #E9E9E9;}
+
+.show_more{
+    background-color: #426883;
+    height: 10px;
+    width: 100%;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    text-align: center;
+    
+}
+.show_more a {
+    color: #fff;
+    font-weight: bold;
+    cursor: pointer;
+}
