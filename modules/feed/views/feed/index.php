@@ -8,7 +8,7 @@
                 </div>
             <?php }?>
         </div>
-        <?php if(trim($feeds)){ ?>
+        <?php if(trim($feeds) && ($total_feeds > 5)){ ?>
         <div class="show_more ">
             <a id="more_feeds">show older feeds &#x25BC;</a>
         </div>
