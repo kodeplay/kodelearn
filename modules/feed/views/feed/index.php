@@ -13,7 +13,7 @@
             <a id="more_feeds">show older feeds &#x25BC;</a>
         </div>
         <?php } ?>
-        <div id="edit_event"></div>
+        <div id="feed_event"></div>
     </div>
     
 <script type="text/javascript">
