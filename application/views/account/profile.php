@@ -7,7 +7,7 @@
 		
 		<div class="topbar">
 			<a href="#" class="pageTab active">Profile</a>
-			<a href="#" class="pageTab">Privacy</a>
+			<!-- <a href="#" class="pageTab">Privacy</a> -->
 		</div><!-- topbar -->
 		
 		<?php echo $form->startform(); ?>

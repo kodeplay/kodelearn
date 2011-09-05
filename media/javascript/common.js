@@ -388,6 +388,6 @@ Feeds.show = function(d,m,y) {
 	$( "#feed_event" ).dialog({
         resizable: false,
         modal: true,
-        title: "Event for "+d+" - "+m+" - "+y
+        title: "Events for "+d+" - "+m+" - "+y
     });return false;
 };
