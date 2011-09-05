@@ -17,13 +17,13 @@
         </div>
         <?php } ?>
         <?php echo $form->startform(); ?>
-            <table class="formcontainer">
+            <table class="formcontainer" id="user-csv">
                 <tr>
                     <td><?php echo $form->role_id->label(); ?></td>
                     <td><?php echo $form->role_id->element(); ?></td>
                 </tr>
-                <tr>
-                    <td><?php echo $form->batch_id->label(); ?></td>
+                <tr class="hidden" id="batch-list">
+                    <td class="vatop"><?php echo $form->batch_id->label(); ?></td>
                     <td>
                         <?php echo $form->batch_id->element(); ?>
                         <p class="tip">You can select multiple batches.</p>

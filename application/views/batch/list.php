@@ -3,8 +3,7 @@
 			<div class="pageTitle l">replace_here_page_title</div>
 			<div class="pageDesc r">replace_here_page_description</div>
 			<div class="clear"></div>
-		</div><!-- pageTop -->
-		
+		</div><!-- pageTop -->		
 		<div class="topbar">
 			<?php if (Acl::instance()->is_allowed('batch_delete')){?>
 			<a onclick="$('#batch').submit();" class="pageAction r alert">Delete selected...</a>
@@ -15,8 +14,13 @@
             <?php } ?>
 			<!-- <a href="#" class="pageAction l">Send message</a> -->
 			<span class="clear">&nbsp;</span>
-		</div><!-- topbar -->
-		
+		</div><!-- topbar -->		
+		<?php if ($success) {  ?>
+            <div class="formMessages w90">     
+            <span class="fmIcon good"></span> <span class="fmText" ><?php echo $success ?></span>
+            <span class="clear">&nbsp;</span>
+            </div>
+        <?php } ?>      		
 		<form name="batch" id="batch" method="POST" action="<?php echo $links['delete'] ?>">
 		<table class="vm10 datatable fullwidth">
 			<?php echo $table['heading'] ?>

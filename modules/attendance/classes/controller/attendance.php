@@ -139,9 +139,14 @@ class Controller_Attendance extends Controller_Base {
         $users = View::factory('attendance/events')
             ->bind('lecture_exam_data_all', $lecture_exam_data_all)
             ;
+        
+        $success = Session::instance()->get('success');
+        Session::instance()->delete('success');        
+        
         $view = View::factory('attendance/list')
             ->bind('users', $users)
-            ->bind('date', $date);
+            ->bind('date', $date)
+            ->bind('success', $success);
         
         Breadcrumbs::add(array(
             'Attendance', Url::site('attendance')
@@ -266,7 +271,7 @@ class Controller_Attendance extends Controller_Base {
                    $attendance->save();
                 }
             }
-            
+            Session::instance()->set('success', 'Attendance marked successfully.');
             $feed = new Feed_Attendance();
                     
             $feed->set_action('mark');

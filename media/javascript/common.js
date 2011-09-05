@@ -17,12 +17,6 @@ $(document).ready(function() {
  */
 var KODELEARN = KODELEARN || { };
 
-KODELEARN.config = {
-    
-    base_url:  'http://kodelearn.kp/'
-    
-};
-
 KODELEARN.modules = {
     
     /**
@@ -174,7 +168,25 @@ KODELEARN.modules.add('time_slider', (function () {
 
 })());
 
-;
+KODELEARN.modules.add('user', (function () {
+    return {
+        init: function () {
+            this.csvupload();
+        },
+        csvupload: function () {
+            var $batch_tr = $("#batch-list");
+            $("select[name='role_id']","#user-csv").change(function () {
+                $batch_tr.addClass('hidden');
+                var role_name = $("select[name='role_id'] option:selected").text().toLowerCase();
+                if (role_name === 'student') {
+                    console.log($batch_tr);
+                    $batch_tr.removeClass('hidden');
+                }
+            }).trigger('change');
+        }
+    }
+})());
+
 KODELEARN.modules.add('course', (function () {
 	
 	return {
@@ -195,6 +207,7 @@ KODELEARN.modules.add('course', (function () {
 	};
 
 })());
+
 KODELEARN.modules.add('ajax_message', (function () {
 	return {
 		init : function () {

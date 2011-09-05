@@ -4,7 +4,12 @@
         <div class="pageDesc r">replace_here_page_description</div>
         <div class="clear"></div>
     </div><!-- pageTop -->
-    
+    <?php if ($success) {  ?>
+        <div class="formMessages w90">     
+        <span class="fmIcon good"></span> <span class="fmText" ><?php echo $success ?></span>
+        <span class="clear">&nbsp;</span>
+        </div>
+    <?php } ?>    
     <table class="vm10 datatable fullwidth">
         <tr>
             <th>&nbsp;</th>

@@ -150,6 +150,9 @@ class Controller_Exam extends Controller_Base {
         $filter_total_marks = $this->request->param('filter_total_marks');
         $filter_url = URL::site('exam/index');
         
+        $success = Session::instance()->get('success');
+        Session::instance()->delete('success');        
+        
         $view = View::factory('exam/list')
             ->bind('links', $links)
             ->bind('table', $table)
@@ -158,6 +161,7 @@ class Controller_Exam extends Controller_Base {
             ->bind('filter_passing_marks', $filter_passing_marks)
             ->bind('filter_total_marks', $filter_total_marks)
             ->bind('filter_url', $filter_url)
+            ->bind('success', $success)
             ->bind('pagination', $pagination);
         
         Breadcrumbs::add(array(
@@ -203,7 +207,7 @@ class Controller_Exam extends Controller_Base {
 			        $feed->set_actor_id(Auth::instance()->get_user()->id); 
 			        $feed->save();
 			        $feed->subscribe_users();
-			        
+			        Session::instance()->set('success', 'Exam added successfully.');
                     Request::current()->redirect('exam');
                     exit;
                 } else {
@@ -280,7 +284,7 @@ class Controller_Exam extends Controller_Base {
                     $feed->set_actor_id(Auth::instance()->get_user()->id); 
                     $feed->save();
                     $feed->subscribe_users();
-                    
+                    Session::instance()->set('success', 'Exam edited successfully.');
                     Request::current()->redirect('exam');
                     exit;
                 } else {
@@ -386,6 +390,7 @@ class Controller_Exam extends Controller_Base {
             	$exam->delete();
             }
         }
+        Session::instance()->set('success', 'Exam deleted successfully.');
         Request::current()->redirect('exam');
     }
 }

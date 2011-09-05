@@ -15,6 +15,12 @@
             
             <span class="clear">&nbsp;</span>
         </div><!-- topbar -->
+        <?php if ($success) {  ?>
+            <div class="formMessages w90">     
+            <span class="fmIcon good"></span> <span class="fmText" ><?php echo $success ?></span>
+            <span class="clear">&nbsp;</span>
+            </div>
+        <?php } ?>
         <?php if($msg == 1){?>
             <div class="formMessages"><span class="fmIcon bad"></span> <span class="fmText">This grading period is assigned to some exam</span><span class="clear">&nbsp;</span></div>
         <?php }?>

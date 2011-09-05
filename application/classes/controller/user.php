@@ -400,12 +400,16 @@ class Controller_User extends Controller_Base {
                             $user->add('roles', $role);
                             $user_id[] = $user->id;
                             
-                            if(($this->request->post('batch_id'))){
-                                foreach($this->request->post('batch_id') as $batch_id){
-                                    $batch = ORM::factory('batch', $batch_id);
-                                    $user->add('batches', $batch);
+                            // assign to batch only if the role of the user is student
+                            if ($user->is_role('student')) {
+                                if(($this->request->post('batch_id'))){
+                                    foreach($this->request->post('batch_id') as $batch_id){
+                                        $batch = ORM::factory('batch', $batch_id);
+                                        $user->add('batches', $batch);
+                                    }
                                 }
-                            }
+                            }                            
+
                             // send email
                             self::notify_by_email($user, $password);
                             $records_added += 1;	
@@ -415,9 +419,7 @@ class Controller_User extends Controller_Base {
                             $error = 1;
                             break;
                         }
-                    }
-                    
-                    
+                    }                    
                     if(!$error){
                         $this->success = "Users uploaded successfully. Records Added " . $records_added ;
                         $feed = new Feed_Batch();
@@ -431,8 +433,7 @@ class Controller_User extends Controller_Base {
                                 $feed->subscribe_users($user_id);
                             }
                         }
-                    }
-                    
+                    }                    
                     fclose($handle);
                 } else {
                     $this->error['warning'] = "The file you uploaded is not a valid csv file";
