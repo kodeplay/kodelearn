@@ -3,6 +3,12 @@
     <head>
         <title>KodeLearn - Generic Header</title>
         <?php foreach ($styles as $file => $type) echo HTML::style($file, array('media' => $type)), PHP_EOL ?>
+        <script type="text/javascript">
+            var KODELEARN = KODELEARN || { };
+            KODELEARN.config = {    
+                base_url:  "<?php echo Url::base(); ?>"    
+            };
+        </script>
         <?php foreach ($scripts as $file) echo HTML::script($file), PHP_EOL ?>
     </head>
     <body>

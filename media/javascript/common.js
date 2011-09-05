@@ -17,12 +17,6 @@ $(document).ready(function() {
  */
 var KODELEARN = KODELEARN || { };
 
-KODELEARN.config = {
-    
-    base_url:  'http://kodelearn.kp/'
-    
-};
-
 KODELEARN.modules = {
     
     /**
