@@ -20,13 +20,18 @@ class Controller_Feed extends Controller_Base {
     
     public function action_feeds(){
         
-        $data = array();
-        
+    	$data = array();
+    	
         if($this->request->param('start')){
             $data['offset'] = $this->request->param('start');
         } 
         
-        $result = Model_Feed::get_feeds($data);
+        $course_id = $this->request->param('id');
+        if($course_id){
+            $data['course_id'] = $course_id;
+        }
+        
+    	$result = Model_Feed::get_feeds($data);
         
         $feeds = array();
         

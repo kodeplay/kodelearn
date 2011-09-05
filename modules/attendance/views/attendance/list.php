@@ -9,6 +9,12 @@
                 <input type="text" name="date" id="date"  value="<?php echo $date; ?>"></input>
                 <!-- <a class="button" href="#" id="add_users"> Add</a> -->
             </p>
+	        <?php if ($success) {  ?>
+	            <div class="formMessages w90">     
+	            <span class="fmIcon good"></span> <span class="fmText" ><?php echo $success ?></span>
+	            <span class="clear">&nbsp;</span>
+	            </div>
+	        <?php } ?>
             <div style="height:10px;">
                 <p class="tip" style="display:none;" id="loading">Please wait...Loading Events</p>
             </div>

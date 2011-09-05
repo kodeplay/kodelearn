@@ -28,26 +28,20 @@
 			</p>
 		</div><!-- courseSummary -->
 		
-		<div class="vm40">
-			<p class="sectionTitle">Recent course material and news</p>
-			<ul class="lsNone feed">
-				<li class="feedItem lesson">
-					<span class="feedIcon">&nbsp;</span>
-					<span class="feedContent">Professor John Doe added a new lesson on "Electromagnetic Waves"</span>
-					<span class="clear">&nbsp;</span>
-				</li>
-				<li class="feedItem deadline">
-					<span class="feedIcon">&nbsp;</span>
-					<span class="feedContent">Assignment #5 due tomorrow.</span>
-					<span class="clear">&nbsp;</span>
-				</li>
-				<li class="feedItem lesson">
-					<span class="feedIcon">&nbsp;</span>
-					<span class="feedContent">Professor Johnny Doe added a new lesson on "Sea Waves"</span>
-					<span class="clear">&nbsp;</span>
-				</li>
-			</ul>
-		</div>
+		<div id="feeds">
+            <?php if(trim($feeds)){ ?>
+            <?php echo $feeds ?>
+            <?php } else {?>
+                <div class="vpad10">
+                    No feed
+                </div>
+            <?php }?>
+        </div>
+        <?php if(trim($feeds) && ($total_feeds > 5)){ ?>
+        <div class="show_more ">
+            <a id="more_feeds">show older feeds &#x25BC;</a>
+        </div>
+        <?php } ?>
 		
 		
 		
@@ -55,3 +49,13 @@
 	</div><!-- pagecontent -->
 	
 	<div class="clear"></div>
+	
+ <script type="text/javascript">
+ new verticalScroll({
+    $link : $('#more_feeds'), 
+    action : 'feeds/id/<?php echo $course->id; ?>',
+    start : 6,
+    controller : 'feed',
+    $appendTO: $('#feeds') //Must Be Id  to which you want to append
+});
+</script>

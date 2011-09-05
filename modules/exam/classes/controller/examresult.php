@@ -135,6 +135,7 @@ class Controller_Examresult extends Controller_Base {
             ->bind('edit_form_action', $action)
             ->bind('csv_import', $csv_import)
             ->bind('publish', $publish)
+            ->bind('publish_status', $publish_status)
             ->bind('success', $success)
             ->bind('warning', $warning);
         if ($this->request->method() === 'POST' && $this->request->post()) {
@@ -149,6 +150,8 @@ class Controller_Examresult extends Controller_Base {
             }
         }
         $examgroup_id = $this->request->param('examgroup_id');
+        $examgroups = ORM::factory('examgroup',$examgroup_id);
+        $publish_status = $examgroups->publish; 
         $action = Url::site('examresult/edit/examgroup_id/'.$examgroup_id);
         $csv_import = Url::site('examresult/upload/examgroup_id/'.$examgroup_id);
         $publish = Url::site('examresult/publish/examgroup_id/'.$examgroup_id);
@@ -265,7 +268,9 @@ class Controller_Examresult extends Controller_Base {
     public function action_publish(){
     	
     	$examgroup_id = $this->request->param('examgroup_id');
-    	
+    	$examgroups = ORM::factory('examgroup',$examgroup_id);
+    	$examgroups->publish = 1;
+    	$examgroups->save();
     	$users = Model_Examgroup::get_students($examgroup_id, 'object');
     	
         $feed = new Feed_Exam();

@@ -1,6 +1,9 @@
 /*components*/
 .button {	padding: 5px 10px;	}
-
+.button.disabled {
+    background: url("../image/disabledBtn.png") repeat-x left bottom;
+    color: #7c7c7c;
+ }
 .debug { border: 1px solid red !important; background: #faa !important; color: #000 !important;	}
 
 

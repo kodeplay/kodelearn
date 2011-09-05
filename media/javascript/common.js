@@ -17,12 +17,6 @@ $(document).ready(function() {
  */
 var KODELEARN = KODELEARN || { };
 
-KODELEARN.config = {
-    
-    base_url:  'http://kodelearn.kp/'
-    
-};
-
 KODELEARN.modules = {
     
     /**
@@ -174,7 +168,27 @@ KODELEARN.modules.add('time_slider', (function () {
 
 })());
 
-;
+KODELEARN.modules.add('user', (function () {
+    return {
+        init: function () {
+            var $batch_tr = $("#batch-list"),
+            $course_tr = $("#course-list");            
+            $("select[name='role_id']","#user-form").change(function () {
+                $batch_tr.addClass('hidden');
+                $course_tr.addClass('hidden');
+                var role_name = $("select[name='role_id'] option:selected").text().toLowerCase();
+                if (role_name === 'student') {
+                    $batch_tr.removeClass('hidden');
+                    $course_tr.removeClass('hidden');
+                }
+                if (role_name === 'teacher') {
+                    $course_tr.removeClass('hidden');
+                }
+            }).trigger('change');
+        }
+    }
+})());
+
 KODELEARN.modules.add('course', (function () {
     
     return {
@@ -195,6 +209,7 @@ KODELEARN.modules.add('course', (function () {
     };
 
 })());
+
 KODELEARN.modules.add('ajax_message', (function () {
     return {
 	init : function () {
@@ -435,6 +450,6 @@ Feeds.show = function(d,m,y) {
 	$( "#feed_event" ).dialog({
         resizable: false,
         modal: true,
-        title: "Event for "+d+" - "+m+" - "+y
+        title: "Events for "+d+" - "+m+" - "+y
     });return false;
 };

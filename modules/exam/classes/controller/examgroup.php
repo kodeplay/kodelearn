@@ -81,6 +81,9 @@ class Controller_Examgroup extends Controller_Base {
         $filter_name = $this->request->param('filter_name');
         $filter_url = URL::site('examgroup/index');
         
+        $success = Session::instance()->get('success');
+        Session::instance()->delete('success');        
+        
         $view = View::factory('examgroup/list')
                     ->bind('links', $links)        
                     ->bind('table', $table)
@@ -89,6 +92,7 @@ class Controller_Examgroup extends Controller_Base {
                     ->bind('filter_name', $filter_name)
                     ->bind('filter_url', $filter_url)
                     ->bind('msg', $msg)
+                    ->bind('success', $success)
                     ;
         
         Breadcrumbs::add(array(
@@ -115,6 +119,7 @@ class Controller_Examgroup extends Controller_Base {
                     $examgroup->name = $this->request->post('name');
                     
                     $examgroup->save();
+                    Session::instance()->set('success', 'Grading Period added successfully.');
                     Request::current()->redirect('examgroup');
                     exit;
                 } else {
@@ -181,6 +186,7 @@ class Controller_Examgroup extends Controller_Base {
                 if ($validator->check()) {
                     $examgroup->name = $this->request->post('name');
                     $examgroup->save();
+                    Session::instance()->set('success', 'Grading Period edited successfully.');
                     Request::current()->redirect('examgroup');
                     exit;
                 } else {
