@@ -108,3 +108,5 @@
 .w70 {	width: 70%; }
 .w80 {	width: 80%; }
 .w90 {	width: 90%; }
+
+.hgtfix { height: auto; overflow: hidden; }
