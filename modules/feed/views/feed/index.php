@@ -1,3 +1,10 @@
+<form id="post_form">
+<input type="text" name="message" value="This is a message"/>
+<input type="text" name="link" />
+<input type="text" name="role_id" value="0"/>
+
+</form>
+
     <div class="r pagecontent">
         <div id="feeds">
             <?php if(trim($feeds)){ ?>
@@ -13,7 +20,7 @@
             <a id="more_feeds">show older feeds &#x25BC;</a>
         </div>
         <?php } ?>
-        <div id="edit_event"></div>
+        <div id="feed_event"></div>
     </div>
     
 <script type="text/javascript">
@@ -25,4 +32,3 @@ new verticalScroll({
     $appendTO: $('#feeds') //Must Be Id  to which you want to append
 });
 </script>
-

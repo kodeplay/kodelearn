@@ -17,6 +17,7 @@
 	10.		News feed
         11.             Calendar styling
         12.             Overridden jquery-ui styles
+        13.             Post form styling
 	END.	Developer styles
 	
    ............................. */
@@ -835,6 +836,16 @@ table.calendar td ul.output { margin-top: 10px; color: #427693; }
    .................................... */
 .ui-slider { z-index: 0; }
 
+/* ......................................
+        Post form styles
+   .................................... */
+
+#post-form { height: auto; overflow: hidden;  border: 1px solid #d7c2b5; margin-bottom: 20px; width: 96%; }
+#post-form label { vertical-align: top; margin-top:3px; }
+#post-form textarea { margin:0px 10px; width: 72%; height: 30px; border: 1px solid #606060; border-radius: 0px; }
+#post-form select { width: 180px; }
+#post-form ul li { float: left; margin-right: 10px; line-height: 16px; }
+
 /* ..........................
 	Developer section
    ........................ */
@@ -898,4 +909,11 @@ table.calendar td ul.output { margin-top: 10px; color: #427693; }
     color: #fff;
     font-weight: bold;
     cursor: pointer;
+}
+
+#feed_event h1 {display:none;}
+#feed_event li {
+	border-bottom: 1px solid #E9E9E9;
+    padding-top: 15px;
+    padding-bottom: 15px;
 }

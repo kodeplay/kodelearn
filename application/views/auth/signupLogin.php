@@ -105,7 +105,7 @@
         <?php echo $form_login->endform(); ?>
         <br>
         <div style="display:<?php echo $display; ?>;" id="forgot_password">
-        <p class="tdBlue bm40">Forgot Password</p>
+        <p class="tdBlue bm40"><a name="password_recovery">Forgot Password</a></p>
         <?php echo $display_success; ?>
         <?php echo $form_forgot_password->startform(); ?>
         <table class="formcontainer">
@@ -128,9 +128,15 @@
 
 <div class="clear"></div>
 <script type="text/javascript">
-
+$(document).ready(function () {
+    var fp = <?php echo $display == 'block' ? 1 : 0; ?>;    
+    if (fp) { 
+        forgotPassword();
+    }
+});
 function forgotPassword()
 {
 	$('#forgot_password').css('display','block');
+	window.location.href += '#password_recovery';
 }
 //--></script>

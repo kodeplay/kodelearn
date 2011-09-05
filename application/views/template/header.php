@@ -50,13 +50,7 @@
             <div class="branding">
                 <h1 class="dib l"><a href="<?php echo Url::base(); ?>home"><img src="<?php echo $image; ?>" alt="KodeLearn | Home" /></a></h1>
                 
-                <div class="roles dib r">
-                    <p id="roleViewToggle">Switch roles <span class="trid">&#x25BC;</span></p>
-                    <ul id="roleList" class="smallMenu">
-                        <li class="smallText sans"><a href="#" class="role">Manager</a></li>
-                        <li class="smallText sans"><a href="#" class="role">Student</a></li>
-                    </ul>
-                </div><!-- roles -->
+                
                 <div class="clear"></div>
             </div><!-- branding -->
             
