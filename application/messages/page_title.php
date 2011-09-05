@@ -156,6 +156,6 @@ return array(
     ),
     'attendance_add' => array(
         'description'     => 'You can add/edit attendance here.',
-        'title'           => 'Attendance for {event}',
+        'title'           => 'Mark Attendance',
     ),    
 );
