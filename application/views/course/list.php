@@ -18,6 +18,12 @@
             <!--  <a href="#" class="pageAction c">Send message</a>-->
             <span class="clear">&nbsp;</span>
         </div><!-- topbar -->
+        <?php if ($success) {  ?>
+            <div class="formMessages w90">     
+            <span class="fmIcon good"></span> <span class="fmText" ><?php echo $success ?></span>
+            <span class="clear">&nbsp;</span>
+            </div>
+        <?php } ?>
         
         
         <form name="course" id="course" method="POST" action="<?php echo $links['delete'] ?>">
