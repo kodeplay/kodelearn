@@ -36,4 +36,27 @@ class Model_Batch extends ORM {
             ->find_all();
         return $students;
     }
+
+    /**
+     * Method to get the users assigned to this batch
+     * if optional role_name is passed, from all users assigned to this batch, 
+     * get only those that have value of $role_name  as their role.
+     * @param mixed $batch (int/Model_Batch)
+     * @param String $role_name default = null
+     * @param Database_MySQL_Result $users
+     */
+    public static function get_users($batch, $role_name=null) {
+        $batch = $batch instanceof Model_Batch ? $batch : ORM::factory('batch', (int)$batch);
+        if ($role_name) {
+            $role = Model_Role::from_name($role_name);
+            $users = $batch->users
+                ->join('roles_users', 'INNER')
+                ->on('users.id', ' = ', 'roles_users.user_id')
+                ->where('roles_users.role_id', ' = ', $role->id)            
+                ->find_all();
+        } else {
+            $users = $batch->users->find_all();
+        }
+        return $users;
+    }
 }
