@@ -217,7 +217,7 @@ KODELEARN.modules.add('ajax_message', (function () {
 	},
 	showAjaxError: function (beforeDiv,msgArr){
 
-		$('#error').remove();
+	    $('#error').remove();
 	    var warning = '<div class="block-error" id="error"><ul>';
 	    
 	    for(var i = 0; i < msgArr.length ; i++ ){		
@@ -404,12 +404,12 @@ KODELEARN.modules.add('post', (function () {
                     data: formdata,
                     async: false,
                     success: function (data) {
-                		if(data.success){
-                			$('#feeds').replaceWith(data.html);
-                		} else {
-                			var msg = data.errors;
-            				KODELEARN.modules.get('ajax_message').showAjaxError($("#post-form"),msg);
-                		}
+                	if(data.success){
+                	    $('#feeds').prepend(data.html);
+                	} else {
+                	    var msg = data.errors;
+            		    KODELEARN.modules.get('ajax_message').showAjaxError($("#post-form"),msg);
+                	}
                     }                    
                 });
             });
@@ -440,14 +440,14 @@ KODELEARN.helpers.url = {
 var Feeds = { };
 
 Feeds.show = function(d,m,y) {
-	$("#ajax-loader").show();
-	$.get(KODELEARN.config.base_url + "calendar/day_events/year/"+ y +"/month/"+ m +"/day/"+ d,  {},	
-        function(html){
-		    $('#feed_event').html(html);
-		    $("#ajax-loader").hide();
-		
-        }, "html");
-	$( "#feed_event" ).dialog({
+    $("#ajax-loader").show();
+    $.get(KODELEARN.config.base_url + "calendar/day_events/year/"+ y +"/month/"+ m +"/day/"+ d,  {},	
+          function(html){
+	      $('#feed_event').html(html);
+	      $("#ajax-loader").hide();
+	      
+          }, "html");
+    $( "#feed_event" ).dialog({
         resizable: false,
         modal: true,
         title: "Events for "+d+" - "+m+" - "+y

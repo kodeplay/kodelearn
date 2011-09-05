@@ -45,10 +45,10 @@ class Controller_Post extends Controller_Base {
                 'selected_roles'=> $this->request->post('selected_roles'),
                 'post_setting'  => $this->request->post('post_setting')
             );
+
+            $feed = $this->add_feed($data);
             
-            $this->add_feed($data);
-            
-            $html = Request::factory('feed/index')
+            $html = Request::factory('feed/feed/feed_id/'.$feed->get_id())
                 ->method(Request::GET)
                 ->execute()
                 ->body();
@@ -85,7 +85,7 @@ class Controller_Post extends Controller_Base {
                 $this->_errors[] = 'Please select atleast one role';
             } else {
                 foreach($data['selected_roles'] as $role_id){
-                    $users = Model_Role::get_users(ORM::factory('role', $data['role_id'])->name);
+                    $users = Model_Role::get_users(ORM::factory('role', $role_id)->name);
                     $feed->subscribe_users($users);
                 }
             }
@@ -123,6 +123,8 @@ class Controller_Post extends Controller_Base {
         $users = array(Auth::instance()->get_user());
         
         $feed->subscribe_users($users);
+
+        return $feed;
     }
     
     private function validate() {

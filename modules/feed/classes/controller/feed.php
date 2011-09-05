@@ -18,6 +18,9 @@ class Controller_Feed extends Controller_Base {
         $this->content = $view;
     }
     
+    /**
+     * Method to get multiple feeds
+     */
     public function action_feeds(){
         
     	$data = array();
@@ -46,8 +49,21 @@ class Controller_Feed extends Controller_Base {
             'Feeds', Url::site('feed')
         ));
                        
-        $this->content = $view;
-        
+        $this->content = $view;        
     }
-    
+
+    /**
+     * Action to get only single feed html
+     * @param int feed_id
+     * will be used in ajax requests to get the recently added field
+     */
+    public function action_feed() {
+        $feed_id = $this->request->param('feed_id');
+        $feed = ORM::factory('feed', $feed_id);
+        $feeds = array();
+        $feeds[$feed->id] = Feed::factory($feed->type, $feed->id)->render();
+        $view = View::factory('feed/feeds')
+            ->bind('feeds', $feeds);        
+        $this->content = $view;        
+    }    
 }
