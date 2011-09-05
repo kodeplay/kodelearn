@@ -2,11 +2,10 @@
 
 class Controller_Role extends Controller_Base {
 
-    public function action_index() {
-        
+    public function action_index() {        
         $view = View::factory('role/list')
             ->bind('roles', $roles)
-            ;
+            ->bind('success', $success);
         $role_model = ORM::factory('role');
         $all_roles = $role_model->find_all();
         $roles = array();
@@ -20,10 +19,11 @@ class Controller_Role extends Controller_Base {
                 'action_permissions' => Html::anchor('role/permissions/' . $role->id, 'set permissions'),
             );
         }
+        $success = Session::instance()->get('success');
+        Session::instance()->delete('success');
         Breadcrumbs::add(array(
             'Role', Url::site('role')
-        ));
-        
+        ));        
         $this->content = $view;
     }
 
@@ -38,10 +38,10 @@ class Controller_Role extends Controller_Base {
         $id = $this->request->param('id');
         if(!$id)
             Request::current()->redirect('role');
-            
+        
         $role = ORM::factory('role',$id);
         
-         if($this->request->method() === 'POST' && $this->request->post()){
+        if($this->request->method() === 'POST' && $this->request->post()){
             if (Arr::get($this->request->post(), 'save') !== null){
                 $submitted = true;
                 $validator = $role->validator($this->request->post());
@@ -49,25 +49,25 @@ class Controller_Role extends Controller_Base {
                     $role->name = $this->request->post('name');
                     $role->description = $this->request->post('description');
                     $role->save();
+                    Session::instance()->set('success', 'Role modified successfully.');
                     Request::current()->redirect('role');
                     exit;
                 } else {
                     $this->_errors = $validator->errors('role');
                 }
             }
-         }
+        }
         
-        $form = $this->form('role/edit/id/'.$id ,$submitted, array('name' => $role->name, 'description' => $role->description));
-        
+        $form = $this->form('role/edit/id/'.$id ,$submitted, array('name' => $role->name, 'description' => $role->description));        
         
         $links = array(
             'cancel' => Html::anchor('/role/', 'or cancel')
         );
         
         $view = View::factory('role/form')
-                  ->bind('links', $links)
-                  ->bind('form', $form)
-                  ;
+            ->bind('links', $links)
+            ->bind('form', $form)
+            ;
         Breadcrumbs::add(array(
             'Role', Url::site('role')
         ));
@@ -82,8 +82,7 @@ class Controller_Role extends Controller_Base {
         $form->default_data = array(
             'name' => '',
             'description' => '',            
-        );
-        
+        );        
         $form->saved_data = $saved_data;
         $form->posted_data = $submitted ? $this->request->post() : array();
         $form->append('Name', 'name', 'text');
@@ -96,6 +95,7 @@ class Controller_Role extends Controller_Base {
     public function action_delete(){
         $id = $this->request->param('id');
         if(!$id){
+            Session::instance()->set('success', 'Role deleted successfully.');
             Request::current()->redirect('role');
         }    
         $role = ORM::factory('role', $id);
@@ -122,6 +122,7 @@ class Controller_Role extends Controller_Base {
             $role = ORM::factory('role', $role_id);
             $role->permissions = serialize($post['acl']);
             $role->save();
+            Session::instance()->set('success', 'User permissions saved successfully.');
             Request::current()->redirect('role/index');
         }
         $role_id = $this->request->param('params');
