@@ -23,9 +23,9 @@ class Controller_User extends Controller_Base {
 
         if($this->request->param('filter_name')){
             $user->and_where_open()
-                 ->where('users.firstname', 'LIKE', '%' . $this->request->param('filter_name') . '%')
-                 ->or_where('users.lastname', 'LIKE', '%' . $this->request->param('filter_name') . '%')
-                 ->and_where_close();
+                ->where('users.firstname', 'LIKE', '%' . $this->request->param('filter_name') . '%')
+                ->or_where('users.lastname', 'LIKE', '%' . $this->request->param('filter_name') . '%')
+                ->and_where_close();
         }
         
         if($this->request->param('filter_id')){
@@ -41,9 +41,9 @@ class Controller_User extends Controller_Base {
         
         if($this->request->param('filter_name')){
             $user->and_where_open()
-                 ->where('users.firstname', 'LIKE', '%' . $this->request->param('filter_name') . '%')
-                 ->or_where('users.lastname', 'LIKE', '%' . $this->request->param('filter_name') . '%')
-                 ->and_where_close();
+                ->where('users.firstname', 'LIKE', '%' . $this->request->param('filter_name') . '%')
+                ->or_where('users.lastname', 'LIKE', '%' . $this->request->param('filter_name') . '%')
+                ->and_where_close();
         }
         
         if($this->request->param('filter_id')){
@@ -94,8 +94,10 @@ class Controller_User extends Controller_Base {
         $filter_name = $this->request->param('filter_name');
         $filter_url = URL::site('user/index');
         $cacheimage = CacheImage::instance();
+
+        $success = Session::instance()->get('success');
+        Session::instance()->delete('success');        
         
-       
         $view = View::factory('user/list')
             ->bind('table', $table)
             ->bind('users', $users)
@@ -106,12 +108,12 @@ class Controller_User extends Controller_Base {
             ->bind('filter_id', $filter_id)
             ->bind('filter_url', $filter_url)
             ->bind('cacheimage', $cacheimage)
-            ;
+            ->bind('success', $success);
         
         Breadcrumbs::add(array(
             'User', Url::site('user')
         ));
-            
+        
         $this->content = $view;
     }
     
@@ -163,6 +165,7 @@ class Controller_User extends Controller_Base {
                         }
                     }
                     self::notify_by_email($user, $password);
+                    Session::instance()->set('success', 'User added successfully.');
                     Request::current()->redirect('user');
                     exit;
                 } else {
@@ -268,10 +271,10 @@ class Controller_User extends Controller_Base {
                             $user->add('batches', $batch);
                             $feed_exist = ORM::factory('feed');
                             $feed_exist->join('feeds_users','left')
-                                             ->on('feeds_users.feed_id','=','feeds.id')
-                                             ->where('feeds.type','=','batch')
-                                             ->where('feeds.respective_id','=',$batch_id)
-                                             ->where('feeds_users.user_id','=',$user->id);
+                                ->on('feeds_users.feed_id','=','feeds.id')
+                                ->where('feeds.type','=','batch')
+                                ->where('feeds.respective_id','=',$batch_id)
+                                ->where('feeds_users.user_id','=',$user->id);
                             $feed_exists = $feed_exist->find();
                             if(!$feed_exists->id){
                                 $feed->set_action('add');
@@ -281,7 +284,7 @@ class Controller_User extends Controller_Base {
                                 $feed->save();
                                 $feed->subscribe_users(array('0' => $user->id));       
                             }
-                               
+                            
                         }
                     }
                     //removing the previous courses assigned
@@ -293,10 +296,10 @@ class Controller_User extends Controller_Base {
                             $user->add('courses', $course);
                             $feed_exist = ORM::factory('feed');
                             $feed_exist->join('feeds_users','left')
-                                             ->on('feeds_users.feed_id','=','feeds.id')
-                                             ->where('feeds.type','=','course')
-                                             ->where('feeds.respective_id','=',$course_id)
-                                             ->where('feeds_users.user_id','=',$user->id);
+                                ->on('feeds_users.feed_id','=','feeds.id')
+                                ->where('feeds.type','=','course')
+                                ->where('feeds.respective_id','=',$course_id)
+                                ->where('feeds_users.user_id','=',$user->id);
                             $feed_exists = $feed_exist->find();
                             if(!$feed_exists->id){
                                 $feed->set_action('student_add');
@@ -310,6 +313,7 @@ class Controller_User extends Controller_Base {
                     }
                     
                     $user->save();
+                    Session::instance()->set('success', 'User modified successfully.');
                     Request::current()->redirect('user');
                     exit;
                 } else {
@@ -347,6 +351,7 @@ class Controller_User extends Controller_Base {
                 ORM::factory('user', $user_id)->delete();
             }
         }
+        Session::instance()->set('success', 'User(s) deleted successfully.');
         Request::current()->redirect('user');
     }
     
@@ -355,11 +360,11 @@ class Controller_User extends Controller_Base {
         if($this->request->method() === 'POST' && $this->request->post()){
             
             if (Arr::get($this->request->post(), 'save') !== null){
-               
+                
                 $filename = $_FILES['csv']['name'];
                 $extension = explode(".",$filename);
                 if(isset($extension[1]) && strtolower($extension[1]) === "csv"){ //Validation of file 
-                     
+                    
                     $filename = $_FILES['csv']['tmp_name'];
                     $handle = fopen($filename, "r");
                     
@@ -394,7 +399,7 @@ class Controller_User extends Controller_Base {
                             $user->save();
                             $user->add('roles', $role);
                             $user_id[] = $user->id;
-                             
+                            
                             if(($this->request->post('batch_id'))){
                                 foreach($this->request->post('batch_id') as $batch_id){
                                     $batch = ORM::factory('batch', $batch_id);

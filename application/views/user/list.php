@@ -21,6 +21,12 @@
             <?php }?>
 			<span class="clear">&nbsp;</span>
 		</div><!-- topbar -->
+		<?php if ($success) {  ?>
+            <div class="formMessages w90">     
+            <span class="fmIcon good"></span> <span class="fmText" ><?php echo $success ?></span>
+            <span class="clear">&nbsp;</span>
+            </div>
+        <?php } ?>
         <form name="form" id="form" method="POST" action="<?php echo $links['delete'] ?>">
 		<table class="vm10 datatable fullwidth">
 			<?php echo $table['heading'] ?>
