@@ -6,7 +6,7 @@ class Controller_Home extends Controller_Base {
     	$view = View::factory('home/index')
             ->bind('feeds', $feeds)
             ->bind('post_form', $post_form);
-    	$feeds = Request::factory('feed/feeds')
+    	$feeds = Request::factory('feed/index')
             ->method(Request::GET)
             ->execute()
             ->body();
