@@ -30,6 +30,7 @@ class Controller_Exammarksheet extends Controller_Base {
             
             if($exams){
                 $examgroups = ORM::factory('examgroup');
+                $examgroups->where('publish', '=', '1');
                 $examgroups->where('id', 'IN', $exams)->group_by('id');
                 $examgroups = $examgroups->find_all();
             }else{

@@ -78,9 +78,7 @@ class Controller_System extends Controller_Base {
         // get languages 
         $language = array(
             '1' => 'English',
-            '2' => 'French',
-            '3' => 'Deutsch',
-            '4' => 'Español',
+            
         );
                
         $form = new Stickyform($action, array(), ($submitted ? $this->_errors : array()));

@@ -12,7 +12,7 @@
 			<?php if( Acl::instance()->is_allowed('user_create')){?>
 			     <?php echo $links['add']?>
 			<?php }?>
-            <a href="#" class="pageAction l">Send message</a>
+            <!-- <a href="#" class="pageAction l">Send message</a> -->
             <?php if( Acl::instance()->is_allowed('user_upload_csv')){?>
 			     <?php echo $links['uploadcsv']?>
 			<?php }?>

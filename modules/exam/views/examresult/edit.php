@@ -18,7 +18,11 @@
     </div>
     <?php } ?>
     <div class="buttons">
-        <a href="<?php echo $publish; ?>" class="button">Publish</a>   
+        <?php if($publish_status == '1'){ ?>
+            <a href="#" class="button disabled">Publish</a>
+        <?php } else { ?>
+            <a href="<?php echo $publish; ?>" class="button">Publish</a>
+        <?php } ?>   
         <a class="button" onclick="$('#examresult-edit-form').submit();">Save</a>
         <a href="<?php echo $csv_import; ?>" class="button">Cancel</a>        
     </div>
