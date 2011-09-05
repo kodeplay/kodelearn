@@ -8,12 +8,7 @@
     <body>
         <div class="menubar">
             <div class="wrap twhite">
-                <ul class="lsNone l">
-                    <li class="menu l selected"><?php echo $topmenu->home; ?></li>
-                    <li class="menu l"><?php echo $topmenu->about; ?></li>
-                    <li class="menu l"><?php echo $topmenu->features; ?></li>
-                    <li class="clear"></li>
-                </ul>
+                
                 <ul class="lsNone r">
                     <li class="l menu"><?php echo $topmenu->signuplogin; ?></li>
                 </ul>
