@@ -910,3 +910,10 @@ table.calendar td ul.output { margin-top: 10px; color: #427693; }
     font-weight: bold;
     cursor: pointer;
 }
+
+#feed_event h1 {display:none;}
+#feed_event li {
+	border-bottom: 1px solid #E9E9E9;
+    padding-top: 15px;
+    padding-bottom: 15px;
+}

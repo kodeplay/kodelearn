@@ -420,17 +420,16 @@ KODELEARN.helpers.url = {
 var Feeds = { };
 
 Feeds.show = function(d,m,y) {
-    $("#ajax-loader").show();
-    $.get(KODELEARN.config.base_url + "calendar/day_events/year/"+ y +"/month/"+ m +"/day/"+ d,  {},
-	  
-          function(html){
-    	      
-    	      $('#edit_event').html(html);
-    	      $("#ajax-loader").hide();
-          }, "html");
-    $( "#edit_event" ).dialog({
+	$("#ajax-loader").show();
+	$.get(KODELEARN.config.base_url + "calendar/day_events/year/"+ y +"/month/"+ m +"/day/"+ d,  {},	
+        function(html){
+		    $('#feed_event').html(html);
+		    $("#ajax-loader").hide();
+		
+        }, "html");
+	$( "#feed_event" ).dialog({
         resizable: false,
-        modal: true
-        
+        modal: true,
+        title: "Event for "+d+" - "+m+" - "+y
     });return false;
 };
