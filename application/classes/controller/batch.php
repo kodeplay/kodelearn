@@ -1,49 +1,48 @@
 <?php defined('SYSPATH') or die('No direct script access.');
 
-class Controller_Batch extends Controller_Base 
+class Controller_Batch extends Controller_Base
 {
-    
+
     public $template = 'template/logged_template';
-    
+
     protected $_errors = array();
 
-    public function action_index(){
-        
-        
-        if($this->request->param('sort')){
+    public function action_index() {
+
+        if ($this->request->param('sort')) {
             $sort = $this->request->param('sort');
         } else {
             $sort = 'name';
         }
-        
-        if($this->request->param('order')){
+
+        if ($this->request->param('order')) {
             $order = $this->request->param('order');
         } else {
             $order = 'DESC';
         }
-        
+
         $batch = ORM::factory('batch');
-        
-        if($this->request->param('filter_name')){
+
+        if ($this->request->param('filter_name')) {
             $batch->where('batches.name', 'LIKE', '%' . $this->request->param('filter_name') . '%');
         }
-        
+
         $count = $batch->count_all();
 
         $pagination = Pagination::factory(array(
             'total_items'    => $count,
             'items_per_page' => 5,
         ));
-        
+
 
         $batch->select(array('COUNT("batches_users.user_id")', 'users'))
             ->join('batches_users','left')
             ->on('batches_users.batch_id','=','batches.id');
-        
-        if($this->request->param('filter_name')){
+
+        if ($this->request->param('filter_name')) {
             $batch->where('batches.name', 'LIKE', '%' . $this->request->param('filter_name') . '%');
         }
-        
+
         $batch->group_by('batches.id')
             ->order_by($sort, $order)
             ->limit($pagination->items_per_page)
@@ -51,69 +50,69 @@ class Controller_Batch extends Controller_Base
             ;
         $batches = $batch->find_all();
 
-
-
         $sorting = new Sort(array(
             'Batch'             => 'name',
             'No. of Students'   => 'users',
             'Actions'           => '',
         ));
-        
+
         $url = ('batch/index');
-        
-        if($this->request->param('filter_name')){
+
+        if ($this->request->param('filter_name')) {
             $url .= '/filter_name/'.$this->request->param('filter_name');
         }
-        
+
         $sorting->set_link($url);
-        
+
         $sorting->set_order($order);
         $sorting->set_sort($sort);
         $heading = $sorting->render();
-        
+
         $links = array(
             'add_batch' => Html::anchor('/batch/add/', 'Create a batch', array('class' => 'createButton l')),
             'delete'      => URL::site('/batch/delete/')
         );
-        
+
         $table = array('heading' => $heading, 'data' => $batches);
-        
+
         // Render the pagination links
         $pagination = $pagination->render();
-        
+
         $filter_name = $this->request->param('filter_name');
         $filter_url = URL::site('batch/index');
-        
-       
+
         $view = View::factory('batch/list')
-            ->bind('links', $links)        
+            ->bind('links', $links)
             ->bind('table', $table)
             ->bind('count', $count)
             ->bind('pagination', $pagination)
             ->bind('filter_name', $filter_name)
             ->bind('filter_url', $filter_url)
-            ;
-        
+            ->bind('success', $success);
+
+        $success = Session::instance()->get('success');
+        Session::instance()->delete('success');
+
         Breadcrumbs::add(array(
             'Batches', Url::site('batch')
         ));
-            
-        $this->content = $view;	
+
+        $this->content = $view;
     }
-    
-    public function action_add(){
+
+    public function action_add() {
         $submitted = false;
-        
-        if($this->request->method() === 'POST' && $this->request->post()){
-            if (Arr::get($this->request->post(), 'save') !== null){
+
+        if ($this->request->method() === 'POST' && $this->request->post()) {
+            if (Arr::get($this->request->post(), 'save') !== null) {
                 $submitted = true;
                 $batch = ORM::factory('batch');
                 $validator = $batch->validator($this->request->post());
                 if ($validator->check()) {
-                    
                     $batch->name = $this->request->post('name');
                     $batch->description = $this->request->post('description');
                     $batch->save();
+                    Session::instance()->set('success', 'Batch added successfully.');
                     Request::current()->redirect('batch');
                     exit;
                 } else {
@@ -121,27 +120,27 @@ class Controller_Batch extends Controller_Base
                 }
             }
         }
-        
+
         Breadcrumbs::add(array(
             'Batches', Url::site('batch')
         ));
-        
+
         Breadcrumbs::add(array(
             'Create', Url::site('batch/add')
         ));
-        
+
         $this->form('batch/add', $submitted);
-        
+
     }
-    
-    private function form($action, $submitted = false, $saved_data = array()){
-        
+
+    private function form($action, $submitted = false, $saved_data = array()) {
+
         $form = new Stickyform($action, array(), ($submitted ? $this->_errors : array()));
         $form->default_data = array(
             'name' => '',
             'description' => '',
         );
-        
+
         $form->saved_data = $saved_data;
         $form->posted_data = $submitted ? $this->request->post() : array();
         $form->append('Name', 'name', 'text');
@@ -150,42 +149,44 @@ class Controller_Batch extends Controller_Base
         $form->process();
 
         $id = $this->request->param('id');
-        
+
         $links = array(
             'cancel' => Html::anchor('/batch/', 'or cancel'),
             'upload' => Html::anchor('user/uploadcsv/batch_id/' . $id, 'Upload Now', array('class' => 'button'))
         );
-        
+
         $action = $this->request->action();
-        
+
         $view = View::factory('batch/form')
             ->bind('links', $links)
             ->bind('form', $form)
             ->bind('action', $action)
             ->bind('id', $id)
             ;
-            
+
         $this->content = $view;
-                
+
     }
-    
-    public function action_edit(){
+
+    public function action_edit() {
         $submitted = false;
-        
+
         $id = $this->request->param('id');
-        if(!$id)
+        if (!$id) {
             Request::current()->redirect('batch');
-        
+        }
+
         $batch = ORM::factory('batch',$id);
-        
-        if($this->request->method() === 'POST' && $this->request->post()){
-            if (Arr::get($this->request->post(), 'save') !== null){
+
+        if ($this->request->method() === 'POST' && $this->request->post()) {
+            if (Arr::get($this->request->post(), 'save') !== null) {
                 $submitted = true;
                 $validator = $batch->validator($this->request->post());
                 if ($validator->check()) {
                     $batch->name = $this->request->post('name');
                     $batch->description = $this->request->post('description');
                     $batch->save();
+                    Session::instance()->set('success', 'Batch edited successfully.');
                     Request::current()->redirect('batch');
                     exit;
                 } else {
@@ -193,26 +194,25 @@ class Controller_Batch extends Controller_Base
                 }
             }
         }
-        
+
         Breadcrumbs::add(array(
             'Batches', Url::site('batch')
         ));
-        
+
         Breadcrumbs::add(array(
             'Edit', Url::site('batch/edit/id/'.$id )
         ));
-        
+
         $this->form('batch/edit/id/'.$id ,$submitted, array('name' => $batch->name, 'description' => $batch->description));
-        
     }
-    
-    public function action_delete(){
-        if($this->request->method() === 'POST' && $this->request->post('selected')){
-            foreach($this->request->post('selected') as $batch_id){
+
+    public function action_delete() {
+        if ($this->request->method() === 'POST' && $this->request->post('selected')) {
+            foreach($this->request->post('selected') as $batch_id) {
                 ORM::factory('batch', $batch_id)->delete();
             }
         }
+        Session::instance()->set('success', 'Batch(es) deleted successfully.');
         Request::current()->redirect('batch');
     }
-    
 }
