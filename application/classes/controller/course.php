@@ -286,8 +286,17 @@ class Controller_Course extends Controller_Base {
             'count_student' => $count_student,
             'count_exam' => $count_exam,
         );
+        $feeds = Request::factory('feed/feeds/id/'.$id)
+            ->method(Request::GET)
+            ->execute()
+            ->body();
+        $data = array();
+        $data['course_id'] = $id;
+        $total_feeds = Model_Feed::get_total_feeds($data);
     	$view = View::factory('course/summary')
     	               ->bind('course', $course)
+    	               ->bind('feeds', $feeds)
+    	               ->bind('total_feeds', $total_feeds)
     	               ->bind('count', $count);    	
         
 
