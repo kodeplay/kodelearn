@@ -29,7 +29,7 @@
             <div class="clear"></div>
             <ul class="hidden tm10">
                 <?php foreach ($roles as $role_id=>$role_name) { ?>
-                    <li><input type="checkbox" name="selected_roles[]" value="<?php echo $role_name; ?>" /><label><?php echo $role_name; ?></label></li>
+                    <li><input type="checkbox" name="selected_roles[]" value="<?php echo $role_id; ?>" /><label><?php echo $role_name; ?></label></li>
                 <?php } ?>
             </ul>            
         </div>

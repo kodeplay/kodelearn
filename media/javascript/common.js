@@ -201,12 +201,12 @@ KODELEARN.modules.add('ajax_message', (function () {
 	    
 	},
 	showAjaxError: function (beforeDiv,msgArr){
-	    
-	    $('#warning').remove();
+
+		$('#error').remove();
 	    var warning = '<div class="block-error" id="error"><ul>';
 	    
 	    for(var i = 0; i < msgArr.length ; i++ ){		
-		warning += '<li>'+msgArr[i]+'</li>';	
+	    	warning += '<li>'+msgArr[i]+'</li>';	
 	    }		
 	    
 	    warning += '</ul></div>';
@@ -218,7 +218,7 @@ KODELEARN.modules.add('ajax_message', (function () {
 	},
 	showAjaxSuccess : function (beforeDiv,msgArr){
 	    
-	    $('#warning').remove();
+	    $('#success').remove();
 	    var warning = '<div class="block-success" id="success"><ul>';
 	    
 	    for(var i = 0; i < msgArr.length ; i++ ){		
@@ -385,16 +385,21 @@ KODELEARN.modules.add('post', (function () {
                 $.ajax({
                     url: KODELEARN.config.base_url+"post/add/",
                     type: "POST",
-                    dataType: "html",
+                    dataType: "json",
                     data: formdata,
                     async: false,
-                    success: function (resp) {
-                        alert('ho');
+                    success: function (data) {
+                		if(data.success){
+                			$('#feeds').replaceWith(data.html);
+                		} else {
+                			var msg = data.errors;
+            				KODELEARN.modules.get('ajax_message').showAjaxError($("#post-form"),msg);
+                		}
                     }                    
                 });
             });
         }
-    }
+    };
 })());
 
 KODELEARN.helpers = { };
