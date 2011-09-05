@@ -17,7 +17,7 @@
         </div>
         <?php } ?>
         <?php echo $form->startform(); ?>
-            <table class="formcontainer" id="user-csv">
+            <table class="formcontainer" id="user-form">
                 <tr>
                     <td><?php echo $form->role_id->label(); ?></td>
                     <td><?php echo $form->role_id->element(); ?></td>

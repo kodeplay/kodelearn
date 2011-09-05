@@ -6,7 +6,7 @@
 		</div><!-- pageTop -->
 		
 		<?php echo $form->startform(); ?>
-			<table class="formcontainer">
+			<table class="formcontainer" id="user-form">
 				<tr>
 					<td><?php echo $form->firstname->label(); ?></td>
 					<td><?php echo $form->firstname->element(); ?>
@@ -26,14 +26,14 @@
 					<td><?php echo $form->role_id->label(); ?></td>
 					<td><?php echo $form->role_id->element(); ?></td>
 				</tr>
-                <tr>
+                <tr class="hidden" id="batch-list">
                     <td><?php echo $form->batch_id->label(); ?></td>
                     <td>
                         <?php echo $form->batch_id->element(); ?>
                         <p class="tip">You can select multiple batches.</p>
                     </td>
                 </tr>                
-                <tr>
+                <tr class="hidden" id="course-list">
                     <td><?php echo $form->course_id->label(); ?></td>
                     <td><?php echo $form->course_id->element(); ?>
                         <p class="tip">You can select multiple courses.</p>
