@@ -80,6 +80,9 @@ class Controller_Course extends Controller_Base {
         $filter_end_date = $this->request->param('filter_end_date');
         $filter_url = URL::site('course/index');        
         
+        $success = Session::instance()->get('success');
+        Session::instance()->delete('success');        
+        
         $view = View::factory('course/list')
             ->bind('table', $table)
             ->bind('count', $total)
@@ -90,6 +93,7 @@ class Controller_Course extends Controller_Base {
             ->bind('filter_start_date', $filter_start_date)
             ->bind('filter_end_date', $filter_end_date)
             ->bind('filter_url', $filter_url)
+            ->bind('success', $success)
             ;
         
         Breadcrumbs::add(array(
@@ -105,6 +109,7 @@ class Controller_Course extends Controller_Base {
                 ORM::factory('course', $course_id)->delete();
             }
         }
+        Session::instance()->set('success', 'Cources deleted successfully.');
         Request::current()->redirect('course');
     }
     
@@ -124,6 +129,7 @@ class Controller_Course extends Controller_Base {
                     $course->start_date = $this->request->post('start_date');
                     $course->end_date = $this->request->post('end_date');
                     $course->save();
+                    Session::instance()->set('success', 'Cources added successfully.');
                     Model_Course::assign_users($course, $this->request->post('selected'));
                     Request::current()->redirect('course');
                     exit;
@@ -222,6 +228,7 @@ class Controller_Course extends Controller_Base {
                     $course->start_date = $this->request->post('start_date');
                     $course->end_date = $this->request->post('end_date');                    
                     $course->save();
+                    Session::instance()->set('success', 'Cources edited successfully.');
                     Model_Course::assign_users($course, $this->request->post('selected'));                    
                     Request::current()->redirect('course');
                     exit;

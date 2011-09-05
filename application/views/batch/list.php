@@ -12,7 +12,7 @@
 			<?php if (Acl::instance()->is_allowed('batch_create')) { ?>
             <?php echo $links['add_batch']; ?>
             <?php } ?>
-			<a href="#" class="pageAction l">Send message</a>
+			<!-- <a href="#" class="pageAction l">Send message</a> -->
 			<span class="clear">&nbsp;</span>
 		</div><!-- topbar -->		
 		<?php if ($success) {  ?>
