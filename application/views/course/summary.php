@@ -47,7 +47,7 @@
 		
 		
 	</div><!-- pagecontent -->
-	
+	<div id="feed_event"></div>
 	<div class="clear"></div>
 	
  <script type="text/javascript">
