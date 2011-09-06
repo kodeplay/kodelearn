@@ -2,7 +2,7 @@
     <div class="w60 pageTitle l">New User</div>
     <div class="w30 pageTitle l">Existing User</div>
 </div><!-- pageTop -->
-
+<?php echo $admin_approval; ?>
 <div class="vpad40 l" id="suContainer">
     <p class="tdBlue bm40">Sign up and join KodeLearn Learning Management System</p>
     

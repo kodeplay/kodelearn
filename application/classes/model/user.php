@@ -154,5 +154,22 @@ class Model_User extends ORM {
         $user->find();
         
         return ($user->id !== null);
-    }   
+    }
+
+    public function send_parent_email(){
+        $parent = ORM::factory('user', $this->parent_user_id);
+        $forgot_password_string = md5($parent->email.time());
+        $parent->forgot_password_string = $forgot_password_string;
+        $parent->save(); 
+        
+        $subject = "Parent email";
+        $message  = "<b>Dear ". $parent->firstname ." ". $parent->lastname .",<br><br>";
+        $message .= "Your child '". $this->firstname ." ". $this->lastname ."' has registered on Kodelearn. <br>The link to access your account is ".Url::site("auth")." <br>";
+        $message .= "User name : ". $parent->email ."<br>"; 
+        $message .= "Set password first : ". Url::site("auth/changepassword/u/".$forgot_password_string); 
+
+        $message .=  "<br><br>Thanks,<br> Kodelearn team";
+        $html = true;
+        Email::send_mail($parent->email, $subject, $message, $html);
+    }
 }
