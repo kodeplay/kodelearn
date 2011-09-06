@@ -1,15 +1,12 @@
 [submodule "modules/stickyform"]
 	path = modules/stickyform
-	url = git@vineet-desktop.local:/home/git/repos/kohana_modules/stickyform.git
-[submodule "cacheimage"]
-	path = cacheimage
-	url = git@vineet-desktop.local:/home/git/repos/kohana_modules/cacheimage.git
+	url = git@github.com:kodeplay/stickyform.git
 [submodule "modules/cacheimage"]
 	path = modules/cacheimage
-	url = git@vineet-desktop.local:/home/git/repos/kohana_modules/cacheimage.git
+	url = git@github.com:kodeplay/cacheimage.git
 [submodule "modules/breadcrumbs"]
 	path = modules/breadcrumbs
 	url = git@github.com:kodeplay/breadcrumbs.git
 [submodule "modules/calendar"]
 	path = modules/calendar
-	url = git@vineet-desktop.local:/home/git/repos/kohana_calendar.git
+	url = git@github.com:kodeplay/kohana_calendar.git
