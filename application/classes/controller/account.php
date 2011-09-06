@@ -21,6 +21,7 @@ class Controller_Account extends Controller_Base {
                     	$user->password = Auth::instance()->hash($this->request->post('password'));
                     }
                     $user->save();
+                    Session::instance()->set('success', 'Saved successfully.');
                     Request::current()->redirect('account');
                 } else {
                     $this->_errors = $validator->errors('register');
@@ -64,12 +65,16 @@ class Controller_Account extends Controller_Base {
                     ->bind('upload_url', $upload_url)
                     ->bind('remove_url', $remove_url)
                     ->bind('user', $user)
+                    ->bind('success', $success)
                     ->bind('avatar', $avatar);
                     
         Breadcrumbs::add(array(
             'Profile', Url::site('account')
         ));
                     
+        $success = Session::instance()->get('success');
+        Session::instance()->delete('success');
+
         $this->content = $view;
 	}
 	
