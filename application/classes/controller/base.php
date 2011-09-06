@@ -58,6 +58,11 @@ class Controller_Base extends Controller_Template {
     /**
      * Check if the role of the current user is allowed to access this page
      * otherwise redirect to the access denied page.
+     * first we check if user has permission on whole using has_access method
+     * then we check if acl for current resource action combination is defined and
+     * check for it
+     * lastly we resolve standard action names to valid resource-action combinations
+     * and check for them
      */
     protected function acl_filter() {
         $resource = $this->request->controller();
@@ -65,6 +70,24 @@ class Controller_Base extends Controller_Template {
         if (!$acl->has_access($resource)) {
             Request::current()->redirect('error/access_denied');
         }
+        // check if current acl for current controller-action is defined in permissions
+        $action = $this->request->action();
+        $repr_key = Acl::repr_key($resource, $action);
+        if ($acl->acl_exists($repr_key) && !$acl->is_allowed($repr_key)) {
+            Request::current()->redirect('error/access_denied');
+        }
+        // check for standard action names
+        $std_actions = array(
+            'index' => 'view',
+            'add' => 'create',
+            'edit' => 'edit',
+            'delete' => 'delete',            
+        );
+        if (isset($std_actions[$action]) && !$acl->is_allowed(Acl::repr_key($resource, $std_actions[$action]))) {
+            Request::current()->redirect('error/access_denied');
+        }
+        // if it reaches here, we assume the user has permission to this resource-level
+        // any other checking will have to be done in the controller action
     }
 
     /**
