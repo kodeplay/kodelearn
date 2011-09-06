@@ -5,72 +5,7 @@
 <?php echo $admin_approval; ?>
 <div class="vpad40 l" id="suContainer">
     <p class="tdBlue bm40">Sign up and join KodeLearn Learning Management System</p>
-    
-     <?php echo $form_register->startform(); ?>
-        <table class="formcontainer">
-            <tr>
-                <td class="tar"><?php echo $form_register->email->label(); ?></td>
-                <td>
-                    <?php echo $form_register->email->element(); ?>
-                    <span class="form-error"><?php echo $form_register->email->error(); ?></span>
-                </td>
-            </tr>
-            <tr>
-                <td class="tar"><?php echo $form_register->email_parent->label(); ?></td>
-                <td>
-                    <?php echo $form_register->email_parent->element(); ?>
-                    <span class="form-error"><?php echo $form_register->email_parent->error(); ?></span>
-                </td>
-            </tr>
-            <tr>
-                <td class="tar"><?php echo $form_register->firstname->label(); ?></td>
-                <td>
-                    <?php echo $form_register->firstname->element(); ?>
-                    <span class="form-error"><?php echo $form_register->firstname->error(); ?></span>
-                </td>
-            </tr>
-            <tr>
-                <td class="tar"><?php echo $form_register->lastname->label(); ?></td>
-                <td>
-                    <?php echo $form_register->lastname->element(); ?>
-                    <span class="form-error"><?php echo $form_register->lastname->error(); ?></span>
-                </td>
-            </tr>
-            <tr>
-                <td class="tar"><?php echo $form_register->parentname->label(); ?></td>
-                <td>
-                    <?php echo $form_register->parentname->element(); ?>
-                    <span class="form-error"><?php echo $form_register->parentname->error(); ?></span>
-                </td>
-            </tr>
-            <tr>
-                <td class="tar"><?php echo $form_register->password->label(); ?></td>
-                <td>
-                    <?php echo $form_register->password->element(); ?>
-                    <span class="form-error"><?php echo $form_register->password->error(); ?></span>
-                </td>
-            </tr>
-            <tr>
-                <td class="tar"><?php echo $form_register->confirm_password->label(); ?></td>
-                <td>
-                    <?php echo $form_register->confirm_password->element(); ?>
-                    <span class="form-error"><?php echo $form_register->confirm_password->error(); ?></span>
-                </td>
-            </tr>
-            <tr>
-                <td class="tar"></td>
-                <td>
-                    <?php echo $form_register->agree->element(); ?>&nbsp;
-                    <?php echo $form_register->agree->label(); ?>
-                    <span class="form-error"><?php echo $form_register->agree->error(); ?></span>
-                </td>
-            </tr>
-            <tr>
-                <td class="tar"></td>
-                <td><?php echo $form_register->register->element(); ?></td>
-            </tr>
-        </table> <!-- formcontainer -->
-        <?php echo $form_register->endForm(); ?>
+    <?php echo $form_register; ?>
 </div><!-- suContainer -->
 
 <div class="vpad40 l" id="lContainer">

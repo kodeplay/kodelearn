@@ -51,7 +51,7 @@ class Controller_Auth extends Controller_Base {
             ->bind('login_message', $login_msg)
             ->bind('admin_approval', $admin_approval);          
         $form_login = $this->form_login(($submitted_form === 'login'));
-        $form_register = $this->form_register(($submitted_form === 'register'));
+        $form_register = $this->form_register();
         $form_forgot_password = $this->form_forgot_password(($submitted_form === 'forgot_password'));
         $links = array(
             'forgot_password_link' => Html::anchor('#password_recovery', 'Forgot Password', array('class' => 'tdblue bold', 'onclick' => 'forgotPassword();'))
@@ -166,7 +166,48 @@ class Controller_Auth extends Controller_Base {
         }
     }
 
-    private function form_register($submitted = false) {    	
+    private function form_register() {   
+
+    	$config_settings = Config::instance()->load('config');
+    	
+    	$role = ORM::factory('role', $config_settings->default_role);
+    	
+    	switch(strtolower($role->name)){
+    		
+            case 'admin':
+                return 'Load Admin Form';
+                break;
+                
+            case 'parent':
+                return 'Load Parent Form';
+                break;
+                
+            case 'teacher':
+                return 'Load teacher Form';
+                break;
+                
+    		case 'student':
+    		default:
+		    	$action = 'auth/student_register'; 
+    			
+    	}
+    	
+    	
+        return Request::factory($action)
+            ->method(Request::POST)
+            ->post($this->request->post())
+            ->execute()
+            ->body();
+    }
+    
+    public function action_student_register() {
+    	$submitted = FALSE;
+    	
+    	if ($this->request->method() === 'POST' && $this->request->post()) {
+    		$submitted = TRUE;
+    		$this->register();
+    	}
+    	
         $action = 'auth/index';
         $form = new Stickyform($action, array(), ($submitted ? $this->_errors : array()));
         $fields = array('email', 'email_parent', 'firstname', 'lastname', 'parentname', 'password', 'batch_id', 'course_id', 'agree');
@@ -186,7 +227,12 @@ class Controller_Auth extends Controller_Base {
                 array('attributes' => array('value' => 1))
             )->append('Signup Now', 'register', 'submit', array('attributes' => array('class' => 'button')));
         $form->process();
-        return $form;
+        
+        $view = View::factory('auth/register/student')
+                       ->bind('form', $form);
+        
+        $this->content = $view;
+    
     }
 
     public function action_logout() {
