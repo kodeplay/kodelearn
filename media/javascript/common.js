@@ -63,8 +63,7 @@ KODELEARN.modules = {
     }
 };
 
-KODELEARN.modules.add('add_datepicker' , (function () {    
-    
+KODELEARN.modules.add('add_datepicker' , (function () {        
     return {
         init: function () { 
     	    $('.date').datepicker({dateFormat: 'yy-mm-dd'});
@@ -73,7 +72,6 @@ KODELEARN.modules.add('add_datepicker' , (function () {
 })());
 
 KODELEARN.modules.add('add_timepicker' , (function () {    
-    
     return {
         init: function () { 
     	    $('.time').timepicker({});
@@ -202,9 +200,7 @@ KODELEARN.modules.add('course', (function () {
 	    $.post(KODELEARN.config.base_url + "course/get_students",  {'course_id' : courseId},
 		   function(data){
 		       $('#' + container).html(data.html);
-		   }, "json");
-
-	    
+		   }, "json");	    
 	}
     };
 
@@ -434,6 +430,84 @@ KODELEARN.helpers.url = {
         else {
             return decodeURIComponent(results[1].replace(/\+/g, " "));
         }
+    }
+}
+
+KODELEARN.helpers.request = {
+
+    ajax: function (o) {
+        var options = {
+            async: false,
+            type: 'get',
+            data: { },
+            success: function { }
+        }
+        $.extend(options, o);
+        $.ajax({
+            url: options.url,
+            type: options.type,
+            data: options.data,
+            dataType: 'json',
+            async: options.async
+            success: function (resp) {
+                options.success(resp);
+            }
+        });
+    },
+
+    get: function (o) {        
+        var options = {
+            data: { },         
+            async: false,
+            success: function (resp) { },
+            access_denied: function (resp) { 
+                window.location.href = KODELEARN.config.base_url+'error/access_denied';
+            },
+        }
+        $.extend(options, o);
+        this.ajax({
+            url: options.url,
+            type: 'GET',
+            data: options.data,
+            async: options.async,
+            success: function (resp) {
+                if (resp.success) {
+                    options.success(resp);
+                } else if (resp.reason === 'access_denied') {
+                    options.access_denied(resp)
+                }
+            }
+        });
+    },
+
+    post: function (o) {
+        var options = {
+            data: { },         
+            async: false,
+            success: function (resp) { },
+            access_denied: function (resp) { 
+                window.location.href = KODELEARN.config.base_url+'error/access_denied';
+            },
+            error: function (resp) { 
+                KODELEARN.modules.get('ajax_message').showAjaxError($("#event_form"), resp.errors);
+            },
+        }
+        $.extend(options, o);
+        this.ajax({
+            url: options.url,
+            type: 'POST',
+            data: options.data,
+            async: options.async,
+            success: function (resp) {
+                if (resp.success) {
+                    options.success(resp);
+                } else if (resp.reason === 'errors' && resp.errors) {
+                    options.error(resp)
+                } else if (resp.reason === 'access_denied') {
+                    options.access_denied(resp);
+                }
+            }
+        });
     }
 }
 
