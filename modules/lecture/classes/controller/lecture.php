@@ -380,7 +380,8 @@ class Controller_Lecture extends Controller_Base {
     	$view = View::factory('lecture/schedule')
             ->bind('lecture', $lecture)
             ->bind('events', $events)
-            ->bind('conflict_event_ids', $conflict_event_ids);
+            ->bind('conflict_event_ids', $conflict_event_ids)
+            ->set('can_edit', Acl::instance()->is_allowed('exam_edit'));
         
         Breadcrumbs::add(array(
             'Lectures', Url::site('lecture')
