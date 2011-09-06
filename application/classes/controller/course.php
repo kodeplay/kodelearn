@@ -286,7 +286,7 @@ class Controller_Course extends Controller_Base {
         }        
     	$course = ORM::factory('course', $id);
         // Todo
-    	$count_student = ORM::factory('course', $id)->users->count_all();    	
+    	$count_student = Model_Course::get_users_count($id, 'student');    	
     	$count_exam = ORM::factory('exam');
     	$count_exam = $count_exam->where('course_id', '=', $id)->count_all();    	
     	$count = array(
