@@ -8,6 +8,7 @@ class Controller_System extends Controller_Base {
         $view = View::factory('system/form')
             ->bind('form', $form)
             ->bind('image', $image)
+            ->bind('success', $success)
             ->bind('upload_url', $upload_url)
             ;
         $institution = ORM::factory('institution', $id=1);
@@ -39,6 +40,7 @@ class Controller_System extends Controller_Base {
                 $institution->address = $this->request->post('address');
                 $institution->save();
                 $config->load('config')->setMany($config_post);
+                Session::instance()->set('success', 'Setting saved successfully.');
                 Request::current()->redirect('system');
                 exit;    
             } else {
@@ -66,6 +68,9 @@ class Controller_System extends Controller_Base {
             'System', Url::site('system')
         ));
         
+        $success = Session::instance()->get('success');
+        Session::instance()->delete('success');
+
         $this->content = $view;
     }
     
