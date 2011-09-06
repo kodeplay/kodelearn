@@ -61,7 +61,7 @@
 				            <?php echo Html::anchor('/user/edit/id/'.$user->id, 'View/Edit'); ?>
 				       <?php }?>
 				    </p>
-					<p><a href="#">Send message</a></p>
+					<!-- <p><a href="#">Send message</a></p> -->
 				</td>
 			</tr>
 			<?php } ?>
