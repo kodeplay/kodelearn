@@ -431,7 +431,7 @@ KODELEARN.helpers.url = {
             return decodeURIComponent(results[1].replace(/\+/g, " "));
         }
     }
-}
+};
 
 KODELEARN.helpers.request = {
 
@@ -440,15 +440,15 @@ KODELEARN.helpers.request = {
             async: false,
             type: 'get',
             data: { },
-            success: function { }
-        }
+            success: function () { }
+        };
         $.extend(options, o);
         $.ajax({
             url: options.url,
             type: options.type,
             data: options.data,
             dataType: 'json',
-            async: options.async
+            async: options.async,
             success: function (resp) {
                 options.success(resp);
             }
@@ -462,8 +462,8 @@ KODELEARN.helpers.request = {
             success: function (resp) { },
             access_denied: function (resp) { 
                 window.location.href = KODELEARN.config.base_url+'error/access_denied';
-            },
-        }
+            }
+        };
         $.extend(options, o);
         this.ajax({
             url: options.url,
@@ -474,7 +474,7 @@ KODELEARN.helpers.request = {
                 if (resp.success) {
                     options.success(resp);
                 } else if (resp.reason === 'access_denied') {
-                    options.access_denied(resp)
+                    options.access_denied(resp);
                 }
             }
         });
@@ -490,8 +490,8 @@ KODELEARN.helpers.request = {
             },
             error: function (resp) { 
                 KODELEARN.modules.get('ajax_message').showAjaxError($("#event_form"), resp.errors);
-            },
-        }
+            }
+        };
         $.extend(options, o);
         this.ajax({
             url: options.url,
@@ -502,14 +502,14 @@ KODELEARN.helpers.request = {
                 if (resp.success) {
                     options.success(resp);
                 } else if (resp.reason === 'errors' && resp.errors) {
-                    options.error(resp)
+                    options.error(resp);
                 } else if (resp.reason === 'access_denied') {
                     options.access_denied(resp);
                 }
             }
         });
     }
-}
+};
 
 var Feeds = { };
 

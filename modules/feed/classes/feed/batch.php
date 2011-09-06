@@ -13,10 +13,11 @@ class Feed_Batch extends Feed {
         
         $batch = ORM::factory('batch',$this->respective_id);
         if($this->check_deleted($batch)) return View::factory('feed/unavaliable')->render();
-        $count_user = DB::select('*')
+        $count_user = Model_Batch::get_users_count($this->respective_id,'student');
+        /*$count_user = DB::select('*')
                     ->from('batches_users')
                     ->where('batch_id', '=', $this->respective_id)
-                    ->execute()->count();
+                    ->execute()->count();*/
         
         $span = Date::fuzzy_span($this->time);
         

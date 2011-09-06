@@ -59,4 +59,19 @@ class Model_Batch extends ORM {
         }
         return $users;
     }
+    
+    public static function get_users_count($batch, $role_name=null) {
+        $batch = $batch instanceof Model_Batch ? $batch : ORM::factory('batch', (int)$batch);
+        if ($role_name) {
+            $role = Model_Role::from_name($role_name);
+            $users = $batch->users
+                ->join('roles_users', 'INNER')
+                ->on('users.id', ' = ', 'roles_users.user_id')
+                ->where('roles_users.role_id', ' = ', $role->id)            
+                ->count_all();
+        } else {
+            $users = $batch->users->count_all();
+        }
+        return $users;
+    }
 }
