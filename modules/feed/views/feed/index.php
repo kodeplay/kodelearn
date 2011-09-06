@@ -1,4 +1,5 @@
     <div class="r pagecontent">
+        <?php echo $post_form ?>
         <div id="feeds">
             <?php if(trim($feeds)){ ?>
             <?php echo $feeds ?>

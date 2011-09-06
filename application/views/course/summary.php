@@ -1,8 +1,8 @@
 	<div class="r pagecontent">
 		<div class="pageTop">
 			<div class="pageTitle l">Course - <?php echo $course->name ?></div>
-			<div class="pageDesc r"><?php echo $course->description ?>
-			<br><br><?php echo $course->start_date ?> To <?php echo $course->end_date ?>
+			<div class="pageDesc r" title=" <?php echo $course->description ?> "><?php echo Text::limit_chars($course->description, 85) ?>
+			<br><br><?php echo date('d M Y', strtotime($course->start_date)) ?> To <?php echo date('d M Y', strtotime($course->end_date)) ?>
 			</div>
 			
 			<div class="clear"></div>
