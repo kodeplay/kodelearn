@@ -191,4 +191,19 @@ class Model_Course extends ORM {
     public function toLink() {
         return Html::anchor(Url::site('course/summary/id/'.$this->id), $this->name);
     }
+    
+    public static function get_users_count($course, $role_name=null) {
+        $course = $course instanceof Model_Course ? $course : ORM::factory('course', (int)$course);
+        if ($role_name) {
+            $role = Model_Role::from_name($role_name);
+            $users = $course->users
+                ->join('roles_users', 'INNER')
+                ->on('users.id', ' = ', 'roles_users.user_id')
+                ->where('roles_users.role_id', ' = ', $role->id)            
+                ->count_all();
+        } else {
+            $users = $course->users->count_all();
+        }
+        return $users;
+    }
 }

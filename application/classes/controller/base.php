@@ -58,12 +58,54 @@ class Controller_Base extends Controller_Template {
     /**
      * Check if the role of the current user is allowed to access this page
      * otherwise redirect to the access denied page.
+     * first we check if user has permission on whole using has_access method
+     * then we check if acl for current resource action combination is defined and
+     * check for it
+     * lastly we resolve standard action names to valid resource-action combinations
+     * and check for them
      */
     protected function acl_filter() {
         $resource = $this->request->controller();
         $acl = Acl::instance();
         if (!$acl->has_access($resource)) {
-            Request::current()->redirect('error/access_denied');
+            $this->redirect_after_filter('error/access_denied');
+            // Request::current()->redirect('error/access_denied');
+        }
+        // check if current acl for current controller-action is defined in permissions
+        $action = $this->request->action();
+        $repr_key = Acl::repr_key($resource, $action);
+        if ($acl->acl_exists($repr_key) && !$acl->is_allowed($repr_key)) {
+            $this->redirect_after_filter('error/access_denied');
+            // Request::current()->redirect('error/access_denied');
+        }
+        // check for standard action names
+        $std_actions = array(
+            'index' => 'view',
+            'add' => 'create',
+            'edit' => 'edit',
+            'delete' => 'delete',            
+        );
+        if (isset($std_actions[$action]) && !$acl->is_allowed(Acl::repr_key($resource, $std_actions[$action]))) {
+            $this->redirect_after_filter('error/access_denied');
+            // Request::current()->redirect('error/access_denied');
+        }
+        // if it reaches here, we assume the user has permission to this resource-level
+        // any other checking will have to be done in the controller action
+    }
+
+    /**
+     * Method to do the correct thing to deny access to the user to the requested 
+     * resource as per the permissions. 
+     * Depending upon the type of request, it will decide the mode of notifying the user
+     * if action type = ajax - show overlay view
+     * if action type = normal - redirect to the access denied page
+     */
+    protected function redirect_after_filter($page) {
+        if ($this->request->is_ajax()) {
+            echo json_encode(array('success' => 0, 'reason' => 'access_denied'));
+            exit;
+        } else {
+            Request::current()->redirect($page);
         }
     }
 

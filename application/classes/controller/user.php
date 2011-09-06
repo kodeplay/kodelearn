@@ -255,6 +255,7 @@ class Controller_User extends Controller_Base {
                     $user->firstname = $this->request->post('firstname');
                     $user->lastname = $this->request->post('lastname');
                     $user->email = $this->request->post('email');
+                    
                     $user->status = $this->request->post('status');
                     //removing the previous role assigned
                     $user->remove('roles');

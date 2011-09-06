@@ -4,11 +4,17 @@
             <div class="pageDesc r">replace_here_page_description</div>
             <div class="clear"></div>
         </div><!-- pageTop -->
+        <?php if (Acl::instance()->is_allowed('lecture_delete') || Acl::instance()->is_allowed('lecture_create')) { ?>
         <div class="topbar">
+             <?php if (Acl::instance()->is_allowed('lecture_delete')) { ?>
              <a onclick="$('#lecture').submit();" class="pageAction r alert">Delete selected...</a>
-             <?php echo $links['add']?>
+             <?php } ?>
+             <?php if (Acl::instance()->is_allowed('lecture_create')) { 
+                echo $links['add'];
+             } ?>
             <span class="clear">&nbsp;</span>
         </div><!-- topbar -->
+        <?php } ?>
         <form name="lecture" id="lecture" method="POST" action="<?php echo $links['delete'] ?>">
         <table class="vm10 datatable fullwidth">
            <?php echo $table['heading']?>
@@ -41,7 +47,9 @@
                     <?php }?>
                 </td>
                 <td>
-                    <p><?php echo Html::anchor('/lecture/edit/id/' . $lecture->id, 'View/Edit')?></p>
+                    <?php if (Acl::instance()->is_allowed('lecture_edit')) { ?>
+                        <p><?php echo Html::anchor('/lecture/edit/id/' . $lecture->id, 'View/Edit')?></p>
+                    <?php } ?>
                     <p><?php echo Html::anchor('/lecture/schedule/id/' . $lecture->id, 'Schedule')?></p>
                 </td>
             </tr>

@@ -1,15 +1,15 @@
 <?php defined('SYSPATH') or die('No direct access allowed.');
 
 class Controller_Event extends Controller_Base {
-	
-	public function action_edit(){
-		
-		if($this->request->method() === 'POST' && $this->request->post()){
-			$event = ORM::factory('event', $this->request->post('event_id'));
+    
+    public function action_edit(){
+        
+        if($this->request->method() === 'POST' && $this->request->post()){
+            $event = ORM::factory('event', $this->request->post('event_id'));
             $validator = $event->validator($this->request->post());
             
             if ($validator->check()) {
-            	
+                
                 $from = strtotime($this->request->post('date')) + ($this->request->post('from') * 60); 
                 $to = strtotime($this->request->post('date')) + ($this->request->post('to') * 60); 
 
@@ -18,7 +18,7 @@ class Controller_Event extends Controller_Base {
             	$event->eventend = $to;
             	$event->cancel = (int) $this->request->post('cancel');
             	$event->save();
-            	
+                
             	if($this->request->post('cancel')){
                     $feed = new Feed_Lecture();
                     
@@ -29,42 +29,42 @@ class Controller_Event extends Controller_Base {
                     $feed->save();
                     $feed->subscribe_users();
             	}
-            	
+                
                 $json = array(
-            	   'success'   => 1,
-            	   'message'   => array('Event is edited successfully')
+                    'success'   => 1,
+                    'message'   => array('Event is edited successfully')
             	);
             } else {
             	$json = array(
-            	       'success'   => 0,
-            	       'errors'    => array_values($validator->errors('exam'))
+                    'success'   => 0,
+                    'errors'    => array_values($validator->errors('exam'))
             	);
-            	
+                
             }
             echo json_encode($json);
             exit;
-		}
-		
-		$id = $this->request->param('id');
-		
-		$event = ORM::factory('event', $id);
-		
+        }
+        
+        $id = $this->request->param('id');
+        
+        $event = ORM::factory('event', $id);
+        
         $form = new Stickyform('', array(), (array()));
-		
-		$form->default_data = array(
+        
+        $form->default_data = array(
             'date'          => '',
-		    'room_id'       => '',
+            'room_id'       => '',
             'from'          => '',
             'to'            => '',
-		    'cancel'        => '1'
-		);
-		
-		$conflict_event = $event->get_conflict_event();
+            'cancel'        => '1'
+        );
+        
+        $conflict_event = $event->get_conflict_event();
         $event_details = array();
         if($conflict_event){
-			$class = 'Event_'.$conflict_event->eventtype;
-	        $dynamic_object = new $class($conflict_event->id);
-	        $event_details = $dynamic_object->get_event_details();		
+            $class = 'Event_'.$conflict_event->eventtype;
+            $dynamic_object = new $class($conflict_event->id);
+            $event_details = $dynamic_object->get_event_details();		
         }
 
         $form->saved_data = array('date' => date('Y-m-d', $event->eventstart), 'cancel' => $event->cancel);
@@ -83,16 +83,20 @@ class Controller_Event extends Controller_Base {
         );
         
         $view = View::factory('event/edit')
-		               ->bind('event', $event)
-		               ->bind('form', $form)
-		               ->bind('slider', $slider)
-		               ->bind('conflict_event', $conflict_event)
-		               ->bind('event_details', $event_details);
-		
-		$this->content = $view;
-	}
+            ->bind('event', $event)
+            ->bind('form', $form)
+            ->bind('slider', $slider)
+            ->bind('conflict_event', $conflict_event)
+            ->bind('event_details', $event_details);
+        
+        echo json_encode(array(
+            'success' => 1,
+            'html' => $view->render(),
+        ));
+        exit;
+    }
 
-	public function action_get_avaliable_rooms(){
+    public function action_get_avaliable_rooms(){
         
         $from = strtotime($this->request->post('date')) + ($this->request->post('from') * 60); 
         $to = strtotime($this->request->post('date')) + ($this->request->post('to') * 60); 

@@ -17,12 +17,17 @@ class Controller_Auth extends Controller_Base {
             Request::current()->redirect('home');
             exit;            
         }
+        
         $posted_login = array();
         $posted_register = array();
         $posted_forgot_password = array();
         $submitted_form = '';
+        $admin_approval = '';
         $display = "none";
         $login_msg = "";
+        if($this->request->param('admin_aproval')){
+            $admin_approval = '<div class="formMessages"><span class="fmIcon good"></span> <span class="fmText">Your account is created, but its pending for administrators approval.</span><span class="clear">&nbsp;</span></div>';
+        }
         if ($this->request->method() === 'POST' && $this->request->post()) {            
             if (Arr::get($this->request->post(), 'login') !== null) {
                 $submitted_form = 'login';
@@ -43,7 +48,8 @@ class Controller_Auth extends Controller_Base {
             ->bind('links', $links)
             ->bind('display', $display)
             ->bind('display_success', $display_success)
-            ->bind('login_message', $login_msg);          
+            ->bind('login_message', $login_msg)
+            ->bind('admin_approval', $admin_approval);          
         $form_login = $this->form_login(($submitted_form === 'login'));
         $form_register = $this->form_register(($submitted_form === 'register'));
         $form_forgot_password = $this->form_forgot_password(($submitted_form === 'forgot_password'));
@@ -112,10 +118,7 @@ class Controller_Auth extends Controller_Base {
         
         if ($validator->check()) {
         	
-            $subject = "Parent email";
-            $message  = "<b>Dear ". $this->request->post('parentname') ." ". $this->request->post('lastname') .",<br><br>";
-            $message .= "Your child '". $this->request->post('firstname') ." ". $this->request->post('lastname') ."' has registered on Kodelearn. <br>The link to access your account is ".Url::site("auth")." <br>";
-        	//first check if parent's account exists
+            //first check if parent's account exists
         	$parent = ORM::factory('user')->where('email', '=', $this->request->post('email_parent'))->find();
         	$user_id = $parent->id;
         	if(!$parent->id){
@@ -128,14 +131,9 @@ class Controller_Auth extends Controller_Base {
 	            );
 	            $role = Model_Role::from_name('Parent');
 	            $user_id = $this->create_user($values, $role);
-	            $message .= "User name : ". $this->request->post('email_parent') ."<br>"; 
-	            $message .= "Password : ". $parent_password ."<br>";
-        		
+	            
         	}
-            $message .=  "<br><br>Thanks,<br> Kodelearn team";
-            $html = true;
-            Email::send_mail($this->request->post('email_parent'), $subject, $message, $html);
-           
+            
             $values = array(
                'firstname' => $this->request->post('firstname'),
                'lastname'  => $this->request->post('lastname'),
@@ -148,16 +146,19 @@ class Controller_Auth extends Controller_Base {
 
             $user_id = $this->create_user($values, $role);
             
+            $user = ORM::factory('user', $user_id);
+            
             if ($config_settings->user_approval) {
                 $auto_login = false;
             }
             
             if ($auto_login) {
+                $user->send_parent_email();
                 Auth::instance()->login($validator['email'], $validator['password']);
                 Request::current()->redirect('home');
                 exit;
             } else {
-                echo 'Your account is pending the administrators approval';
+                Request::current()->redirect('auth/index/admin_aproval/1');
             }
             exit;
         } else {
@@ -270,7 +271,7 @@ class Controller_Auth extends Controller_Base {
                     $user->password = $values['password'];
                     $user->forgot_password_string = "";
                     $user->save();
-                    $display_msg = '<div class="formMessages" style="width:380px; height:30px"><span class="fmIcon good"></span> <span class="fmText">Your password has been changed successfully. Please click here to <a href="'. Url::site("auth"). '">login</a></span><span class="clear">&nbsp;</span></div>';
+                    $display_msg = '<div class="formMessages" style="width:380px; height:35px"><span class="fmIcon good"></span> <span class="fmText">Your password has been changed successfully. Please click here to <a href="'. Url::site("auth"). '">login</a></span><span class="clear">&nbsp;</span></div>';
                     
                 } else {
                     

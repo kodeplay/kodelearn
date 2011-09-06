@@ -67,6 +67,11 @@ class Acl {
         $this->load();
     }
 
+    public function acl_exists($repr_key) {
+        list($resource, $action) = self::split_repr_key($repr_key);
+        return isset($this->_permissions[$resource][$action]);
+    }
+
     /**
      * @param String $repr_key of type resource_action viz. user_create
      * @return Boolean whether the current user has the permission to 
@@ -74,7 +79,7 @@ class Acl {
      */
     public function is_allowed($repr_key) {
         list($resource, $action) = self::split_repr_key($repr_key);
-        return $this->_permissions[$resource][$action];
+        return (Acl_Config::is_resource_ignored($resource) || $this->_permissions[$resource][$action]);
     }
 
     /**
