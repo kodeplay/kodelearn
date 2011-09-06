@@ -63,6 +63,7 @@ class Model_Event extends ORM {
         $user = Acl::instance()->relevant_user();
         if ($user instanceof Model_User) {
             $courses = $user->courses->find_all()->as_array(null, 'id');
+            $courses[] = 0;
             $event = ORM::factory('event')
                 ->where('eventstart', 'BETWEEN', array($first, $last))
                 ->where('events.course_id', 'IN', DB::expr('(' . implode(", ", $courses) . ')'))
@@ -87,6 +88,7 @@ class Model_Event extends ORM {
         $user = Acl::instance()->relevant_user();
         if ($user instanceof Model_User) {
             $courses = $user->courses->find_all()->as_array(null, 'id');
+            $courses[] = 0;
             $event = ORM::factory('event')
                 ->where(DB::expr('DATE(FROM_UNIXTIME(eventstart))'), ' = ', $date)
                 ->where('events.course_id', 'IN', DB::expr('(' . implode(", ", $courses) . ')'))
