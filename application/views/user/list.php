@@ -45,8 +45,8 @@
 				<td>
 					<div class="l w20"><img src="<?php echo $cacheimage->resize($user->avatar, 56, 56);?>" alt="User" /></div>
 					<div class="l">
-						<p><?php echo Text::limit_chars($user->fullname(), 30); ?></p>
-						<p><?php echo Text::limit_chars($user->email, 30); ?></p>
+						<p title="<?php echo $user->fullname() ?>"><?php echo Text::limit_chars($user->fullname(), 30); ?></p>
+						<p title="<?php echo $user->email ?>"><?php echo Text::limit_chars($user->email, 30); ?></p>
 						<p><?php echo $user->role(); ?></p>
 					</div>
 					<div class="clear"></div>

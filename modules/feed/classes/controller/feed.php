@@ -9,11 +9,20 @@ class Controller_Feed extends Controller_Base {
             ->execute()
             ->body();
 
+        $post_form = Request::factory('post/form')
+            ->execute()
+            ->body();
+            
         $total_feeds = Model_Feed::get_total_feeds();
         $view = View::factory('feed/index')
                        ->bind('feeds', $feeds)
+                       ->bind('post_form', $post_form)
                        ->bind('total_feeds', $total_feeds);
 
+        Breadcrumbs::add(array(
+            'Feeds', Url::site('feed')
+        ));
+                       
                        
         $this->content = $view;
     }
@@ -45,10 +54,6 @@ class Controller_Feed extends Controller_Base {
         $view = View::factory('feed/feeds')
                        ->bind('feeds', $feeds);
 
-        Breadcrumbs::add(array(
-            'Feeds', Url::site('feed')
-        ));
-                       
         $this->content = $view;        
     }
 
