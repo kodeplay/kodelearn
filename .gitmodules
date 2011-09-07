@@ -19,3 +19,6 @@
 [submodule "modules/codebench"]
 	path = modules/codebench
 	url = https://github.com/kohana/codebench.git
+[submodule "modules/database"]
+	path = modules/database
+	url = git@github.com:kodeplay/database.git
