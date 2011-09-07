@@ -13,3 +13,6 @@
 [submodule "modules/userguide"]
 	path = modules/userguide
 	url = https://github.com/kohana/userguide.git
+[submodule "modules/cache"]
+	path = modules/cache
+	url = https://github.com/kohana/cache.git
