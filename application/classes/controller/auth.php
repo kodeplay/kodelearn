@@ -276,15 +276,12 @@ class Controller_Auth extends Controller_Base {
     	switch(strtolower($role->name)){
     		
             case 'admin':
+            case 'teacher':
                 $action = 'auth/admin_register';
                 break;
                 
             case 'parent':
                 $action = 'auth/parent_register'; 
-                break;
-                
-            case 'teacher':
-                return 'Load teacher Form';
                 break;
                 
     		case 'student':
