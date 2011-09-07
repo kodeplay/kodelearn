@@ -10,3 +10,6 @@
 [submodule "modules/calendar"]
 	path = modules/calendar
 	url = git@github.com:kodeplay/kohana_calendar.git
+[submodule "modules/userguide"]
+	path = modules/userguide
+	url = https://github.com/kohana/userguide.git
