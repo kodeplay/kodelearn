@@ -182,11 +182,11 @@ class Controller_Auth extends Controller_Base {
                'email'     => $this->request->post('email'),
                'password'  => Auth::instance()->hash($this->request->post('password')),
             );
-            
+
             $role = ORM::factory('role', $config_settings->default_role);
 
             $user_id = $this->create_user($values, $role);
-            
+
             $user = ORM::factory('user', $user_id);
         	
             //first check if parent's account exists
@@ -201,15 +201,13 @@ class Controller_Auth extends Controller_Base {
 	               'parent_user_id' => $user_id
                 );
                 $role = Model_Role::from_name('Student');
-                $this->create_user($values, $role);
+                $child_id = $this->create_user($values, $role);
                 
-            } else {
-            	$child->parent_user_id = $user_id;
-            	$child->save();
-            }
-            
-            
-            $user = ORM::factory('user', $user_id);
+                $child = ORM::factory('user', $child_id);
+            } 
+
+            $child->parent_user_id = $user_id;
+            $child->save();
             
             if ($config_settings->user_approval) {
                 $auto_login = false;

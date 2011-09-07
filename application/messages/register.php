@@ -12,6 +12,11 @@ return array(
         'email'     => 'Email not valid',
         'Model_User::validate_parent_email' => "Parent Email cannot be same"
     ),
+    'email_child' => array(
+        'not_empty' => 'Please enter an email address',
+        'email'     => 'Email not valid',
+        'Model_User::validate_parent_email' => "Child Email cannot be same"
+    ),
     'firstname' => array(
         'not_empty' => 'Please enter your firstname',
     ),
@@ -30,4 +35,7 @@ return array(
     'parentname' => array(
     'not_empty' => 'Please enter parent\'s name',
     ),
-);
+    'childname' => array(
+    'not_empty' => 'Please enter child\'s name',
+    ),
+    );
