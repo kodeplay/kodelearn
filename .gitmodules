@@ -22,3 +22,15 @@
 [submodule "modules/database"]
 	path = modules/database
 	url = git@github.com:kodeplay/database.git
+[submodule "modules/image"]
+	path = modules/image
+	url = https://github.com/kohana/image.git
+[submodule "modules/orm"]
+	path = modules/orm
+	url = https://github.com/kohana/orm.git
+[submodule "modules/unittest"]
+	path = modules/unittest
+	url = https://github.com/kohana/unittest.git
+[submodule "modules/email"]
+	path = modules/email
+	url = https://github.com/banks/kohana-email.git
