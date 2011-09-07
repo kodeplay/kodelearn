@@ -205,7 +205,7 @@ class Model_User extends ORM {
             $message  = "<b>Dear ". $parent->firstname ." ". $parent->lastname .",<br><br>";
             $message .= "Your account has been created on Kodelearn. <br>But it is waiting for admin approval <br>";
         }
-        $subject = "Parent registration email";
+        $subject = "Kodelearn Parent Registration confirmation";
         $message .=  "<br><br>Thanks,<br> Kodelearn team";
         $html = true;
         Email::send_mail($parent->email, $subject, $message, $html);
@@ -228,7 +228,7 @@ class Model_User extends ORM {
             $message .= "Your account has been created on Kodelearn. <br>But it is waiting for admin approval <br>";
             
         }
-        $subject = "User registration email";
+        $subject = "Kodelearn User Registration confirmation";
         $message .=  "<br><br>Thanks,<br> Kodelearn team";
         $html = true;
         Email::send_mail($user->email, $subject, $message, $html);
@@ -254,7 +254,7 @@ class Model_User extends ORM {
             $message .= "Your account has been created on Kodelearn. <br>But it is waiting for admin approval <br>";
             
         }
-        $subject = "Child email";
+        $subject = "Kodelearn Student Registration confirmation";
         $message .=  "<br><br>Thanks,<br> Kodelearn team";
         $html = true;
         Email::send_mail($child->email, $subject, $message, $html);
