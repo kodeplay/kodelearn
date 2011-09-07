@@ -250,11 +250,8 @@ class Controller_Attendance extends Controller_Base {
         if($this->request->method() === 'POST' && $this->request->post('selected')){
             $event_id = $this->request->post('id');
             $course_id = $this->request->post('course_id');
-            $user = ORM::factory('user');
-            $user->join('courses_users','left')
-                 ->on('courses_users.user_id','=','id');
-            $user->where('courses_users.course_id','=',$course_id); 
-            $users = $user->find_all();
+            $users = Model_Course::get_users($course_id, 'student');
+            
             DB::delete('attendances')->where('event_id', '=', $event_id)
                        ->execute(Database::instance());
             foreach($users as $user){
