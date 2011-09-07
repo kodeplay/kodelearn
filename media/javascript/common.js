@@ -393,20 +393,14 @@ KODELEARN.modules.add('post', (function () {
             }).trigger('change');
             $("a.button", "#post-form").click(function () {
                 var formdata = $("form[name='post_status']").serializeArray();
-                $.ajax({
+                KODELEARN.helpers.request.post({
                     url: KODELEARN.config.base_url+"post/add/",
-                    type: "POST",
-                    dataType: "json",
                     data: formdata,
-                    async: false,
-                    success: function (data) {
-                	if(data.success){
-                	    $('#feeds').prepend(data.html);
-                	} else {
-                	    var msg = data.errors;
-            		    KODELEARN.modules.get('ajax_message').showAjaxError($("#post-form"),msg);
-                	}
-                    }                    
+                    async: true,
+                    error_container: $("#post-form"),
+                    success: function (resp) {
+	                $('#feeds').prepend(resp.html);
+                    }
                 });
             });
         }
@@ -484,12 +478,14 @@ KODELEARN.helpers.request = {
         var options = {
             data: { },         
             async: false,
+            error_container: $("#event_form"),
             success: function (resp) { },
             access_denied: function (resp) { 
                 window.location.href = KODELEARN.config.base_url+'error/access_denied';
             },
-            error: function (resp) { 
-                KODELEARN.modules.get('ajax_message').showAjaxError($("#event_form"), resp.errors);
+            error: function (resp) {
+                console.log(options.error_container); 
+                KODELEARN.modules.get('ajax_message').showAjaxError(options.error_container, resp.errors);
             }
         };
         $.extend(options, o);
@@ -501,7 +497,7 @@ KODELEARN.helpers.request = {
             success: function (resp) {
                 if (resp.success) {
                     options.success(resp);
-                } else if (resp.reason === 'errors' && resp.errors) {
+                } else if (resp.errors) {
                     options.error(resp);
                 } else if (resp.reason === 'access_denied') {
                     options.access_denied(resp);
