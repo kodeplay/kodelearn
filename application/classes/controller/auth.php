@@ -165,6 +165,46 @@ class Controller_Auth extends Controller_Base {
             $this->_errors = $validator->errors('register');
         }
     }
+    
+    private function admin_register() {
+        
+        $user = ORM::factory('user');
+        $config_settings = Config::instance()->load('config');
+        $auto_login = true;
+        $validator = $user->validator_register_admin($this->request->post());
+        $validator->bind(':email', $this->request->post('email'));
+        
+        if ($validator->check()) {
+            
+            $values = array(
+               'firstname' => $this->request->post('firstname'),
+               'lastname'  => $this->request->post('lastname'),
+               'email'     => $this->request->post('email'),
+               'password'  => Auth::instance()->hash($this->request->post('password')),
+               'parent_user_id' => 0
+            );
+            
+            $role = ORM::factory('role', $config_settings->default_role);
+
+            $user_id = $this->create_user($values, $role);
+            $user = ORM::factory('user', $user_id);
+            
+            if ($config_settings->user_approval) {
+                $auto_login = false;
+            }
+            $user->send_user_email();
+            if ($auto_login) {
+                Auth::instance()->login($validator['email'], $validator['password']);
+                Request::current()->redirect('home');
+                exit;
+            } else {
+                Request::current()->redirect('auth/index/admin_aproval/1');
+            }
+            exit;
+        } else {
+            $this->_errors = $validator->errors('register');
+        }
+    }
 
     private function form_register() {   
 
@@ -175,7 +215,7 @@ class Controller_Auth extends Controller_Base {
     	switch(strtolower($role->name)){
     		
             case 'admin':
-                return 'Load Admin Form';
+                $action = 'auth/admin_register';
                 break;
                 
             case 'parent':
@@ -198,6 +238,39 @@ class Controller_Auth extends Controller_Base {
             ->post($this->request->post())
             ->execute()
             ->body();
+    }
+    
+    public function action_admin_register() {
+        $submitted = FALSE;
+        
+        if ($this->request->method() === 'POST' && $this->request->post()) {
+            $submitted = TRUE;
+            $this->admin_register();
+        }
+        
+        $action = 'auth/index';
+        $form = new Stickyform($action, array(), ($submitted ? $this->_errors : array()));
+        $fields = array('email', 'firstname', 'lastname', 'password', 'agree');
+        $form->default_data = array_fill_keys($fields, '');
+        $form->posted_data = $submitted ? $this->request->post() : array();
+        $form->append('Your Email', 'email', 'text')
+            ->append('First Name', 'firstname', 'text')
+            ->append('Last Name', 'lastname', 'text')
+            ->append('Password', 'password', 'password')
+            ->append('Confirm Password', 'confirm_password', 'password')
+            ->append(
+                'I have read and agree the privacy policy',
+                'agree', 
+                'checkbox', 
+                array('attributes' => array('value' => 1))
+            )->append('Signup Now', 'register', 'submit', array('attributes' => array('class' => 'button')));
+        $form->process();
+        
+        $view = View::factory('auth/register/admin')
+                       ->bind('form', $form);
+        
+        $this->content = $view;
+    
     }
     
     public function action_student_register() {
