@@ -187,6 +187,9 @@ class Model_User extends ORM {
     }
 
     public function send_parent_email(){
+        if (!$this->is_role('student')) {
+            throw new Exception('Invalid Role');
+        }
         $parent = ORM::factory('user', $this->parent_user_id);
         if($parent->status == '1'){
             $forgot_password_string = md5($parent->email.time());
@@ -232,8 +235,11 @@ class Model_User extends ORM {
     }    
 
 
-    public function send_child_email(){
-        $child = ORM::factory('user')->where('parent_user_id', '=', $this->id);
+    public function send_child_email() {
+        if (!$this->is_role('parent')) {
+            throw new Exception('Invalid Role');
+        }
+        $child = ORM::factory('user')->where('parent_user_id', '=', $this->id)->find();
         $forgot_password_string = md5($child->email.time());
         $child->forgot_password_string = $forgot_password_string;
         $child->save(); 
@@ -247,6 +253,5 @@ class Model_User extends ORM {
         $message .=  "<br><br>Thanks,<br> Kodelearn team";
         $html = true;
         Email::send_mail($child->email, $subject, $message, $html);
-
     }
 }
