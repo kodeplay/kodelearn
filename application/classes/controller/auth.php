@@ -229,8 +229,8 @@ class Controller_Auth extends Controller_Base {
 
             $user = ORM::factory('user', $user_id);
         	
-            //first check if parent's account exists
-            $child = ORM::factory('user')->where('email', '=', $this->request->post('email_parent'))->find();
+            //first check if child's account exists
+            $child = ORM::factory('user')->where('email', '=', $this->request->post('email_child'))->find();
             if(!$child->id){
                 $child_password = rand(10000, 65000);
                 $values = array(
