@@ -14,7 +14,11 @@
     <body>
         <div class="menubar">
             <div class="wrap twhite">
-                
+                <ul class="lsNone l">
+                    <li class="menu l selected"><a href="http://www.kodelearn.com:3000">Home</a></li>
+                    
+                    <li class="clear"></li>
+                </ul>
                 <ul class="lsNone r">
                     <li class="l menu"><?php echo $topmenu->signuplogin; ?></li>
                 </ul>

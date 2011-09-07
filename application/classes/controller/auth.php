@@ -51,7 +51,7 @@ class Controller_Auth extends Controller_Base {
             ->bind('login_message', $login_msg)
             ->bind('admin_approval', $admin_approval);          
         $form_login = $this->form_login(($submitted_form === 'login'));
-        $form_register = $this->form_register(($submitted_form === 'register'));
+        $form_register = $this->form_register();
         $form_forgot_password = $this->form_forgot_password(($submitted_form === 'forgot_password'));
         $links = array(
             'forgot_password_link' => Html::anchor('#password_recovery', 'Forgot Password', array('class' => 'tdblue bold', 'onclick' => 'forgotPassword();'))
@@ -109,7 +109,7 @@ class Controller_Auth extends Controller_Base {
     }
     
     private function register() {
-    	
+        
         $user = ORM::factory('user');
         $config_settings = Config::instance()->load('config');
         $auto_login = true;
@@ -117,22 +117,22 @@ class Controller_Auth extends Controller_Base {
         $validator->bind(':email', $this->request->post('email'));
         
         if ($validator->check()) {
-        	
+            
             //first check if parent's account exists
-        	$parent = ORM::factory('user')->where('email', '=', $this->request->post('email_parent'))->find();
-        	$user_id = $parent->id;
-        	if(!$parent->id){
-	        	$parent_password = rand(10000, 65000);
-	            $values = array(
-	               'firstname' => $this->request->post('parentname'),
-	               'lastname'  => $this->request->post('lastname'),
-	               'email'     => $this->request->post('email_parent'),
-	               'password'  => Auth::instance()->hash($parent_password),
-	            );
-	            $role = Model_Role::from_name('Parent');
-	            $user_id = $this->create_user($values, $role);
-	            
-        	}
+            $parent = ORM::factory('user')->where('email', '=', $this->request->post('email_parent'))->find();
+            $user_id = $parent->id;
+            if(!$parent->id){
+                $parent_password = rand(10000, 65000);
+                $values = array(
+                   'firstname' => $this->request->post('parentname'),
+                   'lastname'  => $this->request->post('lastname'),
+                   'email'     => $this->request->post('email_parent'),
+                   'password'  => Auth::instance()->hash($parent_password),
+                );
+                $role = Model_Role::from_name('Parent');
+                $user_id = $this->create_user($values, $role);
+                
+            }
             
             $values = array(
                'firstname' => $this->request->post('firstname'),
@@ -151,9 +151,49 @@ class Controller_Auth extends Controller_Base {
             if ($config_settings->user_approval) {
                 $auto_login = false;
             }
-            
+            $user->send_parent_email();
+            $user->send_user_email();
             if ($auto_login) {
-                $user->send_parent_email();
+                Auth::instance()->login($validator['email'], $validator['password']);
+                Request::current()->redirect('home');
+                exit;
+            } else {
+                Request::current()->redirect('auth/index/admin_aproval/1');
+            }
+            exit;
+        } else {
+            $this->_errors = $validator->errors('register');
+        }
+    }
+    
+    private function admin_register() {
+        
+        $user = ORM::factory('user');
+        $config_settings = Config::instance()->load('config');
+        $auto_login = true;
+        $validator = $user->validator_register_admin($this->request->post());
+        $validator->bind(':email', $this->request->post('email'));
+        
+        if ($validator->check()) {
+            
+            $values = array(
+               'firstname' => $this->request->post('firstname'),
+               'lastname'  => $this->request->post('lastname'),
+               'email'     => $this->request->post('email'),
+               'password'  => Auth::instance()->hash($this->request->post('password')),
+               'parent_user_id' => 0
+            );
+            
+            $role = ORM::factory('role', $config_settings->default_role);
+
+            $user_id = $this->create_user($values, $role);
+            $user = ORM::factory('user', $user_id);
+            
+            if ($config_settings->user_approval) {
+                $auto_login = false;
+            }
+            $user->send_user_email();
+            if ($auto_login) {
                 Auth::instance()->login($validator['email'], $validator['password']);
                 Request::current()->redirect('home');
                 exit;
@@ -166,7 +206,139 @@ class Controller_Auth extends Controller_Base {
         }
     }
 
-    private function form_register($submitted = false) {    	
+    private function parent_register() {
+        
+        $user = ORM::factory('user');
+        $config_settings = Config::instance()->load('config');
+        $auto_login = true;
+        $validator = $user->validator_parent_register($this->request->post());
+        $validator->bind(':email', $this->request->post('email'));
+        
+        if ($validator->check()) {
+            
+            $values = array(
+               'firstname' => $this->request->post('firstname'),
+               'lastname'  => $this->request->post('lastname'),
+               'email'     => $this->request->post('email'),
+               'password'  => Auth::instance()->hash($this->request->post('password')),
+            );
+
+            $role = ORM::factory('role', $config_settings->default_role);
+
+            $user_id = $this->create_user($values, $role);
+
+            $user = ORM::factory('user', $user_id);
+        	
+            //first check if child's account exists
+            $child = ORM::factory('user')->where('email', '=', $this->request->post('email_child'))->find();
+            if(!$child->id){
+                $child_password = rand(10000, 65000);
+                $values = array(
+                   'firstname' => $this->request->post('childname'),
+                   'lastname'  => $this->request->post('lastname'),
+                   'email'     => $this->request->post('email_child'),
+                   'password'  => Auth::instance()->hash($child_password),
+	               'parent_user_id' => $user_id
+                );
+                $role = Model_Role::from_name('Student');
+                $child_id = $this->create_user($values, $role);
+                
+                $child = ORM::factory('user', $child_id);
+            } 
+
+            $child->parent_user_id = $user_id;
+            $child->save();
+            
+            if ($config_settings->user_approval) {
+                $auto_login = false;
+            }
+            $user->send_child_email();
+            $user->send_user_email();
+            if ($auto_login) {
+                Auth::instance()->login($validator['email'], $validator['password']);
+                Request::current()->redirect('home');
+                exit;
+            } else {
+                Request::current()->redirect('auth/index/admin_aproval/1');
+            }
+            exit;
+        } else {
+            $this->_errors = $validator->errors('register');
+        }
+    }
+    
+    private function form_register() {   
+
+    	$config_settings = Config::instance()->load('config');
+    	
+    	$role = ORM::factory('role', $config_settings->default_role);
+    	
+    	switch(strtolower($role->name)){
+    		
+            case 'admin':
+            case 'teacher':
+                $action = 'auth/admin_register';
+                break;
+                
+            case 'parent':
+                $action = 'auth/parent_register'; 
+                break;
+                
+    		case 'student':
+    		default:
+		    	$action = 'auth/student_register'; 
+    			
+    	}
+    	
+    	
+        return Request::factory($action)
+            ->method(Request::POST)
+            ->post($this->request->post())
+            ->execute()
+            ->body();
+    }
+    
+    public function action_admin_register() {
+        $submitted = FALSE;
+        
+        if ($this->request->method() === 'POST' && $this->request->post()) {
+            $submitted = TRUE;
+            $this->admin_register();
+        }
+        
+        $action = 'auth/index';
+        $form = new Stickyform($action, array(), ($submitted ? $this->_errors : array()));
+        $fields = array('email', 'firstname', 'lastname', 'password', 'agree');
+        $form->default_data = array_fill_keys($fields, '');
+        $form->posted_data = $submitted ? $this->request->post() : array();
+        $form->append('Your Email', 'email', 'text')
+            ->append('First Name', 'firstname', 'text')
+            ->append('Last Name', 'lastname', 'text')
+            ->append('Password', 'password', 'password')
+            ->append('Confirm Password', 'confirm_password', 'password')
+            ->append(
+                'I have read and agree the privacy policy',
+                'agree', 
+                'checkbox', 
+                array('attributes' => array('value' => 1))
+            )->append('Signup Now', 'register', 'submit', array('attributes' => array('class' => 'button')));
+        $form->process();
+        
+        $view = View::factory('auth/register/admin')
+                       ->bind('form', $form);
+        
+        $this->content = $view;
+    
+    }
+    
+    public function action_student_register() {
+        $submitted = FALSE;
+        
+        if ($this->request->method() === 'POST' && $this->request->post()) {
+            $submitted = TRUE;
+            $this->register();
+        }
+        
         $action = 'auth/index';
         $form = new Stickyform($action, array(), ($submitted ? $this->_errors : array()));
         $fields = array('email', 'email_parent', 'firstname', 'lastname', 'parentname', 'password', 'batch_id', 'course_id', 'agree');
@@ -186,9 +358,49 @@ class Controller_Auth extends Controller_Base {
                 array('attributes' => array('value' => 1))
             )->append('Signup Now', 'register', 'submit', array('attributes' => array('class' => 'button')));
         $form->process();
-        return $form;
+        
+        $view = View::factory('auth/register/student')
+                       ->bind('form', $form);
+        
+        $this->content = $view;
+    
     }
 
+    public function action_parent_register() {
+        $submitted = FALSE;
+        
+        if ($this->request->method() === 'POST' && $this->request->post()) {
+            $submitted = TRUE;
+            $this->parent_register();
+        }
+        
+        $action = 'auth/index';
+        $form = new Stickyform($action, array(), ($submitted ? $this->_errors : array()));
+        $fields = array('email', 'email_child', 'firstname', 'lastname', 'childname', 'password', 'batch_id', 'course_id', 'agree');
+        $form->default_data = array_fill_keys($fields, '');
+        $form->posted_data = $submitted ? $this->request->post() : array();
+        $form->append('Your Email', 'email', 'text')
+            ->append('Child\'s Email', 'email_child', 'text')
+            ->append('First Name', 'firstname', 'text')
+            ->append('Last Name', 'lastname', 'text')
+            ->append('Child\'s Name', 'childname', 'text')
+            ->append('Password', 'password', 'password')
+            ->append('Confirm Password', 'confirm_password', 'password')
+            ->append(
+                'I have read and agree the privacy policy',
+                'agree', 
+                'checkbox', 
+                array('attributes' => array('value' => 1))
+            )->append('Signup Now', 'register', 'submit', array('attributes' => array('class' => 'button')));
+        $form->process();
+        
+        $view = View::factory('auth/register/parent')
+                       ->bind('form', $form);
+        
+        $this->content = $view;
+    
+    }
+    
     public function action_logout() {
         
         Auth::instance()->logout();

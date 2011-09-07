@@ -97,6 +97,36 @@ class Model_User extends ORM {
             ->rule('confirm_password', 'matches', array(':validation', ':field', 'password'))
             ->rule('agree', 'not_empty');
     }
+    
+    public function validator_register_admin($data) {
+        return Validation::factory($data)
+            ->rule('email', 'not_empty')
+            ->rule('email', 'email')
+            ->rule('email', 'Model_User::email_unique')
+            ->rule('firstname', 'not_empty')
+            ->rule('lastname', 'not_empty')
+            ->rule('password', 'not_empty')
+            ->rule('password', 'min_length', array(':value', 8))
+            ->rule('confirm_password', 'matches', array(':validation', ':field', 'password'))
+            ->rule('agree', 'not_empty');
+    }
+
+    public function validator_parent_register($data) {
+        return Validation::factory($data)
+            ->rule('email', 'not_empty')
+            ->rule('email', 'email')
+            ->rule('email', 'Model_User::email_unique')
+            ->rule('email_child', 'not_empty')
+            ->rule('email_child', 'Model_User::validate_parent_email', array(':value', ':email'))
+            ->rule('email_child', 'email')
+            ->rule('firstname', 'not_empty')
+            ->rule('lastname', 'not_empty')
+            ->rule('childname', 'not_empty')
+            ->rule('password', 'not_empty')
+            ->rule('password', 'min_length', array(':value', 8))
+            ->rule('confirm_password', 'matches', array(':validation', ':field', 'password'))
+            ->rule('agree', 'not_empty');
+    }
 
     public function validator_create($data){
 
@@ -157,19 +187,76 @@ class Model_User extends ORM {
     }
 
     public function send_parent_email(){
+        if (!$this->is_role('student')) {
+            throw new Exception('Invalid Role');
+        }
         $parent = ORM::factory('user', $this->parent_user_id);
-        $forgot_password_string = md5($parent->email.time());
-        $parent->forgot_password_string = $forgot_password_string;
-        $parent->save(); 
-        
-        $subject = "Parent email";
-        $message  = "<b>Dear ". $parent->firstname ." ". $parent->lastname .",<br><br>";
-        $message .= "Your child '". $this->firstname ." ". $this->lastname ."' has registered on Kodelearn. <br>The link to access your account is ".Url::site("auth")." <br>";
-        $message .= "User name : ". $parent->email ."<br>"; 
-        $message .= "Set password first : ". Url::site("auth/changepassword/u/".$forgot_password_string); 
-
+        if($parent->status == '1'){
+            $forgot_password_string = md5($parent->email.time());
+            $parent->forgot_password_string = $forgot_password_string;
+            $parent->save(); 
+            
+            $message  = "<b>Dear ". $parent->firstname ." ". $parent->lastname .",<br><br>";
+            $message .= "Your child '". $this->firstname ." ". $this->lastname ."' has registered on Kodelearn. <br>The link to access your account is ".Url::site("auth")." <br>";
+            $message .= "User name : ". $parent->email ."<br>"; 
+            $message .= "Set password first : ". Url::site("auth/changepassword/u/".$forgot_password_string); 
+            
+        } else {
+            $message  = "<b>Dear ". $parent->firstname ." ". $parent->lastname .",<br><br>";
+            $message .= "Your account has been created on Kodelearn. <br>But it is waiting for admin approval <br>";
+        }
+        $subject = "Parent registration email";
         $message .=  "<br><br>Thanks,<br> Kodelearn team";
         $html = true;
         Email::send_mail($parent->email, $subject, $message, $html);
+    }
+
+    
+    public function send_user_email(){
+        $user = ORM::factory('user', $this->id);
+        if($user->status == '1'){
+            $forgot_password_string = md5($user->email.time());
+            $user->forgot_password_string = $forgot_password_string;
+            $user->save(); 
+            
+            $message  = "<b>Dear ". $user->firstname ." ". $user->lastname .",<br><br>";
+            $message .= "Your account has been created on Kodelearn. <br>The link to access your account is ".Url::site("auth")." <br>";
+            $message .= "User name : ". $user->email ."<br>"; 
+            $message .= "Set password first : ". Url::site("auth/changepassword/u/".$forgot_password_string); 
+        } else {
+            $message  = "<b>Dear ". $user->firstname ." ". $user->lastname .",<br><br>";
+            $message .= "Your account has been created on Kodelearn. <br>But it is waiting for admin approval <br>";
+            
+        }
+        $subject = "User registration email";
+        $message .=  "<br><br>Thanks,<br> Kodelearn team";
+        $html = true;
+        Email::send_mail($user->email, $subject, $message, $html);
+    }    
+
+
+    public function send_child_email() {
+        if (!$this->is_role('parent')) {
+            throw new Exception('Invalid Role');
+        }
+        $child = ORM::factory('user')->where('parent_user_id', '=', $this->id)->find();
+        if($child->status == '1'){
+            $forgot_password_string = md5($child->email.time());
+            $child->forgot_password_string = $forgot_password_string;
+            $child->save(); 
+            
+            $message  = "<b>Dear ". $child->firstname ." ". $child->lastname .",<br><br>";
+            $message .= "Your parent '". $this->firstname ." ". $this->lastname ."' has registered on Kodelearn. <br>The link to access your account is ".Url::site("auth")." <br>";
+            $message .= "User name : ". $child->email ."<br>"; 
+            $message .= "Set password first : ". Url::site("auth/changepassword/u/".$forgot_password_string); 
+        } else {
+            $message  = "<b>Dear ". $child->firstname ." ". $child->lastname .",<br><br>";
+            $message .= "Your account has been created on Kodelearn. <br>But it is waiting for admin approval <br>";
+            
+        }
+        $subject = "Child email";
+        $message .=  "<br><br>Thanks,<br> Kodelearn team";
+        $html = true;
+        Email::send_mail($child->email, $subject, $message, $html);
     }
 }
