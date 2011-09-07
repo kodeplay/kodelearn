@@ -40,7 +40,7 @@ Change the value of base_url to the one you would be using.
   
 #### Database && Database Config
 
-Create a new database and import the database schema and dump provided in the _database.sql_ file.
+Create a new Mysql database and import the database schema and dump provided in the _database.sql_ file.
 
 Copy the contents of the file _application/config/sample-database.php_ to a new file _database.php_
 in the same directory and modify the 'default' configuration in it to add your database details.
