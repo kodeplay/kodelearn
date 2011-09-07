@@ -240,16 +240,21 @@ class Model_User extends ORM {
             throw new Exception('Invalid Role');
         }
         $child = ORM::factory('user')->where('parent_user_id', '=', $this->id)->find();
-        $forgot_password_string = md5($child->email.time());
-        $child->forgot_password_string = $forgot_password_string;
-        $child->save(); 
-        
+        if($child->status == '1'){
+            $forgot_password_string = md5($child->email.time());
+            $child->forgot_password_string = $forgot_password_string;
+            $child->save(); 
+            
+            $message  = "<b>Dear ". $child->firstname ." ". $child->lastname .",<br><br>";
+            $message .= "Your parent '". $this->firstname ." ". $this->lastname ."' has registered on Kodelearn. <br>The link to access your account is ".Url::site("auth")." <br>";
+            $message .= "User name : ". $child->email ."<br>"; 
+            $message .= "Set password first : ". Url::site("auth/changepassword/u/".$forgot_password_string); 
+        } else {
+            $message  = "<b>Dear ". $child->firstname ." ". $child->lastname .",<br><br>";
+            $message .= "Your account has been created on Kodelearn. <br>But it is waiting for admin approval <br>";
+            
+        }
         $subject = "Child email";
-        $message  = "<b>Dear ". $child->firstname ." ". $child->lastname .",<br><br>";
-        $message .= "Your parent '". $this->firstname ." ". $this->lastname ."' has registered on Kodelearn. <br>The link to access your account is ".Url::site("auth")." <br>";
-        $message .= "User name : ". $child->email ."<br>"; 
-        $message .= "Set password first : ". Url::site("auth/changepassword/u/".$forgot_password_string); 
-
         $message .=  "<br><br>Thanks,<br> Kodelearn team";
         $html = true;
         Email::send_mail($child->email, $subject, $message, $html);

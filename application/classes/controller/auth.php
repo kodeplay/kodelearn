@@ -151,9 +151,9 @@ class Controller_Auth extends Controller_Base {
             if ($config_settings->user_approval) {
                 $auto_login = false;
             }
-            
+            $user->send_parent_email();
+            $user->send_user_email();
             if ($auto_login) {
-                $user->send_parent_email();
                 Auth::instance()->login($validator['email'], $validator['password']);
                 Request::current()->redirect('home');
                 exit;
@@ -252,9 +252,9 @@ class Controller_Auth extends Controller_Base {
             if ($config_settings->user_approval) {
                 $auto_login = false;
             }
-            
+            $user->send_child_email();
+            $user->send_user_email();
             if ($auto_login) {
-                $user->send_child_email();
                 Auth::instance()->login($validator['email'], $validator['password']);
                 Request::current()->redirect('home');
                 exit;
