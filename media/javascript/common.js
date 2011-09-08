@@ -399,7 +399,8 @@ KODELEARN.modules.add('post', (function () {
                     async: true,
                     error_container: $("#post-form"),
                     success: function (resp) {
-	                $('#feeds').prepend(resp.html);
+                	$('#post').val("");
+                	$('#feeds').prepend(resp.html);
                     }
                 });
             });

@@ -2,7 +2,7 @@
 <div class="pad10 tm10" id="post-form">
     <form name="post_status" method="post">
         <label>Post something: </label>
-        <textarea name="post"></textarea>
+        <textarea name="post" id="post"></textarea>
         <a class="button r">Post</a>
         <div class="clear"></div>
         <div class="vpad10 tm10 hgtfix">
