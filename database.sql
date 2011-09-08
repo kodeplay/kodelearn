@@ -444,12 +444,17 @@ CREATE TABLE IF NOT EXISTS `setting` (
   `config_key` varchar(128) NOT NULL,
   `config_value` varchar(255) NOT NULL,
   PRIMARY KEY (`setting_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
 --
 -- Dumping data for table `setting`
 --
 
+INSERT INTO `setting` (`setting_id`, `group_name`, `config_key`, `config_value`) VALUES
+(1, 'config', 'language_id', '1'),
+(2, 'config', 'default_role', '5'),
+(3, 'config', 'membership', '0'),
+(4, 'config', 'user_approval', '1');
 
 -- --------------------------------------------------------
 
