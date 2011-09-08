@@ -32,9 +32,6 @@ class Controller_Auth extends Controller_Base {
             if (Arr::get($this->request->post(), 'login') !== null) {
                 $submitted_form = 'login';
                 $login_msg = $this->login();
-            } elseif (Arr::get($this->request->post(), 'register') !== null) {
-                $submitted_form = 'register';
-                $this->register();
             } elseif (Arr::get($this->request->post(), 'forgot_password') !== null) {                
                 $display = "block";
                 $submitted_form = 'forgot_password';
@@ -307,7 +304,7 @@ class Controller_Auth extends Controller_Base {
     public function action_admin_register() {
         $submitted = FALSE;
         
-        if ($this->request->method() === 'POST' && $this->request->post()) {
+        if ($this->request->method() === 'POST' && Arr::get($this->request->post(), 'register') !== null) {
             $submitted = TRUE;
             $this->admin_register();
         }
@@ -340,7 +337,7 @@ class Controller_Auth extends Controller_Base {
     public function action_student_register() {
         $submitted = FALSE;
         
-        if ($this->request->method() === 'POST' && $this->request->post()) {
+        if ($this->request->method() === 'POST' && Arr::get($this->request->post(), 'register') !== null) {
             $submitted = TRUE;
             $this->register();
         }
@@ -375,7 +372,7 @@ class Controller_Auth extends Controller_Base {
     public function action_parent_register() {
         $submitted = FALSE;
         
-        if ($this->request->method() === 'POST' && $this->request->post()) {
+        if ($this->request->method() === 'POST' && Arr::get($this->request->post(), 'register') !== null) {
             $submitted = TRUE;
             $this->parent_register();
         }
