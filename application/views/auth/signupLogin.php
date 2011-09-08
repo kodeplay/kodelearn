@@ -1,5 +1,5 @@
 <div class="pageTop withBorder hpad10">
-    <div class="w60 pageTitle l">New User</div>
+    <div class="w60 pageTitle l">Register as <?php echo $role; ?></div>
     <div class="w30 pageTitle l">Existing User</div>
 </div><!-- pageTop -->
 <?php echo $admin_approval; ?>

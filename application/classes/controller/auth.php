@@ -41,6 +41,11 @@ class Controller_Auth extends Controller_Base {
                 $display_success = $this->forgot_password();
             }
         }
+        
+        $config_settings = Config::instance()->load('config');
+        
+        $role = ORM::factory('role', $config_settings->default_role);
+        
         $view = View::factory('auth/signupLogin')
             ->bind('form_login', $form_login)
             ->bind('form_register', $form_register)
@@ -49,6 +54,7 @@ class Controller_Auth extends Controller_Base {
             ->bind('display', $display)
             ->bind('display_success', $display_success)
             ->bind('login_message', $login_msg)
+            ->bind('role', $role)
             ->bind('admin_approval', $admin_approval);          
         $form_login = $this->form_login(($submitted_form === 'login'));
         $form_register = $this->form_register();
