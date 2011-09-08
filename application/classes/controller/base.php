@@ -171,10 +171,26 @@ class Controller_Base extends Controller_Template {
             $user = Auth::instance()->get_user();
             $role = $user->role()->name;
             $username = Auth::instance()->get_user()->firstname;
-            if ($user->is_role('student')) {
+            if ($user->is_role('student') || $user->is_role('parent')) {
                 $avatar = Auth::instance()->get_user()->avatar;
                 $avatar = $avatar === null ? '' : $avatar;
-                $this->view->set('avatar', CacheImage::instance()->resize($avatar, 72, 72));
+                $img_user = CacheImage::instance()->resize($avatar, 72, 72);
+                
+                $childs = ORM::factory('user')->where('parent_user_id', '=', $user->id)->find_all();
+                $img_child = array();
+                foreach($childs as $child){
+                    $child_avatar = $child->avatar;
+                    $child_avatar = $child_avatar === null ? '' : $child_avatar;
+                    $img_child[$child->firstname] = CacheImage::instance()->resize($child_avatar, 30, 30);
+                }
+                
+                $view_avatar = View::factory('account/sidemenu/'.strtolower($role))
+                        ->bind('avatar_user', $img_user)
+                        ->bind('avatar_students', $img_child)
+                        ->bind('user', $user)
+                        ->bind('role', $role)
+                        ;
+                $this->view->set('avatar', $view_avatar);
             }
         }
         $menu = Acl_Menu::factory($role);
