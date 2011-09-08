@@ -33,4 +33,4 @@
 	url = https://github.com/kohana/unittest.git
 [submodule "modules/email"]
 	path = modules/email
-	url = https://github.com/banks/kohana-email.git
+	url = git@github.com:kodeplay/kohana-email.git
