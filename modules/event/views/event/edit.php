@@ -1,4 +1,5 @@
 <div id="event_from" title="Edit Event">
+    <div id="error_msg"></div>
     <form id="event_form" name="event">
     <div class="l">
         <span id="loading">Please wait... Loading Rooms</span>
@@ -25,11 +26,11 @@
         </table>
     </div>
     <?php if($conflict_event){ ?>
-    <div class="l tRed">
-        Conflict With:<br/>
-        <?php echo ucfirst($conflict_event->eventtype) ?>: <?php echo $event_details->name ?> 
-        <a href="#" onclick="Events.switchEvent(<?php echo $conflict_event->id ?>)">Edit this instead</a>
-    </div>
+        <div class="l tRed">
+            Conflict With:<br/>
+            <?php echo ucfirst($conflict_event->eventtype) ?>: <?php echo $event_details->name ?> 
+            <a href="#" onclick="Events.switchEvent(<?php echo $conflict_event->id ?>)">Edit this instead</a>
+        </div>
     <?php } ?>
     </form>
 </div>

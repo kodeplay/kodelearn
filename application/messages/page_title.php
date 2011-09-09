@@ -61,6 +61,7 @@ return array(
     ),
     'system_index' => array(
         'description'     => 'Here you can configure the system settings.',
+        'title'           => 'System',
     ),
     'location_index' => array(
         'description'     => 'This is the locations page you can view the list of all locations here.',

@@ -10,41 +10,46 @@ class Controller_System extends Controller_Base {
             ->bind('image', $image)
             ->bind('success', $success)
             ->bind('upload_url', $upload_url)
+            ->bind('permission_msg', $permission_msg)
             ;
         $institution = ORM::factory('institution', $id=1);
         $config = Config::instance();
         $config_settings = $config->load('config')->as_array();
-
+        $permission_msg = '';
         // if post, validate, save and redirect
         if ($this->request->method() === 'POST' && $this->request->post()) {
-            $submitted = true;
-            $config_post = $this->request->post('config');
-            if(isset($config_post['membership'])){
-                $config_post['membership'];
+            if( Acl::instance()->is_allowed('system_edit')){
+                $submitted = true;
+                $config_post = $this->request->post('config');
+                if(isset($config_post['membership'])){
+                    $config_post['membership'];
+                } else {
+                    $config_post['membership'] = 0;
+                }
+                if(isset($config_post['user_approval'])){
+                    $config_post['user_approval'];
+                } else {
+                    $config_post['user_approval'] = 0;
+                }
+                //echo $config_post['membership'];
+                //exit;
+                $validator = $institution->validator($this->request->post());
+                if ($validator->check()) {                
+                    $institution->name = $this->request->post('name');
+                    $institution->institution_type_id = $this->request->post('institutiontype_id');
+                    $institution->logo = $this->request->post('logo');
+                    $institution->website = $this->request->post('website');
+                    $institution->address = $this->request->post('address');
+                    $institution->save();
+                    $config->load('config')->setMany($config_post);
+                    Session::instance()->set('success', 'Setting saved successfully.');
+                    Request::current()->redirect('system');
+                    exit;    
+                } else {
+                    $this->_errors = $validator->errors('institution');
+                }
             } else {
-                $config_post['membership'] = 0;
-            }
-            if(isset($config_post['user_approval'])){
-                $config_post['user_approval'];
-            } else {
-                $config_post['user_approval'] = 0;
-            }
-            //echo $config_post['membership'];
-            //exit;
-            $validator = $institution->validator($this->request->post());
-            if ($validator->check()) {                
-                $institution->name = $this->request->post('name');
-                $institution->institution_type_id = $this->request->post('institutiontype_id');
-                $institution->logo = $this->request->post('logo');
-                $institution->website = $this->request->post('website');
-                $institution->address = $this->request->post('address');
-                $institution->save();
-                $config->load('config')->setMany($config_post);
-                Session::instance()->set('success', 'Setting saved successfully.');
-                Request::current()->redirect('system');
-                exit;    
-            } else {
-                $this->_errors = $validator->errors('institution');
+                $permission_msg = '<div class="formMessages"><span class="fmIcon bad"></span> <span class="fmText">Permission denied for editing this page.</span><span class="clear">&nbsp;</span></div>';
             }            
         }
         
@@ -59,7 +64,8 @@ class Controller_System extends Controller_Base {
                 'logo' => $institution->logo, 
                 'website' => $institution->website, 
                 'address' => $institution->address, 
-                'config' => $config_settings
+                'config' => $config_settings,
+                
             ), 
             $submitted
         );        

@@ -18,7 +18,7 @@
             <span class="clear">&nbsp;</span>
             </div>
         <?php } ?>              
-    
+    <?php echo $permission_msg; ?>
     <?php echo $form->startform(); ?>
         <table class="formcontainer">
             <tr>

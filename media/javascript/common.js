@@ -214,29 +214,28 @@ KODELEARN.modules.add('ajax_message', (function () {
 	showAjaxError: function (beforeDiv,msgArr){
 
 	    $('#error').remove();
-	    var warning = '<div class="block-error" id="error"><ul>';
+	    var warning = '<div id="error" class="formMessages"><span class="fmIcon bad"></span> <span class="fmText"><ul>';
 	    
 	    for(var i = 0; i < msgArr.length ; i++ ){		
 	    	warning += '<li>'+msgArr[i]+'</li>';	
 	    }		
 	    
-	    warning += '</ul></div>';
+	    warning += '</ul></span><span class="clear">&nbsp;</span></div>';
 	    beforeDiv.before(warning);
 	    scroll(0,0);
 	    $('#error').slideDown(200);
-	    setTimeout('$("#error").slideUp()', 3000);
 	    
 	},
 	showAjaxSuccess : function (beforeDiv,msgArr){
 	    
 	    $('#success').remove();
-	    var warning = '<div class="block-success" id="success"><ul>';
+	    var warning = '<div id="success" class="formMessages"><span class="fmIcon good"></span> <span class="fmText"><ul>';
 	    
 	    for(var i = 0; i < msgArr.length ; i++ ){		
 		warning += '<li>'+msgArr[i]+'</li>';	
 	    }		
 	    
-	    warning += '</ul></div>';
+	    warning += '</ul></span><span class="clear">&nbsp;</span></div>';
 	    beforeDiv.before(warning);
 	    scroll(0,0);
 	    $('#success').slideDown(200);
