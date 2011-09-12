@@ -22,14 +22,17 @@
             </div>
         <?php } ?>      		
 		<form name="batch" id="batch" method="POST" action="<?php echo $links['delete'] ?>">
+        <div class="vm5" align="right">
+            <select id="filter_select" name="filter_select" style="padding:2px; width:150px"> 
+              <option value="filter_name">Name</option>
+            </select>
+            <input type="text" name="filter" id="filter" value="<?php echo $filter['text']; ?>" style="padding:5px" />
+            <a class="button" id="trigger_filter" href="#">Find</a>
+            <input type="hidden" id="filter_url" value="<?php echo $filter['url'] ?>" />
+            <input type="hidden" id="select_val" value="<?php echo $filter['select'] ?>" />
+        </div>
 		<table class="vm10 datatable fullwidth">
 			<?php echo $table['heading'] ?>
-			<tr class="filter" >
-			     <td><input type="hidden" id="filter_url" value="<?php echo $filter_url ?>" /></td>
-			     <td><input type="text" name="filter_name" value="<?php echo $filter_name ?>"  /></td>
-			     <td></td>
-			     <td valign="middle"><a class="button" id="trigger_filter" href="#">Filter</a></td>
-			</tr>
 			<?php foreach($table['data'] as $batch){ ?>
 			<tr>
 				<td><input type="checkbox" name="selected[]" class="selected" value="<?php echo $batch->id ?>" /></td>

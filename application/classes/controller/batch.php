@@ -57,9 +57,17 @@ class Controller_Batch extends Controller_Base
         ));
 
         $url = ('batch/index');
-
+        $filter = array(
+            'text'      => '',
+            'select'    => ''
+        );
+        
         if ($this->request->param('filter_name')) {
             $url .= '/filter_name/'.$this->request->param('filter_name');
+            $filter = array(
+                'text'      => $this->request->param('filter_name'),
+                'select'    => 'filter_name'
+            );
         }
 
         $sorting->set_link($url);
@@ -78,16 +86,14 @@ class Controller_Batch extends Controller_Base
         // Render the pagination links
         $pagination = $pagination->render();
 
-        $filter_name = $this->request->param('filter_name');
-        $filter_url = URL::site('batch/index');
+        $filter['url'] = URL::site('batch/index');
 
         $view = View::factory('batch/list')
             ->bind('links', $links)
             ->bind('table', $table)
             ->bind('count', $count)
             ->bind('pagination', $pagination)
-            ->bind('filter_name', $filter_name)
-            ->bind('filter_url', $filter_url)
+            ->bind('filter', $filter)
             ->bind('success', $success);
 
         $success = Session::instance()->get('success');
