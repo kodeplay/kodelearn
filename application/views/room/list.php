@@ -21,15 +21,20 @@
             <div class="formMessages"><span class="fmIcon bad"></span> <span class="fmText">Room assigned to some event(s)</span><span class="clear">&nbsp;</span></div>
         <?php }?>
         <form name="room" id="room" method="POST" action="<?php echo $links['delete'] ?>">
+        <div class="vm5" align="right">
+            <select id="filter_select" name="filter_select" style="padding:2px; width:150px"> 
+              <option value="filter_room_name">Name</option>
+              <option value="filter_number">Number</option>
+              <option value="filter_location">Location</option>
+            </select>
+            <input type="text" name="filter" id="filter" value="<?php echo $filter; ?>" style="padding:5px" />
+            <a class="button" id="trigger_filter" href="#">Filter</a>
+            <input type="hidden" id="filter_url" value="<?php echo $filter_url ?>" />
+            <input type="hidden" id="select_val" value="<?php echo $filter_select ?>" />
+        </div>
+        
         <table class="vm10 datatable fullwidth">
             <?php echo $table['heading'] ?>
-            <tr class="filter" >
-                 <td><input type="hidden" id="filter_url" value="<?php echo $filter_url ?>" /></td>
-                 <td><input type="text" name="filter_room_name" value="<?php echo $filter_room_name ?>" /></td>
-                 <td></td>
-                 <td></td>
-                 <td valign="middle"><a class="button" id="trigger_filter" href="#">Filter</a></td>
-            </tr>
             <?php foreach($table['data'] as $room){ ?>
             <tr>
                 <td><input type="checkbox" name="selected[]" class="selected" value="<?php echo $room->id ?>" /></td>
