@@ -15,6 +15,11 @@ $(document).ready(function() {
     	$("#filter_select").val($('#select_val').val());
     }
     
+    $('.ui-icon-closethick').live('click', function(){
+    	$('.lightoverlay').hide();
+    
+    });
+    
 });
 
 /**
@@ -261,6 +266,21 @@ KODELEARN.modules.add('rooms', (function () {
 		$('select[name="room_id"]').replaceWith(data.element);
 		$('#loading').fadeOut();
 	    }, "json");
+	},
+	showMap: function (roomId){
+		$("#ajax-loader").show();
+        KODELEARN.helpers.request.ajax({
+            url: KODELEARN.config.base_url+"room/show_map/id/" + roomId,
+            async: true,
+            success: function (resp) {
+        	console.log(resp.html);
+        		$("#ajax-loader").hide();
+        		$('#maps div').html(resp.html);
+        		$('#maps').show();
+	        	
+            }
+        });
+		
 	}
     };
 

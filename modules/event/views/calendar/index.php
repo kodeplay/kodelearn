@@ -29,5 +29,10 @@
         <?php echo $day_events; ?>
     </div>  
 </div>
-
+<div class="lightoverlay" id="maps"> 
+	<a href="#" class="ui-dialog-titlebar-close ui-corner-all" role="button"><span class="ui-icon ui-icon-closethick r">close</span></a>
+	<div>
+	Hi, I am Jimit
+	</div>
+</div>
         
