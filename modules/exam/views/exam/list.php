@@ -26,19 +26,24 @@
             </div>
         <?php } ?>
         <form name="exam" id="exam" method="POST" action="<?php echo $links['delete'] ?>">
+        <div class="vm5" align="right">
+            <select id="filter_select" name="filter_select" style="padding:2px; width:150px"> 
+              <option value="filter_name">Name</option>
+              <option value="filter_grading_period">Grading Period</option>
+              <option value="filter_date">Date</option>
+              <option value="filter_course">Course</option>
+              <option value="filter_total_marks">Total marks</option>
+              <option value="filter_passing_marks">Passing marks</option>
+              <option value="filter_reminder">Reminder</option>
+            </select>
+            <input type="text" name="filter" id="filter" value="<?php echo $filter; ?>" style="padding:5px" />
+            <a class="button" id="trigger_filter" href="#">Filter</a>
+            <input type="hidden" id="filter_url" value="<?php echo $filter_url ?>" />
+            <input type="hidden" id="select_val" value="<?php echo $filter_select ?>" />
+        </div>
         <table class="vm10 datatable fullwidth">
             <?php echo $table['heading']?>
-            <tr class="filter" >
-                 <td><input style="width: 120px;" type="hidden" id="filter_url" value="<?php echo $filter_url ?>" /></td>
-                 <td><input type="text" name="filter_name" value="<?php echo $filter_name ?>" /></td>
-                 <td></td>
-                 <td></td>
-                 <td></td>
-                 <td><input style="width: 25px;" type="text" name="filter_total_marks" value="<?php echo $filter_total_marks ?>" /></td>
-                 <td><input style="width: 25px;" type="text" name="filter_passing_marks" value="<?php echo $filter_passing_marks ?>" /></td>
-                 <td></td>
-                 <td valign="middle"><a class="button" id="trigger_filter" href="#">Filter</a></td>
-            </tr>
+                 
             <?php foreach($table['data'] as $exam){ ?>
             <tr>
                 <td><input type="checkbox" class="selected" name="selected[]" value="<?php echo $exam->id ?>" /></td>
@@ -73,4 +78,28 @@
         </form>
     </div>
     <div class="clear"></div>
+
+<script type="text/javascript" ><!--
+
+$("#filter_select").change(function () {
+    var column = $("#filter_select").val().toLowerCase();
+    if (column == 'filter_date') {
+        $("#filter").addClass('date');
+        $('.date').datepicker({dateFormat: 'yy-mm-dd'});
+    } else {
+        $('.date').datepicker( "destroy" )
+        $("#filter").removeClass('date hasDatepicker');
+    }        
+})
+
+$(document).ready(function() {
+	var column = $("#filter_select").val().toLowerCase();
+    if (column == 'filter_date') {
+    	$("#filter").addClass('date');
+        $('.date').datepicker({dateFormat: 'yy-mm-dd'});
+    }
+    
+});
+    
+//--></script> 
     

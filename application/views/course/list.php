@@ -27,16 +27,20 @@
         
         
         <form name="course" id="course" method="POST" action="<?php echo $links['delete'] ?>">
+        <div class="vm5" align="right">
+            <select id="filter_select" name="filter_select" style="padding:2px; width:150px"> 
+              <option value="filter_name">Name</option>
+              <option value="filter_access_code">Access Code</option>
+              <option value="filter_start_date">Start date</option>
+              <option value="filter_end_date">End Date</option>
+            </select>
+            <input type="text" name="filter" id="filter" value="<?php echo $filter; ?>" style="padding:5px" />
+            <a class="button" id="trigger_filter" href="#">Filter</a>
+            <input type="hidden" id="filter_url" value="<?php echo $filter_url ?>" />
+            <input type="hidden" id="select_val" value="<?php echo $filter_select ?>" />
+        </div>
         <table class="vm10 datatable fullwidth">
             <?php echo $table['heading'] ?>
-            <tr class="filter">
-                <td><input type="hidden" id="filter_url" value="<?php echo $filter_url ?>" /></td>
-                <td><input type="text" name="filter_name" value="<?php echo $filter_name ?>" /></td>
-                <td><input type="text" name="filter_access_code" value="<?php echo $filter_access_code ?>" /></td>
-                <td><input type="text" class="date" name="filter_start_date" value="<?php echo $filter_start_date ?>" /></td>
-                <td><input type="text" class="date" name="filter_end_date" value="<?php echo $filter_end_date ?>" /></td>
-                <td valign="middle"><a class="button" id="trigger_filter" href="#">Filter</a></td>
-            </tr>
             <?php foreach($table['data'] as $course){ ?>
             <tr>
                 <td><input type="checkbox" class="selected" name="selected[]" value="<?php echo $course->id ?>" /></td>
@@ -76,3 +80,27 @@
     </div><!-- content -->
     
     <div class="clear"></div>
+    
+<script type="text/javascript" ><!--
+
+$("#filter_select").change(function () {
+	var column = $("#filter_select").val().toLowerCase();
+    if (column == 'filter_start_date' || column == 'filter_end_date') {
+    	$("#filter").addClass('date');
+    	$('.date').datepicker({dateFormat: 'yy-mm-dd'});
+    } else {
+    	$('.date').datepicker( "destroy" )
+    	$("#filter").removeClass('date hasDatepicker');
+    }        
+})
+
+$(document).ready(function() {
+    var column = $("#filter_select").val().toLowerCase();
+    if (column == 'filter_start_date' || column == 'filter_end_date') {
+        $("#filter").addClass('date');
+        $('.date').datepicker({dateFormat: 'yy-mm-dd'});
+    }
+    
+});
+    
+//--></script> 
