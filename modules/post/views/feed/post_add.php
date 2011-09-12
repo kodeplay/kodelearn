@@ -10,7 +10,7 @@
                 <img src = "<?php echo $avatar; ?>"></img>
             </td>
             <td class="vatop">
-                <p class="h3"><?php echo $user->fullname(); ?></p><br>
+                <p class="h3"><span class = "roleIcon <?php echo $user->role(); ?>">&nbsp;</span><?php echo $user->fullname(); ?></p><br>
                 <p class="h5 lh140" ><?php echo Html::chars($post->message); ?></p><br/>
                 <p class = "h6 tlGray"><?php echo $span; ?></p>
             </td>

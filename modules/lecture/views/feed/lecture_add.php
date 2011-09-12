@@ -11,7 +11,7 @@
             </td>
             <td class="vatop">
                 <p class="h3"><?php echo $user->fullname(); ?></p><br>
-                <p class="h5 lh140" >Has added <?php echo $lecture ?> Lecture for <?php echo $lecture->course->toLink() ?></p>
+                <p class="h5 lh140" ><span class = "roleIcon <?php echo $user->role(); ?>">&nbsp;</span>Has added <?php echo $lecture ?> Lecture for <?php echo $lecture->course->toLink() ?></p>
                 <p class="h5 lh140" >It is scheduled on</p>
                 <?php if($lecture->type == 'once') {?>
                 <p class="h5 lh140 bold"><a class = "crsrPoint" onclick="Feeds.show('<?php echo date("d", $lecture->start_date); ?>','<?php echo date("m", $lecture->start_date); ?>','<?php echo date("Y", $lecture->start_date); ?>')"><?php echo date('d M Y ', $lecture->start_date) . '';
