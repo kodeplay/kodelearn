@@ -28,22 +28,28 @@
             </div>
         <?php } ?>
         <form name="form" id="form" method="POST" action="<?php echo $links['delete'] ?>">
+		<div class="vm5" align="right">
+    		<select id="filter_select" name="filter_select" style="padding:2px; width:150px"> 
+    		  <option value="filter_id">Roll No</option>
+    		  <option value="filter_name">Name</option>
+    		  <option value="filter_batch">Batch</option>
+    		  <option value="filter_course">Course</option>
+    		  <option value="filter_approved">Approval status</option>
+    		</select>
+    		<input type="text" name="filter" id="filter" value="<?php echo $filter; ?>" style="padding:5px" />
+    		<a class="button" id="trigger_filter" href="#">Filter</a>
+    		<input type="hidden" id="filter_url" value="<?php echo $filter_url ?>" />
+    		<input type="hidden" id="select_val" value="<?php echo $filter_select ?>" />
+        </div>
+		
 		<table class="vm10 datatable fullwidth">
 			<?php echo $table['heading'] ?>
-            <tr class="filter" >
-                 <td><input type="hidden" id="filter_url" value="<?php echo $filter_url ?>" /></td>
-                 <td><input type="text" name="filter_id" value="<?php echo $filter_id ?>" style="width: 40px;" /></td>
-                 <td><input type="text" name="filter_name" value="<?php echo $filter_name ?>" /></td>
-                 <td></td>
-                 <td></td>
-                 <td valign="middle"><a class="button" id="trigger_filter" href="#">Filter</a></td>
-            </tr>
-			<?php foreach($users as $user) { ?>
+            <?php foreach($users as $user) { ?>
 			<tr>
 				<td><input class="selected" name="selected[]" value="<?php echo $user->id ?>" type="checkbox" /></td>
 				<td class="tac"><?php echo $user->id ?></td>
 				<td>
-					<div class="l w20"><img src="<?php echo $cacheimage->resize($user->avatar, 56, 56);?>" alt="User" /></div>
+					<div class="l w20"><img src="<?php echo $cacheimage->resize($user->avatar, 40, 40);?>" alt="User" /></div>
 					<div class="l">
 						<p title="<?php echo $user->fullname() ?>"><?php echo Text::limit_chars($user->fullname(), 30); ?></p>
 						<p title="<?php echo $user->email ?>"><?php echo Text::limit_chars($user->email, 30); ?></p>
@@ -55,6 +61,7 @@
 				<?php echo implode(', ', $user->batches()->as_array(NULL, 'name')); ?>
 				</td>
 				<td><?php echo implode(', ', $user->courses()->as_array(NULL, 'name')); ?></td>
+				<td><?php echo $user->getstatus(); ?></td>
 				<td>
 					<p>
 					   <?php if (Acl::instance()->is_allowed('user_edit')) {?>

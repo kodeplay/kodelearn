@@ -9,7 +9,12 @@ $(document).ready(function() {
         }
     });
 
-    KODELEARN.modules.load();    
+    KODELEARN.modules.load();
+    
+    if($('#filter').val()){
+    	$("#filter_select").val($('#select_val').val());
+    }
+    
 });
 
 /**
@@ -86,12 +91,10 @@ KODELEARN.modules.add('filter', (function () {
 	    
 	    $('#trigger_filter').click(function(){
 		var url = $('#filter_url').val();
-		
-		$('input[name*="filter_"]').each(function (){
-		    if($(this).val()){
-			url += '/' + $(this).attr('name') + '/' + encodeURIComponent($(this).val());
-		    }
-		});
+		if($('#filter').val()){
+			url += '/' + $('#filter_select').val() + '/' + encodeURIComponent($('#filter').val());
+			
+		}
 		location = url;
 	    });
 	    $('tr.filter td input').keypress(function(e){

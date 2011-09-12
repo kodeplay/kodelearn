@@ -19,47 +19,86 @@ class Controller_User extends Controller_Base {
             $order = 'DESC';
         }
         
-        $user = ORM::factory('user');
-
-        if($this->request->param('filter_name')){
-            $user->and_where_open()
-                ->where('users.firstname', 'LIKE', '%' . $this->request->param('filter_name') . '%')
-                ->or_where('users.lastname', 'LIKE', '%' . $this->request->param('filter_name') . '%')
-                ->and_where_close();
+        if($this->request->param('filter_batch')) {
+            $filters = array(
+                    'filter_batch' => $this->request->param('filter_batch'),
+                    
+            );
+            
+            $total = Model_User::users_total_batch($filters);
+            
+            $count = $total;
+            
+            $pagination = Pagination::factory(array(
+                'total_items'    => $count,
+                'items_per_page' => 50,
+            ));
+            
+            $filters = array_merge($filters, array(
+                'sort' => $sort,
+                'order' => $order,
+                'limit' => $pagination->items_per_page,
+                'offset' => $pagination->offset,            
+            ));
+            
+            $users = Model_User::users_batch($filters);
+        
+        } else if($this->request->param('filter_course')) {
+            $filters = array(
+                    'filter_course' => $this->request->param('filter_course'),
+                    
+            );
+            
+            $total = Model_User::users_total_course($filters);
+            
+            $count = $total;
+            
+            $pagination = Pagination::factory(array(
+                'total_items'    => $count,
+                'items_per_page' => 50,
+            ));
+            
+            $filters = array_merge($filters, array(
+                'sort' => $sort,
+                'order' => $order,
+                'limit' => $pagination->items_per_page,
+                'offset' => $pagination->offset,            
+            ));
+            
+            $users = Model_User::users_course($filters);
+        } else {
+            $filters = array(
+                    'filter_id' => $this->request->param('filter_id'),
+                    'filter_name' => $this->request->param('filter_name'),
+                    'filter_approved' => $this->request->param('filter_approved'),
+            );
+            
+            $total = Model_User::users_total($filters);
+            
+            $count = $total;
+            
+            $pagination = Pagination::factory(array(
+                'total_items'    => $count,
+                'items_per_page' => 50,
+            ));
+            
+            $filters = array_merge($filters, array(
+                'sort' => $sort,
+                'order' => $order,
+                'limit' => $pagination->items_per_page,
+                'offset' => $pagination->offset,            
+            ));
+            
+            $users = Model_User::users($filters);
+            
         }
-        
-        if($this->request->param('filter_id')){
-            $user->where('users.id', '=', (int) $this->request->param('filter_id') );
-        }
-        
-        $count = $user->count_all();
-        
-        $pagination = Pagination::factory(array(
-            'total_items'    => $count,
-            'items_per_page' => 50,
-        ));
-        
-        if($this->request->param('filter_name')){
-            $user->and_where_open()
-                ->where('users.firstname', 'LIKE', '%' . $this->request->param('filter_name') . '%')
-                ->or_where('users.lastname', 'LIKE', '%' . $this->request->param('filter_name') . '%')
-                ->and_where_close();
-        }
-        
-        if($this->request->param('filter_id')){
-            $user->where('users.id', '=', (int) $this->request->param('filter_id') );
-        }
-        
-        $users = $user->order_by($sort, $order)
-            ->limit($pagination->items_per_page)
-            ->offset($pagination->offset)
-            ->find_all();
         
         $sorting = new Sort(array(
             'Roll No'           => 'id',
             'Name'              => array('sort' => 'firstname', 'attributes' => array('width' => 330)),
             'Batch'             => array('sort' => '', 'attributes' => array('width' => 140)),
             'Courses'           => array('sort' => '', 'attributes' => array('width' => 140)),
+            'Approved'          => array('sort' => 'status', 'attributes' => array('width' => 140)),
             'Actions'           => ''
         ));
         
@@ -67,10 +106,32 @@ class Controller_User extends Controller_Base {
         
         if($this->request->param('filter_name')){
             $url .= '/filter_name/'.$this->request->param('filter_name');
+            $filter = $this->request->param('filter_name');
+            $filter_select = 'filter_name';
         }
         
         if($this->request->param('filter_id')){
             $url .= '/filter_id/'.$this->request->param('filter_id');
+            $filter = $this->request->param('filter_id');
+            $filter_select = 'filter_id';
+        }
+        
+        if($this->request->param('filter_batch')){
+            $url .= '/filter_batch/'.$this->request->param('filter_batch');
+            $filter = $this->request->param('filter_batch');
+            $filter_select = 'filter_batch';
+        }
+        
+        if($this->request->param('filter_course')){
+            $url .= '/filter_course/'.$this->request->param('filter_course');
+            $filter = $this->request->param('filter_course');
+            $filter_select = 'filter_course';
+        }
+        
+        if($this->request->param('filter_approved')){
+            $url .= '/filter_approved/'.$this->request->param('filter_approved');
+            $filter = $this->request->param('filter_approved');
+            $filter_select = 'filter_approved';
         }
         
         $sorting->set_link($url);
@@ -91,7 +152,6 @@ class Controller_User extends Controller_Base {
         $table['heading'] = $heading;
         $table['data'] = $users;
         
-        $filter_name = $this->request->param('filter_name');
         $filter_url = URL::site('user/index');
         $cacheimage = CacheImage::instance();
 
@@ -104,8 +164,8 @@ class Controller_User extends Controller_Base {
             ->bind('count', $count)
             ->bind('links', $links)
             ->bind('pagination', $pagination)
-            ->bind('filter_name', $filter_name)
-            ->bind('filter_id', $filter_id)
+            ->bind('filter', $filter)
+            ->bind('filter_select', $filter_select)
             ->bind('filter_url', $filter_url)
             ->bind('cacheimage', $cacheimage)
             ->bind('success', $success);

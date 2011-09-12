@@ -24,6 +24,14 @@ class Model_User extends ORM {
     public function fullname() {
         return $this->firstname . ' ' . $this->lastname;
     }
+    
+    public function getstatus() {
+        if($this->status == "1"){
+            return "Yes";
+        } else {
+            return "No";
+        }
+    }
 
     /**
      * Method to get the role of the user
@@ -258,5 +266,130 @@ class Model_User extends ORM {
         $message .=  "<br><br>Thanks,<br> Kodelearn team";
         $html = true;
         Email::send_mail($child->email, $subject, $message, $html);
+    }
+    
+    public static function users_total($filters=array()) {
+       
+        $user = ORM::factory('user');
+        if (isset($filters['filter_id'])) {
+            $user->where('users.id', '=', (int) $filters['filter_id'] );
+        }        
+        if (isset($filters['filter_name'])) {
+            $user->and_where_open()
+                ->where('users.firstname', 'LIKE', '%' . $filters['filter_name'] . '%')
+                ->or_where('users.lastname', 'LIKE', '%' . $filters['filter_name'] . '%')
+                ->and_where_close();
+        } 
+        if (isset($filters['filter_approved'])) {
+            $filter_approved = $filters['filter_approved'];
+            if($filters['filter_approved'] == "yes" || $filters['filter_approved'] == "Yes" || $filters['filter_approved'] == "YES" || $filters['filter_approved'] == "Y" || $filters['filter_approved'] == "YE" || $filters['filter_approved'] == "y" || $filters['filter_approved'] == "ye")  {
+                $filter_approved = '1';
+            } else if($filters['filter_approved'] == "no" || $filters['filter_approved'] == "No" || $filters['filter_approved'] == "NO" || $filters['filter_approved'] == "N" || $filters['filter_approved'] == "n") {
+                $filter_approved = '0';
+            }
+            $user->where('users.status', '=', (int) $filter_approved );
+        }       
+        
+        return $user->count_all();
+    }
+    
+    public static function users($filters=array()) {
+       
+        $user = ORM::factory('user');
+        
+        if (isset($filters['filter_id'])) {
+            $user->where('users.id', '=', (int) $filters['filter_id'] );
+        }        
+        if (isset($filters['filter_name'])) {
+            $user->and_where_open()
+                ->where('users.firstname', 'LIKE', '%' . $filters['filter_name'] . '%')
+                ->or_where('users.lastname', 'LIKE', '%' . $filters['filter_name'] . '%')
+                ->and_where_close();
+        }
+        if (isset($filters['filter_approved'])) {
+            $filter_approved = $filters['filter_approved'];
+            if($filters['filter_approved'] == "yes" || $filters['filter_approved'] == "Yes" || $filters['filter_approved'] == "YES" || $filters['filter_approved'] == "Y" || $filters['filter_approved'] == "YE" || $filters['filter_approved'] == "y" || $filters['filter_approved'] == "ye")  {
+                $filter_approved = '1';
+            } else if($filters['filter_approved'] == "no" || $filters['filter_approved'] == "No" || $filters['filter_approved'] == "NO" || $filters['filter_approved'] == "N" || $filters['filter_approved'] == "n") {
+                $filter_approved = '0';
+            }
+            $user->where('users.status', '=', (int) $filter_approved );
+        }        
+        if (isset($filters['sort'])) {
+            $user->order_by($filters['sort'], Arr::get($filters, 'order', 'ASC'));
+        }
+        if (isset($filters['limit'])) {
+            $user->limit($filters['limit'])
+                ->offset(Arr::get($filters, 'offset', 0));            
+        }
+        return $user->find_all();
+    }
+    
+    public static function users_total_batch($filters=array()) {
+       
+        $user = ORM::factory('user')
+            ->join('batches_users','left')
+            ->on('batches_users.user_id','=','users.id')
+            ->join('batches','left')
+            ->on('batches_users.batch_id','=','batches.id');
+        $user->where('batches.name', 'like', '%'. $filters['filter_batch'].'%' );
+        $user->group_by('users.id');
+        
+        $users = $user->find_all()->as_array(null,'id');
+        
+        return count($users);
+    }
+    
+    public static function users_batch($filters=array()) {
+       
+        $user = ORM::factory('user')
+            ->join('batches_users','left')
+            ->on('batches_users.user_id','=','users.id')
+            ->join('batches','left')
+            ->on('batches_users.batch_id','=','batches.id');
+        $user->where('batches.name', 'like', '%'. $filters['filter_batch'].'%' );
+        $user->group_by('users.id');        
+        if (isset($filters['sort'])) {
+            $user->order_by($filters['sort'], Arr::get($filters, 'order', 'ASC'));
+        }
+        if (isset($filters['limit'])) {
+            $user->limit($filters['limit'])
+                ->offset(Arr::get($filters, 'offset', 0));            
+        }
+        return $user->find_all();
+    }
+    
+    public static function users_total_course($filters=array()) {
+       
+        $user = ORM::factory('user')
+            ->join('courses_users','left')
+            ->on('courses_users.user_id','=','users.id')
+            ->join('courses','left')
+            ->on('courses_users.course_id','=','courses.id');
+        $user->where('courses.name', 'like', '%'. $filters['filter_course'].'%' );
+        $user->group_by('users.id');
+        
+        $users = $user->find_all()->as_array(null,'id');
+        
+        return count($users);
+    }
+    
+    public static function users_course($filters=array()) {
+       
+        $user = ORM::factory('user')
+            ->join('courses_users','left')
+            ->on('courses_users.user_id','=','users.id')
+            ->join('courses','left')
+            ->on('courses_users.course_id','=','courses.id');
+        $user->where('courses.name', 'like', '%'. $filters['filter_course'].'%' );
+        $user->group_by('users.id');        
+        if (isset($filters['sort'])) {
+            $user->order_by($filters['sort'], Arr::get($filters, 'order', 'ASC'));
+        }
+        if (isset($filters['limit'])) {
+            $user->limit($filters['limit'])
+                ->offset(Arr::get($filters, 'offset', 0));            
+        }
+        return $user->find_all();
     }
 }
