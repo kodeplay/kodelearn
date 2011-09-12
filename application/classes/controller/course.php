@@ -44,18 +44,26 @@ class Controller_Course extends Controller_Base {
         
         if($this->request->param('filter_name')){
             $url .= '/filter_name/'.$this->request->param('filter_name');
+            $filter = $this->request->param('filter_name');
+            $filter_select = 'filter_name';
         }
         
         if($this->request->param('filter_access_code')){
             $url .= '/filter_access_code/'.$this->request->param('filter_access_code');
+            $filter = $this->request->param('filter_access_code');
+            $filter_select = 'filter_access_code';
         }
         
         if($this->request->param('filter_start_date')){
             $url .= '/filter_start_date/'.$this->request->param('filter_start_date');
+            $filter = $this->request->param('filter_start_date');
+            $filter_select = 'filter_start_date';
         }
         
         if($this->request->param('filter_end_date')){
             $url .= '/filter_end_date/'.$this->request->param('filter_end_date');
+            $filter = $this->request->param('filter_end_date');
+            $filter_select = 'filter_end_date';
         }
         
         $sorting->set_link($url);        
@@ -88,10 +96,8 @@ class Controller_Course extends Controller_Base {
             ->bind('count', $total)
             ->bind('links', $links)
             ->bind('pagination', $pagination)
-            ->bind('filter_name', $filter_name)
-            ->bind('filter_access_code', $filter_access_code)
-            ->bind('filter_start_date', $filter_start_date)
-            ->bind('filter_end_date', $filter_end_date)
+            ->bind('filter', $filter)
+            ->bind('filter_select', $filter_select)
             ->bind('filter_url', $filter_url)
             ->bind('success', $success)
             ;

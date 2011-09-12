@@ -62,45 +62,110 @@ class Controller_Exam extends Controller_Base {
             $order = 'DESC';
         }
         
-        $exam = ORM::factory('exam');
+        if($this->request->param('filter_grading_period')) {
+            $filters = array(
+                    'filter_grading_period' => $this->request->param('filter_grading_period'),
+                    
+            );
+            
+            $total = Model_Exam::exams_total_grading_period($filters);
+            
+            $count = $total;
+            
+            $pagination = Pagination::factory(array(
+                'total_items'    => $count,
+                'items_per_page' => 5,
+            ));
+            
+            $filters = array_merge($filters, array(
+                'sort' => $sort,
+                'order' => $order,
+                'limit' => $pagination->items_per_page,
+                'offset' => $pagination->offset,            
+            ));
+            
+            $exams = Model_Exam::exams_grading_period($filters);    
         
-        if($this->request->param('filter_name')){
-            $exam->where('exams.name', 'LIKE', '%' . $this->request->param('filter_name') . '%');
+        } else if($this->request->param('filter_date')) {
+            
+            $sdate = strtotime($this->request->param('filter_date'));
+            $edate = $sdate + 86400;            
+            $filters = array(
+                    'sdate' => $sdate,
+                    'edate' => $edate,
+            );
+            
+            $total = Model_Exam::exams_total_date($filters);
+            
+            $count = $total;
+            
+            $pagination = Pagination::factory(array(
+                'total_items'    => $count,
+                'items_per_page' => 5,
+            ));
+            
+            $filters = array_merge($filters, array(
+                'sort' => $sort,
+                'order' => $order,
+                'limit' => $pagination->items_per_page,
+                'offset' => $pagination->offset,            
+            ));
+            
+            $exams = Model_Exam::exams_date($filters);    
+            
+        } else if($this->request->param('filter_course')) {
+            
+            $filters = array(
+                    'filter_course' => $this->request->param('filter_course'),
+                    
+            );
+            
+            $total = Model_Exam::exams_total_course($filters);
+            
+            $count = $total;
+            
+            $pagination = Pagination::factory(array(
+                'total_items'    => $count,
+                'items_per_page' => 5,
+            ));
+            
+            $filters = array_merge($filters, array(
+                'sort' => $sort,
+                'order' => $order,
+                'limit' => $pagination->items_per_page,
+                'offset' => $pagination->offset,            
+            ));
+            
+            $exams = Model_Exam::exams_course($filters);    
+            
+        } else {
+            
+            $filters = array(
+                    'filter_name' => $this->request->param('filter_name'),
+                    'filter_passing_marks' => $this->request->param('filter_passing_marks'),
+                    'filter_total_marks' => $this->request->param('filter_total_marks'),
+                    'filter_reminder' => $this->request->param('filter_reminder'),
+            );
+            
+            $total = Model_Exam::exams_total($filters);
+            
+            $count = $total;
+            
+            $pagination = Pagination::factory(array(
+                'total_items'    => $count,
+                'items_per_page' => 5,
+            ));
+            
+            $filters = array_merge($filters, array(
+                'sort' => $sort,
+                'order' => $order,
+                'limit' => $pagination->items_per_page,
+                'offset' => $pagination->offset,            
+            ));
+            
+            $exams = Model_Exam::exams($filters);
+            
         }
-        
-        if($this->request->param('filter_passing_marks')){
-            $exam->where('exams.passing_marks', 'LIKE', '%' . $this->request->param('filter_passing_marks') . '%');
-        }
-        
-        if($this->request->param('filter_total_marks')){
-            $exam->where('exams.total_marks', 'LIKE', '%' . $this->request->param('filter_total_marks') . '%');
-        }
-        
-        $count = $exam->count_all();
-        
-        $pagination = Pagination::factory(array(
-            'total_items'    => $count,
-            'items_per_page' => 5,
-        ));
-        
-        if($this->request->param('filter_name')){
-            $exam->where('exams.name', 'LIKE', '%' . $this->request->param('filter_name') . '%');
-        }
-        
-        if($this->request->param('filter_passing_marks')){
-            $exam->where('exams.passing_marks', 'LIKE', '%' . $this->request->param('filter_passing_marks') . '%');
-        }
-        
-        if($this->request->param('filter_total_marks')){
-            $exam->where('exams.total_marks', 'LIKE', '%' . $this->request->param('filter_total_marks') . '%');
-        }
-        
-        $exam->group_by('id')
-            ->order_by($sort, $order)
-            ->limit($pagination->items_per_page)
-            ->offset($pagination->offset)
-            ;
-        $exams = $exam->find_all();
         
         $sorting = new Sort(array(
             'Name'              => 'name',
@@ -117,14 +182,44 @@ class Controller_Exam extends Controller_Base {
         
         if($this->request->param('filter_name')){
             $url .= '/filter_name/'.$this->request->param('filter_name');
+            $filter = $this->request->param('filter_name');
+            $filter_select = 'filter_name';
         }
         
         if($this->request->param('filter_passing_marks')){
             $url .= '/filter_passing_marks/'.$this->request->param('filter_passing_marks');
+            $filter = $this->request->param('filter_passing_marks');
+            $filter_select = 'filter_passing_marks';
         }
         
         if($this->request->param('filter_total_marks')){
             $url .= '/filter_total_marks/'.$this->request->param('filter_total_marks');
+            $filter = $this->request->param('filter_total_marks');
+            $filter_select = 'filter_total_marks';
+        }
+        
+        if($this->request->param('filter_grading_period')){
+            $url .= '/filter_grading_period/'.$this->request->param('filter_grading_period');
+            $filter = $this->request->param('filter_grading_period');
+            $filter_select = 'filter_grading_period';
+        }
+        
+        if($this->request->param('filter_date')){
+            $url .= '/filter_date/'.$this->request->param('filter_date');
+            $filter = $this->request->param('filter_date');
+            $filter_select = 'filter_date';
+        }
+        
+        if($this->request->param('filter_course')){
+            $url .= '/filter_course/'.$this->request->param('filter_course');
+            $filter = $this->request->param('filter_course');
+            $filter_select = 'filter_course';
+        }
+        
+        if($this->request->param('filter_reminder')){
+            $url .= '/filter_reminder/'.$this->request->param('filter_reminder');
+            $filter = $this->request->param('filter_reminder');
+            $filter_select = 'filter_reminder';
         }
         
         $sorting->set_link($url);
@@ -157,9 +252,8 @@ class Controller_Exam extends Controller_Base {
             ->bind('links', $links)
             ->bind('table', $table)
             ->bind('count', $count)
-            ->bind('filter_name', $filter_name)
-            ->bind('filter_passing_marks', $filter_passing_marks)
-            ->bind('filter_total_marks', $filter_total_marks)
+            ->bind('filter', $filter)
+            ->bind('filter_select', $filter_select)
             ->bind('filter_url', $filter_url)
             ->bind('success', $success)
             ->bind('pagination', $pagination);

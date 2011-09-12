@@ -72,4 +72,148 @@ class Model_Exam extends ORM {
         return Html::anchor($url, (string)$this);
     }
     
+    public static function exams_total($filters=array()) {
+       
+        $exam = ORM::factory('exam');
+        if (isset($filters['filter_name'])) {
+            $exam->where('exams.name', 'LIKE', '%' . $filters['filter_name'] . '%');
+        }        
+        if (isset($filters['filter_passing_marks'])) {
+            $exam->where('exams.passing_marks', 'LIKE', '%' . $filters['filter_passing_marks'] . '%');
+        } 
+        if (isset($filters['filter_total_marks'])) {
+            $exam->where('exams.total_marks', 'LIKE', '%' . $filters['filter_total_marks'] . '%');
+        } 
+        if (isset($filters['filter_reminder'])) {
+            if($filters['filter_reminder'] == "yes" || $filters['filter_reminder'] == "Yes" || $filters['filter_reminder'] == "YES" || $filters['filter_reminder'] == "ye" || $filters['filter_reminder'] == "Ye" || $filters['filter_reminder'] == "YE" || $filters['filter_reminder'] == "Y" || $filters['filter_reminder'] == "y") {
+                $exam->where('exams.reminder', '=', '1');
+            } else if ($filters['filter_reminder'] == "no" || $filters['filter_reminder'] == "No" || $filters['filter_reminder'] == "NO" || $filters['filter_reminder'] == "N" || $filters['filter_reminder'] == "n") {
+                $exam->where('exams.reminder', '=', '0');
+            }
+            
+        }       
+        
+        return $exam->count_all();
+    }
+    
+    public static function exams($filters=array()) {
+       
+        $exam = ORM::factory('exam');
+        if (isset($filters['filter_name'])) {
+            $exam->where('exams.name', 'LIKE', '%' . $filters['filter_name'] . '%');
+        }        
+        if (isset($filters['filter_passing_marks'])) {
+            $exam->where('exams.passing_marks', 'LIKE', '%' . $filters['filter_passing_marks'] . '%');
+        } 
+        if (isset($filters['filter_total_marks'])) {
+            $exam->where('exams.total_marks', 'LIKE', '%' . $filters['filter_total_marks'] . '%');
+        }
+        if (isset($filters['filter_reminder'])) {
+            if($filters['filter_reminder'] == "yes" || $filters['filter_reminder'] == "Yes" || $filters['filter_reminder'] == "YES" || $filters['filter_reminder'] == "ye" || $filters['filter_reminder'] == "Ye" || $filters['filter_reminder'] == "YE" || $filters['filter_reminder'] == "Y" || $filters['filter_reminder'] == "y") {
+                $exam->where('exams.reminder', '=', '1');
+            } else if ($filters['filter_reminder'] == "no" || $filters['filter_reminder'] == "No" || $filters['filter_reminder'] == "NO" || $filters['filter_reminder'] == "N" || $filters['filter_reminder'] == "n") {
+                $exam->where('exams.reminder', '=', '0');
+            }
+            
+        }
+        
+        $exam->group_by('id'); 
+              
+        if (isset($filters['sort'])) {
+            $exam->order_by($filters['sort'], Arr::get($filters, 'order', 'ASC'));
+        }
+        if (isset($filters['limit'])) {
+            $exam->limit($filters['limit'])
+                ->offset(Arr::get($filters, 'offset', 0));            
+        }
+        return $exam->find_all();
+    }
+    
+    public static function exams_total_grading_period($filters=array()) {
+       
+        $exam = ORM::factory('exam')
+            ->join('examgroups','left')
+            ->on('examgroups.id','=','exams.examgroup_id');
+        $exam->where('examgroups.name', 'LIKE', '%' . $filters['filter_grading_period'] . '%');
+        
+        return $exam->count_all();
+    }
+    
+    public static function exams_grading_period($filters=array()) {
+       
+        $exam = ORM::factory('exam')
+            ->join('examgroups','left')
+            ->on('examgroups.id','=','exams.examgroup_id');
+        $exam->where('examgroups.name', 'LIKE', '%' . $filters['filter_grading_period'] . '%');
+        
+        $exam->group_by('exams.id'); 
+              
+        if (isset($filters['sort'])) {
+            $exam->order_by($filters['sort'], Arr::get($filters, 'order', 'ASC'));
+        }
+        if (isset($filters['limit'])) {
+            $exam->limit($filters['limit'])
+                ->offset(Arr::get($filters, 'offset', 0));            
+        }
+        return $exam->find_all();
+    }
+    
+    public static function exams_total_date($filters=array()) {
+       
+        $exam = ORM::factory('exam')
+            ->join('events','left')
+            ->on('events.id','=','exams.event_id');
+        $exam->where('events.eventstart', 'between', array($filters['sdate'], $filters['edate']));
+        
+        return $exam->count_all();
+    }
+    
+    public static function exams_date($filters=array()) {
+       
+        $exam = ORM::factory('exam')
+            ->join('events','left')
+            ->on('events.id','=','exams.event_id');
+        $exam->where('events.eventstart', 'between', array($filters['sdate'], $filters['edate']));
+        
+        $exam->group_by('exams.id'); 
+              
+        if (isset($filters['sort'])) {
+            $exam->order_by($filters['sort'], Arr::get($filters, 'order', 'ASC'));
+        }
+        if (isset($filters['limit'])) {
+            $exam->limit($filters['limit'])
+                ->offset(Arr::get($filters, 'offset', 0));            
+        }
+        return $exam->find_all();
+    }
+    
+    public static function exams_total_course($filters=array()) {
+       
+        $exam = ORM::factory('exam')
+            ->join('courses','left')
+            ->on('courses.id','=','exams.course_id');
+        $exam->where('courses.name', 'LIKE', '%' . $filters['filter_course'] . '%');
+        
+        return $exam->count_all();
+    }
+    
+    public static function exams_course($filters=array()) {
+       
+        $exam = ORM::factory('exam')
+            ->join('courses','left')
+            ->on('courses.id','=','exams.course_id');
+        $exam->where('courses.name', 'LIKE', '%' . $filters['filter_course'] . '%');
+        
+        $exam->group_by('exams.id'); 
+              
+        if (isset($filters['sort'])) {
+            $exam->order_by($filters['sort'], Arr::get($filters, 'order', 'ASC'));
+        }
+        if (isset($filters['limit'])) {
+            $exam->limit($filters['limit'])
+                ->offset(Arr::get($filters, 'offset', 0));            
+        }
+        return $exam->find_all();
+    }
+    
 }
