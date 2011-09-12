@@ -943,7 +943,7 @@ table.calendar td ul.output { margin-top: 10px; color: #427693; }
     margin: 3px;
 }
 .roleIcon.Teacher {
-    background-position: 2px 0;
+    background-position: -2px 0;
 }
 .roleIcon.Student {
     background-position: -29px 0;
