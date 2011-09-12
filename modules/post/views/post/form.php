@@ -1,7 +1,6 @@
-<div class="clear">
+<div class="clear"></div>
 <div class="pad10 tm10" id="post-form">
     <form name="post_status" method="post">
-        <label>Post something: </label>
         <textarea name="post" id="post"></textarea>
         <a class="button r">Post</a>
         <div class="clear"></div>
@@ -35,3 +34,10 @@
         </div>
     </form>     
 </div>
+<script type="text/javascript">
+
+$(document).ready(function(){
+	$("#post").watermark("What are you learning today?");
+});
+
+</script>
