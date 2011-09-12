@@ -917,3 +917,24 @@ table.calendar td ul.output { margin-top: 10px; color: #427693; }
     padding-top: 15px;
     padding-bottom: 15px;
 }
+
+.roleIcon {
+    background: url("images/roleSprite.png") no-repeat;
+    display: inline-block;
+    zoom: 1;
+    width: 20px;
+    height: 20px;
+    margin: 3px;
+}
+.roleIcon.Teacher {
+    background-position: 2px 0;
+}
+.roleIcon.Student {
+    background-position: -29px 0;
+}
+.roleIcon.Parents {
+    background-position: -52px 0;
+}
+.roleIcon.Admin {
+    background-position: -80px 0;
+}
