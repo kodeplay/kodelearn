@@ -110,7 +110,7 @@ class Model_Examgroup extends ORM {
         if (Acl::instance()->is_allowed('exam_edit')) {
             $url = Url::site('examgroup/edit/id/'.$this->id);
         } else {
-            $url = Url::site('examgroup');
+            $url = Url::site('exam');
         }
         return Html::anchor($url, (string) $this);
     }

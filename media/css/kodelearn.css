@@ -917,3 +917,19 @@ table.calendar td ul.output { margin-top: 10px; color: #427693; }
     padding-top: 15px;
     padding-bottom: 15px;
 }
+.lightoverlay {
+    position:absolute;
+    width: auto;
+    min-height: 250px;
+    height: 170px;
+    background: #fff;
+    z-index: 5;
+    border: 2px solid;
+    top: 200px;
+    left: 40%;
+    -webkit-box-shadow: 0 0 20px #000;
+    -moz-box-shadow: 0 0 20px #000;
+    -ms-box-shadow: 0 0 20px #000;
+    box-shadow: 0 0 20px #000;
+    display: none;
+}

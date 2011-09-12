@@ -29,9 +29,9 @@ class Model_Room extends ORM {
     public function toLink() {
         if (Acl::instance()->is_allowed('exam_edit')) {
             $url = Url::site('room/edit/id/'.$this->id);
+	        return Html::anchor($url, (string) $this);
         } else {
-            $url = Url::site('room');
+        	return Html::anchor('#', (string) $this, array('onclick' => 'javascript:KODELEARN.modules.get("rooms").showMap("'. $this->id .'");return false;'));
         }
-        return Html::anchor($url, (string) $this);
     }
 }

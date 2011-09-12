@@ -250,4 +250,27 @@ class Controller_Room extends Controller_Base {
         Request::current()->redirect('room/index/msg/'.$msg);
     }
     
+    public function action_show_map() {
+    	
+    	$room = ORM::factory('room', $this->request->param('id'));
+    	
+    	$location = ORM::factory('location', $room->location_id);
+    	
+    	$images = CacheImage::instance();
+        $image = $images->resize($location->image, 400, 200);
+    	
+        $html = '<img src ="' . $image . '" />';
+    	
+    	$json = array(
+    	   'success'   => 0,
+    	   'html'      => $html
+    	);
+    	
+    	echo json_encode($json);
+    	exit;
+    	
+    	
+    	
+    }
+    
 }
