@@ -265,6 +265,7 @@ a{ color: #427693; }
 .sidemenu.active {
 	background: #f4f4f4;
 	font-weight: bold;
+	width: 173px;
 }
 .sidemenu.active a{
 	color: #feb100;
