@@ -16,6 +16,18 @@
         </div><!-- topbar -->
         <?php } ?>
         <form name="lecture" id="lecture" method="POST" action="<?php echo $links['delete'] ?>">
+        <div class="vm5" align="right">
+            <select id="filter_select" name="filter_select" style="padding:2px; width:150px"> 
+              <option value="filter_name">Name</option>
+              <option value="filter_course">Course</option>
+              <option value="filter_lecturer">Lecturer</option>
+              <option value="filter_when">when</option>
+            </select>
+            <input type="text" name="filter" id="filter" value="<?php echo $filter; ?>" style="padding:5px" />
+            <a class="button" id="trigger_filter" href="#">Find</a>
+            <input type="hidden" id="filter_url" value="<?php echo $filter_url ?>" />
+            <input type="hidden" id="select_val" value="<?php echo $filter_select ?>" />
+        </div>
         <table class="vm10 datatable fullwidth">
            <?php echo $table['heading']?>
            <?php foreach($table['data'] as $lecture){ ?>
@@ -62,3 +74,27 @@
         </table>
         </form>
     </div>
+
+<script type="text/javascript" ><!--
+
+$("#filter_select").change(function () {
+    var column = $("#filter_select").val().toLowerCase();
+    if (column == 'filter_when') {
+        $("#filter").addClass('date');
+        $('.date').datepicker({dateFormat: 'yy-mm-dd'});
+    } else {
+        $('.date').datepicker( "destroy" )
+        $("#filter").removeClass('date hasDatepicker');
+    }        
+})
+
+$(document).ready(function() {
+    var column = $("#filter_select").val().toLowerCase();
+    if (column == 'filter_when') {
+        $("#filter").addClass('date');
+        $('.date').datepicker({dateFormat: 'yy-mm-dd'});
+    }
+    
+});
+    
+//--></script> 
