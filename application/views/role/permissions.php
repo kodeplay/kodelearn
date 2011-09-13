@@ -1,6 +1,6 @@
 <div class="r pagecontent">
     <div class="pageTop withBorder">
-        <div class="pageTitle l">User role: <span id="roleOf"><?php echo $role_name; ?></span></div>
+        <div class="pageTitle l w60">User role: <span id="roleOf"><?php echo $role_name; ?></span></div>
         <div class="pageDesc r">replace_here_page_description</div>
         <div class="clear"></div>
     </div><!-- pageTop -->

@@ -1,7 +1,7 @@
 <div class="r pagecontent">
 
     <div class="pageTop withBorder">
-        <div class="pageTitle l">Exam Results</div>
+        <div class="pageTitle l w60">Exam Results</div>
         <div class="pageDesc r">this is a test description this is a test description this is a test description this is a test description this is a test description </div>
         <div class="clear"></div>
     </div><!-- pageTop -->

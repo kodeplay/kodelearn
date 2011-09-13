@@ -1,6 +1,6 @@
 <div class="r pagecontent">
         <div class="pageTop">
-            <div class="pageTitle l"><?php echo $lecture->name; ?></div>
+            <div class="pageTitle l w60"><?php echo $lecture->name; ?></div>
             <div class="pageDesc r">replace_here_page_description</div>
             <div class="clear"></div>
         </div><!-- pageTop -->
