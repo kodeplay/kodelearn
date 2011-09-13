@@ -1,6 +1,6 @@
     <div class="r pagecontent">
         <div class="pageTop">
-            <div class="pageTitle l"><?php echo $page_title; ?></div>
+            <div class="pageTitle l w60"><?php echo $page_title; ?></div>
             <div class="pageDesc r"><?php echo $page_description; ?></div>
             <div class="clear"></div>
         </div><!-- pageTop -->

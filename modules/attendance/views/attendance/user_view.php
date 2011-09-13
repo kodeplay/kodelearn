@@ -1,6 +1,6 @@
     <div class="r pagecontent">
         <div class="pageTop">
-            <div class="pageTitle l">View Attendance</div>
+            <div class="pageTitle l w60">View Attendance</div>
             <div class="pageDesc r">You can view your attendance in all events here. Select a timeframe and a course to view your attendance.</div>
             <div class="clear"></div>
         </div><!-- pageTop -->

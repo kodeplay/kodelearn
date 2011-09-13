@@ -142,8 +142,7 @@ class Model_User extends ORM {
             ->rule('email', 'not_empty')
             ->rule('email', 'email')
             ->rule('email', 'Model_User::email_unique', array(':value',':user'))
-            ->rule('firstname', 'not_empty')
-            ->rule('lastname', 'not_empty');
+            ->rule('firstname', 'not_empty');
     }
     
     public function validator_profile($data){

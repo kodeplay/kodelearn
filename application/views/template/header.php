@@ -7,7 +7,8 @@
         <script type="text/javascript">
             var KODELEARN = KODELEARN || { };
             KODELEARN.config = {    
-                base_url: "<?php echo Url::base(); ?>"    
+                base_url: "<?php echo Url::base(); ?>",
+                controller: "<?php echo Request::current()->controller() ?>"     
             };
         </script>
         <?php foreach ($scripts as $file) echo HTML::script($file), PHP_EOL ?>

@@ -1,6 +1,6 @@
 <div class="r pagecontent">
     <div class="pageTop withBorder">
-        <div class="pageTitle l"><?php echo $examgroup->name; ?><span id="roleOf"></span></div>
+        <div class="pageTitle l w60"><?php echo $examgroup->name; ?><span id="roleOf"></span></div>
         <div class="pageDesc r">replace_here_page_description</div>
         <div class="clear"></div>
     </div><!-- pageTop -->
