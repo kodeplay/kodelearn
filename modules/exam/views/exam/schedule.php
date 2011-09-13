@@ -9,7 +9,12 @@
             <div class="sectionTitle">Upcoming Exams</div>
             <ul>
                 <?php foreach($exams as $exam) {?>
-                <li <?php echo ($exam->event->eventstart < (time() + 86500))?'class="tGreen"':''?>><?php echo date('d M Y H:i ', $exam->event->eventstart)?> - <?php echo $exam->name?> - <?php echo Date::fuzzy_span($exam->event->eventstart); ?></li>
+                    <li <?php echo ($exam->event->eventstart < (time() + 86500))?'class="tGreen"':''?>> <?php echo $exam->name?>
+                        <ul>
+                            <li><?php echo $exam->passing_marks ?> Marks Passing Out of <?php echo $exam->total_marks ?> </li>
+		                    <li>On <?php echo date('d M Y h:i A', $exam->event->eventstart)?> - <?php echo Date::fuzzy_span($exam->event->eventstart); ?></li>
+                        </ul>
+                    </li>                    
                 <?php }?>
             </ul>
         </div>
