@@ -276,6 +276,10 @@ class Controller_Auth extends Controller_Base {
     	
     	$role = ORM::factory('role', $config_settings->default_role);
     	
+    	if(!$config_settings->membership){
+    		return 'Admin had disabled the registration. Please Contact Administrator for Account. ';
+    	}
+    	
     	switch(strtolower($role->name)){
     		
             case 'admin':
