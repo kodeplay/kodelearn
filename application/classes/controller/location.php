@@ -63,6 +63,8 @@ class Controller_Location extends Controller_Base {
         
         if($this->request->param('filter_name')){
             $url .= '/filter_name/'.$this->request->param('filter_name');
+            $filter = $this->request->param('filter_name');
+            $filter_select = 'filter_name';
         }
         
         $sorting->set_link($url);
@@ -90,7 +92,8 @@ class Controller_Location extends Controller_Base {
                     ->bind('table', $table)
                     ->bind('count', $count)
                     ->bind('pagination', $pagination)
-                    ->bind('filter_name', $filter_name)
+                    ->bind('filter', $filter)
+                    ->bind('filter_select', $filter_select)
                     ->bind('filter_url', $filter_url)
                     ->bind('msg', $msg)
                     ;

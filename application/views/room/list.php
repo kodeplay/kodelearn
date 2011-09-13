@@ -28,7 +28,7 @@
               <option value="filter_location">Location</option>
             </select>
             <input type="text" name="filter" id="filter" value="<?php echo $filter; ?>" style="padding:5px" />
-            <a class="button" id="trigger_filter" href="#">Filter</a>
+            <a class="button" id="trigger_filter" href="#">Find</a>
             <input type="hidden" id="filter_url" value="<?php echo $filter_url ?>" />
             <input type="hidden" id="select_val" value="<?php echo $filter_select ?>" />
         </div>
