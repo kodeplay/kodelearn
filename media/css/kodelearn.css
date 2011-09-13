@@ -256,11 +256,20 @@ a{ color: #427693; }
 	display: block;
 	padding: 15px 0 15px 45px;
 	color: #636363;
-	background: url("../image/sideicon.jpg") no-repeat left 50%;
+	background: url("../image/sbiconsSprite.png") no-repeat;
 	-webkit-transition: color 0.3s ease;
 	-moz-transition: background 0.3s ease;
 	transition: background 0.3s ease;
 }
+.sidemenu.Users a {	background-position:0 -325px; }
+.sidemenu.Batches a {	background-position:0 -223px; }
+.sidemenu.System a {	background-position:0 10px; }
+.sidemenu.Courses a {	background-position:0 -103px; }
+.sidemenu.Exam a {	background-position:0 -367px; }
+.sidemenu.Lecture a {	background-position:0 -46px; }
+.sidemenu.Attendance a {	background-position:0 -274px; }
+.sidemenu.Calendar a {	background-position:0 -165px; }
+
 .sidemenu a:hover {	color: #415666; }
 .sidemenu.active {
 	background: #f4f4f4;
@@ -278,7 +287,7 @@ a{ color: #427693; }
 	border-bottom: 1px dotted #ccc;
 	padding-bottom: 10px;
 }
-
+#sbName { margin: 6px; }
 #sbProfileImg {
 	width: 72px;
 	height: 72px;
@@ -299,8 +308,6 @@ a{ color: #427693; }
 	line-height: 18px;
 	color: #415666;
 }
-
-
 
 /* .......................
 	Form elements
@@ -392,6 +399,7 @@ textarea:focus {	background: white; }
 	-moz-box-shadow: 0 0 8px #4f6473;
 	box-shadow: 0 0 8px #4f6473; 
 }
+.buttons { height: 15px; width: 98%; padding:25px 0 15px; text-align: right; }
 
 select {	width: 210px;  }
 .formerror {	
@@ -424,6 +432,30 @@ select {	width: 210px;  }
 tr.bad { background: #f4dcdc; }
 
 .formMessages.w90 { width: 90%; }
+
+.block-success{
+	clear:both; 
+	display:none; 
+	width:98%; 
+	height:auto; 
+	padding:5px 0; 
+	border:1px solid #a5bd71; 
+	background:#e4f1c9; 
+	margin:0 auto; 
+	text-align:center; 
+	color:#000
+}
+.block-error{
+	display:none;
+	width:98%;
+	height:auto;
+	padding:5px 0;
+	border:1px solid red;
+	background:#ffdfe0;
+	margin:0 auto;
+	color:red
+}
+.block-error ul{list-style:none; padding-left: 10px;}
 
 .fmIcon {
 	display: block;
@@ -554,6 +586,31 @@ tr.bad { background: #f4dcdc; }
 	border: 1px solid #796d66; 
 	border-radius: 3px; 
 }
+.lightoverlay {
+    position:absolute;
+    width: auto;
+    min-height: 250px;
+    height: 170px;
+    background: #fff;
+    z-index: 5;
+    border: 2px solid;
+    top: 200px;
+    left: 40%;
+    -webkit-box-shadow: 0 0 20px #000;
+    -moz-box-shadow: 0 0 20px #000;
+    -ms-box-shadow: 0 0 20px #000;
+    box-shadow: 0 0 20px #000;
+    display: none;
+}
+#ajax-loader {
+    display: none;
+    height: 12px;
+    position: fixed;
+    text-align: center;
+    top: 400px;
+    width: 100%;
+    z-index: 2000;
+}
 /* .......................
 	END OF GENERAL STYLES
    ..................... */
@@ -675,6 +732,26 @@ tr.bad { background: #f4dcdc; }
 .feedContent {	float: left; margin-left: 20px; }
 .lesson .feedIcon {	background-position: 0 -16px; }
 .deadline .feedIcon {	background-position: 0 0; }
+#feed_event li {
+	border-bottom: 1px solid #E9E9E9;
+    padding-top: 15px;
+    padding-bottom: 15px;
+}
+.show_more{
+    background-color: #426883;
+    height: 10px;
+    width: 100%;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    text-align: center;
+    
+}
+.show_more a {
+    color: #fff;
+    font-weight: bold;
+    cursor: pointer;
+}
+
 
 /* ..........................
 	Calendar
@@ -747,6 +824,15 @@ tr.bad { background: #f4dcdc; }
 
 #calendar-jumper select { width: 120px; }
 
+#upcoming_exams li {
+    font-size: 15px;
+    margin-bottom: 20px;
+    margin-left: 15px;
+}
+#upcoming_exams li ul {
+	margin-top: 10px;
+}
+#examresult-edit-form input[type="text"] { width: 30px; }
 
 /* ..........................
 	Rank badges
@@ -847,94 +933,9 @@ table.calendar td ul.output { margin-top: 10px; color: #427693; }
 #post-form select { width: 180px; }
 #post-form ul li { float: left; margin-right: 10px; line-height: 16px; }
 
-/* ..........................
-	Developer section
-   ........................ */
-
-.buttons { height: 15px; width: 98%; padding:25px 0 15px; text-align: right; }
-#sbName { margin: 6px; }
-#upcoming_exams li {
-    font-size: 15px;
-    margin-bottom: 20px;
-    margin-left: 15px;
-}
-#upcoming_exams li ul {
-	margin-top: 10px;
-}
-#examresult-edit-form input[type="text"] { width: 30px; }
-
-.block-success{
-	clear:both; 
-	display:none; 
-	width:98%; 
-	height:auto; 
-	padding:5px 0; 
-	border:1px solid #a5bd71; 
-	background:#e4f1c9; 
-	margin:0 auto; 
-	text-align:center; 
-	color:#000
-}
-.block-error{
-	display:none;
-	width:98%;
-	height:auto;
-	padding:5px 0;
-	border:1px solid red;
-	background:#ffdfe0;
-	margin:0 auto;
-	color:red
-}
-.block-error ul{list-style:none; padding-left: 10px;}
-#ajax-loader {
-    display: none;
-    height: 12px;
-    position: fixed;
-    text-align: center;
-    top: 400px;
-    width: 100%;
-    z-index: 2000;
-}
-#feeds div {border-bottom: 1px solid #E9E9E9;}
-
-.show_more{
-    background-color: #426883;
-    height: 10px;
-    width: 100%;
-    padding-top: 10px;
-    padding-bottom: 10px;
-    text-align: center;
-    
-}
-.show_more a {
-    color: #fff;
-    font-weight: bold;
-    cursor: pointer;
-}
-
-#feed_event h1 {display:none;}
-#feed_event li {
-	border-bottom: 1px solid #E9E9E9;
-    padding-top: 15px;
-    padding-bottom: 15px;
-}
-.lightoverlay {
-    position:absolute;
-    width: auto;
-    min-height: 250px;
-    height: 170px;
-    background: #fff;
-    z-index: 5;
-    border: 2px solid;
-    top: 200px;
-    left: 40%;
-    -webkit-box-shadow: 0 0 20px #000;
-    -moz-box-shadow: 0 0 20px #000;
-    -ms-box-shadow: 0 0 20px #000;
-    box-shadow: 0 0 20px #000;
-    display: none;
-}
-
+/* ......................................
+        User Role Icons
+   .................................... */
 .roleIcon {
     background: url("images/roleSprite.png") no-repeat;
     display: inline-block;
@@ -955,3 +956,11 @@ table.calendar td ul.output { margin-top: 10px; color: #427693; }
 .roleIcon.Admin {
     background-position: -80px 0;
 }
+
+
+
+/* ..........................
+	Developer section
+   ........................ */
+
+/*#feed_event h1 {display:none;}*/

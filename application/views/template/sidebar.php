@@ -10,7 +10,7 @@
           $links = $sidemenu->as_array(); 
           foreach ($links as $link) {
         ?>
-              <li class="sidemenu"><?php echo $link['html']; ?></li>
+              <li class="sidemenu <?php echo $link['title']; ?>"><?php echo $link['html']; ?></li>
         <?php } ?>
     </ul>
 </div><!-- sidebar -->
