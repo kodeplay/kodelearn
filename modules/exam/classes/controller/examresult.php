@@ -280,6 +280,8 @@ class Controller_Examresult extends Controller_Base {
         $feed->set_actor_id(Auth::instance()->get_user()->id); 
         $feed->save();
         $feed->subscribe_users($users);
+        Request::current()->redirect('examresult/edit/examgroup_id/'.$examgroup_id);
+        exit;
     }
     
     // view results of all users - so typically only the administrator and teacher 
