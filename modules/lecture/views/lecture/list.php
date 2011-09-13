@@ -66,11 +66,18 @@
                 </td>
             </tr>
            <?php } ?>
-            <tr class="pagination">
-                <td class="tar pagination" colspan="6">
-                    <?php echo $pagination ?>
-                </td>
-            </tr>
+            <?php if($count == 0){ ?>
+                <tr>
+                    <td colspan="6" align="center">
+                        No Records Found
+                    </td>
+                </tr>
+                <?php  } ?>
+                <tr class="pagination">
+                    <td class="tar pagination" colspan="6">
+                        <?php echo $pagination ?>
+                    </td>
+                </tr>
         </table>
         </form>
     </div>
