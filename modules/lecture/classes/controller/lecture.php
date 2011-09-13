@@ -15,28 +15,59 @@ class Controller_Lecture extends Controller_Base {
         } else {
             $order = 'DESC';
         }
-        
-        $lecture = ORM::factory('lecture')
-            ->join('courses')
-            ->on('courses.id', '=', 'lectures.course_id');
-        
-        $count = $lecture->count_all();
-        
-        $pagination = Pagination::factory(array(
-            'total_items'    => $count,
-            'items_per_page' => 5,
-        ));
-        
-        $lecture->select(array('courses.name','course_name'), 'firstname', 'lastname')->join('courses')
-            ->on('courses.id', '=', 'lectures.course_id')
-            ->join('users')
-            ->on('users.id', '=', 'lectures.user_id')
-            ->group_by('id')
-            ->order_by($sort, $order)
-            ->limit($pagination->items_per_page)
-            ->offset($pagination->offset)
-            ;
-        $lectures = $lecture->find_all();
+    
+        if($this->request->param('filter_when')) {
+            $sdate = strtotime($this->request->param('filter_when'));
+            $edate = $sdate + 86400;            
+            $filters = array(
+                    'sdate' => $sdate,
+                    'edate' => $edate,
+            );
+            
+            $total = Model_Lecture::lectures_total_when($filters);
+            
+            $count = $total;
+            
+            $pagination = Pagination::factory(array(
+                'total_items'    => $count,
+                'items_per_page' => 5,
+            ));
+            
+            $filters = array_merge($filters, array(
+                'sort' => $sort,
+                'order' => $order,
+                'limit' => $pagination->items_per_page,
+                'offset' => $pagination->offset,            
+            ));
+            
+            $lectures = Model_Lecture::lectures_when($filters);
+        } else {
+            
+            $filters = array(
+                    'filter_name' => $this->request->param('filter_name'),
+                    'filter_course' => $this->request->param('filter_course'),
+                    'filter_lecturer' => $this->request->param('filter_lecturer'),
+                    
+            );
+            
+            $total = Model_Lecture::lectures_total($filters);
+            
+            $count = $total;
+            
+            $pagination = Pagination::factory(array(
+                'total_items'    => $count,
+                'items_per_page' => 5,
+            ));
+            
+            $filters = array_merge($filters, array(
+                'sort' => $sort,
+                'order' => $order,
+                'limit' => $pagination->items_per_page,
+                'offset' => $pagination->offset,            
+            ));
+            
+            $lectures = Model_Lecture::lectures($filters);
+        }
         
         $sorting = new Sort(array(
             'Lecture'           => 'name',
@@ -47,6 +78,30 @@ class Controller_Lecture extends Controller_Base {
         ));
         
         $url = ('lecture/index');
+        
+        if($this->request->param('filter_name')){
+            $url .= '/filter_name/'.$this->request->param('filter_name');
+            $filter = $this->request->param('filter_name');
+            $filter_select = 'filter_name';
+        }
+        
+        if($this->request->param('filter_course')){
+            $url .= '/filter_course/'.$this->request->param('filter_course');
+            $filter = $this->request->param('filter_course');
+            $filter_select = 'filter_course';
+        }
+        
+        if($this->request->param('filter_lecturer')){
+            $url .= '/filter_lecturer/'.$this->request->param('filter_lecturer');
+            $filter = $this->request->param('filter_lecturer');
+            $filter_select = 'filter_lecturer';
+        }
+        
+        if($this->request->param('filter_when')){
+            $url .= '/filter_when/'.$this->request->param('filter_when');
+            $filter = $this->request->param('filter_when');
+            $filter_select = 'filter_when';
+        }
         
         $sorting->set_link($url);
         
@@ -63,11 +118,14 @@ class Controller_Lecture extends Controller_Base {
             'add'       => Html::anchor('/lecture/add/', 'Create a Lecture', array('class' => 'createButton l')),
             'delete'    => URL::site('/lecture/delete/'),
         );
-        
+        $filter_url = URL::site('lecture/index');
         $view = View::factory('lecture/list')
             ->bind('links', $links)
             ->bind('table', $table)
             ->bind('count', $count)
+            ->bind('filter', $filter)
+            ->bind('filter_select', $filter_select)
+            ->bind('filter_url', $filter_url)
             ->bind('pagination', $pagination);
         
         Breadcrumbs::add(array(

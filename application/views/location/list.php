@@ -21,16 +21,19 @@
             <div class="formMessages"><span class="fmIcon bad"></span> <span class="fmText">Location assigned to some room(s)</span><span class="clear">&nbsp;</span></div>
         <?php }?>
 		<form name="location" id="location" method="POST" action="<?php echo $links['delete'] ?>">
-		
+		    <div class="vm5" align="right">
+                <select id="filter_select" name="filter_select" style="padding:2px; width:150px"> 
+                  <option value="filter_name">Name</option>
+                  
+                </select>
+                <input type="text" name="filter" id="filter" value="<?php echo $filter; ?>" style="padding:5px" />
+                <a class="button" id="trigger_filter" href="#">Find</a>
+                <input type="hidden" id="filter_url" value="<?php echo $filter_url ?>" />
+                <input type="hidden" id="select_val" value="<?php echo $filter_select ?>" />
+            </div>
     		<table class="vm10 datatable fullwidth">
     			<?php echo $table['heading'] ?>
-    			<tr class="filter" >
-    			     <td><input type="hidden" id="filter_url" value="<?php echo $filter_url ?>" /></td>
-    			     <td><input type="text" name="filter_name" value="<?php echo $filter_name ?>" /></td>
-    			     <td></td>
-    			     <td></td>
-    			     <td valign="middle"><a class="button" href="#" id="trigger_filter">Filter</a></td>
-    			</tr>
+    			
     			
     			<?php foreach($table['data'] as $location){ ?>
     					
