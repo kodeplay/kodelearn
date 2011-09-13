@@ -97,6 +97,10 @@ KODELEARN.modules.add('sidebar' , (function () {
     				el.css({position: 'absolute', top: 178});
     			}
     		};
+    		this.highlight();
+    	},
+    	highlight: function () {
+    		$('.sidemenu a[href*="'+KODELEARN.config.controller+'"]').parent().addClass('active');
     	}
     }; 
 })());
