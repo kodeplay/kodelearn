@@ -19,9 +19,11 @@ class Controller_Feed extends Controller_Base {
                        ->bind('post_form', $post_form)
                        ->bind('total_feeds', $total_feeds);
 
-        Breadcrumbs::add(array(
-            'Feeds', Url::site('feed')
-        ));
+		if($this->request->is_initial()){
+		        Breadcrumbs::add(array(
+		            'Feeds', Url::site('feed')
+		        ));
+		}
                        
                        
         $this->content = $view;

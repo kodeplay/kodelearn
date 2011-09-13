@@ -90,6 +90,7 @@
 
 .vatop {	vertical-align: top; }
 .vamid {	vertical-align: middle; }
+.vabot {	vertical-align:bottom; }
 
 /*table*/
 .collapse {	border-collapse: collapse }
