@@ -21,38 +21,34 @@ class Controller_Room extends Controller_Base {
         } else {
             $order = 'DESC';
         }
+    
+        $filters = array(
+                'filter_room_name' => $this->request->param('filter_room_name'),
+                'filter_number' => $this->request->param('filter_number'),
+                'filter_location' => $this->request->param('filter_location'),
+                
+        );
         
-        $room = ORM::factory('room');
+        $total = Model_Room::rooms_total($filters);
         
-        if($this->request->param('filter_room_name')){
-            $room->where('room_name', 'LIKE', '%' . $this->request->param('filter_room_name') . '%');
-        }
+        $count = $total;
         
-        $count = $room->count_all();
-
         $pagination = Pagination::factory(array(
             'total_items'    => $count,
             'items_per_page' => 5,
         ));
         
-
-        $room->select('locations.name','room_number','room_name')
-             ->join('locations','left')
-             ->on('locations.id','=','location_id');
-                        
-        if($this->request->param('filter_room_name')){
-            $room->where('room_name', 'LIKE', '%' . $this->request->param('filter_room_name') . '%');
-        }
-                        
-        $room->group_by('id')
-                ->order_by($sort, $order)
-                ->limit($pagination->items_per_page)
-                ->offset($pagination->offset)
-                ;
-        $rooms = $room->find_all();
-
-
-
+        $filters = array_merge($filters, array(
+            'sort' => $sort,
+            'order' => $order,
+            'limit' => $pagination->items_per_page,
+            'offset' => $pagination->offset,            
+        ));
+        
+        $rooms = Model_Room::rooms($filters);
+        
+    
+        
         $sorting = new Sort(array(
                 'Name'          => 'room_name',
                 'Number'        => 'room_number',
@@ -64,6 +60,20 @@ class Controller_Room extends Controller_Base {
         
         if($this->request->param('filter_room_name')){
             $url .= '/filter_room_name/'.$this->request->param('filter_room_name');
+            $filter = $this->request->param('filter_room_name');
+            $filter_select = 'filter_room_name';
+        }
+        
+        if($this->request->param('filter_number')){
+            $url .= '/filter_number/'.$this->request->param('filter_number');
+            $filter = $this->request->param('filter_number');
+            $filter_select = 'filter_number';
+        }
+        
+        if($this->request->param('filter_location')){
+            $url .= '/filter_location/'.$this->request->param('filter_location');
+            $filter = $this->request->param('filter_location');
+            $filter_select = 'filter_location';
         }
         
         $sorting->set_link($url);
@@ -92,7 +102,8 @@ class Controller_Room extends Controller_Base {
                     ->bind('table', $table)
                     ->bind('count', $count)
                     ->bind('pagination', $pagination)
-                    ->bind('filter_room_name', $filter_room_name)
+                    ->bind('filter', $filter)
+                    ->bind('filter_select', $filter_select)
                     ->bind('filter_url', $filter_url)
                     ->bind('msg', $msg)
                     ;
