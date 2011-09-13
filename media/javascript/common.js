@@ -81,6 +81,26 @@ KODELEARN.modules.add('add_datepicker' , (function () {
     }; 
 })());
 
+KODELEARN.modules.add('sidebar' , (function () {        
+    return {
+    	el: $('.sidebar'),
+        init: function () { 
+    		var win = $(window);
+    		var el = $('.sidebar');
+    		window.onscroll = function() {
+    			var eltop = el.position().top;
+    			var winscroll = win.scrollTop();
+    			if(winscroll > 178){
+    				el.css({position: 'fixed', top: 0});
+    			} else {
+    				console.log(eltop );
+    				el.css({position: 'absolute', top: 178});
+    			}
+    		};
+    	}
+    }; 
+})());
+
 KODELEARN.modules.add('add_timepicker' , (function () {    
     return {
         init: function () { 

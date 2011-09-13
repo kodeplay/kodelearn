@@ -43,7 +43,7 @@ body {
 	border-bottom-right-radius: 8px;
 	background: #fff;
 	margin-bottom: 40px;
-	height: auto; 
+	min-height: 700px; 
 	overflow: hidden;
 }
 
@@ -238,6 +238,7 @@ a{ color: #427693; }
 	width: 175px;
 	margin-right: 10px;
 	background: url("../image/sidebar.png") no-repeat right 70%;
+	position: absolute;
 }
 .sidebarTitle {	
 	color: #898989; 
