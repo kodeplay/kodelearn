@@ -1,6 +1,6 @@
 <?php 
     $image = CacheImage::instance();
-    $avatar = $image->resize($user->avatar, 50, 50);
+    $avatar = $image->resize($user->avatar, 75, 75);
 ?>
 
     
@@ -9,7 +9,7 @@
             <td class="w8">
                 <img src = "<?php echo $avatar; ?>"></img>
             </td>
-            <td class="vatop">
+            <td class="vatop hpad10">
                 <p class="h3"><span class = "roleIcon <?php echo $user->role(); ?>">&nbsp;</span><?php echo $user->fullname(); ?></p><br>
                 <p class="h5 lh140" ><?php echo Html::chars($post->message); ?></p><br/>
                 <p class = "h6 tlGray"><?php echo $span; ?></p>
