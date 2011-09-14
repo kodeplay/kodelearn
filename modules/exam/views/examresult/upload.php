@@ -67,4 +67,7 @@ function downloadurl()
 $("#browser-edit").click(function() {
     window.location.href = "<?php echo Url::base(); ?>index.php/examresult/edit/examgroup_id/"+$('#examgroup_id').val();
 });
+$(document).ready(function(){
+	KODELEARN.modules.get('sidebar').highlight('exam');
+});
 //--></script>
