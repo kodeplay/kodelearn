@@ -26,4 +26,13 @@ $(document).ready (function () {
 		ev.preventDefault();
 	});
 	
+	//Hide error messages when corrective action is being taken
+	$("#post").focus(function () {
+		$("#error").fadeOut(250, function () {
+			$("#error").remove();
+		});
+		
+	});
+	
+	
 });
