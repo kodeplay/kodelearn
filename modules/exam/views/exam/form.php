@@ -5,7 +5,7 @@
             <div class="clear"></div>
         </div><!-- pageTop -->
         <?php echo $form->startform(); ?>
-        <table class="formcontainer bm40 l">
+        <table class="formcontainer bm40 l w60">
             <tr>
                 <td><?php echo $form->name->label(); ?></td>
                 <td><?php echo $form->name->element(); ?>
@@ -73,7 +73,7 @@
                 </td>
             </tr>
         </table>
-        <div id="course_student" class="r" ></div>
+        <div id="course_student" class="r w30" ></div>
         <?php echo $form->endForm(); ?>
     </div><!-- content -->
     
