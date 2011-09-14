@@ -10,6 +10,7 @@ class Model_Exam extends ORM {
         return Validation::factory($data)
             ->rule('name', 'not_empty')
             ->rule('room_id', 'not_empty')
+            ->rule('examgroup_id', 'not_empty')
             ->rule('total_marks', 'not_empty')
             ->rule('total_marks', 'digit')
             ->rule('passing_marks', 'not_empty')
