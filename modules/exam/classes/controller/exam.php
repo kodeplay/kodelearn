@@ -24,6 +24,7 @@ class Controller_Exam extends Controller_Base {
                 ->join('events')->on('exams.event_id', '=', 'events.id')
                 ->where('exams.course_id', 'IN', $course_ids)
                 ->and_where('events.eventstart', '>', time())
+                ->order_by('events.eventstart')
                 ->find_all();
             $past_exams = ORM::factory('exam')
                 ->join('events')->on('exams.event_id', '=', 'events.id')
@@ -480,7 +481,7 @@ class Controller_Exam extends Controller_Base {
         if($this->request->method() === 'POST' && $this->request->post('selected')){
             foreach($this->request->post('selected') as $exam_id){
             	$exam = ORM::factory('exam', $exam_id);
-            	ORM::factory('event', $exam->event_id);
+            	ORM::factory('event', $exam->event_id)->delete();
             	$exam->delete();
             }
         }
