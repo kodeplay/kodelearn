@@ -190,6 +190,7 @@ class Controller_User extends Controller_Base {
                     $user->firstname = $this->request->post('firstname');
                     $user->lastname = $this->request->post('lastname');
                     $user->email = $this->request->post('email');
+                    $user->avatar = $this->request->post('avatar');
                     $password = rand(10000, 65000);
                     $user->password = Auth::instance()->hash($password);
                     $user->status = $this->request->post('status');
@@ -235,10 +236,17 @@ class Controller_User extends Controller_Base {
         }
         
         $form = $this->form('user/add', $submitted);
-        
-        
+        $upload_url = URL::site('user/uploadavatar');
+        $remove_url = URL::site('user/removeimage');
+        $image = CacheImage::instance();
+        $avatar = $image->resize('', 100, 100);
+        $filename = "";
         $view = View::factory('user/form')
             ->bind('form', $form)
+            ->bind('upload_url', $upload_url)
+            ->bind('remove_url', $remove_url)
+            ->bind('avatar', $avatar)
+            ->bind('filename', $filename)
             ->set('page_title', 'Create a new user');
         Breadcrumbs::add(array(
             'User', Url::site('user')
@@ -315,6 +323,7 @@ class Controller_User extends Controller_Base {
                     $user->firstname = $this->request->post('firstname');
                     $user->lastname = $this->request->post('lastname');
                     $user->email = $this->request->post('email');
+                    $user->avatar = $this->request->post('avatar');
                     
                     $user->status = $this->request->post('status');
                     //removing the previous role assigned
@@ -393,10 +402,18 @@ class Controller_User extends Controller_Base {
             'status' => (int) $user->status,
         ));        
         //$heading[] = "View/Edit ".$user->firstname."'s Profile";        
-        
+        $upload_url = URL::site('user/uploadavatar');
+        $remove_url = URL::site('user/removeimage');
+        $image = CacheImage::instance();
+        $avatar = $image->resize($user->avatar, 100, 100);
+        $filename = $user->avatar;
         $view = View::factory('user/form')
             ->bind('form', $form)
-            ->set('page_title', sprintf('View/Edit %s\'s profile', $user->fullname()));
+            ->bind('upload_url', $upload_url)
+            ->bind('remove_url', $remove_url)
+            ->bind('filename', $filename)
+            ->bind('avatar', $avatar)
+            ->set('page_title', sprintf('View/Edit %s\'s profile', $user->firstname));
         Breadcrumbs::add(array(
             'User', Url::site('user')
         ));
@@ -560,5 +577,52 @@ class Controller_User extends Controller_Base {
         $message = str_replace($search, $replace, $message);
         $html = true;
         Email::send_mail($user->email, $subject, $message, $html);
-    }    
+    }
+
+    public function action_uploadavatar(){
+        
+        $filename = time() . '_' . $_FILES['image']['name'];
+                
+        $file_validation = new Validation($_FILES);
+        $file_validation->rule('image','upload::valid');
+        $file_validation->rule('image', 'upload::type', array(':value', array('jpg', 'png', 'gif', 'jpeg')));
+        
+        if ($file_validation->check()){
+            
+            if($path = Upload::save($_FILES['image'], $filename, DIR_IMAGE)){
+                
+                $image = CacheImage::instance();
+                $src = $image->resize($filename, 100, 100);
+                
+                $json = array(
+                   'success'   => 1,
+                   'image'     => $src,
+                   'filename' => $filename
+                );
+            } else {
+                $json = array(
+                   'success'  => 0,
+                   'errors'   => array('image' => 'The file is not a valid Image'),
+                   
+                );
+            }
+        } else {
+            $json = array(
+                 'success'   => 0,
+                 'errors'    => (array) $file_validation->errors('profile')
+            );
+        }
+        
+         
+        echo json_encode($json);
+        exit;
+        
+    }
+    
+    public function action_removeimage(){
+        $image = CacheImage::instance();
+        $src = $image->resize('', 100, 100);
+        echo $src;
+        exit;
+    }
 }
