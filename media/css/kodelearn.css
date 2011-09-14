@@ -1,4 +1,4 @@
-/* ...............................
+/* ...............................	
 	Contents
 	...............................
 	1.		General
@@ -140,6 +140,11 @@ a{ color: #427693; }
 #myacContent li:last-child {
 	border-bottom: none;
 }
+#myacContent li:last-child a {
+	border-bottom-right-radius: 3px;
+	border-bottom-left-radius: 3px;
+	
+}
 
 .branding {
 	padding: 25px 10px;
@@ -160,6 +165,7 @@ a{ color: #427693; }
 	border-bottom: 1px solid #4c3d34; 
 	vertical-align: middle; 
 	height: 36px;
+	font-size: 12px;
 }
 
 .pageTab {
@@ -199,11 +205,25 @@ a{ color: #427693; }
 	color: #feb100; 
 	background: #4c3d34; 
 }
-.pageAction.alert {	color: red; }
+.pageAction.alert {	
+	color: #fff;
+	height: 12px;
+	margin-top: 10px;
+	margin-right: 5px;
+	background: #c00000; 
+	border-radius: 3px;
+	display: inline;
+	padding: 3px 5px;
+	font-size: 11px;
+	font-weight:normal;
+}
+.pageAction.alert:hover {
+	background: #c00000 url("../image/alert.png") repeat-x left top;
+}
 .sectionTitle {	
 	font-size: 14px; 
 	font-weight: bold; 
-	color: #4c3d34; 
+	color: #4c3d34;
 	border-bottom: 1px solid #eae3e0; 
 	padding: 3px 0; 
 	margin-bottom: 15px;
@@ -241,7 +261,7 @@ a{ color: #427693; }
 	position: absolute;
 }
 .sidebarTitle {	
-	color: #898989; 
+	color: #333; 
 	font-size: 20px; 
 	font-family: Georgia, serif; 
 	margin: 30px 0 20px 0;
@@ -400,6 +420,16 @@ textarea:focus {	background: white; }
 	-moz-box-shadow: 0 0 8px #4f6473;
 	box-shadow: 0 0 8px #4f6473; 
 }
+.button.disabled {
+    background: url("../image/disabledBtn.png") repeat-x left bottom;
+    color: #7c7c7c;
+}
+.button.disabled:hover {
+	-webkit-box-shadow: none;
+	-moz-box-shadow: none;
+	-ms-box-shadow: none;
+	box-shadow: none;
+}
 .buttons { height: 15px; width: 98%; padding:25px 0 15px; text-align: right; }
 
 select {	width: 210px;  }
@@ -526,6 +556,7 @@ tr.bad { background: #f4dcdc; }
    ..................... */
 .datatable {	
 	font-size: 12px; 
+	font-size: 13px;
 	border-collapse: collapse; 
 	color: #000; 
 	border: none; 
@@ -533,6 +564,7 @@ tr.bad { background: #f4dcdc; }
 .datatable th {	
 	background: #f3f3f3 url("../image/thback.png") repeat-x left bottom;
 	padding: 20px 5px; 
+	padding: 10px 5px;
 	color: #4c3d34; 
 	text-shadow: 1px 1px 1px #fff; 
 	border-bottom: 1px solid #4c3d34; 
@@ -548,7 +580,8 @@ tr.bad { background: #f4dcdc; }
 	vertical-align: middle;
 }
 .datatable tr:nth-child(odd) td {
-	background-color:##eae3e0;
+	/*background-color:#eae3e0;*/
+	background-color: #f7f4f3;
 }
 .datatable p+p {
 	margin-top: 8px;
@@ -612,6 +645,10 @@ tr.bad { background: #f4dcdc; }
     width: 100%;
     z-index: 2000;
 }
+.innerTitle {
+	color: #444;
+}
+.rm30 {	margin-right: 30px;	}
 /* .......................
 	END OF GENERAL STYLES
    ..................... */
@@ -826,14 +863,28 @@ tr.bad { background: #f4dcdc; }
 #calendar-jumper select { width: 120px; }
 
 #upcoming_exams li {
-    font-size: 15px;
-    margin-bottom: 20px;
+    font-size: 13px;
+    margin-bottom: 15px;
     margin-left: 15px;
 }
+.exam + .exam {
+	border-top: 1px dashed #aaa;
+	padding-top: 25px;
+}
+
 #upcoming_exams li ul {
 	margin-top: 10px;
 }
 #examresult-edit-form input[type="text"] { width: 30px; }
+
+.upcomingAttention {
+	background: #768230 url("../image/upcomingAttention.png") repeat-x left bottom;
+	color:#fff;
+	padding: 3px 5px;
+	font-size: 10px;
+	border-radius: 3px;
+	font-weight:bold;
+}
 
 /* ..........................
 	Rank badges
@@ -957,8 +1008,6 @@ table.calendar td ul.output { margin-top: 10px; color: #427693; }
 .roleIcon.Admin {
     background-position: -80px 0;
 }
-
-
 
 /* ..........................
 	Developer section
