@@ -56,7 +56,7 @@
                 <td><?php echo ($exam->reminder)?'Yes':'No'; ?></td>
                 <td>
                     <p><?php if( Acl::instance()->is_allowed('exam_edit')){?>
-                        <?php echo Html::anchor('/exam/edit/id/'.$exam->id, 'View/Edit')?>
+                        <?php if($exam->event->eventstart > strtotime(date('d M Y h:i:s A'))) { echo Html::anchor('/exam/edit/id/'.$exam->id, 'View/Edit'); } else { echo "Exam Over"; } ?>
                     <?php }?></p>
                 </td>
             </tr>
