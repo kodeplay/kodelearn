@@ -31,7 +31,11 @@ $(document).ready (function () {
 		$("#error").fadeOut(250, function () {
 			$("#error").remove();
 		});
-		
+	});
+	$("input[name='selected_roles[]']").click(function () {
+			$("#error").fadeOut(250, function () {
+			$("#error").remove();
+		});
 	});
 	
 	
