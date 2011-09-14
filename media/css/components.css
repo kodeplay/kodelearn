@@ -1,9 +1,5 @@
 /*components*/
 .button {	padding: 5px 10px;	}
-.button.disabled {
-    background: url("../image/disabledBtn.png") repeat-x left bottom;
-    color: #7c7c7c;
- }
 .debug { border: 1px solid red !important; background: #faa !important; color: #000 !important;	}
 
 
@@ -52,6 +48,10 @@
 .round3 { -webkit-border-radius: 3px; -moz-border-radius: 3px; border-radius: 3px; }
 .round50p {	-webkit-border-radius: 50%; -moz-border-radius: 50%; border-radius: 50%; }
 .clear {clear: both; }
+
+.pabs {	position:absolute; }
+.prel { position:relative; }
+.pfix {	position:fixed; }
 
 .lsNone {	list-style-type: none;	}
 
