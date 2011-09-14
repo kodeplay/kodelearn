@@ -481,7 +481,7 @@ class Controller_Exam extends Controller_Base {
         if($this->request->method() === 'POST' && $this->request->post('selected')){
             foreach($this->request->post('selected') as $exam_id){
             	$exam = ORM::factory('exam', $exam_id);
-            	ORM::factory('event', $exam->event_id);
+            	ORM::factory('event', $exam->event_id)->delete();
             	$exam->delete();
             }
         }
