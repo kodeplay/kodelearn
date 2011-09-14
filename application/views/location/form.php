@@ -61,5 +61,7 @@ new AjaxUpload('#uploadmap', {
         }
     }
 });
-
+$(document).ready(function(){
+	KODELEARN.modules.get('sidebar').highlight('system');
+});
 //--></script>
