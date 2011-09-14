@@ -1,5 +1,5 @@
 <?php if (isset($avatar_user)) { ?>
-    <p class="tac"><img id="sbProfileImg" src="<?php echo $avatar_user; ?>" /></p>
+    <div class="tac" id="profile_image"><div class="prel"><a href="<?php echo $change_img_url; ?>" class="fullwidth profileimg_link">Change</a><img id="sbProfileImg" src="<?php echo $avatar_user; ?>" /></div></div>
     <p class="tac sidebarTitle" id="sbName"><?php echo $user->firstname . ' ' . $user->lastname; ?></p>
     <p class="tac h4" id="sbType"><?php echo $role; ?></p>
     <p align="center">

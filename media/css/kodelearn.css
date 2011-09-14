@@ -965,3 +965,23 @@ table.calendar td ul.output { margin-top: 10px; color: #427693; }
    ........................ */
 
 /*#feed_event h1 {display:none;}*/
+
+
+.prel {
+    position:relative;
+    
+}
+
+.profileimg_link {
+    display: none;
+    position: absolute; 
+    bottom: 0px;
+    opacity: 0.7;
+    color: black;
+    
+}
+
+#profile_image:hover a {
+    display: block;
+}
+
