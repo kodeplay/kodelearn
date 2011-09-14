@@ -9,6 +9,7 @@ return array(
         'Model_Exam::marks_check'    => 'Passing marks should not be greater than total marks',
         
     ),
-    
-    
+    'examgroup_id' => array(
+        'not_empty' => 'No Grading Period found. <a href="' . URL::site('examgroup') . '">Would you like to create one now?</a>'
+    ),
 );

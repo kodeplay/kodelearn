@@ -22,6 +22,7 @@
                     Name
                 </th>
                 <th>
+                    <input class="hidden" type="checkbox" value="0" name="selected[]" checked >
                     <input type="checkbox" onclick="$('.selected').attr('checked', this.checked);" class="selected">Status
                 </th>
                 

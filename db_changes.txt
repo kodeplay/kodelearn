@@ -279,3 +279,6 @@ CREATE TABLE `feeds_users` (
 COLLATE='utf8_general_ci'
 ENGINE=InnoDB;
 
+--------------------------------------------------------------------------------------------------------------------------
+ALTER TABLE `examgroups`
+    ADD COLUMN `publish` TINYINT NOT NULL DEFAULT '0' AFTER `name`;

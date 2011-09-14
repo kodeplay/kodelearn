@@ -71,24 +71,19 @@
 					<!-- <p><a href="#">Send message</a></p> -->
 				</td>
 			</tr>
-			<?php } ?>
-            <?php if($count > 0){ ?>
-                <tr class="pagination">
-                    <td class="tar pagination" colspan="6">
-                        <?php echo $pagination ?>
-                    </td>
-                </tr>
-                <?php 
-                } else {
-                ?>
+			<?php  } ?>
+            <?php if($count == 0){ ?>
                 <tr>
-                    <td colspan="5" align="center">
+                    <td colspan="7" align="center">
                         No Records Found
                     </td>
                 </tr>
-                <?php 
-                }
-                ?>
+                <?php  } ?>
+                <tr class="pagination">
+                    <td class="tar pagination" colspan="7">
+                        <?php echo $pagination ?>
+                    </td>
+                </tr>
 		</table>
 		</form>
 	</div><!-- content -->
