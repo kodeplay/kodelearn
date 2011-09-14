@@ -391,4 +391,38 @@ class Model_User extends ORM {
         }
         return $user->find_all();
     }
+    
+    public static function users_total_role($filters=array()) {
+       
+        $user = ORM::factory('user')
+            ->join('roles_users','left')
+            ->on('roles_users.user_id','=','users.id')
+            ->join('roles','left')
+            ->on('roles_users.role_id','=','roles.id');
+        $user->where('roles.name', 'like', '%'. $filters['filter_role'].'%' );
+        $user->group_by('users.id');
+        
+        $users = $user->find_all()->as_array(null,'id');
+        
+        return count($users);
+    }
+    
+    public static function users_role($filters=array()) {
+       
+        $user = ORM::factory('user')
+            ->join('roles_users','left')
+            ->on('roles_users.user_id','=','users.id')
+            ->join('roles','left')
+            ->on('roles_users.role_id','=','roles.id');
+        $user->where('roles.name', 'like', '%'. $filters['filter_role'].'%' );
+        $user->group_by('users.id');        
+        if (isset($filters['sort'])) {
+            $user->order_by($filters['sort'], Arr::get($filters, 'order', 'ASC'));
+        }
+        if (isset($filters['limit'])) {
+            $user->limit($filters['limit'])
+                ->offset(Arr::get($filters, 'offset', 0));            
+        }
+        return $user->find_all();
+    }
 }

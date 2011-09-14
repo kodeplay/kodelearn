@@ -35,6 +35,7 @@
     		  <option value="filter_batch">Batch</option>
     		  <option value="filter_course">Course</option>
     		  <option value="filter_approved">Approval status</option>
+    		  <option value="filter_role">Role</option>
     		</select>
     		<input type="text" name="filter" id="filter" value="<?php echo $filter; ?>" style="padding:5px" />
     		<a class="button" id="trigger_filter" href="#">Find</a>

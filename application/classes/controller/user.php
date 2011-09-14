@@ -66,6 +66,29 @@ class Controller_User extends Controller_Base {
             ));
             
             $users = Model_User::users_course($filters);
+        } else if($this->request->param('filter_role')) {
+            $filters = array(
+                    'filter_role' => $this->request->param('filter_role'),
+                    
+            );
+            
+            $total = Model_User::users_total_role($filters);
+            
+            $count = $total;
+            
+            $pagination = Pagination::factory(array(
+                'total_items'    => $count,
+                'items_per_page' => 50,
+            ));
+            
+            $filters = array_merge($filters, array(
+                'sort' => $sort,
+                'order' => $order,
+                'limit' => $pagination->items_per_page,
+                'offset' => $pagination->offset,            
+            ));
+            
+            $users = Model_User::users_role($filters);
         } else {
             $filters = array(
                     'filter_id' => $this->request->param('filter_id'),
@@ -132,6 +155,12 @@ class Controller_User extends Controller_Base {
             $url .= '/filter_approved/'.$this->request->param('filter_approved');
             $filter = $this->request->param('filter_approved');
             $filter_select = 'filter_approved';
+        }
+        
+        if($this->request->param('filter_role')){
+            $url .= '/filter_role/'.$this->request->param('filter_role');
+            $filter = $this->request->param('filter_role');
+            $filter_select = 'filter_role';
         }
         
         $sorting->set_link($url);
