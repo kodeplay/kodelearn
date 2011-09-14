@@ -184,12 +184,13 @@ class Controller_Base extends Controller_Template {
                     $child_avatar = $child_avatar === null ? '' : $child_avatar;
                     $img_child[$child->firstname] = CacheImage::instance()->resize($child_avatar, 30, 30);
                 }
-                
+                $change_img_url = Url::site('account');
                 $view_avatar = View::factory('account/sidemenu/'.strtolower($role))
                         ->bind('avatar_user', $img_user)
                         ->bind('avatar_students', $img_child)
                         ->bind('user', $user)
                         ->bind('role', $role)
+                        ->bind('change_img_url', $change_img_url)
                         ;
                 $this->view->set('avatar', $view_avatar);
             }

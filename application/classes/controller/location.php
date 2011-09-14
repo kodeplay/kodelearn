@@ -174,8 +174,6 @@ class Controller_Location extends Controller_Base {
                 
                 $images = CacheImage::instance();;
                 $src = $images->resize($filename, 400, 200);
-
-                
                 
                 $json = array(
                    'success'   => 1,

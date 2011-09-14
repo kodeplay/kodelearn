@@ -101,4 +101,7 @@ KODELEARN.modules.add('acl', (function () {
         }
     }
 })());
+$(document).ready(function(){
+	KODELEARN.modules.get('sidebar').highlight('user');
+});
 </script>

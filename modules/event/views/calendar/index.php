@@ -20,6 +20,11 @@
             <option value="<?php echo $y; ?>" <?php echo ($year == $y ? 'selected="selected"' : ''); ?>><?php echo $y; ?></option>
             <?php } ?>
         </select>&nbsp;&nbsp;
+        <select name="type">
+        	<option value="">All</option>
+        	<option value="lecture">Lecture</option>
+        	<option value="exam">Exam</option>
+        </select>
         <a class="button">Go</a>
     </div>     
     <div class="l w69 pad5" id="calendar-wrapper">

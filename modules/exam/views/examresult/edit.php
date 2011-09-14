@@ -60,3 +60,8 @@
         <a class="button" onclick="$('#examresult-edit-form').submit();">Save</a>
     </div>
 </div><!-- content -->
+<script type="text/javascript">
+$(document).ready(function(){
+	KODELEARN.modules.get('sidebar').highlight('exam');
+});
+</script>

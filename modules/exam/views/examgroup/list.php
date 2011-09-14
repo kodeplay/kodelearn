@@ -61,3 +61,8 @@
     </div><!-- content -->
     
     <div class="clear"></div>
+<script type="text/javascript">
+$(document).ready(function(){
+	KODELEARN.modules.get('sidebar').highlight('exam');
+});
+</script>

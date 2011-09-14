@@ -20,3 +20,8 @@
     </ul>
     
 </div>
+<script type="text/javascript">
+$(document).ready(function(){
+	KODELEARN.modules.get('sidebar').highlight('exam');
+});
+</script>

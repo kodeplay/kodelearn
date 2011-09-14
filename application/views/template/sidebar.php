@@ -3,7 +3,10 @@
     <p class="sidebarTitle">Administration</p>
     <?php } ?>
     <?php if (isset($avatar)) { 
-        echo $avatar;    
+        ?>
+            <?php echo $avatar; ?>
+        
+	<?php 
 	} ?>
     <ul class="lsNone">
         <?php 
