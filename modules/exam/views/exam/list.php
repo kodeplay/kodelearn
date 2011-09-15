@@ -49,11 +49,14 @@
                 <td><input type="checkbox" class="selected" name="selected[]" value="<?php echo $exam->id ?>" /></td>
                 <td><?php echo $exam->name ?></td>
                 <td><?php echo $exam->examgroup->name ?></td>
-                <td><?php echo date('d M Y h:i A', $exam->event->eventstart) ?></td>
+                <td>
+					<p><?php echo date('d M Y', $exam->event->eventstart) ?></p>
+					<p><?php echo date('h:i A', $exam->event->eventstart) ?></p>
+				</td>
                 <td><?php echo $exam->course->name ?></td>
-                <td><?php echo $exam->total_marks ?></td>
-                <td><?php echo $exam->passing_marks ?></td>
-                <td><?php echo ($exam->reminder)?'Yes':'No'; ?></td>
+                <td class="tac"><?php echo $exam->total_marks ?></td>
+                <td class="tac"><?php echo $exam->passing_marks ?></td>
+                <td class="tac"><span class="yesno <?php echo ($exam->reminder)?'Yes':'No'; ?>" title="<?php echo ($exam->reminder)?'Yes':'No'; ?>">&nbsp;</span></td>
                 <td>
                     <p><?php if( Acl::instance()->is_allowed('exam_edit')){?>
                         <?php echo Html::anchor('/exam/edit/id/'.$exam->id, 'View/Edit')?>

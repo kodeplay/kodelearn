@@ -29,7 +29,8 @@ body {
 	margin: 0; 
 	padding: 0; 
 	font-size: 12px; 
-	font-family: verdana, sans serif;
+	font-size: 14px;
+	font-family: arial, verdana, sans serif;
 }
 
 .container {
@@ -70,6 +71,7 @@ a{ color: #427693; }
 .tpad10 {
 	padding-top: 10px;
 }
+.w8 {  width: 11%; }
 
 /* .......................
 	Page sections
@@ -215,7 +217,6 @@ a{ color: #427693; }
 	display: inline;
 	padding: 3px 5px;
 	font-size: 11px;
-	font-weight:normal;
 }
 .pageAction.alert:hover {
 	background: #c00000 url("../image/alert.png") repeat-x left top;
@@ -445,10 +446,12 @@ select {	width: 210px;  }
 .formMessages {
 	background: #e0f0f5;
 	border: 1px solid #b8bec4;
-	border-radius: 3px;
+	border-radius: 2px;
 	padding: 5px;
 	width: 80%;
 	margin: 10px auto;
+	xmargin: 10px 0;
+	font-size: 12px;
 }
 
 .formMessages.good {
@@ -504,6 +507,14 @@ tr.bad { background: #f4dcdc; }
 .fmText {
 	float: left;
 	font-weight: bold;
+	display: block;
+}
+.fmText li+li {
+	margin-top: 5px;
+}
+.formMessages .clear {
+	display:block;
+	height: 1px;
 }
 .form-error {
 	display: block;
@@ -560,6 +571,7 @@ tr.bad { background: #f4dcdc; }
 	border-collapse: collapse; 
 	color: #000; 
 	border: none; 
+	line-height: 1.6;
 }
 .datatable th {	
 	background: #f3f3f3 url("../image/thback.png") repeat-x left bottom;
@@ -567,7 +579,8 @@ tr.bad { background: #f4dcdc; }
 	padding: 10px 5px;
 	color: #4c3d34; 
 	text-shadow: 1px 1px 1px #fff; 
-	border-bottom: 1px solid #4c3d34; 
+	border-bottom: 1px solid #aaa;
+	border-top: 1px solid #aaa;
 	text-align: left;
 	font-weight: bold;
 }
@@ -762,9 +775,12 @@ tr.bad { background: #f4dcdc; }
 .feed li {
 	padding: 10px 5px;
 }
-.feed li+li {
+.feed li+li, #feeds > div+div {
 	border-top: 1px solid #d7c2b5;
 	margin-top: 5px;
+}
+#feeds > div img {
+	width: 70px;
 }
 .feedIcon { float: left; height: 16px; width: 16px; display: block; background: url("../image/feedIcons.png") no-repeat 50%; }
 .feedContent {	float: left; margin-left: 20px; }
@@ -774,6 +790,11 @@ tr.bad { background: #f4dcdc; }
 	border-bottom: 1px solid #E9E9E9;
     padding-top: 15px;
     padding-bottom: 15px;
+}
+#feeds p:nth-child(1) {
+	/*name of poster*/
+	font-weight:bold;
+	font-size: 14px;
 }
 .show_more{
     background-color: #426883;
@@ -871,7 +892,20 @@ tr.bad { background: #f4dcdc; }
 	border-top: 1px dashed #aaa;
 	padding-top: 25px;
 }
-
+.yesno {	
+	background: url("../image/rightWrongSprite.png") no-repeat;
+	width: 16px;
+	height: 16px;
+	*display: inline;
+	display: inline-block;
+	margin: 2px;
+}
+.yesno.Yes {
+	background-position: 0 5px;
+}
+.yesno.No {
+	background-position: 0 -12px;
+}
 #upcoming_exams li ul {
 	margin-top: 10px;
 }
@@ -952,7 +986,8 @@ table.calendar td ul.output { margin-top: 10px; color: #427693; }
 #day-events { border: 1px solid #d7c2b5; }
 #day-events h1 { padding: 10px 15px; font-size: 18px; border-bottom: 1px solid #feb100; }
 #day-events ul { padding: 10px 5px; } 
-#day-events ul li { padding: 15px 10px; margin-bottom: 1px; border-bottom: 1px solid #d7c2b5; }
+#day-events ul li { padding: 15px 10px; margin-bottom: 1px; }
+#day-events ul li+li { border-top: 1px solid #d7c2b5; }
 #day-events ul li:hover { background: #f1edd3; border: 1px dashed #666; cursor: pointer; }
 #day-events ul li.cancelled { background: #F4DCDC; }
 #day-events ul li.cancelled span.cancelled { color: #ff0000; }
@@ -989,7 +1024,7 @@ table.calendar td ul.output { margin-top: 10px; color: #427693; }
         User Role Icons
    .................................... */
 .roleIcon {
-    background: url("images/roleSprite.png") no-repeat;
+    background: url("../image/roleSprite.png") no-repeat;
     display: inline-block;
     zoom: 1;
     width: 20px;
