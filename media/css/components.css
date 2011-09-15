@@ -88,9 +88,9 @@
 .whiteShadow {	text-shadow: 1px 1px 1px #fff;	}
 .blackShadow {	text-shadow: 1px 1px 1px #000;	}
 
-.vatop {	vertical-align: top; }
-.vamid {	vertical-align: middle; }
-.vabot {	vertical-align:bottom; }
+.vatop {	vertical-align: top !important; }
+.vamid {	vertical-align: middle !important; }
+.vabot {	vertical-align:bottom !important; }
 
 /*table*/
 .collapse {	border-collapse: collapse }
@@ -100,7 +100,6 @@
 /* --------------------------------
 	Widths
 -----------------------------------*/
-.w8 {  width: 8%; }
 .w10 {	width: 10%; }
 .w20 {	width: 20%; }
 .w29 { width: 29%; }

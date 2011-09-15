@@ -1,7 +1,7 @@
 <?php defined('SYSPATH') or die('No direct access allowed.'); ?>
 <div class="pagecontent one_column">
-    <div class="pageTop">
-        <div class="pageTitle l w60">Calender</div>
+    <div class="pageTop withBorder bm10">
+        <div class="pageTitle l w60">Calendar</div>
         <div class="pageDesc r">
            
         </div>
