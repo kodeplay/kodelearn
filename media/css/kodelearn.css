@@ -145,6 +145,23 @@ a{ color: #427693; }
 	border-bottom-left-radius: 3px;
 	
 }
+.roleContainer {
+	width: 100%;
+	left: 0;
+	top: 0;
+	height: 19px;
+	padding: 13px 0 5px;
+	text-align: center;
+	font-weight: bold;
+	color: #ffffff;
+	background: #c00 url("../image/xyz.png") repeat-x left bottom;
+	display: block;
+	
+}
+
+.roleContainer > a {
+	color: #ffffff;
+}
 
 .branding {
 	padding: 25px 10px;

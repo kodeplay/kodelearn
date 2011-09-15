@@ -146,4 +146,10 @@ class Controller_Account extends Controller_Base {
 		echo 'hi'; exit;
 	}
 	
+    public function action_rolelogin() {
+        $email = base64_decode($this->request->param('j'));
+        Auth::instance()->force_login($email);
+        Request::current()->redirect('feed');   
+    }
+	
 }

@@ -69,7 +69,7 @@
 				            <?php echo Html::anchor('/user/edit/id/'.$user->id, 'View/Edit'); ?>
 				       <?php }?>
 				    </p>
-					<!-- <p><a href="#">Send message</a></p> -->
+					<p><?php echo Html::anchor('/account/rolelogin/j/'.base64_encode($user->email), 'Login'); ?></p> 
 				</td>
 			</tr>
 			<?php  } ?>

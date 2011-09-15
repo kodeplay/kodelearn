@@ -206,4 +206,5 @@ class Model_Course extends ORM {
         }
         return $users;
     }
+       
 }

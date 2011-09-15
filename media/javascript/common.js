@@ -91,10 +91,14 @@ KODELEARN.modules.add('sidebar' , (function () {
 	    		window.onscroll = function() {
 	    			var eltop = el.position().top;
 	    			var winscroll = win.scrollTop();
-	    			if(winscroll > 178){
+	    			var adminbar = $(".roleContainer").outerHeight();
+	    			if(adminbar === "NaN") {
+	    				adminbar = 0;
+	    			}
+	    			if(winscroll > (178 + +adminbar)){
 	    				el.css({position: 'fixed', top: 0});
 	    			} else {
-	    				el.css({position: 'absolute', top: 178});
+	    				el.css({position: 'absolute', top: (178+ +adminbar)});
 	    			}
 	    		};
 	    		this.highlight();
