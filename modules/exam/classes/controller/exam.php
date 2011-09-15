@@ -171,7 +171,7 @@ class Controller_Exam extends Controller_Base {
         $sorting = new Sort(array(
             'Name'              => 'name',
             'Grading Period'    => '',
-            'Date / Time'       => '',
+            'Date / Time'       => 'events.eventstart',
             'Course'            => '',
             'Total Marks'       => 'total_marks',
             'Passing Marks'     => 'passing_marks',
