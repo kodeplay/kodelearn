@@ -48,7 +48,7 @@ class Model_Event extends ORM {
      * @param int $year > 1970 due to unix time stamp
      * @return Database_MySQL_Result
      */
-    public static function monthly_events($month, $year) {
+    public static function monthly_events($month, $year, $event_type = "") {
         // first date of the month
         $first = mktime(0, 0, 0, $month, 1, $year);
         // last date of the month
@@ -67,15 +67,21 @@ class Model_Event extends ORM {
             $event = ORM::factory('event')
                 ->where('eventstart', 'BETWEEN', array($first, $last))
                 ->where('events.course_id', 'IN', DB::expr('(' . implode(", ", $courses) . ')'))
-                ->where('events.cancel', ' = ', 0)
-                ->find_all();
+                ->where('events.cancel', ' = ', 0);
+            if($event_type != "") {
+                $event->where('events.eventtype', '=', $event_type);
+            }   
+            $events = $event->find_all();
         } else {
             $event = ORM::factory('event')
                 ->where('eventstart', 'BETWEEN', array($first, $last))
-                ->where('events.cancel', ' = ', 0)
-                ->find_all();
+                ->where('events.cancel', ' = ', 0);
+            if($event_type != "") {
+                $event->where('events.eventtype', '=', $event_type);
+            }    
+            $events = $event->find_all();
         }
-        return $event;
+        return $events;
     }
 
     /**

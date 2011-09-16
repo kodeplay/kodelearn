@@ -40,9 +40,10 @@ class Controller_Calendar extends Controller_Base {
             ->bind('calendar', $calendar_markup);
         $month = Arr::get($_GET, 'month', date('m'));
         $year = Arr::get($_GET, 'year', date('Y'));
+        $event_type = Arr::get($_GET, 'event_type');
         $calendar = new Calendar($month, $year);
         $calendar->standard('prev-next');
-        $event = Model_Event::monthly_events($month, $year);
+        $event = Model_Event::monthly_events($month, $year, $event_type);
         $day_events = array();
         // loop though events and group events by day and event types
         foreach ($event as $e) {

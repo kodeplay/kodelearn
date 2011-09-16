@@ -1017,7 +1017,7 @@ tr.bad { background: #f4dcdc; }
 	Calendar styling
    ........................ */
 table.calendar { width: 100%; }
-table.calendar caption { background: #373736 url("../image/menubar.png") repeat-x left bottom; height: 30px; padding: 10px 0 3px 0; font-size: 18px; color: #4c3d34; color: #fff; border-bottom: 1px solid #600; text-shadow: 1px 1px 1px #000; }
+table.calendar caption { background: #373736 url("../image/menubar.png") repeat-x left bottom; height: 40px; padding: 10px 0 3px 0; font-size: 18px; color: #4c3d34; color: #fff; border-bottom: 1px solid #600; text-shadow: 1px 1px 1px #000; }
 table.calendar caption .title {	font-weight:bold; }
 table.calendar th { height: 30px; padding-top:10px; border: 1px solid #D7C2B5; border-top:none; color:#333; font-weight:bold; border-bottom:1px solid #feb100; }
 table.calendar td { width: 14%; height: 80px; cursor: pointer; }
@@ -1105,3 +1105,17 @@ table.calendar .prev-next .day { color: #aaa; }
 /* ..........................
 	Developer section
    ........................ */
+
+.calandar-today {
+    background: none repeat scroll 0 0 #373737;
+    color: #FFFFFF;
+    margin-left: 99px;
+    margin-right: 10px;
+    padding: 8px;
+    text-shadow: none;
+    width: 73px;
+}
+
+.w555 {
+	width: 555px;
+}

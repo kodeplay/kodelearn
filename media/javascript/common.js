@@ -401,13 +401,27 @@ KODELEARN.modules.add('calendar', (function () {
 
         jumper: function () {
             var that = this;
-            $("#calendar-jumper>a.button").click(function () {
+            $("#jumper_go").click(function () {
                 var month = $("select[name='jump_month']").val(),
                 year = $("select[name='jump_year']").val();
+                var event_type = $("select[name='event_type']").val();
                 new ajaxLoad({
                     'container': '#calendar-wrapper',
                     'controller': 'calendar',
-                    'action': 'calendar?month='+month+'&year='+year,
+                    'action': 'calendar?month='+month+'&year='+year+'&event_type='+event_type,
+                    'callback': function (resp) {
+                        that.day_events();
+                        that.ajaxify();
+                    }
+                });
+            });
+            
+            $("#current_day").live('click', function () {
+            	var event_type = $("select[name='event_type']").val();
+                new ajaxLoad({
+                    'container': '#calendar-wrapper',
+                    'controller': 'calendar',
+                    'action': 'calendar?event_type='+event_type,
                     'callback': function (resp) {
                         that.day_events();
                         that.ajaxify();
