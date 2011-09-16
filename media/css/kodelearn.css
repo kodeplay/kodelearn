@@ -155,13 +155,23 @@ a{ color: #427693; }
 	text-align: center;
 	font-weight: bold;
 	color: #ffffff;
-	background: #c00 url("../image/xyz.png") repeat-x left bottom;
+	background: #feb100 url("../image/roleContainer.png") repeat-x left bottom;
 	display: block;
-	
+	-webkit-box-shadow: inset -1px -1px 3px #f3b95c;
+	-moz-box-shadow: inset -1px -1px 3px #f3b95c;
+	-ms-box-shadow: inset -1px -1px 3px #f3b95c;
+	box-shadow: inset -1px -1px 3px #f3b95c;
 }
 
 .roleContainer > a {
-	color: #ffffff;
+	color: #9f410e;
+	text-shadow: 1px 1px 1px #f3b95c;
+	-webkit-transition: color 0.3s ease;
+	-moz-transition: color 0.3s ease;
+	transition: color 0.3s ease;
+}
+.roleContainer > a:hover {
+	color: #662908;
 }
 
 .branding {
