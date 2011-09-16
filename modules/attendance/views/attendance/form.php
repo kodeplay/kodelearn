@@ -1,5 +1,5 @@
       <div class="r pagecontent">
-        <div class="pageTop">
+        <div class="pageTop withBorder">
             <div class="pageTitle l w60"><?php echo $page_title; ?></div>
             <div class="pageDesc r">replace_here_page_description</div>
             <div class="clear"></div>
