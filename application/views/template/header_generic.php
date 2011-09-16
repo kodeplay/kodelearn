@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>KodeLearn - Generic Header</title>
+        <title>KodeLearn</title>
         <?php foreach ($styles as $file => $type) echo HTML::style($file, array('media' => $type)), PHP_EOL ?>
         <script type="text/javascript">
             var KODELEARN = KODELEARN || { };
