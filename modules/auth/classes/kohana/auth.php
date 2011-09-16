@@ -101,8 +101,15 @@ abstract class Kohana_Auth {
 	    $already_logged_user = $this->get_user();
         
         if ($already_logged_user->is_role('admin')) {
-	        $this->_session->delete('admin_logged');
-            $this->_session->set('admin_logged',base64_encode($already_logged_user->email)); 
+            if(isset($_SESSION['admin_logged'])){
+                $email = "";
+                $email = base64_decode($_SESSION['admin_logged']);
+                $this->_session->delete('admin_logged');
+            } else {
+                $this->_session->delete('admin_logged');
+                $this->_session->set('admin_logged',base64_encode($already_logged_user->email)); 
+            }
+        	
         } else {
             $email = "";
             if(isset($_SESSION['admin_logged'])){
