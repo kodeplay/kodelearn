@@ -6,6 +6,8 @@ class Controller_Home extends Controller_Base {
     	$view = View::factory('home/index')
             ->bind('feeds', $feeds);
             
+        Session::instance()->delete('course_id');    
+            
     	$feeds = Request::factory('feed/index')
             ->method(Request::GET)
             ->execute()
