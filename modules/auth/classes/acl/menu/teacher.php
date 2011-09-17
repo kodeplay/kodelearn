@@ -20,5 +20,11 @@ class Acl_Menu_Teacher extends Acl_Menu {
         $this->set('topmenu', $topmenu)
             ->set('sidemenu', $sidemenu)
             ->set('myaccount', $myaccount);
+        $coursemenu = DynamicMenu::factory('coursemenu');
+        
+        $this->set('topmenu', $topmenu)
+            ->set('sidemenu', $sidemenu)
+            ->set('coursemenu', $coursemenu)
+            ->set('myaccount', $myaccount);
     }
 }
