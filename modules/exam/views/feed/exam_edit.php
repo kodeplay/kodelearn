@@ -5,7 +5,7 @@
     <table class="fullwidth">
         <tr>
             <td class="w8">
-                <img src = "<?php echo $avatar; ?>"></img>
+                <img src = "<?php echo $avatar; ?>" class = "h70 "></img>
             </td>
             <td class="vatop hpad10">
                 <p class="h3"><span class = "roleIcon <?php echo $user->role(); ?>">&nbsp;</span><?php echo $user->fullname(); ?></p><br>

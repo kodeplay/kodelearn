@@ -1180,3 +1180,8 @@ table.calendar .prev-next .day { color: #aaa; }
 	text-overflow: ellipsis;
 }
 /*docs by nkhl*/
+
+.h70 {
+    height: 70px
+}
+
