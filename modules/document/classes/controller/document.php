@@ -44,13 +44,12 @@ class Controller_Document extends Controller_Base {
     		Request::current()->redirect('error/access_denied');
     	}
     	 */
-    	
     	header("Pragma: public");
 		header("Expires: 0");
 		header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
 		header("Cache-Control: public");
 		header("Content-Description: File Transfer");
-		header("Content-Type: " . mime_content_type($filename));
+		header("Content-Type: " . File::mime($filename));
 		header("Content-Disposition: attachment; filename=" . basename($filename));
 		header("Content-Transfer-Encoding: binary");
 		readfile($filename);
