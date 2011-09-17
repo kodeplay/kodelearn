@@ -4,8 +4,8 @@
         <div class="pageDesc r">replace_here_page_description</div>
         <div class="clear"></div>
     </div><!-- pageTop -->
-    <div class="topbar bm10">
-    	<?php echo HTML::anchor('document/upload', 'Upload', array('class' => 'button round5')); ?>            
+    <div class="topbar bm10 hgtfix vpad5">
+    	<?php echo HTML::anchor('document/upload', 'Upload', array('class' => 'dib button round5')); ?>            
         <span class="clear">&nbsp;</span>
     </div><!-- topbar -->    
     

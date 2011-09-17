@@ -15,9 +15,10 @@
 	8.		Signup form styles
 	9.		Role actions permissions
 	10.		News feed
-        11.             Calendar styling
-        12.             Overridden jquery-ui styles
-        13.             Post form styling
+    11.             Calendar styling
+    12.             Overridden jquery-ui styles
+    13.             Post form styling
+	14.		Documents
 	END.	Developer styles
 
    ............................. */
@@ -180,6 +181,7 @@ a{ color: #427693; }
 }
 .branding h1 {
 	width: 200px;
+	height: 60px;
 }
 .role {
 	padding: 5px;
@@ -308,14 +310,20 @@ a{ color: #427693; }
 	-moz-transition: background 0.3s ease;
 	transition: background 0.3s ease;
 }
-.sidemenu.Users a {	background-position:0 -325px; }
-.sidemenu.Batches a {	background-position:0 -223px; }
-.sidemenu.System a {	background-position:0 10px; }
-.sidemenu.Courses a {	background-position:0 -103px; }
-.sidemenu.Exam a {	background-position:0 -367px; }
-.sidemenu.Lecture a {	background-position:0 -46px; }
-.sidemenu.Attendance a {	background-position:0 -274px; }
-.sidemenu.Calendar a {	background-position:0 -165px; }
+.sidemenu.Users a {	background-position:0 -333px; }
+.sidemenu.Batches a {	background-position:0 -232px; }
+.sidemenu.System a {	background-position:0 3px; }
+.sidemenu.Courses a {	background-position:0 -111px; }
+.sidemenu.Exam a {	background-position:0 -375px; }
+.sidemenu.Lecture a {	background-position:0 -52px; }
+.sidemenu.Attendance a {	background-position:0 -284px; }
+.sidemenu.Documents a {	background-position:0 -706px; }
+.sidemenu.Links a {	background-position:0 -644px; }
+.sidemenu.Flashcard a {	background-position:0 -478px; }
+.sidemenu.Assignments a {	background-position:0 -532px; }
+.sidemenu.Lessons a {	background-position:0 -585px; }
+.sidemenu.Calendar a {	background-position:0 -173px; }
+.sidemenu.Quiz a {	background-position:0 -422px; }
 
 .sidemenu a:hover {	color: #415666; }
 .sidemenu.active {
@@ -902,6 +910,20 @@ tr.bad { background: #f4dcdc; }
 	width: 117px;
 	height: 80px;
 }
+.calandar-today {
+    background: none repeat scroll 0 0 #373737;
+    color: #FFFFFF;
+    margin-left: 99px;
+    margin-right: 10px;
+    padding: 8px;
+    text-shadow: none;
+    width: 73px;
+}
+
+.w555 {
+	width: 555px;
+}
+
 .rectBtn {
 	border-radius: 3px;
 	padding: 5px;
@@ -1103,23 +1125,8 @@ table.calendar .prev-next .day { color: #aaa; }
 }
 
 /* ..........................
-	Developer section
+	Documents
    ........................ */
-
-.calandar-today {
-    background: none repeat scroll 0 0 #373737;
-    color: #FFFFFF;
-    margin-left: 99px;
-    margin-right: 10px;
-    padding: 8px;
-    text-shadow: none;
-    width: 73px;
-}
-
-.w555 {
-	width: 555px;
-}
-
 .documents {
 	margin-top: 10px;
 }
@@ -1141,7 +1148,6 @@ table.calendar .prev-next .day { color: #aaa; }
 	padding-top: 15px;	
 }
 
-/*docs by nkhl*/
 .documentsContainer {
 	margin-top: 30px;
 }
@@ -1157,7 +1163,6 @@ table.calendar .prev-next .day { color: #aaa; }
 }
 .oneDoc {
 	background: url("../image/file_icon.png") no-repeat 50% top;
-	xborder: 1px solid #eee;
 	display: block;
 	width: 150px;
 	height: 180px;
@@ -1176,12 +1181,13 @@ table.calendar .prev-next .day { color: #aaa; }
 	left: 0;
 	width: 100%;
 	background: #fff;
-	overflow: hidden;
 	text-overflow: ellipsis;
 }
-/*docs by nkhl*/
 
 .h70 {
     height: 70px
 }
 
+/* ..........................
+	Developer section
+   ........................ */
