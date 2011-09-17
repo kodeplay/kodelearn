@@ -1030,3 +1030,64 @@ table.calendar td ul.output { margin-top: 10px; color: #427693; }
 #profile_image:hover a {
     display: block;
 }
+
+.documents {
+	margin-top: 10px;
+}
+.documents li:not(.heading):hover {
+	background: #ccc;
+	cursor: pointer;
+}
+.documents li {
+	border-bottom: 1px solid #ddd;
+	padding-left: 10px;
+	padding-bottom: 5px;
+}
+
+.documents li.heading {
+	font-weight: bold;
+	padding-left: 0px;
+	border-bottom: 0px none;
+	padding-bottom: 5px;	
+	padding-top: 15px;	
+}
+
+/*docs by nkhl*/
+.documentsContainer {
+	margin-top: 30px;
+}
+.catName {
+	border-bottom: 1px solid #ccc;
+	padding: 5px 0;
+	font-weight: bold;
+	font-size: 16px;
+	color: #333;
+}
+.catName + .catName {
+	margin-top: 30px;
+}
+.oneDoc {
+	background: url("../image/file_icon.png") no-repeat 50% top;
+	xborder: 1px solid #eee;
+	display: block;
+	width: 150px;
+	height: 180px;
+	margin: 20px 10px;
+}
+
+.docWrapper {
+	left: 0;
+	top: 0;
+	height: 100%;
+	width: 100%;
+}
+.docMeta {
+	bottom: 0;
+	height: 50px;
+	left: 0;
+	width: 100%;
+	background: #fff;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+/*docs by nkhl*/
