@@ -96,6 +96,34 @@ abstract class Kohana_Auth {
 		return $this->_login($email, $password, $remember);
 	}
 	
+	public function force_login($email = "")
+	{
+	    $already_logged_user = $this->get_user();
+        
+        if ($already_logged_user->is_role('admin')) {
+            if(isset($_SESSION['admin_logged'])){
+                $email = "";
+                $email = base64_decode($_SESSION['admin_logged']);
+                $this->_session->delete('admin_logged');
+            } else {
+                $this->_session->delete('admin_logged');
+                $this->_session->set('admin_logged',base64_encode($already_logged_user->email)); 
+            }
+        	
+        } else {
+            $email = "";
+            if(isset($_SESSION['admin_logged'])){
+                $email = base64_decode($_SESSION['admin_logged']);
+                $this->_session->delete('admin_logged');
+            } else {
+                return False;
+            }
+        }
+        
+        $user = ORM::factory('user');
+        $user->where('email', '=', $email)->find(); 
+        return $this->complete_login($user);   
+	}	
 	
     public function login_cookie($email, $password, $remember = FALSE)
     {
@@ -175,10 +203,9 @@ abstract class Kohana_Auth {
 	{
 		// Regenerate session_id
 		$this->_session->regenerate();
-
-		// Store email in session
+        // Store email in session
 		$this->_session->set($this->_config['session_key'], $user);
-
+        
 		return TRUE;
 	}
 

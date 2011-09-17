@@ -11,7 +11,7 @@
         </div>
         <?php if(trim($feeds) && ($total_feeds > 5)){ ?>
         <div class="show_more ">
-            <a id="more_feeds">show older feeds &#x25BC;</a>
+            <a id="more_feeds">Show older feeds &#x25BC;</a>
         </div>
         <?php } ?>
         <div id="feed_event"></div>

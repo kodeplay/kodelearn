@@ -14,6 +14,9 @@
         <?php foreach ($scripts as $file) echo HTML::script($file), PHP_EOL ?>
     </head>
     <body>
+    <?php if(isset($_SESSION['admin_logged'])) {?>
+        <div class="roleContainer"><?php echo Html::anchor('/account/rolelogin', 'Switch back to admin'); ?></div>
+    <?php } ?>
 <div id="ajax-loader"><img src="<?php echo URL::base() ?>media/image/ajax-loader.gif" alt="loading" title="loading.."/></div>
 
         <div class="menubar">

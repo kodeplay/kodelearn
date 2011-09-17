@@ -1,6 +1,6 @@
 	<div class="r pagecontent">
 		<div class="pageTop withBorder">
-			<div class="pageTitle l w60"><?php echo $page_title; ?></div>
+			<div class="pageTitle l w90"><?php echo $page_title; ?></div>
 			<div class="pageDesc r">replace_here_page_description</div>
 			<div class="clear"></div>
 		</div><!-- pageTop -->
@@ -22,6 +22,17 @@
 					<td><?php echo $form->email->element(); ?>
 					    <span class="form-error"><?php echo $form->email->error(); ?></span></td>
 				</tr>
+				<tr>
+                    <td>
+                        <label for="photo">Photograph</label>
+                        <p class="tip">Preferred size: 100px</p>
+                    </td>
+                    <td><img src="<?php echo $avatar ?>" alt="" id="photo" />
+                        <input style="font-size:12px;" type="button" id="uploadavatar" value="Upload"><br>
+                        <a class = "crsrPoint" onclick="return removeImage()">[Remove]</a>
+                        <input type="hidden" name="avatar" id="avatar" value="<?php echo $filename; ?>"></input>
+                    </td>
+                </tr>
 				<tr>
 					<td><?php echo $form->role_id->label(); ?></td>
 					<td><?php echo $form->role_id->element(); ?></td>
@@ -53,3 +64,46 @@
 	</div><!-- pagecontent -->
 	
 	<div class="clear"></div>
+	
+<script type="text/javascript"><!--
+new AjaxUpload('#uploadavatar', {
+    action : '<?php echo $upload_url ?>',
+    name : 'image',
+    autoSubmit : true,
+    responseType: 'json',
+    onChange: function(file, extension){   },   
+    onSubmit: function(file, extension) {
+        //alert('submiting');
+    },
+    onComplete: function(file, data) {
+        
+        if(data.success){
+            $('#photo').attr('src',data.image);
+            $('#avatar').val(data.filename);
+        } else {
+           $('#uploadavatar').after('<span class="form-error">' + data.errors.image + '</span>');
+        }
+    }
+});
+
+function removeImage() {
+    var usrId = "<?php //echo $user->id ?>";
+    
+    $.ajax(
+            {
+                type: "POST",
+                dataType:"html",
+                url:     "<?php echo $remove_url ?>",
+                data:    "usrId="+usrId,
+                success: function(data)
+                {
+                    if(data != ""){
+                        $('#photo').attr('src',data);
+                        $('#avatar').val('');
+                    }
+                }
+            });
+}
+
+
+//--></script>	

@@ -1,12 +1,12 @@
     <div class="r pagecontent">
-        <div class="pageTop">
+        <div class="pageTop withBorder bm10">
             <div class="pageTitle l w60">replace_here_page_title</div>
             <div class="pageDesc r">replace_here_page_description</div>
             <div class="clear"></div>
         </div><!-- pageTop -->
         <div class="pageContent">
             <p class="bm40">
-                <input type="text" name="date" id="date"  value="<?php echo $date; ?>"></input>
+                <label for="date" class="h5 bold hpad5">Show events of date </label><input type="text" name="date" id="date"  value="<?php echo $date; ?>"></input>
                 <!-- <a class="button" href="#" id="add_users"> Add</a> -->
             </p>
 	        <?php if ($success) {  ?>

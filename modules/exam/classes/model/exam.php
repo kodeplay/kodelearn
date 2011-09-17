@@ -75,7 +75,9 @@ class Model_Exam extends ORM {
     
     public static function exams_total($filters=array()) {
        
-        $exam = ORM::factory('exam');
+        $exam = ORM::factory('exam')    
+            ->join('events','left')
+            ->on('events.id','=','exams.event_id');
         if (isset($filters['filter_name'])) {
             $exam->where('exams.name', 'LIKE', '%' . $filters['filter_name'] . '%');
         }        
@@ -99,7 +101,9 @@ class Model_Exam extends ORM {
     
     public static function exams($filters=array()) {
        
-        $exam = ORM::factory('exam');
+        $exam = ORM::factory('exam')
+            ->join('events','left')
+            ->on('events.id','=','exams.event_id');
         if (isset($filters['filter_name'])) {
             $exam->where('exams.name', 'LIKE', '%' . $filters['filter_name'] . '%');
         }        
@@ -133,6 +137,8 @@ class Model_Exam extends ORM {
     public static function exams_total_grading_period($filters=array()) {
        
         $exam = ORM::factory('exam')
+            ->join('events','left')
+            ->on('events.id','=','exams.event_id')
             ->join('examgroups','left')
             ->on('examgroups.id','=','exams.examgroup_id');
         $exam->where('examgroups.name', 'LIKE', '%' . $filters['filter_grading_period'] . '%');
@@ -143,6 +149,8 @@ class Model_Exam extends ORM {
     public static function exams_grading_period($filters=array()) {
        
         $exam = ORM::factory('exam')
+            ->join('events','left')
+            ->on('events.id','=','exams.event_id')
             ->join('examgroups','left')
             ->on('examgroups.id','=','exams.examgroup_id');
         $exam->where('examgroups.name', 'LIKE', '%' . $filters['filter_grading_period'] . '%');
@@ -191,6 +199,8 @@ class Model_Exam extends ORM {
     public static function exams_total_course($filters=array()) {
        
         $exam = ORM::factory('exam')
+            ->join('events','left')
+            ->on('events.id','=','exams.event_id')
             ->join('courses','left')
             ->on('courses.id','=','exams.course_id');
         $exam->where('courses.name', 'LIKE', '%' . $filters['filter_course'] . '%');
@@ -201,6 +211,8 @@ class Model_Exam extends ORM {
     public static function exams_course($filters=array()) {
        
         $exam = ORM::factory('exam')
+            ->join('events','left')
+            ->on('events.id','=','exams.event_id')
             ->join('courses','left')
             ->on('courses.id','=','exams.course_id');
         $exam->where('courses.name', 'LIKE', '%' . $filters['filter_course'] . '%');

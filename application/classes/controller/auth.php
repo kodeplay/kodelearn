@@ -87,8 +87,6 @@ class Controller_Auth extends Controller_Base {
         $log_chk = Auth::instance()->login($this->request->post('email'), $this->request->post('password'), $remember);
         if ($validator->check()
             && $log_chk) {
-             
-                
                 Request::current()->redirect('home');
             exit;
         } else {
@@ -412,6 +410,7 @@ class Controller_Auth extends Controller_Base {
         
         Auth::instance()->logout();
         unset($_SESSION['date']);
+        unset($_SESSION['admin_logged']);
         Request::current()->redirect('auth');
         
     }

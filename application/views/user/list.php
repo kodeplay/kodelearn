@@ -35,13 +35,17 @@
     		  <option value="filter_batch">Batch</option>
     		  <option value="filter_course">Course</option>
     		  <option value="filter_approved">Approval status</option>
+    		  <option value="filter_role">Role</option>
     		</select>
     		<input type="text" name="filter" id="filter" value="<?php echo $filter; ?>" style="padding:5px" />
     		<a class="button" id="trigger_filter" href="#">Find</a>
     		<input type="hidden" id="filter_url" value="<?php echo $filter_url ?>" />
     		<input type="hidden" id="select_val" value="<?php echo $filter_select ?>" />
         </div>
-		
+		<?php 
+		  $current_user = Auth::instance()->get_user();
+          $user_id = $current_user->id;  
+		?>
 		<table class="vm10 datatable fullwidth">
 			<?php echo $table['heading'] ?>
             <?php foreach($users as $user) { ?>
@@ -68,7 +72,9 @@
 				            <?php echo Html::anchor('/user/edit/id/'.$user->id, 'View/Edit'); ?>
 				       <?php }?>
 				    </p>
-					<!-- <p><a href="#">Send message</a></p> -->
+					<?php if((! isset($_SESSION['admin_logged'])) && ($user->id != $user_id)) {?>
+					   <p><?php echo Html::anchor('/account/rolelogin/j/'.base64_encode($user->email), 'Login'); ?></p>
+					<?php } ?> 
 				</td>
 			</tr>
 			<?php  } ?>
