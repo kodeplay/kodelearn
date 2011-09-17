@@ -2,8 +2,6 @@
 
 DynamicMenu::extend(array(
     'coursemenu' => array(
-        array('document', 'Documents', 1, array()),
+        array('lesson', 'Lesson', 5, array()),
     ),
 ));
-
-define('UPLOAD_PATH', MODPATH . 'document/upload/');

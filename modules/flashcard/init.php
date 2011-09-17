@@ -2,8 +2,6 @@
 
 DynamicMenu::extend(array(
     'coursemenu' => array(
-        array('document', 'Documents', 1, array()),
+        array('flashcard', 'Flashcard', 5, array()),
     ),
 ));
-
-define('UPLOAD_PATH', MODPATH . 'document/upload/');
