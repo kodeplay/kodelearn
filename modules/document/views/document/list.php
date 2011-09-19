@@ -10,13 +10,9 @@
     </div><!-- topbar -->    
     
     
-    <!-- NKHL -->
-    <?php /*?>
-    <?php for($catCount=0; $catCount < 3; $catCount++) { ?>
-    <p class="catName">Document Category <?php echo $catCount; ?></p>
-    */?>
     <ul class="lsNone documentsContainer">
     	<?php foreach($documents as $document){ ?>
+    	<?php //for($i=0; $i < 10; $i++) {?>
     		<li class="l oneDoc">
     			<div class="prel docWrapper">
 	    			<input type="checkbox" />
@@ -26,12 +22,10 @@
 	    			</div>
 	    		</div>
     		</li>
-    	<?php }?>
+    		<?php }?>
+    	<?php //}?>
     	<li class="clear">&nbsp;</li>
     </ul>
-    <?php //} //catCount ?>
-    
-    <!-- NKHL -->
     
     <div class="hidden OLDCODE">
     	<ul class="documents vm10">

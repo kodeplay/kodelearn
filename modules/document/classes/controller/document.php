@@ -6,7 +6,15 @@ class Controller_Document extends Controller_Base {
 	
     public function action_index() {
     	
-    	$documents = ORM::factory('document')->find_all();
+		$course_id = Session::instance()->get('course_id');
+    	
+		$course = ORM::factory('course', $course_id);
+		
+		$role = Auth::instance()->get_user()->role();
+		
+		$criteria = array('course' => $course, 'role' => $role);
+		
+		$documents = Model_Document::documents($criteria); //ORM::factory('document')->find_all();
         
         $view = View::factory('document/list')
             ->set('page_title', 'Documents Manager')
@@ -37,13 +45,10 @@ class Controller_Document extends Controller_Base {
     		Request::current()->redirect('error/not_found');
     	}
 
-    	/**
-    	 * Removed for demo
-    	
     	if(!$document->is_allowed()){
     		Request::current()->redirect('error/access_denied');
     	}
-    	 */
+    	 
     	header("Pragma: public");
 		header("Expires: 0");
 		header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
@@ -79,6 +84,10 @@ class Controller_Document extends Controller_Base {
             		
             		$document->save();
             		
+            		$document->add('courses', $this->request->post('course_id'));
+            		
+            		$document->add('roles', $this->request->post('role'));
+            		
             		Request::current()->redirect('document');
             		
             	} else {
@@ -89,7 +98,9 @@ class Controller_Document extends Controller_Base {
         
         $courses = Model_Course::courses()->as_array('id', 'name');
         
-        $courses = array_merge(array('Global'), $courses);
+    	$course_id = Session::instance()->get('course_id');
+        //remove the current course from the list
+        unset($courses[$course_id]);
         
     	$form = new Stickyform('document/upload', array('enctype'=>"multipart/form-data"), ($submitted ? $this->_errors : array()));
     	
@@ -97,21 +108,41 @@ class Controller_Document extends Controller_Base {
     		'title'		=> '',
     		'user_id'	=> Auth::instance()->get_user()->id,
     		'course_id'	=> 0,
+    		'role'		=> 0
     	);
     	
     	$form->posted_data = $submitted ? $this->request->post() : array();
     	
     	$form->append('Title', 'title', 'text');
+    	$form->append('Access To', 'role', 'text');
     	$form->append('User', 'user_id', 'hidden');
     	$form->append('File', 'name', 'file');
-    	$form->append('Course', 'course_id', 'select', array('options' => $courses));
+    	$form->append('Also add to', 'course_id', 'select', array('options' => $courses, 'attributes' => array('multiple' => 'multiple', 'name' => 'course_id[]')));
     	$form->append('Upload', 'save', 'submit', array('attributes' => array('class' => 'button')));
     	
         $form->process();    	
     	
-    	$view = View::factory('document/form')
-    					->bind('form', $form);
+    	$course = ORM::factory('course', $course_id);
     	
-    	$this->content = $view;
+    	$roles = ORM::factory('role')->find_all()->as_array('id', 'name');
+
+    	$view = View::factory('document/form')
+    					->bind('form', $form)
+    					->bind('course', $course)
+    					->bind('roles', $roles);
+    	
+        Breadcrumbs::add(array(
+            'Courses', Url::site('course')
+        ));
+        
+        Breadcrumbs::add(array(
+            'Documents', Url::site('document')
+        ));
+    					
+        Breadcrumbs::add(array(
+            'Upload', Url::site('document/upload')
+        ));
+    					
+        $this->content = $view;
     }
 }

@@ -292,7 +292,6 @@ CREATE TABLE IF NOT EXISTS `documents` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `title` varchar(255) CHARACTER SET latin1 NOT NULL,
   `name` varchar(255) CHARACTER SET latin1 NOT NULL,
-  `course_id` int(11) NOT NULL DEFAULT '0',
   `user_id` int(11) unsigned NOT NULL,
   `time` int(11) NOT NULL,
   PRIMARY KEY (`id`),
@@ -328,4 +327,17 @@ ALTER TABLE `documents`
 ALTER TABLE `documents_roles`
   ADD CONSTRAINT `documents_roles_ibfk_1` FOREIGN KEY (`role_id`) REFERENCES `roles` (`id`) ON UPDATE CASCADE,
   ADD CONSTRAINT `documents_roles_ibfk_2` FOREIGN KEY (`document_id`) REFERENCES `documents` (`id`) ON UPDATE CASCADE;
+    
+    
+CREATE TABLE IF NOT EXISTS `documents_courses` (
+  `course_id` int(11) unsigned NOT NULL,
+  `document_id` int(11) unsigned NOT NULL,
+  KEY `course_id` (`course_id`),
+  KEY `document_id` (`document_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+ALTER TABLE `documents_courses`
+  ADD CONSTRAINT `documents_courses_ibfk_2` FOREIGN KEY (`document_id`) REFERENCES `documents` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `documents_courses_ibfk_1` FOREIGN KEY (`course_id`) REFERENCES `courses` (`id`) ON DELETE CASCADE;
+    
     
