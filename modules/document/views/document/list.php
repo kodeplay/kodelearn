@@ -13,9 +13,9 @@
     <ul class="lsNone documentsContainer">
     	<?php foreach($documents as $document){ ?>
     	<?php //for($i=0; $i < 10; $i++) {?>
-    		<li class="l oneDoc">
-    			<div class="prel docWrapper">
-	    			<input type="checkbox" />
+    		<li id="doc<?php echo $document->id ?>" class="l oneDoc <?php echo $document->extension() . 'Doc' ?>">
+    			<div class="prel docWrapper hlcontainer">
+    				<p class="hoverLinks"><?php echo $document->editLink() ?> <?php echo $document->deleteLink() ?></p>
 	    			<div class="docMeta tac pabs">
 	    				<p class="bold"><?php echo $document->toLink() ?></p>
 	    				<p class="tm5 h6">Uploaded by <?php echo $document->user(); ?> on <?php echo $document->time(); ?></p>
@@ -27,23 +27,7 @@
     	<li class="clear">&nbsp;</li>
     </ul>
     
-    <div class="hidden OLDCODE">
-    	<ul class="documents vm10">
-    		
-    		<?php foreach($documents as $document){ ?>
-    			<li><input type="checkbox" /><?php echo $document->toLink() ?></li>
-    		<?php }?>
-    		
-    		<li class="heading">Physics Documents</li>
-    		<li> <input type="checkbox" /> GitTdo </li>
-    		<li> <input type="checkbox" /> GitTdo </li>
-    		
-    		<li class="heading">Global Documents</li>
-    		<li> <input type="checkbox" /> GitTdo </li>
-    		<li> <input type="checkbox" /> GitTdo </li>
-    	</ul>
-    </div>
-       
 </div>
+<div id="edit_document"></div>
 <div class="clear"></div>
     

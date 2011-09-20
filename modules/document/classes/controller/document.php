@@ -145,4 +145,80 @@ class Controller_Document extends Controller_Base {
     					
         $this->content = $view;
     }
+    
+    public function action_delete() {
+    	
+    	$id = $this->request->param('id');
+    	
+    	if(Acl::instance()->is_allowed('document_delete')){
+    		
+    		ORM::factory('document', $id)->delete();
+    		
+    		$json = array(
+    			'success'	=> 1,
+    			'msg'	=> array('Document is deleted successfully')
+    		);
+    	} else {
+    		$json = array(
+    			'success'	=> 0,
+    			'reason'	=> 'access_denied'
+    		);
+    	}
+    	
+    	echo json_encode($json);
+    	exit;
+    }
+    
+    public function action_edit() {
+    	
+        if($this->request->method() === 'POST' && $this->request->post()){
+            $document = ORM::factory('document', $this->request->post('document_id'));
+            $validator = $document->validator($this->request->post(), FALSE);
+            
+            if ($validator->check()) {
+                
+            	$document->title = $this->request->post('title');
+                
+            	$document->remove('roles');
+                $document->add('roles', $this->request->post('role'));
+                
+                $document->save();
+                
+                $json = array(
+                    'success'   => 1,
+                    'msg'   => array('Document is edited successfully')
+            	);
+            } else {
+            	$json = array(
+                    'success'   => 0,
+                    'errors'    => array_values($validator->errors('document'))
+            	);
+                
+            }
+            echo json_encode($json);
+            exit;
+        }
+    	
+        $id = $this->request->param('id');
+    	
+    	$document = ORM::factory('document', $id);
+    	
+    	$title = $document->title;
+    	
+    	$roles_access = $document->roles->find_all()->as_array(Null, 'id');
+    	
+    	$roles = ORM::factory('role')->find_all()->as_array('id', 'name');
+    	
+    	$view = View::factory('document/edit')
+    					->bind('title', $title)
+    					->bind('roles', $roles)
+    					->bind('id', $id)
+    					->bind('roles_access', $roles_access);
+    	
+    	echo json_encode(array(
+            'success' => 1,
+            'html' => $view->render(),
+        ));
+        exit;
+    }
 }
