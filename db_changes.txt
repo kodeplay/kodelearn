@@ -282,3 +282,62 @@ ENGINE=InnoDB;
 --------------------------------------------------------------------------------------------------------------------------
 ALTER TABLE `examgroups`
     ADD COLUMN `publish` TINYINT NOT NULL DEFAULT '0' AFTER `name`;
+    
+--------------------------------------------------------------------------------------------------------------------------
+--
+-- Table structure for table `documents`
+--
+
+CREATE TABLE IF NOT EXISTS `documents` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `title` varchar(255) CHARACTER SET latin1 NOT NULL,
+  `name` varchar(255) CHARACTER SET latin1 NOT NULL,
+  `user_id` int(11) unsigned NOT NULL,
+  `time` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `user_id` (`user_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=7 ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `documents_roles`
+--
+
+CREATE TABLE IF NOT EXISTS `documents_roles` (
+  `role_id` int(11) unsigned NOT NULL,
+  `document_id` int(11) unsigned NOT NULL,
+  KEY `role_id` (`role_id`),
+  KEY `document_id` (`document_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Constraints for dumped tables
+--
+
+--
+-- Constraints for table `documents`
+--
+ALTER TABLE `documents`
+  ADD CONSTRAINT `documents_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON UPDATE CASCADE;
+
+--
+-- Constraints for table `documents_roles`
+--
+ALTER TABLE `documents_roles`
+  ADD CONSTRAINT `documents_roles_ibfk_1` FOREIGN KEY (`role_id`) REFERENCES `roles` (`id`) ON UPDATE CASCADE,
+  ADD CONSTRAINT `documents_roles_ibfk_2` FOREIGN KEY (`document_id`) REFERENCES `documents` (`id`) ON UPDATE CASCADE;
+    
+    
+CREATE TABLE IF NOT EXISTS `documents_courses` (
+  `course_id` int(11) unsigned NOT NULL,
+  `document_id` int(11) unsigned NOT NULL,
+  KEY `course_id` (`course_id`),
+  KEY `document_id` (`document_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+ALTER TABLE `documents_courses`
+  ADD CONSTRAINT `documents_courses_ibfk_2` FOREIGN KEY (`document_id`) REFERENCES `documents` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `documents_courses_ibfk_1` FOREIGN KEY (`course_id`) REFERENCES `courses` (`id`) ON DELETE CASCADE;
+    
+    

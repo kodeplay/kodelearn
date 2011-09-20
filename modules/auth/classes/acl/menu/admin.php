@@ -18,8 +18,11 @@ class Acl_Menu_Admin extends Acl_Menu {
         $myaccount->add_link('system', 'Setting', 0)
             ->add_link('account', 'Account', 1)
             ->add_link('auth/logout', 'Logout', 2);
+        $coursemenu = DynamicMenu::factory('coursemenu');
+        
         $this->set('topmenu', $topmenu)
             ->set('sidemenu', $sidemenu)
+            ->set('coursemenu', $coursemenu)
             ->set('myaccount', $myaccount);
     }
 }

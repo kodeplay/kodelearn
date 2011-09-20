@@ -121,7 +121,11 @@ Kohana::modules(array(
     'attendance'    => MODPATH.'attendance',
     'feed'          => MODPATH.'feed',
     'post'          => MODPATH.'post',
-    //'document'      => MODPATH.'document',
+    'document'      => MODPATH.'document',
+    'assignment'    => MODPATH.'assignment',
+    'quiz'          => MODPATH.'quiz',
+    'lesson'        => MODPATH.'lesson',
+    'flashcard'     => MODPATH.'flashcard',
 ));
 
 /**

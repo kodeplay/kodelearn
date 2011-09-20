@@ -6,6 +6,8 @@ class Controller_Course extends Controller_Base {
         $sort = $this->request->param('sort', 'name');        
         $order = $this->request->param('order', 'ASC');
         
+        Session::instance()->delete('course_id');    
+        
         $criteria = array(
             'user' => Acl::instance()->relevant_user(),
             'filters' => array(
@@ -290,6 +292,9 @@ class Controller_Course extends Controller_Base {
     	if(!$id) {
             Request::current()->redirect('course');
         }        
+
+        Session::instance()->set('course_id', $id);
+
     	$course = ORM::factory('course', $id);
         // Todo
     	$count_student = Model_Course::get_users_count($id, 'student');    	
