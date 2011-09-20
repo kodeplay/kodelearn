@@ -399,6 +399,7 @@ class Controller_Exam extends Controller_Base {
             'total_marks'   => $exam->total_marks,
             'passing_marks' => $exam->passing_marks,
             'reminder'      => $exam->reminder,
+            'reminder_days' => $exam->reminder_days,
             'date'          => date('Y-m-d', $event->eventstart),
             'from'          => date('H:i', $event->eventstart),
             'to'            => date('H:i', $event->eventend),
@@ -454,7 +455,8 @@ class Controller_Exam extends Controller_Base {
             'from' => '',
             'to' => '',
             'room_id' => '',
-            'reminder'      => 1
+            'reminder'      => 1,
+            'reminder_days'      => 2
             
         );
         
@@ -466,7 +468,8 @@ class Controller_Exam extends Controller_Base {
         $form->append('To', 'to', 'hidden', array('attributes' => array('id' => 'slider-range_to')));
         $form->append('Total Marks', 'total_marks', 'text');
         $form->append('Passing Marks', 'passing_marks', 'text');
-        $form->append('Reminder', 'reminder', 'hidden');
+        $form->append('Reminder', 'reminder', 'hidden', array('attributes' => array('id' => 'reminder')));
+        $form->append('Before', 'reminder_days', 'text',array('attributes' => array('size' => '1', 'maxlength' => '2', 'id' => 'reminder_days')));
         $form->append('Grading Period', 'examgroup_id', 'select', array('options' => $examgroups));
         $form->append('Room', 'room_id', 'select', array('options' => array()));
         $form->append('Course', 'course_id', 'select', array('options' => $courses));

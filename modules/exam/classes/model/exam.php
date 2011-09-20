@@ -229,4 +229,11 @@ class Model_Exam extends ORM {
         return $exam->find_all();
     }
     
+    public static function send_exam_reminder() {
+        $exam = ORM::factory('exam')
+                ->join('events', left)
+                ->on('events.id','=','exams.event_id');
+                
+    }
+    
 }
