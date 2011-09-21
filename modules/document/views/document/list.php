@@ -5,7 +5,9 @@
         <div class="clear"></div>
     </div><!-- pageTop -->
     <div class="topbar bm10 hgtfix vpad5">
-    	<?php echo HTML::anchor('document/upload', 'Upload', array('class' => 'dib button round5')); ?>            
+        <?php if(Acl::instance()->is_allowed('document_upload')) {?>
+    	<?php echo HTML::anchor('document/upload', 'Upload', array('class' => 'dib button round5')); ?>
+    	<?php } ?>            
         <span class="clear">&nbsp;</span>
     </div><!-- topbar -->    
     <div class="vm5" align="right">
