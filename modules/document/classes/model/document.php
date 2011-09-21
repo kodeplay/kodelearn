@@ -38,22 +38,28 @@ class Model_Document extends ORM {
 		return $user->fullname();
 	}
 	
-	public function validator($data){
-        return Validation::factory($data)
+	public function validator($data, $validate_file = TRUE){
+        $validator =  Validation::factory($data)
         	->rule('title', 'not_empty')
-        	->rule('role', 'not_empty')
-            ->rules(
-                'name',
-                array(
-                    array('Upload::not_empty', NULL),
-                    array('Upload::valid' , NULL),
-                    array('Upload::size', array(':value','5M')),
-                    array('Upload::type' , array(
-                        ':value',
-                        array('jpg', 'png', 'gif', 'jpeg', 'pdf', 'doc', 'odt', 'txt', 'xls', 'rtf', 'bmp', 'ppt', 'docx', 'pptx')
-                    )),
-                )
-            );
+        	->rule('role', 'not_empty');
+        	
+            if($validate_file){
+	        	$validator->rules(
+	                'name',
+	                array(
+	                    array('Upload::not_empty', NULL),
+	                    array('Upload::valid' , NULL),
+	                    array('Upload::size', array(':value','5M')),
+	                    array('Upload::type' , array(
+	                        ':value',
+	                        array('jpg', 'png', 'gif', 'jpeg', 'pdf', 'doc', 'odt', 'txt', 'xls', 'rtf', 'bmp', 'ppt', 'docx', 'pptx')
+	                    )),
+	                )
+            	
+	            );
+            }
+            
+    	return $validator;
 	}
 	
 	public static function documents(array $data = array()){
@@ -65,6 +71,10 @@ class Model_Document extends ORM {
 							->join('documents_roles')
 							->on('documents.id', '=', 'documents_roles.document_id');
 			
+			if(isset($data['filter_by']) && $data['filter_by']){
+				$document->join('users')->on('documents.user_id', '=', 'users.id');
+			}				
+		
 			if(isset($data['course'])){
 				$course = $data['course'] instanceof Model_Course ? $data['course'] : ORM::factory('course', (int)$data['course']);
 				$document->where('documents_courses.course_id', '=', $course->id); 
@@ -75,6 +85,14 @@ class Model_Document extends ORM {
 				$document->where('documents_roles.role_id', '=', $role->id); 
 			}
 			
+			if(isset($data['filter_title']) && $data['filter_title']){
+				$document->where('documents.title', 'LIKE', '%' . $data['filter_title'] . '%');
+			}
+            
+			if(isset($data['filter_by']) && $data['filter_by']){
+                $document->where('users.firstname', 'LIKE', '%' . $data['filter_by'] . '%');
+            }               
+			
 			$document->group_by('documents.id');
 			
 			return $document->find_all();
@@ -83,7 +101,32 @@ class Model_Document extends ORM {
 			return ORM::factory('document')->find_all();
 		}
 		
+	}
+	
+	public function extension() {
+		$path_parts = pathinfo($this->name);
+
+		return strtolower($path_parts['extension']);
+	
+	}
+	
+	public function deleteLink() {
 		
+		if (Acl::instance()->is_allowed('document_delete')) {
+			return '[<a href="#" onclick="KODELEARN.modules.get(\'document\').del(' . $this->id . ')"> Delete </a>]'; //send link if permission is there
+		}
+		
+		return '';
+		
+	} 
+	
+	public function editLink() {
+
+		if (Acl::instance()->is_allowed('document_edit')) {
+			return '[<a href="#" onclick="KODELEARN.modules.get(\'document\').edit(' . $this->id . ')"> Edit </a>]'; //send link if permission is there
+		}
+		
+		return '';
 	}
 	
 }
