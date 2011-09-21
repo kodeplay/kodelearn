@@ -28,6 +28,20 @@ class Controller_Base extends Controller_Template {
             $this->view = View::factory($this->template);
             Breadcrumbs::add(array('Home', Url::site('home')));
         }
+        
+        //check if controller is of innerpage of course and courseid is there in session
+
+        if($this->request->is_initial()){ // check if this is initial request
+	        $course_pages = array('document', 'flashcard', 'lesson', 'quiz', 'assignment');
+	        $controller = $this->request->controller();
+	        $course_id = Session::instance()->get('course_id');
+	        if(in_array($controller, $course_pages) && (!$course_id)){
+	        	$this->request->redirect('course');
+	        } elseif(!in_array($controller, $course_pages)){
+	        	Session::instance()->delete('course_id');    
+	        }
+        }
+                
         return parent::before();
     }
 	

@@ -6,3 +6,6 @@ DynamicMenu::extend(array(
     ),
 ));
 
+Hook::instance()->register("course_count",'Model_Lecture::get_course_lectures_count');
+Hook::instance()->register("send_reminder",'Model_Lecture::send_lecture_reminder');
+

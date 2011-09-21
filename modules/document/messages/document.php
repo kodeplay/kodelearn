@@ -7,7 +7,11 @@ return array(
         'Upload::not_empty'     => 'The file type is not permitted.',
 	),
 	'title' => array(
-		'not_empty'	=> 'Please enter a title'
+		'not_empty'	=> 'Please enter a title.'
+	
+	),
+	'role' => array(
+		'not_empty'	=> 'Please select atleast one role.'
 	
 	)
-);
+	);

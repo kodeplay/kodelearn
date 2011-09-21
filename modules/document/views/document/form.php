@@ -18,9 +18,22 @@
 				<span class="form-error"><?php echo $form->name->error(); ?></span></td>
 			</tr>
 			<tr>
+				<td><input type="hidden" name="course_id[]" value="<?php echo $course->id ?>" /></td>
+				<td>Adding document to <?php echo $course ?></td>
+			</tr>
+			<tr>
 				<td><?php echo $form->course_id->label(); ?></td>
 				<td><?php echo $form->course_id->element(); ?>
 				<span class="form-error"><?php echo $form->course_id->error(); ?></span></td>
+			</tr>
+			<tr>
+				<td><?php echo $form->role->label() ?></td>
+				<td>
+					<?php foreach($roles as $id=> $name){ ?>
+						<input type="checkbox" name="role[]" value="<?php echo $id ?>" checked="checked" /> <?php echo $name ?>
+					<?php }?>
+					<span class="form-error"><?php echo $form->role->error(); ?></span>
+				</td>
 			</tr>
 			<tr>
 				<td></td>
