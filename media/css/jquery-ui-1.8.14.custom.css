@@ -455,11 +455,11 @@ button.ui-button::-moz-focus-inner { border: 0; padding: 0; } /* reset extra pad
  *
  * http://docs.jquery.com/UI/Slider#theming
  */
-.ui-slider { position: relative; text-align: left; }
-.ui-slider .ui-slider-handle { position: absolute; z-index: 2; width: 0.5em; height: 1.2em; cursor: default; }
-.ui-slider .ui-slider-range { position: absolute; z-index: 1; font-size: .7em; display: block; border: 0; background-position: 0 0; }
+.ui-slider { position: relative; text-align: left; border-color: #959595; border-radius: 3px;}
+.ui-slider .ui-slider-handle {background: url(images/slider-handle.png) 50% 50% repeat-x; position: absolute; z-index: 2; width: 0.5em; height: 1.2em; cursor: default; }
+.ui-slider .ui-slider-range {background: #FE9B01 url(images/silder-background.png) 50% 50% repeat-x; position: absolute; z-index: 1; font-size: .7em; display: block; border: 0; background-position: 0 0; }
 
-.ui-slider-horizontal { height: .8em; }
+.ui-slider-horizontal { height: 9px;}
 .ui-slider-horizontal .ui-slider-handle { top: -.3em; margin-left: -.6em; }
 .ui-slider-horizontal .ui-slider-range { top: 0; height: 100%; }
 .ui-slider-horizontal .ui-slider-range-min { left: 0; }

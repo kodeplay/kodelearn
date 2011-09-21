@@ -1093,7 +1093,7 @@ table.calendar .prev-next .day { color: #aaa; }
 	Overridden jquery-ui styles
    .................................... */
 .ui-slider { z-index: 0; }
-
+.ui-widget-header { background: none repeat-x scroll 50% 50% #FE9B01; }
 /* ......................................
         Post form styles
    .................................... */
