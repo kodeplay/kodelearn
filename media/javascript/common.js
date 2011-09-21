@@ -271,7 +271,7 @@ KODELEARN.modules.add('ajax_message', (function () {
 	    $('#success').remove();
 	    var warning = '<div id="success" class="formMessages"><span class="fmIcon good"></span> <span class="fmText"><ul>';
 	    
-	    for(var i = 0; i < msgArr.length ; i++ ){		
+	    for(var i = 0; i < msgArr.length ; i++ ){
 		warning += '<li>'+msgArr[i]+'</li>';	
 	    }		
 	    
@@ -305,7 +305,6 @@ KODELEARN.modules.add('rooms', (function () {
             url: KODELEARN.config.base_url+"room/show_map/id/" + roomId,
             async: true,
             success: function (resp) {
-        	console.log(resp.html);
         		$("#ajax-loader").hide();
         		$('#maps div').html(resp.html);
         		$('#maps').show();
@@ -553,7 +552,6 @@ KODELEARN.helpers.request = {
                 window.location.href = KODELEARN.config.base_url+'error/access_denied';
             },
             error: function (resp) {
-                console.log(options.error_container); 
                 KODELEARN.modules.get('ajax_message').showAjaxError(options.error_container, resp.errors);
             }
         };
@@ -592,3 +590,47 @@ Feeds.show = function(d,m,y) {
         title: "Events for "+d+" - "+m+" - "+y
     });return false;
 };
+
+KODELEARN.modules.add('document', (function () {
+    return {
+        init: function () {
+    		return;
+    	},
+    	del: function (Id) {
+            KODELEARN.helpers.request.get({
+                url: KODELEARN.config.base_url+"document/delete/id/" + Id,
+                async: true,
+                success: function (resp) {
+            		KODELEARN.modules.get('ajax_message').showAjaxSuccess($('.documentsContainer'), resp.msg);
+            		$('#doc'+Id).fadeOut(500);
+                }
+            });
+    	},
+    	edit: function (Id) {
+    		$("#ajax-loader").show();
+    		KODELEARN.helpers.request.get({
+                url: KODELEARN.config.base_url+"document/edit/id/" + Id,
+                async: true,
+                success: function (resp) {
+    				$('#document_from').remove();
+    				$('#edit_document').html(resp.html);
+    				$("#ajax-loader").hide();
+                }
+            });
+    	},
+    	save: function () {
+    		
+    		data = $('#document_form').serializeArray();
+    		KODELEARN.helpers.request.post({
+                url: KODELEARN.config.base_url+"document/edit/",
+                async: true,
+                error_container: $("#document_form"),
+                data: data,
+                success: function (resp) {
+    				KODELEARN.modules.get('ajax_message').showAjaxSuccess($("#document_form"),resp.msg);
+    				setTimeout('window.location.reload()', 2500);
+                }
+            });
+    	}
+    }
+})());
