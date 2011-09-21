@@ -8,7 +8,16 @@
     	<?php echo HTML::anchor('document/upload', 'Upload', array('class' => 'dib button round5')); ?>            
         <span class="clear">&nbsp;</span>
     </div><!-- topbar -->    
-    
+    <div class="vm5" align="right">
+            <select id="filter_select" name="filter_select" style="padding:2px; width:150px"> 
+              <option value="filter_title">Title</option>
+              <option value="filter_by">Uploaded By</option>
+            </select>
+            <input type="text" name="filter" id="filter" value="<?php echo $filter['text']; ?>" style="padding:5px" />
+            <a class="button" id="trigger_filter" href="#">Find</a>
+            <input type="hidden" id="filter_url" value="<?php echo $filter['url'] ?>" />
+            <input type="hidden" id="select_val" value="<?php echo $filter['select'] ?>" />
+        </div>    
     
     <ul class="lsNone documentsContainer">
     	<?php foreach($documents as $document){ ?>

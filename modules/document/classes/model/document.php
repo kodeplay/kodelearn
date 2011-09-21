@@ -71,6 +71,10 @@ class Model_Document extends ORM {
 							->join('documents_roles')
 							->on('documents.id', '=', 'documents_roles.document_id');
 			
+			if(isset($data['filter_by']) && $data['filter_by']){
+				$document->join('users')->on('documents.user_id', '=', 'users.id');
+			}				
+		
 			if(isset($data['course'])){
 				$course = $data['course'] instanceof Model_Course ? $data['course'] : ORM::factory('course', (int)$data['course']);
 				$document->where('documents_courses.course_id', '=', $course->id); 
@@ -80,6 +84,14 @@ class Model_Document extends ORM {
 				$role = $data['role'] instanceof Model_Role ? $data['role'] : ORM::factory('role', (int)$data['role']);
 				$document->where('documents_roles.role_id', '=', $role->id); 
 			}
+			
+			if(isset($data['filter_title']) && $data['filter_title']){
+				$document->where('documents.title', 'LIKE', '%' . $data['filter_title'] . '%');
+			}
+            
+			if(isset($data['filter_by']) && $data['filter_by']){
+                $document->where('users.firstname', 'LIKE', '%' . $data['filter_by'] . '%');
+            }               
 			
 			$document->group_by('documents.id');
 			
@@ -94,7 +106,7 @@ class Model_Document extends ORM {
 	public function extension() {
 		$path_parts = pathinfo($this->name);
 
-		return $path_parts['extension'];
+		return strtolower($path_parts['extension']);
 	
 	}
 	
