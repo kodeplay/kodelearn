@@ -87,9 +87,9 @@ KODELEARN.modules.add('create_exam' , (function () {
                range: true,
                min: 0,
                max: 1439,
-               step: 10,
+               step: 30,
                values: [<?php echo $slider['start'] ?>, <?php echo $slider['end'] ?>],
-               slide: KODELEARN.modules.get('time_slider').slideTime,
+               stop: KODELEARN.modules.get('time_slider').slideTime,
                change: KODELEARN.modules.get('rooms').getAvaliableRooms
            });
            var event = {target: document.getElementById('slider-range')};

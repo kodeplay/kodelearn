@@ -139,9 +139,9 @@ KODELEARN.modules.add('create_lecture' , (function () {
 	                range: true,
 	                min: 0,
 	                max: 1439,
-	                step: 10,
+	                step: 30,
 	                values: [<?php echo $value['from']?>, <?php echo $value['to']?>],
-	                slide: KODELEARN.modules.get('time_slider').slideTime
+	                stop: KODELEARN.modules.get('time_slider').slideTime
 	            });
             <?php }?>
         
