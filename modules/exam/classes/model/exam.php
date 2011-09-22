@@ -229,4 +229,58 @@ class Model_Exam extends ORM {
         return $exam->find_all();
     }
     
+    public static function send_exam_reminder() {
+        $todays_date = strtotime(date('d-m-Y G:i:s'));
+        $exam = ORM::factory('exam')
+                ->select('events.eventtype','events.eventstart')
+                ->join('events', 'left')
+                ->on('events.id','=','exams.event_id');
+        $exam->where('exams.reminder', '=', '1')
+             ->where('events.eventstart', '>', $todays_date);
+        $exams = $exam->find_all();
+
+        foreach($exams as $exam_result) {
+            if($exam_result->reminder_days == 0) {
+                $students = $exam->get_students($exam_result->id);
+                $exam->send_exam_reminder_email($students,$exam_result);       
+                
+            } else {
+                $reminder_days_to_time = (86400 * $exam_result->reminder_days);  
+                $time = $exam_result->eventstart - $reminder_days_to_time;
+                $date = date('d-m-Y', $time);
+                $current_date = date('d-m-Y');
+                if($date == $current_date){
+                    $students = $exam->get_students($exam_result->id);
+                    $exam->send_exam_reminder_email($students,$exam_result);
+                }
+                  
+            }
+            
+        }
+        
+    }
+    
+    public function send_exam_reminder_email($students,$exam_result) {
+        foreach($students as $student) {
+            $file = "exam_reminder_email";
+            $data =array(
+                '{user_name}'   => $student->firstname ." ". $student->lastname,
+                '{exam_name}'   => $exam_result->name,
+                '{date}'        => date('d-m-Y', $exam_result->eventstart),
+                '{time}'        => date('g:i:s a', $exam_result->eventstart),
+            ); 
+            Email::send_mail($student->email, $file, $data);
+               
+        }
+           
+    }
+    
+    public static function get_course_exams_count($course) {
+        $count_exam = ORM::factory('exam');
+        $count_exam = $count_exam->where('course_id', '=', $course->id)->count_all();       
+        $result=array();    
+        $result['exam'] = $count_exam;
+        return $result;
+    }
+    
 }

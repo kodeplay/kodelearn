@@ -340,4 +340,16 @@ ALTER TABLE `documents_courses`
   ADD CONSTRAINT `documents_courses_ibfk_2` FOREIGN KEY (`document_id`) REFERENCES `documents` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `documents_courses_ibfk_1` FOREIGN KEY (`course_id`) REFERENCES `courses` (`id`) ON DELETE CASCADE;
     
-    
+  
+  ----------------------------------------------------------------
+  
+  ALTER TABLE `exams` ADD `reminder_days` INT( 10 ) NOT NULL 
+  
+  
+  ------------------------------------------------------------------
+  
+ CREATE TABLE `kodelearn`.`reminders` (
+`id` INT( 100 ) NOT NULL ,
+`date` VARCHAR( 15 ) NOT NULL ,
+`sent` TINYINT( 1 ) NOT NULL
+) ENGINE = MYISAM ;

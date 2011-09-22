@@ -23,7 +23,16 @@
 			<p class="vm10">
 				<a href="#"><?php echo $count['count_student']; ?> students</a>
 				have access to
-				<a href="#"><?php echo $count['count_exam']; ?> exam(s)</a>
+				<?php foreach($count['results'] as $results){ 
+				        foreach($results as $key=>$value){
+				        
+				    ?>
+				    <a href="#"><?php echo $value. " " .$key; ?></a>
+				
+				<?php 
+				        }
+				    }
+				?>
 				
 			</p>
 		</div><!-- courseSummary -->

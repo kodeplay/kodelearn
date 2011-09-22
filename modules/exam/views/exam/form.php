@@ -64,6 +64,11 @@
                     </div>
                 </td>
             </tr>
+            <tr>
+                <td><?php echo $form->reminder_days->label(); ?></td>
+                <td><?php echo $form->reminder_days->element(); ?> days
+                <span class="form-error"><?php echo $form->reminder_days->error(); ?></span></td>
+            </tr>
            
             <tr>
                 <td></td>
@@ -102,6 +107,32 @@ KODELEARN.modules.add('create_exam' , (function () {
            KODELEARN.modules.get('rooms').getAvaliableRooms();
         }
     }; 
+     
 })());
+
+KODELEARN.modules.add('toggle_buttons', (function () {
+    
+	return {
+	    init: function () {
+	        
+	        //Toggle buttons
+	        $(".toggleButton > a").click(function (ev) {
+	        $(this).parent().find("a").removeClass("on");
+	        $(this).addClass("on");
+	        $(".toggleButton >input").val($(this).attr('data'));
+	        ev.preventDefault();
+	        if($("#reminder").val() == 0) {
+	        	$('#reminder_days').val('');   
+	        	$('#reminder_days').attr('disabled', 'disabled');
+	        } else {
+	        	$('#reminder_days').removeAttr('disabled');
+	        	$('#reminder_days').val('2');   
+	        }  
+	        });
+	    }
+	    };
+    
+})());
+
 
 //--></script>

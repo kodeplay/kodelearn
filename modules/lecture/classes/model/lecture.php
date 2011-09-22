@@ -141,4 +141,53 @@ class Model_Lecture extends ORM {
         }
         return $lecture->find_all();
     }
+
+    public function get_students($lecture_id) {
+        $lecture = ORM::factory('lecture', $lecture_id);
+        $users = $lecture->course->users->find_all();
+        return $users;
+    }
+    
+    public static function send_lecture_reminder() {
+        $start_date = strtotime(date('d-m-Y'));
+        $start_date = $start_date + 86400;
+        $end_date = $start_date + 86400;
+        $lecture = ORM::factory('lecture')
+                ->select('events.eventtype','events.eventstart')
+                ->join('lectures_events', 'left')
+                ->on('lectures_events.lecture_id', '=', 'lectures.id' )
+                ->join('events', 'left')
+                ->on('events.id','=','lectures_events.event_id');
+        $lecture->where('events.eventstart', 'between', array($start_date, $end_date));
+        $lectures = $lecture->find_all();
+        foreach($lectures as $lecture_result) {
+            $students = $lecture->get_students($lecture_result->id);
+            $lecture->send_lecture_reminder_email($students,$lecture_result);       
+            
+        }
+        
+    }
+    
+    public function send_lecture_reminder_email($students,$lecture_result) {
+        foreach($students as $student) {
+            $file = "lecture_reminder_email";
+            $data =array(
+                '{user_name}'   => $student->firstname ." ". $student->lastname,
+                '{lecture_name}'=> $lecture_result->name,
+                '{time}'        => date('g:i:s a', $lecture_result->eventstart),
+            ); 
+            Email::send_mail($student->email, $file, $data);
+             
+        }
+    }
+    
+    public static function get_course_lectures_count($course) {
+        $count_lecture = ORM::factory('lecture');
+        $count_lecture = $count_lecture->where('course_id', '=', $course->id)->count_all();
+        $result=array();
+        $result['lecture']=$count_lecture;    
+        return $result;       
+        
+    }
+    
 }

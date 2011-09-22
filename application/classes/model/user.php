@@ -202,20 +202,26 @@ class Model_User extends ORM {
             $forgot_password_string = md5($parent->email.time());
             $parent->forgot_password_string = $forgot_password_string;
             $parent->save(); 
-            
-            $message  = "<b>Dear ". $parent->firstname ." ". $parent->lastname .",<br><br>";
-            $message .= "Your child '". $this->firstname ." ". $this->lastname ."' has registered on Kodelearn. <br>The link to access your account is ".Url::site("auth")." <br>";
-            $message .= "User name : ". $parent->email ."<br>"; 
-            $message .= "Set password first : ". Url::site("auth/changepassword/u/".$forgot_password_string); 
+            $file = "parent_approved_email";
+            $data =array(
+                '{parent_name}'  => $parent->firstname ." ". $parent->lastname,
+                '{url}'   => Url::site("auth"),
+                '{child_name}'   => $this->firstname ." ". $this->lastname,
+                '{parent_email}' => $parent->email,
+                '{password_url}' => Url::site("auth/changepassword/u/".$forgot_password_string),
+            );
             
         } else {
-            $message  = "<b>Dear ". $parent->firstname ." ". $parent->lastname .",<br><br>";
-            $message .= "Your account has been created on Kodelearn. <br>But it is waiting for admin approval <br>";
+            $file = "parent_unapproved_email";
+            $data =array(
+                '{parent_name}'  => $parent->firstname ." ". $parent->lastname,
+                '{child_name}'   => $this->firstname ." ". $this->lastname,
+                '{parent_email}' => $parent->email,
+                
+            );
+            
         }
-        $subject = "Kodelearn Parent Registration confirmation";
-        $message .=  "<br><br>Thanks,<br> Kodelearn team";
-        $html = true;
-        Email::send_mail($parent->email, $subject, $message, $html);
+        Email::send_mail($parent->email, $file, $data);
     }
 
     
@@ -225,20 +231,21 @@ class Model_User extends ORM {
             $forgot_password_string = md5($user->email.time());
             $user->forgot_password_string = $forgot_password_string;
             $user->save(); 
-            
-            $message  = "<b>Dear ". $user->firstname ." ". $user->lastname .",<br><br>";
-            $message .= "Your account has been created on Kodelearn. <br>The link to access your account is ".Url::site("auth")." <br>";
-            $message .= "User name : ". $user->email ."<br>"; 
-            $message .= "Set password first : ". Url::site("auth/changepassword/u/".$forgot_password_string); 
+            $file = "user_approved_email";
+            $data =array(
+                '{user_name}'  => $user->firstname ." ". $user->lastname,
+                '{url}'   => Url::site("auth"),
+                '{user_email}' => $user->email,
+                '{password_url}' => Url::site("auth/changepassword/u/".$forgot_password_string),
+            );
         } else {
-            $message  = "<b>Dear ". $user->firstname ." ". $user->lastname .",<br><br>";
-            $message .= "Your account has been created on Kodelearn. <br>But it is waiting for admin approval <br>";
-            
+            $file = "user_unapproved_email";
+            $data =array(
+                '{user_name}'  => $user->firstname ." ". $user->lastname,
+                
+            );
         }
-        $subject = "Kodelearn User Registration confirmation";
-        $message .=  "<br><br>Thanks,<br> Kodelearn team";
-        $html = true;
-        Email::send_mail($user->email, $subject, $message, $html);
+        Email::send_mail($user->email, $file, $data);
     }    
 
 
@@ -251,20 +258,26 @@ class Model_User extends ORM {
             $forgot_password_string = md5($child->email.time());
             $child->forgot_password_string = $forgot_password_string;
             $child->save(); 
+            $file = "child_approved_email";
+            $data =array(
+                '{child_name}'  => $child->firstname ." ". $child->lastname,
+                '{url}'   => Url::site("auth"),
+                '{parent_name}'   => $this->firstname ." ". $this->lastname,
+                '{child_email}' => $child->email,
+                '{password_url}' => Url::site("auth/changepassword/u/".$forgot_password_string),
+            );
             
-            $message  = "<b>Dear ". $child->firstname ." ". $child->lastname .",<br><br>";
-            $message .= "Your parent '". $this->firstname ." ". $this->lastname ."' has registered on Kodelearn. <br>The link to access your account is ".Url::site("auth")." <br>";
-            $message .= "User name : ". $child->email ."<br>"; 
-            $message .= "Set password first : ". Url::site("auth/changepassword/u/".$forgot_password_string); 
         } else {
-            $message  = "<b>Dear ". $child->firstname ." ". $child->lastname .",<br><br>";
-            $message .= "Your account has been created on Kodelearn. <br>But it is waiting for admin approval <br>";
+            $file = "child_unapproved_email";
+            $data =array(
+                '{parent_name}'  => $parent->firstname ." ". $parent->lastname,
+                '{child_name}'   => $this->firstname ." ". $this->lastname,
+                '{parent_email}' => $parent->email,
+                
+            );
             
         }
-        $subject = "Kodelearn Student Registration confirmation";
-        $message .=  "<br><br>Thanks,<br> Kodelearn team";
-        $html = true;
-        Email::send_mail($child->email, $subject, $message, $html);
+        Email::send_mail($child->email, $file, $data);
     }
     
     public static function users_total($filters=array()) {

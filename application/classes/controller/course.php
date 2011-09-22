@@ -298,11 +298,14 @@ class Controller_Course extends Controller_Base {
     	$course = ORM::factory('course', $id);
         // Todo
     	$count_student = Model_Course::get_users_count($id, 'student');    	
-    	$count_exam = ORM::factory('exam');
-    	$count_exam = $count_exam->where('course_id', '=', $id)->count_all();    	
+    	
+    	$results = Hook::instance()->trigger("course_count", $course);
+    	
+    	//$count_exam = Model_Exam::get_course_exams_count($id);        
+        
     	$count = array(
             'count_student' => $count_student,
-            'count_exam' => $count_exam,
+            'results'        => $results,
         );
         $feeds = Request::factory('feed/feeds/id/'.$id)
             ->method(Request::GET)

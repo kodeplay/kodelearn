@@ -450,10 +450,13 @@ class Controller_Auth extends Controller_Base {
             
             //Email::connect($config = NULL);
             $to = $user->email;
-            $subject = 'Change password';
-            $message = 'Link to change your password: '. Url::site("auth").'/changepassword/u/'.$forgot_password_string;
             
-            Email::send_mail($to, $subject, $message);
+            $file = "forgot_password_email";
+            $data =array(
+                '{user_name}'  => $user->firstname ." ". $user->lastname,
+                '{password_url}' => Url::site("auth/changepassword/u/".$forgot_password_string),
+            );
+            Email::send_mail($to, $file, $data);
             
             return '<div class="formMessages" style="width:300px; height:50px">
                         <span class="fmIcon good"></span> 
