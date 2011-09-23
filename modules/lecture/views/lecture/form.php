@@ -53,15 +53,15 @@
                             <tr>
                                 <td><input type="checkbox" name="days[Monday]" <?php echo (isset($days['Monday'])) ? 'checked="checked"' : ''?> /></td>
                                 <td>Monday</td>
-                                <td><input type="hidden" name="monday[from]" id="monday_slider_from"/>
+                                <td class="dayslider w60"><input type="hidden" name="monday[from]" id="monday_slider_from"/>
                                     <input type="hidden" name="monday[to]" id="monday_slider_to"/>
-                                    <span id="monday_slider_time"></span>
+                                    <span id="monday_slider_time"></span> 
                                     <div id="monday_slider"></div></td>
                             </tr>
                             <tr>
                                 <td><input type="checkbox" name="days[Tuesday]" <?php echo (isset($days['Tuesday'])) ? 'checked="checked"' : ''?> /></td>
                                 <td>Tuesday</td>
-                                <td><input type="hidden" name="tuesday[from]" id="tuesday_slider_from"/>
+                                <td class="dayslider w60"><input type="hidden" name="tuesday[from]" id="tuesday_slider_from"/>
                                     <input type="hidden" name="tuesday[to]" id="tuesday_slider_to"/>
                                     <span id="tuesday_slider_time"></span>
                                     <div id="tuesday_slider"></div></td>
@@ -69,7 +69,7 @@
                             <tr>
                                 <td><input type="checkbox" name="days[Wednesday]" <?php echo (isset($days['Wednesday'])) ? 'checked="checked"' : ''?> /></td>
                                 <td>Wednesday</td>
-                                <td><input type="hidden" name="wednesday[from]" id="wednesday_slider_from"/>
+                                <td class="dayslider w60"><input type="hidden" name="wednesday[from]" id="wednesday_slider_from"/>
                                     <input type="hidden" name="wednesday[to]" id="wednesday_slider_to"/>
                                     <span id="wednesday_slider_time"></span>
                                     <div id="wednesday_slider"></div></td>
@@ -77,7 +77,7 @@
                             <tr>
                                 <td><input type="checkbox" name="days[Thursday]" <?php echo (isset($days['Thursday'])) ? 'checked="checked"' : ''?> /></td>
                                 <td>Thursday</td>
-                                <td><input type="hidden" name="thursday[from]" id="thursday_slider_from"/>
+                                <td class="dayslider w60"><input type="hidden" name="thursday[from]" id="thursday_slider_from"/>
                                     <input type="hidden" name="thursday[to]" id="thursday_slider_to"/>
                                     <span id="thursday_slider_time"></span>
                                     <div id="thursday_slider"></div></td>
@@ -85,7 +85,7 @@
                             <tr>
                                 <td><input type="checkbox" name="days[Friday]" <?php echo (isset($days['Friday'])) ? 'checked="checked"' : ''?> /></td>
                                 <td>Friday</td>
-                                <td><input type="hidden" name="friday[from]" id="friday_slider_from"/>
+                                <td class="dayslider w60"><input type="hidden" name="friday[from]" id="friday_slider_from"/>
                                     <input type="hidden" name="friday[to]" id="friday_slider_to"/>
                                     <span id="friday_slider_time"></span>
                                     <div id="friday_slider"></div></td>
@@ -93,7 +93,7 @@
                             <tr>
                                 <td><input type="checkbox" name="days[Saturday]" <?php echo (isset($days['Saturday'])) ? 'checked="checked"' : ''?> /></td>
                                 <td>Saturday</td>
-                                <td><input type="hidden" name="saturday[from]" id="saturday_slider_from"/>
+                                <td class="dayslider w60"><input type="hidden" name="saturday[from]" id="saturday_slider_from"/>
                                     <input type="hidden" name="saturday[to]" id="saturday_slider_to"/>
                                     <span id="saturday_slider_time"></span>
                                     <div id="saturday_slider"></div></td>
@@ -101,7 +101,7 @@
                             <tr>
                                 <td><input type="checkbox" name="days[Sunday]" <?php echo (isset($days['Sunday'])) ? 'checked="checked"' : ''?> /></td>
                                 <td>Sunday</td>
-                                <td><input type="hidden" name="sunday[from]" id="sunday_slider_from"/>
+                                <td class="dayslider w60"><input type="hidden" name="sunday[from]" id="sunday_slider_from"/>
                                     <input type="hidden" name="sunday[to]" id="sunday_slider_to"/>
                                     <span id="sunday_slider_time"></span>
                                     <div id="sunday_slider"></div></td>
@@ -139,9 +139,10 @@ KODELEARN.modules.add('create_lecture' , (function () {
 	                range: true,
 	                min: 0,
 	                max: 1439,
-	                step: 10,
+	                step: 30,
 	                values: [<?php echo $value['from']?>, <?php echo $value['to']?>],
-	                slide: KODELEARN.modules.get('time_slider').slideTime
+	                stop: KODELEARN.modules.get('time_slider').slideTime,
+	                slide: this.checkDay
 	            });
             <?php }?>
         
@@ -151,6 +152,39 @@ KODELEARN.modules.add('create_lecture' , (function () {
            }
            this.showType();
            $('input[name="type"]').click(function(){ KODELEARN.modules.get('create_lecture').showType(); });
+
+		   $('.dayslider').hover(
+				   function () {
+					   		$(this).children('span').after(' <a class="hidden sttall">Set this time for all days</a>');
+					     	$(this).children('a').fadeIn(100); 
+					     }, 
+				   function () {  
+					    	 $(this).children('a').fadeOut(500);
+					    	 $(this).children('a').remove();
+								
+						}
+			);
+
+		   var sliders = this.sliders;
+			$('.sttall').live('click', function () {
+
+				var from = $(this).siblings('input[id$="from"]').val();
+				var to = $(this).siblings('input[id$="to"]').val();
+
+				for(var i = 0; i < sliders.length; i++){
+					$('#' + sliders[i]).slider( "values" , 0 , from );
+					$('#' + sliders[i]).slider( "values" , 1 , to );
+	        	    var event = {target: document.getElementById(sliders[i])};
+	        	    KODELEARN.modules.get('time_slider').slideTime(event);
+					
+				}
+
+				$('.datatable input:checkbox').attr('checked', true);
+			});
+           
+        },
+        checkDay: function(event, ui){
+			$(event.target).parent().parent().children().eq(0).children('input:checkbox').attr('checked', true);
         },
         showType: function () {
             var type = $('input[name="type"]:checked').val();

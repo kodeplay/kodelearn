@@ -324,8 +324,8 @@ class Controller_Exam extends Controller_Base {
             'rooms'       => Html::anchor('/room/', 'Add Rooms', array('target' => '_blank')),
         );
         
-        $silder['start'] = 540;
-        $silder['end'] = 600;
+        $silder['start'] = 420;
+        $silder['end'] = 660;
         
         $view = View::factory('exam/form')
             ->bind('form', $form)
