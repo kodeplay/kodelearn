@@ -278,9 +278,7 @@ class Model_Exam extends ORM {
     public static function get_course_exams_count($course) {
         $count_exam = ORM::factory('exam');
         $count_exam = $count_exam->where('course_id', '=', $course->id)->count_all();       
-        $result=array();    
-        $result['exam'] = $count_exam;
-        return $result;
+        return "<a href='".Url::site('exam')."/index/course_id/".$course->id."' target='_blank'>".$count_exam." exams</a>"; 
     }
     
 }

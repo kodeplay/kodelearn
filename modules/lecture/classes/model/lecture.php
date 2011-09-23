@@ -184,10 +184,7 @@ class Model_Lecture extends ORM {
     public static function get_course_lectures_count($course) {
         $count_lecture = ORM::factory('lecture');
         $count_lecture = $count_lecture->where('course_id', '=', $course->id)->count_all();
-        $result=array();
-        $result['lecture']=$count_lecture;    
-        return $result;       
-        
+        return "<a href='".Url::site('lecture')."/index/filter_course/".$course->name."' target='_blank'>".$count_lecture." lectures</a>";       
     }
     
 }

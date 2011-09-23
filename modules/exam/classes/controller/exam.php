@@ -14,11 +14,18 @@ class Controller_Exam extends Controller_Base {
     }
     
     private function get_schedule() {
+        $course_id = $this->request->param('course_id');
         
-    	$user = Auth::instance()->get_user();
+        $user = Auth::instance()->get_user();
         
     	$course_ids = $user->courses->find_all()->as_array(NULL, 'id');
-        
+        if($course_id) {
+        	if(in_array($course_id,$course_ids)) {
+                $course_ids = array(); 
+                $course_ids[] = $course_id;        
+        	}
+        }
+    	
     	if($course_ids){
             $exams = ORM::factory('exam')
                 ->join('events')->on('exams.event_id', '=', 'events.id')

@@ -300,7 +300,6 @@ class Controller_Course extends Controller_Base {
     	$count_student = Model_Course::get_users_count($id, 'student');    	
     	
     	$results = Hook::instance()->trigger("course_count", $course);
-    	
     	//$count_exam = Model_Exam::get_course_exams_count($id);        
         
     	$count = array(

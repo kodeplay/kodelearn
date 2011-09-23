@@ -24,14 +24,12 @@
 				<a href="#"><?php echo $count['count_student']; ?> students</a>
 				have access to
 				<?php foreach($count['results'] as $results){ 
-				        foreach($results as $key=>$value){
 				        
 				    ?>
-				    <a href="#"><?php echo $value. " " .$key; ?></a>
+				    <?php echo $results?>
 				
 				<?php 
-				        }
-				    }
+				      }
 				?>
 				
 			</p>
