@@ -269,13 +269,26 @@ class Controller_Attendance extends Controller_Base {
                 }
             }
             Session::instance()->set('success', 'Attendance marked successfully.');
-            $feed = new Feed_Attendance();
-                    
-            $feed->set_action('mark');
-            $feed->set_respective_id($event_id);
-            $feed->set_actor_id(Auth::instance()->get_user()->id); 
-            $feed->save();
-            $feed->subscribe_users($users);
+            $feed_exist = ORM::factory('feed')
+                            ->where('type','=','attendance')
+                            ->where('action','=','mark')
+                            ->where('respective_id','=',$event_id)
+                            ->where('actor_id','=',Auth::instance()->get_user()->id)
+                            ;
+            $feed_exists = $feed_exist->find();
+            if($feed_exists->id) {
+                $feed = new Feed_Attendance();
+                $feed->subscribe_marked_users($users,$feed_exists->id);
+                
+            } else {
+                $feed = new Feed_Attendance();
+                        
+                $feed->set_action('mark');
+                $feed->set_respective_id($event_id);
+                $feed->set_actor_id(Auth::instance()->get_user()->id); 
+                $feed->save();
+                $feed->subscribe_users($users);
+            }            
         }
         $id = $this->request->param('id');
         $type = $this->request->param('type');

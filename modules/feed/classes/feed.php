@@ -135,6 +135,15 @@ abstract class Feed {
         
     }
     
+    public function subscribe_marked_users($users,$feed_id){
+        
+        $feed = ORM::factory('feed', $feed_id);
+        foreach($users as $user){
+            $feed->add('users', $user);
+        }
+        
+    }
+    
     public function check_deleted($object){
         
         if($object->id === NULL){
