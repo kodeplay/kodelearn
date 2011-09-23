@@ -91,7 +91,7 @@
                 <td colspan="3">
                     <?php 
                         $percentage = ($marks_total * 100)/$total_marks_total;
-                        echo $percentage;
+                        echo round($percentage,2);
                     ?>%
                 </td>
             </tr>

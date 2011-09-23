@@ -187,7 +187,7 @@ class Controller_Base extends Controller_Template {
             $user = Auth::instance()->get_user();
             $role = $user->role()->name;
             $username = Auth::instance()->get_user()->firstname;
-            if ($user->is_role('student') || $user->is_role('parent')) {
+            //if ($user->is_role('student') || $user->is_role('parent') || $user->is_role('admin')) {
                 $avatar = Auth::instance()->get_user()->avatar;
                 $avatar = $avatar === null ? '' : $avatar;
                 $img_user = CacheImage::instance()->resize($avatar, 72, 72);
@@ -208,7 +208,7 @@ class Controller_Base extends Controller_Template {
                         ->bind('change_img_url', $change_img_url)
                         ;
                 $this->view->set('avatar', $view_avatar);
-            }
+            //}
         }
         $menu = Acl_Menu::factory($role);
         // var_dump($menu); exit;

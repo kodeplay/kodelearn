@@ -1,7 +1,5 @@
 <div class="sidebar l">
-    <?php if ($role === 'Admin') { ?>        
-    <p class="sidebarTitle">Administration</p>
-    <?php } ?>
+    
     <?php if (isset($avatar)) { 
         ?>
             <?php echo $avatar; ?>
