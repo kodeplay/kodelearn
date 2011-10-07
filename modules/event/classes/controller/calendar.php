@@ -83,6 +83,7 @@ class Controller_Calendar extends Controller_Base {
         $year = $this->request->param('year', date('Y'));
         $month = $this->request->param('month', date('m'));
         $day = $this->request->param('day', date('d'));
+        $event_type = $this->request->param('event_type');
         $date = date('Y-m-d', mktime(0, 0, 0, (int)$month, (int)$day, $year));
         $events = Model_Event::daily_events($date);
         $day_events = array();

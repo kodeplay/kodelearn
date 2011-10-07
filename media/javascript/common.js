@@ -356,11 +356,12 @@ KODELEARN.modules.add('calendar', (function () {
                 // supress request in case no event present
                 events = $(this).children().filter('ul').length,
                 that = this;
+                var event_type = $("select[name='event_type']").val();
                 if (events) {
                     var request = new ajaxLoad({
                         'container': '#day-events',
                         'controller': 'calendar',
-                        'action': 'day_events/year/'+year+'/month/'+month+'/day/'+day,
+                        'action': 'day_events/year/'+year+'/month/'+month+'/day/'+day+'/type/'+event_type,
                         'callback': function (resp) { 
                             // cache results (entire html) in data
                             $(that).data('events_html', resp).addClass('curr');

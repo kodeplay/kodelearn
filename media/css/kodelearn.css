@@ -162,6 +162,7 @@ a{ color: #427693; }
 	-moz-box-shadow: inset -1px -1px 3px #f3b95c;
 	-ms-box-shadow: inset -1px -1px 3px #f3b95c;
 	box-shadow: inset -1px -1px 3px #f3b95c;
+	position: absolute;
 }
 
 .roleContainer > a {
