@@ -28,6 +28,7 @@ Kodelearn is written in PHP using the Kohana PHP Framework (v3.1)
     You will also need to update the submodules by running the command
   
     ```bash
+    $ cd kodelearn
     $ git submodule init
     $ git submodule update
     ```
@@ -40,7 +41,7 @@ Change the value of base_url to the one you would be using.
   
 #### Database && Database Config
 
-Create a new Mysql database and import the database schema and dump provided in the _database.sql_ file.
+Create a new Mysql database and import the database schema and dump provided in the _database.sql_ file in the kodelearn directory.
 
 Copy the contents of the file _application/config/sample-database.php_ to a new file _database.php_
 in the same directory and modify the 'default' configuration in it to add your database details.
@@ -60,7 +61,7 @@ Open the project url in the browser.
 Following admin account is already there for you to get started quickly -
 
 email: admin@kodelearn.com
-password: kodelearn
+password: kodeplay2010
 
 After loggin in, change the email and password as per your convenience.
 
