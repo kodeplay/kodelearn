@@ -113,6 +113,7 @@ Kohana::modules(array(
     'dynamicmenu'   => MODPATH.'dynamicmenu', // Dynamic menu model by kodeplay
     'pagination'    => MODPATH.'pagination', // for server side pagination
     'cacheimage'    => MODPATH.'cacheimage', // for Image Caching
+    'purifier'      => MODPATH.'purifier', // Shadowhand's html purifier
     'email'         => MODPATH.'email', // for mailling
     'exam'          => MODPATH.'exam',
     'event'         => MODPATH.'event',
