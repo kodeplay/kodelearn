@@ -34,3 +34,6 @@
 [submodule "modules/email"]
 	path = modules/email
 	url = git@github.com:kodeplay/kohana-email.git
+[submodule "modules/purifier"]
+	path = modules/purifier
+	url = git://github.com/shadowhand/purifier.git
