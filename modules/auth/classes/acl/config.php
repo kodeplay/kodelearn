@@ -24,6 +24,7 @@ class Acl_Config {
         'unittest',
         'welcome',
         'error',
+        'purifer',
     );
 
     /**
@@ -72,6 +73,8 @@ class Acl_Config {
      */
     private function merge_resources() {
         $controllers = Kohana::list_files('classes/controller');
+        // controllers can also be nested, so just flatten the array
+        $controllers = Arr::flatten($controllers);
         foreach ($controllers as $controller) {            
             $resource = basename($controller, '.php');
             if (self::is_resource_ignored($resource) || array_key_exists($resource, $this->_acl)) {
