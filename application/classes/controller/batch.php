@@ -113,10 +113,11 @@ class Controller_Batch extends Controller_Base
             if (Arr::get($this->request->post(), 'save') !== null) {
                 $submitted = true;
                 $batch = ORM::factory('batch');
-                $validator = $batch->validator($this->request->post());
+                $safepost = Arr::map('Security::xss_clean', $this->request->post());
+                $validator = $batch->validator($safepost);
                 if ($validator->check()) {
-                    $batch->name = $this->request->post('name');
-                    $batch->description = $this->request->post('description');
+                    $batch->name = Arr::get($safepost, 'name');
+                    $batch->description = Arr::get($safepost, 'description');
                     $batch->save();
                     Session::instance()->set('success', 'Batch added successfully.');
                     Request::current()->redirect('batch');
@@ -187,10 +188,11 @@ class Controller_Batch extends Controller_Base
         if ($this->request->method() === 'POST' && $this->request->post()) {
             if (Arr::get($this->request->post(), 'save') !== null) {
                 $submitted = true;
-                $validator = $batch->validator($this->request->post());
+                $safepost = Arr::map('Security::xss_clean', $this->request->post());
+                $validator = $batch->validator($safepost);
                 if ($validator->check()) {
-                    $batch->name = $this->request->post('name');
-                    $batch->description = $this->request->post('description');
+                    $batch->name = Arr::get($safepost, 'name');
+                    $batch->description = Arr::get($safepost, 'description');
                     $batch->save();
                     Session::instance()->set('success', 'Batch edited successfully.');
                     Request::current()->redirect('batch');
