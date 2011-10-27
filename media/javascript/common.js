@@ -85,24 +85,24 @@ KODELEARN.modules.add('sidebar' , (function () {
     return {
     	el: $('.sidebar'),
         init: function () { 
-    		var win = $(window);
-    		var el = $('.sidebar');
-    		if(el.size()){
-	    		window.onscroll = function() {
-	    			var eltop = el.position().top;
-	    			var winscroll = win.scrollTop();
-	    			var adminbar = $(".roleContainer").outerHeight();
-	    			if(adminbar === "NaN") {
-	    				adminbar = 0;
-	    			}
-	    			if(winscroll > (178 + +adminbar)){
-	    				el.css({position: 'fixed', top: 0});
-	    			} else {
-	    				el.css({position: 'absolute', top: (178+ +adminbar)});
-	    			}
-	    		};
-	    		this.highlight();
-    		}
+    		// var win = $(window);
+    		// var el = $('.sidebar');
+    		// if(el.size()){
+	    	// 	window.onscroll = function() {
+	    	// 		var eltop = el.position().top;
+	    	// 		var winscroll = win.scrollTop();
+	    	// 		var adminbar = $(".roleContainer").outerHeight();
+	    	// 		if(adminbar === "NaN") {
+	    	// 			adminbar = 0;
+	    	// 		}
+	    	// 		if(winscroll > (178 + +adminbar)){
+	    	// 			el.css({position: 'fixed', top: 0});
+	    	// 		} else {
+	    	// 			el.css({position: 'absolute', top: (178+ +adminbar)});
+	    	// 		}
+	    	// 	};
+	    	// 	this.highlight();
+    		// }
     	},
     	highlight: function (controller) {
     		
