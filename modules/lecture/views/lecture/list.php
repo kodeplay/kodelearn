@@ -15,7 +15,7 @@
             <span class="clear">&nbsp;</span>
         </div><!-- topbar -->
         <?php } ?>
-        <form name="lecture" id="lecture" method="POST" action="<?php echo $links['delete'] ?>">
+        <form name="lecture" id="lecture" method="POST" class="selection-required" action="<?php echo $links['delete'] ?>">
         <div class="vm5" align="right">
             <select id="filter_select" name="filter_select" style="padding:2px; width:150px"> 
               <option value="filter_name">Name</option>

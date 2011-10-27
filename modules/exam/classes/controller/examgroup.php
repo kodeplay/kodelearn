@@ -236,8 +236,10 @@ class Controller_Examgroup extends Controller_Base {
                     $msg = 0;
                 }
             }
+            Request::current()->redirect('examgroup/index/msg/'.$msg);
+        } else {
+            Request::current()->redirect('examgroup/index/');
         }
-        Request::current()->redirect('examgroup/index/msg/'.$msg);
     }
 
     public function action_nil_exams() {

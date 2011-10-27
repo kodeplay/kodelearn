@@ -1,7 +1,11 @@
 $(document).ready(function() {
     
     // Confirm Delete
-    $('form').submit(function () {
+    $('form').submit(function (event) {
+        if ($(this).hasClass('selection-required') && $("input[type='checkbox']:checked").length === 0) {
+            alert('Please select atleast 1 entry and try again');
+            return false;
+        }
         if ($(this).attr('action').indexOf('delete',1) != -1) {
             if (!confirm ('Delete cannot be undone! Are you sure you want to do this?')) {
                 return false;
@@ -16,8 +20,7 @@ $(document).ready(function() {
     }
     
     $('.ui-icon-closethick').live('click', function(){
-    	$('.lightoverlay').hide();
-    
+    	$('.lightoverlay').hide();    
     });
     
 });

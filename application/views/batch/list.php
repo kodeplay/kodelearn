@@ -21,7 +21,7 @@
             <span class="clear">&nbsp;</span>
             </div>
         <?php } ?>      		
-		<form name="batch" id="batch" method="POST" action="<?php echo $links['delete'] ?>">
+		<form name="batch" id="batch" method="POST" class="selection-required" action="<?php echo $links['delete'] ?>">
         <div class="vm5" align="right">
             <select id="filter_select" name="filter_select" style="padding:2px; width:150px"> 
               <option value="filter_name">Name</option>
