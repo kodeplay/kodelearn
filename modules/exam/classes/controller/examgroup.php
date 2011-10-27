@@ -113,11 +113,10 @@ class Controller_Examgroup extends Controller_Base {
             if (Arr::get($this->request->post(), 'save') !== null){
                 $submitted = true;
                 $examgroup = ORM::factory('examgroup');
-                $validator = $examgroup->validator($this->request->post());
-                if ($validator->check()) {
-                    
-                    $examgroup->name = $this->request->post('name');
-                    
+                $safepost = Arr::map('Security::xss_clean', $this->request->post());
+                $validator = $examgroup->validator($safepost);
+                if ($validator->check()) {                    
+                    $examgroup->name = Arr::get($safepost, 'name');
                     $examgroup->save();
                     Session::instance()->set('success', 'Grading Period added successfully.');
                     Request::current()->redirect('examgroup');
@@ -182,9 +181,10 @@ class Controller_Examgroup extends Controller_Base {
          if($this->request->method() === 'POST' && $this->request->post()){
             if (Arr::get($this->request->post(), 'save') !== null){
                 $submitted = true;
-                $validator = $examgroup->validator($this->request->post());
+                $safepost = Arr::map('Security::xss_clean', $this->request->post());
+                $validator = $examgroup->validator($safepost);
                 if ($validator->check()) {
-                    $examgroup->name = $this->request->post('name');
+                    $examgroup->name = Arr::get($safepost, 'name');
                     $examgroup->save();
                     Session::instance()->set('success', 'Grading Period edited successfully.');
                     Request::current()->redirect('examgroup');
@@ -195,8 +195,7 @@ class Controller_Examgroup extends Controller_Base {
             }
          }
         
-        $form = $this->form('examgroup/edit/id/'.$id ,$submitted, array('name' => $examgroup->name));
-        
+        $form = $this->form('examgroup/edit/id/'.$id ,$submitted, array('name' => $examgroup->name));        
         
         $links = array(
             'cancel' => Html::anchor('/examgroup/', 'or cancel')
@@ -218,9 +217,7 @@ class Controller_Examgroup extends Controller_Base {
         
         Breadcrumbs::add(array(
             'Edit', Url::site('examgroup/edit/id/'.$id)
-        ));
-        
-        
+        ));        
     }
     
     public function action_delete(){
