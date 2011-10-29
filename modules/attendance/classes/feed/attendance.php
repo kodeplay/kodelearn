@@ -2,12 +2,6 @@
 
 class Feed_Attendance extends Feed {
     
-    public function __construct($id = NULL){
-        if($id){
-            $this->load($id);
-        }
-    }
-    
     public function render(){
                
         $user = ORM::factory('user', $this->actor_id);

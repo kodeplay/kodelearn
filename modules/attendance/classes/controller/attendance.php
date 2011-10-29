@@ -251,7 +251,7 @@ class Controller_Attendance extends Controller_Base {
             $event_id = $this->request->post('id');
             $course_id = $this->request->post('course_id');
             $users = Model_Course::get_users($course_id, 'student');
-            
+            $marked_users = $this->request->post('selected');            
             DB::delete('attendances')->where('event_id', '=', $event_id)
                        ->execute(Database::instance());
             foreach($users as $user){
@@ -268,27 +268,26 @@ class Controller_Attendance extends Controller_Base {
                    $attendance->save();
                 }
             }
-            Session::instance()->set('success', 'Attendance marked successfully.');
-            $feed_exist = ORM::factory('feed')
-                            ->where('type','=','attendance')
-                            ->where('action','=','mark')
-                            ->where('respective_id','=',$event_id)
-                            ->where('actor_id','=',Auth::instance()->get_user()->id)
-                            ;
-            $feed_exists = $feed_exist->find();
-            if($feed_exists->id) {
-                $feed = new Feed_Attendance();
-                $feed->subscribe_marked_users($users,$feed_exists->id);
-                
+            // find an existing feed 
+            $feed_exists = ORM::factory('feed')
+                ->where('type','=','attendance')
+                ->where('action','=','mark')
+                ->where('respective_id','=',$event_id)
+                ->where('actor_id','=',Auth::instance()->get_user()->id)
+                ->find();
+            if ($feed_exists->id !== null) {
+                $feed = new Feed_Attendance($feed_exists->id);
+                $feed->streams(array('user_id' => $marked_users))
+                    ->update_streams();
             } else {
-                $feed = new Feed_Attendance();
-                        
+                $feed = new Feed_Attendance();                
                 $feed->set_action('mark');
                 $feed->set_respective_id($event_id);
-                $feed->set_actor_id(Auth::instance()->get_user()->id); 
+                $feed->set_actor_id(Auth::instance()->get_user()->id);
+                $feed->streams(array('user_id' => $marked_users));
                 $feed->save();
-                $feed->subscribe_users($users);
-            }            
+            }
+            Session::instance()->set('success', 'Attendance marked successfully.');
         }
         $id = $this->request->param('id');
         $type = $this->request->param('type');
