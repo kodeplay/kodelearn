@@ -2,12 +2,6 @@
 
 class Feed_Lecture extends Feed {
     
-    public function __construct($id = NULL){
-    	if($id){
-    		$this->load($id);
-    	}
-    }
-    
     public function render(){
     	
         $view = View::factory('feed/'.$this->type . '_' . $this->action)
