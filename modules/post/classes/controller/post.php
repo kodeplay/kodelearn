@@ -36,17 +36,23 @@ class Controller_Post extends Controller_Base {
             $post->link = $this->request->post('link');
             $post->user_id = Auth::instance()->get_user()->id;
             $post->save();
-            
-            $data = array(
-                'course_id'     => Arr::get($this->request->post(), 'course', 0),
-                'batch_id'      => Arr::get($this->request->post(),'batch', 0),
-                'role_id'       => Arr::get($this->request->post(), 'role_id', 0),
-                'post_id'       => $post->id,
-                'selected_roles'=> Arr::get($this->request->post(), 'selected_roles', array()),
-                'post_setting'  => $this->request->post('post_setting'),
-            );
 
-            $feed = $this->add_feed($data);
+            $course_id = Arr::get($this->request->post(), 'course', 0);
+            $batch_id = Arr::get($this->request->post(),'batch', 0);
+            $role_id = Arr::get($this->request->post(), 'selected_roles', 0); // yes, default 0 and not array; 0 = all roles
+
+            $feed = new Feed_Post();        
+            $feed->set_action('add');
+            $feed->set_respective_id($post->id);
+            $feed->set_course_id($course_id);
+            $feed->set_actor_id(Auth::instance()->get_user()->id); 
+            $stream_data = array(
+                'course_id'     => $course_id,
+                'batch_id'      => $batch_id,
+                'role_id'       => $role_id,
+            );
+            $feed->streams($stream_data);
+            $feed->save();
             
             $html = Request::factory('feed/feed/feed_id/'.$feed->get_id())
                 ->method(Request::GET)
@@ -67,64 +73,6 @@ class Controller_Post extends Controller_Base {
         
     	echo  json_encode($json);
     	exit;
-    }
-    
-    private function add_feed($data){
-        
-        $feed = new Feed_Post();        
-        $feed->set_action('add');
-        $feed->set_respective_id($data['post_id']);
-        $feed->set_course_id($data['course_id']);
-        $feed->set_actor_id(Auth::instance()->get_user()->id); 
-        $feed->save();
-        
-        switch ($data['post_setting']){
-            
-        case 'role':
-            if(!$data['selected_roles']){
-                $this->_errors[] = 'Please select atleast one role';
-            } else {
-                foreach($data['selected_roles'] as $role_id){
-                    $users = Model_Role::get_users(ORM::factory('role', $role_id)->name);
-                    $feed->subscribe_users($users);
-                }
-            }
-            break;
-            
-        case 'batch':
-            if(!$data['selected_roles']){
-                $users = ORM::factory('batch',$data['batch_id'])->users;
-                $feed->subscribe_users($users);
-            } else {
-                foreach($data['selected_roles'] as $role_id){
-                    $users = Model_Batch::get_users($data['batch_id'], ORM::factory('role', $role_id)->name);
-                    $feed->subscribe_users($users);
-                }
-            }
-            break;
-            
-        case 'course':
-            if(!$data['selected_roles']){
-                $users = ORM::factory('course',$data['course_id'])->users;
-                $feed->subscribe_users($users);
-            } else {
-                foreach($data['selected_roles'] as $role_id){
-                    $users = Model_Course::get_users($data['course_id'], ORM::factory('role', $role_id)->name);
-                    $feed->subscribe_users($users);
-                }
-            }
-            break;
-            
-        default:
-            $users = ORM::factory('user')->find_all();
-            $feed->subscribe_users($users);
-        }
-        
-        $users = array(Auth::instance()->get_user());
-        
-        $feed->subscribe_users($users);
-
-        return $feed;
     }
     
     private function validate() {
