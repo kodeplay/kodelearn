@@ -7,6 +7,10 @@ class Model_Feed extends ORM {
             'model'   => 'user',
             'through' => 'feeds_users',
         ),
+        'feedstreams' => array(
+            'model' => 'feedstream',
+            'through' => 'feeds_feedstreams'
+        )
     );
     
     /*
@@ -14,53 +18,36 @@ class Model_Feed extends ORM {
      * 
      * @return array of feed object
      */
-    public static function get_feeds($data = array()){
-        
+    public static function get_feeds($data = array()) {        
         $data = array_merge(array(
             'limit'     => 5,
             'offset'    => 0
         ) , $data);
-        
-        $user = Acl::instance()->relevant_user();
-        
-        if(!$user)
-            $user = Auth::instance()->get_user();
-        
+        // TODO the streams for the current user can be cached
+        $user_streams = Model_Feedstream::user_streams(null, Arr::get($data, 'course_id'));
         $feed = ORM::factory('feed')
-            ->join('feeds_users')
-            ->on('feeds.id', '=', 'feeds_users.feed_id')
-            ->where('feeds_users.user_id', '=', $user->id);
-        if(isset($data['course_id'])){
-            $feed->and_where('course_id', '=', $data['course_id']);
-        }              
-        
-        $feed->order_by('time', 'DESC')
+            ->join('feeds_feedstreams')
+            ->on('feeds.id' , ' = ' , 'feeds_feedstreams.feed_id')
+            ->where('feedstream_id', ' IN ', $user_streams->as_array(null, 'id'))
+            ->order_by('time', 'DESC')
             ->limit($data['limit'])
             ->offset($data['offset']);
-
         $feeds = $feed->find_all();
-        
-        return $feeds;
-        
+        // var_dump($feeds->as_array(null, 'id'));        
+        return $feeds;        
     }
     
-    public static function get_total_feeds($data = array()){
-        
-        $user = Acl::instance()->relevant_user();
-        
-        if(!$user)
+    public static function get_total_feeds($data = array()) {        
+        $user = Acl::instance()->relevant_user();        
+        if (!$user) {
             $user = Auth::instance()->get_user();
-        
+        }        
+        // TODO the streams for the current user can be cached
+        $user_streams = Model_Feedstream::user_streams(null, Arr::get($data, 'course_id'));
         $feed = ORM::factory('feed')
-            ->join('feeds_users')
-            ->on('feeds.id', '=', 'feeds_users.feed_id')
-            ->where('feeds_users.user_id', '=', $user->id);
-        if(isset($data['course_id'])){
-            $feed->where('course_id', '=', $data['course_id']);
-        } 
-        $feeds = $feed->count_all();
-        
-        return $feeds;
-        
+            ->join('feeds_feedstreams')
+            ->on('feeds.id' , ' = ' , 'feeds_feedstreams.feed_id')
+            ->where('feedstream_id', ' IN ', $user_streams->as_array(null, 'id'));
+        return $feed->count_all();                
     } 
 }

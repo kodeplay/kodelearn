@@ -30,7 +30,7 @@ class Model_Feedstream extends ORM {
         $role_id = (int) Arr::get($data, 'role_id', 0);
         $course_id = (int) Arr::get($data, 'course_id', 0);
         $batch_id = (int) Arr::get($data, 'batch_id', 0);
-        $stream = ORM::factory('feedstream');            
+        $stream = ORM::factory('feedstream');
         if ($user_id) {
             $stream->where('user_id', ' = ', $user_id);
         }    
@@ -54,8 +54,6 @@ class Model_Feedstream extends ORM {
                 ->or_where_close();
         }
         $stream->find();
-        // print_r($stream->_db->last_query); exit;
-        /* var_dump($stream->as_array()); */
         if ($stream->id !== null) {
             return $stream;            
         } else {
