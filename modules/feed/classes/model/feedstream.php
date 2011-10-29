@@ -72,16 +72,22 @@ class Model_Feedstream extends ORM {
         $role = $user->role();
         if ($course_id === null) {
             $courses = $user->courses->find_all()->as_array(null, 'id');            
+            $courses[] = 0;
         } else {
             $courses = array($course_id);
         }
-        $batches = $user->batches->find_all()->as_array(null, 'id');
+        if ($batch_id === null) {
+            $batches = $user->batches->find_all()->as_array(null, 'id');            
+            $batches[] = 0;
+        } else {
+            $batches = array($batch_id);
+        }
         $streams = ORM::factory('feedstream')
             ->where('user_id', ' IN', array($user->id, 0))
             ->and_where('role_id', ' IN ', array($role->id, 0))
-            ->and_where('course_id', ' IN ', array_merge($courses, array(0)))
-            ->and_where('batch_id', ' IN ', array_merge($batches, array(0)))
-            ->find_all();
+            ->and_where('course_id', ' IN ', $courses)
+            ->and_where('batch_id', ' IN ', $batches)
+            ->find_all();        
         return $streams;
     }
 }
