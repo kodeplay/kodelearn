@@ -20,12 +20,12 @@ class Controller_Exam extends Controller_Base {
         
     	$course_ids = $user->courses->find_all()->as_array(NULL, 'id');
         if($course_id) {
-        	if(in_array($course_id,$course_ids)) {
+            if(in_array($course_id,$course_ids)) {
                 $course_ids = array(); 
                 $course_ids[] = $course_id;        
-        	}
+            }
         }
-    	
+        
     	if($course_ids){
             $exams = ORM::factory('exam')
                 ->join('events')->on('exams.event_id', '=', 'events.id')
@@ -72,8 +72,8 @@ class Controller_Exam extends Controller_Base {
         
         if($this->request->param('filter_grading_period')) {
             $filters = array(
-                    'filter_grading_period' => $this->request->param('filter_grading_period'),
-                    
+                'filter_grading_period' => $this->request->param('filter_grading_period'),
+                
             );
             
             $total = Model_Exam::exams_total_grading_period($filters);
@@ -93,14 +93,14 @@ class Controller_Exam extends Controller_Base {
             ));
             
             $exams = Model_Exam::exams_grading_period($filters);    
-        
+            
         } else if($this->request->param('filter_date')) {
             
             $sdate = strtotime($this->request->param('filter_date'));
             $edate = $sdate + 86400;            
             $filters = array(
-                    'sdate' => $sdate,
-                    'edate' => $edate,
+                'sdate' => $sdate,
+                'edate' => $edate,
             );
             
             $total = Model_Exam::exams_total_date($filters);
@@ -124,8 +124,8 @@ class Controller_Exam extends Controller_Base {
         } else if($this->request->param('filter_course')) {
             
             $filters = array(
-                    'filter_course' => $this->request->param('filter_course'),
-                    
+                'filter_course' => $this->request->param('filter_course'),
+                
             );
             
             $total = Model_Exam::exams_total_course($filters);
@@ -149,10 +149,10 @@ class Controller_Exam extends Controller_Base {
         } else {
             
             $filters = array(
-                    'filter_name' => $this->request->param('filter_name'),
-                    'filter_passing_marks' => $this->request->param('filter_passing_marks'),
-                    'filter_total_marks' => $this->request->param('filter_total_marks'),
-                    'filter_reminder' => $this->request->param('filter_reminder'),
+                'filter_name' => $this->request->param('filter_name'),
+                'filter_passing_marks' => $this->request->param('filter_passing_marks'),
+                'filter_total_marks' => $this->request->param('filter_total_marks'),
+                'filter_reminder' => $this->request->param('filter_reminder'),
             );
             
             $total = Model_Exam::exams_total($filters);
@@ -269,7 +269,7 @@ class Controller_Exam extends Controller_Base {
         Breadcrumbs::add(array(
             'Exams', Url::site('exam')
         ));
-            
+        
         $this->content = $view;
     }
     
@@ -294,22 +294,24 @@ class Controller_Exam extends Controller_Base {
                     $event_exam->set_value('eventstart', $from);
                     $event_exam->set_value('eventend', $to);
                     $event_id = $event_exam->add();
-			
-			        $exam = ORM::factory('exam');
-			
-			        $exam->values(array_merge($this->request->post(),array('event_id' => $event_id) ));
-			
-			        $exam->save();
-			                    
-			        $feed = new Feed_Exam();
-			        
-			        $feed->set_action('add');
-			        $feed->set_course_id($this->request->post('course_id'));
-			        $feed->set_respective_id($exam->id);
-			        $feed->set_actor_id(Auth::instance()->get_user()->id); 
-			        $feed->save();
-			        $feed->subscribe_users();
-			        Session::instance()->set('success', 'Exam added successfully.');
+                    
+                    $exam = ORM::factory('exam');
+                    
+                    $exam->values(array_merge($this->request->post(),array('event_id' => $event_id) ));
+                    
+                    $exam->save();
+                    
+                    $feed = new Feed_Exam();
+                    
+                    $feed->set_action('add');
+                    $feed->set_course_id($this->request->post('course_id'));
+                    $feed->set_respective_id($exam->id);
+                    $feed->set_actor_id(Auth::instance()->get_user()->id); 
+                    $feed->streams(array(
+                        'course_id' => (int)$this->request->post('course_id'),                        
+                    ));
+                    $feed->save();
+                    Session::instance()->set('success', 'Exam added successfully.');
                     Request::current()->redirect('exam');
                     exit;
                 } else {
@@ -336,11 +338,11 @@ class Controller_Exam extends Controller_Base {
         Breadcrumbs::add(array(
             'Exams', Url::site('exam')
         ));
-            
+        
         Breadcrumbs::add(array(
             'Create', Url::site('exam/add')
         ));
-            
+        
         $this->content = $view;
     }
 
@@ -362,15 +364,15 @@ class Controller_Exam extends Controller_Base {
                 $validator->bind(':total_marks', $this->request->post('total_marks'));
                 if ($validator->check()) {
 
-                	$from = strtotime($this->request->post('date')) + ($this->request->post('from') * 60); 
+                    $from = strtotime($this->request->post('date')) + ($this->request->post('from') * 60); 
                     $to = strtotime($this->request->post('date')) + ($this->request->post('to') * 60); 
                     
-			        $exam = ORM::factory('exam', $id);
-			
-			        $exam->values($this->request->post());
-			
-			        $exam->save();
-			                    
+                    $exam = ORM::factory('exam', $id);
+                    
+                    $exam->values($this->request->post());
+                    
+                    $exam->save();
+                    
                     $event_exam = Event_Abstract::factory('exam');
                     $event_exam->set_values($this->request->post());
                     $event_exam->set_value('eventstart', $from);
@@ -430,11 +432,11 @@ class Controller_Exam extends Controller_Base {
         Breadcrumbs::add(array(
             'Exams', Url::site('exam')
         ));
-            
+        
         Breadcrumbs::add(array(
             'Edit', Url::site('exam/edit/id/' . $id)
         ));
-            
+        
         $this->content = $view;
     }
     

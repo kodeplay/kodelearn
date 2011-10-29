@@ -2,12 +2,6 @@
 
 class Feed_Exam extends Feed {
     
-    public function __construct($id = NULL){
-    	if($id){
-    		$this->load($id);
-    	}
-    }
-    
     public function render(){
         $span = Date::fuzzy_span($this->time);
         if($this->action == "publish_result"){
@@ -42,6 +36,5 @@ class Feed_Exam extends Feed {
     public function save(){
     	$this->type = 'exam';
     	parent::save();
-    }
-    
+    }    
 }
