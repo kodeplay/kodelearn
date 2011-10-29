@@ -2,12 +2,6 @@
 
 class Feed_Document extends Feed {
     
-    public function __construct($id = NULL){
-    	if($id){
-    		$this->load($id);
-    	}
-    }
-    
     public function render(){
     	
         $span = Date::fuzzy_span($this->time);
