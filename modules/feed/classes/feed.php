@@ -129,7 +129,7 @@ abstract class Feed {
         return $this->type . ' ' . $this->action;
     }
     
-    public function save() {
+    public function save() {        
         $this->_feed->type = $this->type;
         $this->_feed->action = $this->action;
         $this->_feed->respective_id = $this->respective_id;
