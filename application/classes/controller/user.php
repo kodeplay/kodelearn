@@ -228,16 +228,16 @@ class Controller_User extends Controller_Base {
                     $user->add('roles', $role);
                     
                     if($this->request->post('batch_id')){
-                        $feed = new Feed_Batch();
                         foreach($this->request->post('batch_id') as $batch_id){
                             $batch = ORM::factory('batch', $batch_id);
                             $user->add('batches', $batch);
+                            $feed = new Feed_Batch();
                             $feed->set_action('add');
                             $feed->set_course_id('0');
                             $feed->set_respective_id($batch_id);
                             $feed->set_actor_id(Auth::instance()->get_user()->id); 
+                            $feed->streams(array('user_id' => $user->id));
                             $feed->save();
-                            $feed->subscribe_users(array('0' => $user->id));
                         }
                     }
                     
@@ -250,8 +250,8 @@ class Controller_User extends Controller_Base {
                             $feed->set_course_id('0');
                             $feed->set_respective_id($course_id);
                             $feed->set_actor_id(Auth::instance()->get_user()->id); 
+                            $feed->streams(array('user_id' => $user->id));
                             $feed->save();
-                            $feed->subscribe_users(array('0' => $user->id));
                         }
                     }
                     self::notify_by_email($user, $password);
@@ -375,15 +375,15 @@ class Controller_User extends Controller_Base {
                                 ->where('feeds.respective_id','=',$batch_id)
                                 ->where('feeds_users.user_id','=',$user->id);
                             $feed_exists = $feed_exist->find();
+                            // add this feed only if doesnt exists already (which means user already in the batch)
                             if(!$feed_exists->id){
                                 $feed->set_action('add');
                                 $feed->set_course_id('0');
                                 $feed->set_respective_id($batch_id);
                                 $feed->set_actor_id(Auth::instance()->get_user()->id); 
+                                $feed->streams(array('user_id' => $user->id));
                                 $feed->save();
-                                $feed->subscribe_users(array('0' => $user->id));       
-                            }
-                            
+                            }                            
                         }
                     }
                     //removing the previous courses assigned
@@ -405,8 +405,8 @@ class Controller_User extends Controller_Base {
                                 $feed->set_course_id('0');
                                 $feed->set_respective_id($course_id);
                                 $feed->set_actor_id(Auth::instance()->get_user()->id); 
+                                $feed->streams(array('user_id' => $user->id));
                                 $feed->save();
-                                $feed->subscribe_users(array('0' => $user->id));       
                             }
                         }
                     }
