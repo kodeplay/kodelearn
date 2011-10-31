@@ -226,34 +226,8 @@ class Controller_User extends Controller_Base {
                     $role = ORM::factory('role', $this->request->post('role_id'));
                     $user->save();
                     $user->add('roles', $role);
-                    
-                    if($this->request->post('batch_id')){
-                        foreach($this->request->post('batch_id') as $batch_id){
-                            $batch = ORM::factory('batch', $batch_id);
-                            $user->add('batches', $batch);
-                            $feed = new Feed_Batch();
-                            $feed->set_action('add');
-                            $feed->set_course_id('0');
-                            $feed->set_respective_id($batch_id);
-                            $feed->set_actor_id(Auth::instance()->get_user()->id); 
-                            $feed->streams(array('user_id' => $user->id));
-                            $feed->save();
-                        }
-                    }
-                    
-                    if($this->request->post('course_id')){
-                        $feed = new Feed_Course();
-                        foreach($this->request->post('course_id') as $course_id){
-                            $course = ORM::factory('course', $course_id);
-                            $user->add('courses', $course);
-                            $feed->set_action('student_add');
-                            $feed->set_course_id('0');
-                            $feed->set_respective_id($course_id);
-                            $feed->set_actor_id(Auth::instance()->get_user()->id); 
-                            $feed->streams(array('user_id' => $user->id));
-                            $feed->save();
-                        }
-                    }
+                    $this->update_courses($user, Arr::get($this->request->post(), 'course_id', array()));
+                    $this->update_batches($user, Arr::get($this->request->post(), 'batch_id', array()));
                     self::notify_by_email($user, $password);
                     Session::instance()->set('success', 'User added successfully.');
                     Request::current()->redirect('user');
@@ -352,66 +326,16 @@ class Controller_User extends Controller_Base {
                     $user->firstname = $this->request->post('firstname');
                     $user->lastname = $this->request->post('lastname');
                     $user->email = $this->request->post('email');
-                    $user->avatar = $this->request->post('avatar');
-                    
+                    $user->avatar = $this->request->post('avatar');                    
                     $user->status = $this->request->post('status');
+                    $user->save();
                     //removing the previous role assigned
                     $user->remove('roles');
                     //creating a role object and assigning a new role
                     $role = ORM::factory('role', $this->request->post('role_id'));
-                    $user->add('roles', $role);
-                    
-                    //removing the previous batches assigned
-                    $user->remove('batches');
-                    if($this->request->post('batch_id')){
-                        $feed = new Feed_Batch();
-                        foreach($this->request->post('batch_id') as $batch_id){
-                            $batch = ORM::factory('batch', $batch_id);
-                            $user->add('batches', $batch);
-                            $feed_exist = ORM::factory('feed');
-                            $feed_exist->join('feeds_users','left')
-                                ->on('feeds_users.feed_id','=','feeds.id')
-                                ->where('feeds.type','=','batch')
-                                ->where('feeds.respective_id','=',$batch_id)
-                                ->where('feeds_users.user_id','=',$user->id);
-                            $feed_exists = $feed_exist->find();
-                            // add this feed only if doesnt exists already (which means user already in the batch)
-                            if(!$feed_exists->id){
-                                $feed->set_action('add');
-                                $feed->set_course_id('0');
-                                $feed->set_respective_id($batch_id);
-                                $feed->set_actor_id(Auth::instance()->get_user()->id); 
-                                $feed->streams(array('user_id' => $user->id));
-                                $feed->save();
-                            }                            
-                        }
-                    }
-                    //removing the previous courses assigned
-                    $user->remove('courses');
-                    if($this->request->post('course_id')){
-                        $feed = new Feed_Course();
-                        foreach($this->request->post('course_id') as $course_id){
-                            $course = ORM::factory('course', $course_id);
-                            $user->add('courses', $course);
-                            $feed_exist = ORM::factory('feed');
-                            $feed_exist->join('feeds_users','left')
-                                ->on('feeds_users.feed_id','=','feeds.id')
-                                ->where('feeds.type','=','course')
-                                ->where('feeds.respective_id','=',$course_id)
-                                ->where('feeds_users.user_id','=',$user->id);
-                            $feed_exists = $feed_exist->find();
-                            if(!$feed_exists->id){
-                                $feed->set_action('student_add');
-                                $feed->set_course_id('0');
-                                $feed->set_respective_id($course_id);
-                                $feed->set_actor_id(Auth::instance()->get_user()->id); 
-                                $feed->streams(array('user_id' => $user->id));
-                                $feed->save();
-                            }
-                        }
-                    }
-                    
-                    $user->save();
+                    $user->add('roles', $role);                    
+                    $this->update_courses($user, Arr::get($this->request->post(), 'course_id', array()));
+                    $this->update_batches($user, Arr::get($this->request->post(), 'batch_id', array()));
                     Session::instance()->set('success', 'User modified successfully.');
                     Request::current()->redirect('user');
                     exit;
@@ -450,6 +374,80 @@ class Controller_User extends Controller_Base {
             'Edit', Url::site('user/edit/id/'.$id)
         ));    
         $this->content = $view;
+    }
+
+    /**
+     * Method to update the batches in which the user is added depending upon the list of selected batch ids
+     * Will be used incase of both add and edit
+     */
+    protected function update_batches($user, $selected) {
+        $current_batches = $user->batches->find_all()->as_array(null, 'id');        
+        $added = array_values(array_diff($selected, $current_batches));
+        $removed = array_values(array_diff($current_batches, $selected));
+        // removing to be done before adding
+        if ($removed) {
+            //removing the previous batches assigned
+            $user->remove('batches');   
+            foreach ($removed as $batch_id) {
+                $feed = new Feed_Batch();
+                $feed->set_action('student_remove');
+                $feed->set_course_id('0');
+                $feed->set_respective_id($batch_id);
+                $feed->set_actor_id(Auth::instance()->get_user()->id); 
+                $feed->streams(array('user_id' => $user->id));
+                $feed->save();                
+            }
+        }
+        if ($added) {
+            foreach ($added as $batch_id) {
+                $batch = ORM::factory('batch', $batch_id);
+                $user->add('batches', $batch);
+                $feed = new Feed_Batch();
+                $feed->set_action('student_add');
+                $feed->set_course_id('0');
+                $feed->set_respective_id($batch_id);
+                $feed->set_actor_id(Auth::instance()->get_user()->id); 
+                $feed->streams(array('user_id' => $user->id));
+                $feed->save();                
+            }
+        }
+    }
+
+    /**
+     * Method to update the courses in which the user is added depending upon the list of selected course ids
+     * Will be used incase of both add and edit
+     */
+    protected function update_courses($user, $selected) {
+        $current_courses = $user->courses->find_all()->as_array(null, 'id');        
+        $added = array_values(array_diff($selected, $current_courses));
+        $removed = array_values(array_diff($current_courses, $selected));
+        // removing to be done before adding
+        if ($removed) {
+            //removing the previous courses assigned
+            $user->remove('courses');   
+            foreach ($removed as $course_id) {
+                $feed = new Feed_Course();
+                $feed->set_action('student_remove');
+                $feed->set_course_id('0');
+                $feed->set_respective_id($course_id);
+                $feed->set_actor_id(Auth::instance()->get_user()->id); 
+                $feed->streams(array('user_id' => $user->id));
+                $feed->save();                
+            }
+        }
+        if ($added) {
+            foreach ($added as $course_id) {
+                $course = ORM::factory('course', $course_id);
+                $user->add('courses', $course);
+                $feed = new Feed_Course();
+                $feed->set_action('student_add');
+                $feed->set_course_id('0');
+                $feed->set_respective_id($course_id);
+                $feed->set_actor_id(Auth::instance()->get_user()->id); 
+                $feed->streams(array('user_id' => $user->id));
+                $feed->save();                
+            }
+        }
     }
 
     public function action_delete(){
@@ -529,15 +527,15 @@ class Controller_User extends Controller_Base {
                     }                    
                     if(!$error){
                         $this->success = "Users uploaded successfully. Records Added " . $records_added ;
-                        $feed = new Feed_Batch();
                         if(($this->request->post('batch_id'))){
                             foreach($this->request->post('batch_id') as $batch_id){
-                                $feed->set_action('add');
+                                $feed = new Feed_Batch();
+                                $feed->set_action('student_add');
                                 $feed->set_course_id('0');
                                 $feed->set_respective_id($batch_id);
                                 $feed->set_actor_id(Auth::instance()->get_user()->id); 
+                                $feed->streams(array('user_id' => $user->id));
                                 $feed->save();
-                                $feed->subscribe_users($user_id);
                             }
                         }
                     }                    
