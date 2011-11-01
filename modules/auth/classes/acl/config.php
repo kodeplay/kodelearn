@@ -24,7 +24,8 @@ class Acl_Config {
         'unittest',
         'welcome',
         'error',
-        'purifer',
+        'purifier',
+        'cron',
     );
 
     /**
