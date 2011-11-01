@@ -353,3 +353,34 @@ ALTER TABLE `documents_courses`
 `date` VARCHAR( 15 ) NOT NULL ,
 `sent` TINYINT( 1 ) NOT NULL
 ) ENGINE = MYISAM ;
+
+--------------------------------------------------------------------
+
+DROP TABLE `feeds_users`;
+
+--------------------------------------------------------------------
+
+CREATE TABLE IF NOT EXISTS `feedstreams` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) NOT NULL DEFAULT '0',
+  `role_id` int(11) NOT NULL DEFAULT '0',
+  `course_id` int(11) NOT NULL DEFAULT '0',
+  `batch_id` int(11) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `idk_unique_combination` (`id`,`user_id`,`role_id`,`course_id`,`batch_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1;
+
+--------------------------------------------------------------------
+
+CREATE TABLE IF NOT EXISTS `feeds_feedstreams` (
+  `feed_id` int(11) unsigned NOT NULL,
+  `feedstream_id` int(11) NOT NULL,
+  KEY `feedstream_id` (`feedstream_id`),
+  KEY `feed_id` (`feed_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+ALTER TABLE `feeds_feedstreams`
+  ADD CONSTRAINT `feeds_feedstreams_ibfk_1` FOREIGN KEY (`feedstream_id`) REFERENCES `feedstreams` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `feeds_feedstreams_ibfk_2` FOREIGN KEY (`feed_id`) REFERENCES `feeds` (`id`) ON DELETE CASCADE;
+
+--------------------------------------------------------------------
