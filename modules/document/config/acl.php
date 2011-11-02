@@ -7,8 +7,8 @@ return array(
             'view',
             'upload',
             'download',
-			'edit',
-			'delete'
+            'edit',
+            'delete'
         ),
     ),
 );
