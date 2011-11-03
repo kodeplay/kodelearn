@@ -67,4 +67,12 @@ After loggin in, change the email and password as per your convenience.
 
 # Kodelearn uses the Kohana PHP Framework, version 3.1 (release)
 
-This is the current release version of [Kohana](http://kohanaframework.org/).
+# Contributing to Kodelearn
+
+If you think you can help us make this project better, feel free to do so.
+
+You may contribute by either reporting a bug (by the way of opening an issue here on github)
+or may contribute directly by forking this project and sending pull request.
+
+We fairly follow [this](http://nvie.com/posts/a-successful-git-branching-model/) git branching model
+so the master branch is always stable and there is a develop branch for any new development.
