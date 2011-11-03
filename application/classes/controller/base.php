@@ -31,10 +31,10 @@ class Controller_Base extends Controller_Template {
         return parent::before();
     }
 	
-    public function action_index()
-    {
-        $this->response->body('hello, world!');
-    }
+//    public function action_index()
+//    {
+//        $this->response->body('hello, world!');
+//    }
 
     /**
      * Check whether the user is logged in and set the correct 
