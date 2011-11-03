@@ -60,7 +60,7 @@ Open the project url in the browser.
 
 Following admin account is already there for you to get started quickly -
 
-email: admin@kodelearn.com
+email: admin.demo@kodelearn.com
 password: kodeplay2010
 
 After loggin in, change the email and password as per your convenience.
