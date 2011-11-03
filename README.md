@@ -28,6 +28,7 @@ Kodelearn is written in PHP using the Kohana PHP Framework (v3.1)
     You will also need to update the submodules by running the command
   
     ```bash
+    $ cd kodelearn
     $ git submodule init
     $ git submodule update
     ```
@@ -40,7 +41,7 @@ Change the value of base_url to the one you would be using.
   
 #### Database && Database Config
 
-Create a new Mysql database and import the database schema and dump provided in the _database.sql_ file.
+Create a new Mysql database and import the database schema and dump provided in the _database.sql_ file in the kodelearn directory.
 
 Copy the contents of the file _application/config/sample-database.php_ to a new file _database.php_
 in the same directory and modify the 'default' configuration in it to add your database details.
@@ -59,11 +60,19 @@ Open the project url in the browser.
 
 Following admin account is already there for you to get started quickly -
 
-email: admin@kodelearn.com
-password: kodelearn
+email: admin.demo@kodelearn.com
+password: kodeplay2010
 
 After loggin in, change the email and password as per your convenience.
 
 # Kodelearn uses the Kohana PHP Framework, version 3.1 (release)
 
-This is the current release version of [Kohana](http://kohanaframework.org/).
+# Contributing to Kodelearn
+
+If you think you can help us make this project better, feel free to do so.
+
+You may contribute by either reporting a bug (by the way of opening an issue here on github)
+or may contribute directly by forking this project and sending pull request.
+
+We fairly follow [this](http://nvie.com/posts/a-successful-git-branching-model/) git branching model
+so the master branch is always stable and there is a develop branch for any new development.
