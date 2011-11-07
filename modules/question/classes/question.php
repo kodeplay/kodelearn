@@ -70,6 +70,20 @@ abstract class Question {
     abstract public function process_attrs($data);
 
     /**
+     * Method to get the type of the solution tab name
+     * @return String type
+     */
+    abstract public function solution_tab();
+
+    /**
+     * Method to be implemented by subclasses to validate attributes as per
+     * the type of the question.
+     * @param Array $attributes - These attributes are what is submitted in the form
+     * ie non-processed attributes
+     */
+    abstract public function validate_attributes(array $attributes);
+
+    /**
      * Public getter for $_orm
      */
     public function orm() {
@@ -96,14 +110,6 @@ abstract class Question {
         }
     }
 
-    /**
-     * Method to get the type of the solution tab name
-     * @return String type
-     */
-    public function solution_tab() {
-        return $this->_solution_tab;
-    }
-
     public function process_hints($hintdata) {
         $hints = array();
         $total = count($hintdata['hint']);
@@ -119,12 +125,6 @@ abstract class Question {
         }
         return $hints;
     }
-
-    /**
-     * Method to be implemented by subclasses to validate attributes as per
-     * the type of the question
-     */
-    abstract public function validate_attributes(array $attributes);
 
     /**
      * Method the validate question data before storing in the db

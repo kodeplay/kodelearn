@@ -46,6 +46,7 @@ class Controller_Question extends Controller_Base {
         $question = Question::factory($type);
         $hints = array();
         if ($this->request->method() === 'POST' && $this->request->post()) {
+            // var_dump($this->request->post()); exit;
             $submitted = true;
             if ($question->validate($this->request->post())) {
                 $question->save($this->request->post());
