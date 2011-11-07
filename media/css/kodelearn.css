@@ -1237,3 +1237,26 @@ table.calendar .prev-next .day { color: #aaa; }
 /* ..........................
 	Developer section
    ........................ */
+
+ol.form-assist { font-size:12px; margin-top: 10px; line-height: 16px; }
+
+.form-blocks li { padding: 1%; border: 1px solid #ddd; margin-bottom: 5px; position: relative; }
+.form-blocks li .rm-block { position: absolute; width: 20px; height: 20px; color: #fff; background: #900000; top:0; right:0; text-align:center; padding: 5px; cursor: pointer; display: none; }
+.form-blocks li table { width: 98% }
+.form-blocks li table td { height: 30px; margin: 5px 0px; }
+.form-blocks li table td input, .form-blocks li table td textarea { width: 70%; padding: 5px; }
+.form-blocks li table td input.w10 { width: 10%; }
+
+#question-type-selector {
+    background: none repeat scroll 0 0 #FFFFFF;
+    left: 140px;
+    line-height: 16px;
+    position: absolute;
+    top: 10px;
+    width: 20%;
+    border: 1px solid #4C3D34;
+    display: none;
+}
+
+#question-type-selector li { height: 20px; padding: 2px 5px; }
+#question-type-selector li+li:hover { background: #373737; color: #fff; cursor: pointer; }
