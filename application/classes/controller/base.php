@@ -83,14 +83,12 @@ class Controller_Base extends Controller_Template {
         $acl = Acl::instance();
         if (!$acl->has_access($resource)) {
             $this->redirect_after_filter('error/access_denied');
-            // Request::current()->redirect('error/access_denied');
         }
         // check if current acl for current controller-action is defined in permissions
         $action = $this->request->action();
         $repr_key = Acl::repr_key($resource, $action);
         if ($acl->acl_exists($repr_key) && !$acl->is_allowed($repr_key)) {
             $this->redirect_after_filter('error/access_denied');
-            // Request::current()->redirect('error/access_denied');
         }
         // check for standard action names
         $std_actions = array(
@@ -101,7 +99,6 @@ class Controller_Base extends Controller_Template {
         );
         if (isset($std_actions[$action]) && !$acl->is_allowed(Acl::repr_key($resource, $std_actions[$action]))) {
             $this->redirect_after_filter('error/access_denied');
-            // Request::current()->redirect('error/access_denied');
         }
         // if it reaches here, we assume the user has permission to this resource-level
         // any other checking will have to be done in the controller action
