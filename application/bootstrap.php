@@ -127,6 +127,7 @@ Kohana::modules(array(
     'quiz'          => MODPATH.'quiz',
     'lesson'        => MODPATH.'lesson',
     'flashcard'     => MODPATH.'flashcard',
+    'question'      => MODPATH.'question',
 ));
 
 /**
