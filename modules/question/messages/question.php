@@ -9,4 +9,7 @@ return array(
     'open' => array(
         'not_empty' => 'Please enter a non-empty answer'
     ),
+    'ordering' => array(
+        'atleast_two' => 'Please enter atleast two items for sorting in correct order.'
+    ),
 );

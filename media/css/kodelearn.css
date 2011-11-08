@@ -1260,3 +1260,7 @@ ol.form-assist { font-size:12px; margin-top: 10px; line-height: 16px; }
 
 #question-type-selector li { height: 20px; padding: 2px 5px; }
 #question-type-selector li+li:hover { background: #373737; color: #fff; cursor: pointer; }
+
+/* ordering questions */
+#ordered-items li input { width: 80%; }
+#ordered-items li:hover { background: #bbb; cursor: move; }
