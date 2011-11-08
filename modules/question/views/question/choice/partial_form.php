@@ -61,22 +61,19 @@
 </table>
 <script type="text/javascript">
 $(document).ready(function () {
-    $("#add-choice-btn").live('click', function () { 
-        $tmpl = $("#answer-tmpl").clone();
-        $tmpl.removeAttr('id').removeAttr('style');                 
-        $tmpl.find('input').removeAttr('disabled');
-        $tmpl.find('select').removeAttr('disabled');
-        $tmpl.find('textarea').removeAttr('disabled');
-        $("#form-answer").append($('<li><div class="rm-block">x</div></li>').append($tmpl));                
-    });
-    $("#form-answer>li").live('mouseover mouseout', function (event) {                 
-        if (event.type == 'mouseover') {               
-            if ($(this).siblings().length > 0) { 
-                $(this).children().filter('.rm-block').show();
-            }
-        } else if (event.type == 'mouseout') {
-            $(this).children().filter('.rm-block').hide();
-        }
+    new KODELEARN.helpers.Formblocks({
+        listElem: '#form-answer',
+        itemElem: '#form-answer>li',  
+        addBtn: '#add-choice-btn',
+        min: 1,
+        onAdd: function () {
+            $tmpl = $("#answer-tmpl").clone();
+            $tmpl.removeAttr('id').removeAttr('style');                 
+            $tmpl.find('input').removeAttr('disabled');
+            $tmpl.find('select').removeAttr('disabled');
+            $tmpl.find('textarea').removeAttr('disabled');
+            $("#form-answer").append($('<li><div class="rm-block">x</div></li>').append($tmpl));
+        }       
     });
 });
 </script>

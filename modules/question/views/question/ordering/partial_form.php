@@ -34,18 +34,13 @@
 </table>
 <script type="text/javascript">
 $(document).ready(function () {
-    $("#ordered-items>li").live('mouseover mouseout', function (event) {                 
-        if (event.type == 'mouseover') {               
-            if ($(this).siblings().length > 0) { 
-                $(this).children().filter('.rm-block').show();
-            }
-        } else if (event.type == 'mouseout') {
-            $(this).children().filter('.rm-block').hide();
-        }
-    });
     $("#ordered-items").sortable();
-    $("#add-item-btn").click(function () {
-        $("#ordered-items").append('<li><input type="text" name="attributes[items][]" /><div class="rm-block">x</div></li>');
+    new KODELEARN.helpers.Formblocks({
+        listElem: '#ordered-items',
+        itemElem: '#ordered-items>li',  
+        addBtn: '#add-item-btn',
+        min: 2,
+        tmpl: '<li><input type="text" name="attributes[items][]" /><div class="rm-block">x</div></li>'       
     });
 });
 

@@ -12,4 +12,8 @@ return array(
     'ordering' => array(
         'atleast_two' => 'Please enter atleast two items for sorting in correct order.'
     ),
+    'matching' => array(
+        'atleast_two' => 'Please enter atleast two pairs for matching in correct order.',
+        'not_empty' => 'Please enter non-empty values for items in the pair'
+    ),
 );

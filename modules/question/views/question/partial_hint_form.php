@@ -43,3 +43,20 @@
         <td><input type="text" class="w10" name="hints[deduction][]" disabled="disabled" /> %</td>
     </tr>            
 </table>
+<script type="text/javascript">
+$(document).ready(function () {
+    $( "#tabs" ).tabs({ 'selected': 0 }); 
+    new KODELEARN.helpers.Formblocks({
+        listElem: '#form-hint',
+        itemElem: '#form-hint>li',  
+        addBtn: '#add-hint-btn',
+        min: 1,
+        onAdd: function () {
+            $tmpl = $("#hint-tmpl").clone();
+            $tmpl.removeAttr('id').removeAttr('style'); 
+            $tmpl.find('input').removeAttr('disabled');
+            $("#form-hint").append($('<li><div class="rm-block">x</div></li>').append($tmpl)); 
+        }       
+    });
+});
+</script>
