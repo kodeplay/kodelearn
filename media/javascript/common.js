@@ -578,6 +578,43 @@ KODELEARN.helpers.request = {
     }
 };
 
+// formblocks - used for those forms in which dynamic fields can be added and removed
+// eg. a question can have many hints. so for adding/editing/removing hints, each hint
+// will be a form block
+// for usage eg. refer: modules/question/views/question/form.php
+KODELEARN.helpers.Formblocks = function (opts) {
+    var options = { 
+        listElem: '', // ul or table element
+        itemElem: '', // li or a td depending upon the listElem
+        addBtn: '', // button for adding a block
+        rmBtn: '.rm-block', // button element for block removal
+        min: 1, // min number of blocks,
+        tmpl: '', // template of the block to be appended to the list
+        onAdd: function () { }
+    };
+    $.extend(options, opts);
+    $(options.addBtn).click(function () {
+        if (options.tmpl !== '') {
+            $(options.listElem).append(options.tmpl);
+        }
+        options.onAdd.call(this);        
+    });    
+    $(options.itemElem).live('mouseover mouseout', function (event) {                 
+        if (event.type == 'mouseover') {               
+            if ($(this).siblings().length > (options.min-1)) { 
+                $(this).children().filter(options.rmBtn).show();
+            }
+        } else if (event.type == 'mouseout') {
+            $(this).children().filter(options.rmBtn).hide();
+        }
+    });    
+    $(options.rmBtn, options.listElem).live('click', function () {
+        $(this).parent().fadeOut(200, function () { 
+            $(this).remove();
+        });
+    });
+}
+
 var Feeds = { };
 
 Feeds.show = function(d,m,y) {
@@ -638,3 +675,5 @@ KODELEARN.modules.add('document', (function () {
     	}
     }
 })());
+
+
