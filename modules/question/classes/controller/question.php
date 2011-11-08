@@ -46,9 +46,9 @@ class Controller_Question extends Controller_Base {
         $question = Question::factory($type);
         $hints = array();
         if ($this->request->method() === 'POST' && $this->request->post()) {
-            // var_dump($this->request->post()); exit;
             $submitted = true;
             if ($question->validate($this->request->post())) {
+                // var_dump($this->request->post()); exit;
                 $question->save($this->request->post());
                 Session::instance()->set('success', 'Question added successfully.');
                 Request::current()->redirect('question');
@@ -94,7 +94,7 @@ class Controller_Question extends Controller_Base {
             $submitted = true;
             if ($question->validate($this->request->post())) {
                 $question->save($this->request->post());
-                Session::instance()->set('success', 'Question added successfully.');
+                Session::instance()->set('success', 'Question edited successfully.');
                 Request::current()->redirect('question');
             } else {
                 $this->_errors = $question->validation_errors();
