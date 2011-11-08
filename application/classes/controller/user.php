@@ -591,19 +591,15 @@ class Controller_User extends Controller_Base {
     }
 
     private static function notify_by_email($user, $password) {
-        $subject = "Your Kodelearn Account Details";
-        $message = "Dear {name}, <br/>
-                    Your account has been created on Kodelearn successfully.<br/>
-                    Please use the following details to login to your account <br/> <br/>
-                    Email: {email}, <br/>
-                    Password: {password} <br/> <br/>
-                    Best Regards, <br/>
-                    Kodelearn Team.";
-        $search = array('{name}', '{email}', '{password}');
-        $replace = array($user->firstname . ' ' . $user->lastname, $user->email, $password);
-        $message = str_replace($search, $replace, $message);
-        $html = true;
-        Email::send_mail($user->email, $subject, $message, $html);
+        
+        $file = "account_creation_email";
+        $data =array(
+                '{user_name}'  => $user->firstname ." ". $user->lastname,
+                '{email}' => $user->email,
+                '{password}' => $password,
+            );
+        
+        Email::send_mail($user->email, $file, $data);
     }
 
     public function action_uploadavatar(){
