@@ -1264,3 +1264,8 @@ ol.form-assist { font-size:12px; margin-top: 10px; line-height: 16px; }
 /* ordering questions */
 #ordered-items li input { width: 80%; }
 #ordered-items li:hover { background: #bbb; cursor: move; }
+
+#matched-items { width: 100%; }
+#matched-items li { margin:10px; padding: 10px 3%; }
+#matched-items li:hover { background: #bbb; }
+#matched-items li input { width: 44%; }
