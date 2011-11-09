@@ -288,7 +288,7 @@ a{ color: #427693; }
 	width: 175px;
 	margin-right: 10px;
 	background: url("../image/sidebar.png") no-repeat right 70%;
-	position: absolute;
+	/** position: absolute; */
 }
 .sidebarTitle {
 	color: #333;
