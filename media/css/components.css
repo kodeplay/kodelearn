@@ -67,6 +67,7 @@
 .tac {	text-align: center;	}
 .tal {	text-align: left !important; }
 .lh140 { line-height: 140%; }
+.lh160 { line-height: 160%; }
 .breakword {	word-wrap: break-word; }
 .underline {	text-decoration: underline; }
 .strike { text-decoration: line-through; }
@@ -115,3 +116,4 @@
 .hgtfix { height: auto !important; overflow: hidden; }
 
 .ht120 { height: 120px; }
+.ht20 { height: 20px; }

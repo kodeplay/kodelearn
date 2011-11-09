@@ -46,4 +46,9 @@ class Question_Open extends Question {
         }
         return true;
     }
+
+    public function render_answer_partial() {
+        $view = View::factory('question/open/partial_view');
+        return $view->render();
+    }
 }

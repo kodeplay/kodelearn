@@ -56,4 +56,18 @@ class Question_Matching extends Question {
         }
         return true;
     }
+
+    public function render_answer_partial() {
+        $view = View::factory('question/matching/partial_view')
+            ->bind('lefts', $lefts)
+            ->bind('rights', $rights);
+        $attributes = $this->_orm !== null ? $this->_orm->attributes_as_array() : array();
+        $attribute = $attributes[0];
+        $pairs = unserialize($attribute['attribute_value']);        
+        $lefts = Arr::pluck($pairs, 0);
+        $rights = Arr::pluck($pairs, 1);
+        shuffle($rights);
+        // var_dump($lefts, $rights, $pairs); exit;
+        return $view->render();
+    }
 }

@@ -163,4 +163,28 @@ abstract class Question {
             ->delete_all_attributes()
             ->add_attributes($this->_attributes);
     }
+
+    /**
+     * Method to show the question
+     * @param bool $preview optional, default=false
+     */
+    public function render_question($preview=false) {
+        $view = View::factory('question/partial_question')
+            ->set('preview', $preview)
+            ->bind('question', $question)
+            ->bind('hints', $hints)
+            ->bind('answer_template', $answer_template);
+        $question = $this->_orm;
+        $hints = $this->_orm->hints_as_array();
+        $answer_template = $this->render_answer_partial();
+        return $view->render();
+    }
+
+    /**
+     * Method to get the markup for the answer part of the display
+     * Each type of question will have a different template so this
+     * method will have to be implemented by all the subclasses
+     * @return String html
+     */
+    abstract public function render_answer_partial();
 }

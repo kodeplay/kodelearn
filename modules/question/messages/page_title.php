@@ -9,4 +9,8 @@ return array(
         'title' => 'Add a new Question',
         'description' => 'Create a new question to be used in some module',
     ),
+    'question_preview' => array(
+        'title' => 'Question preview',
+        'description' => 'See how the question will appear to the student.',
+    ),
 );

@@ -1269,3 +1269,35 @@ ol.form-assist { font-size:12px; margin-top: 10px; line-height: 16px; }
 #matched-items li { margin:10px; padding: 10px 3%; }
 #matched-items li:hover { background: #bbb; }
 #matched-items li input { width: 44%; }
+
+#questions-left { min-height: 200px; width: 60%; float:left; }
+.question-block { margin: 20px 0; padding: 10px; }
+.question-block h3 { padding: 10px 0; font-weight: bold; font-size: 18px; color: #415666; text-shadow: 1px 1px 1px #FFFFFF; border-bottom: 1px solid #FEB100;}
+.question-help { padding-bottom: 20px; padding-left: 10px; font-size: 12px; font-style: italic; }
+.answer-section { margin-top: 30px; height: auto; overflow: hidden; }
+ul#questions-right { float: right; width: 35%; min-height: 200px; margin: 20px 0; padding: 10px; }
+ul#questions-right>li { border: 1px solid #ddd; min-height: 60px; }
+ul#questions-right li div, ul#questions-right li h4 { padding: 10px 15px; }
+ul#questions-right li h4 { 
+    background: url("../image/thback.png") repeat-x scroll left bottom #F3F3F3; 
+    border-bottom: 1px solid #FEB100;
+    font-size: 16px;
+    padding: 10px 15px;
+    text-shadow: 1px 1px 1px #FFFFFF;
+}
+
+ul.choice-section li { line-height: 20px; padding: 5px; height: 24px; }
+
+ul.items-ordering-section li { line-height: 20px; padding: 10px; height: 24px; }
+ul.items-ordering-section li:hover { border: 1px dashed #373736; opacity: 40%; cursor: move; background: #f1edd3; }
+
+ul.pairs-matching-section { width: 48%; }
+ul.pairs-matching-section li { line-height: 20px; padding: 10px; height: 24px; }
+ul.pairs-matching-section.items-right li:hover { border: 1px dashed #373736; opacity: 40%; cursor: move; background: #f1edd3; }
+
+
+
+
+
+
+

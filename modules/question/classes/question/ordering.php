@@ -50,5 +50,16 @@ class Question_Ordering extends Question {
         }
         return true;
     }
+
+    public function render_answer_partial() {
+        $view = View::factory('question/ordering/partial_view')
+            ->bind('items', $items);
+        $attributes = $this->_orm !== null ? $this->_orm->attributes_as_array() : array();
+        $attribute = $attributes[0];
+        $items = unserialize($attribute['attribute_value']);        
+        shuffle($items);
+        return $view->render();
+    }
+
 }
 

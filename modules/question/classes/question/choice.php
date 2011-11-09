@@ -87,4 +87,13 @@ class Question_Choice extends Question {
         }
         return true;
     }
+
+    public function render_answer_partial() {
+        $view = View::factory('question/choice/partial_view')
+            ->bind('choices', $choices)
+            ->bind('choice_type', $choice_type);
+        $choices = $this->_orm !== null ? $this->_orm->attributes_as_array() : array();
+        $choice_type = $this->choice_type($choices);
+        return $view->render();
+    }
 }

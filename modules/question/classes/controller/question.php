@@ -138,6 +138,16 @@ class Controller_Question extends Controller_Base {
         return $form;        
     }
 
+    public function action_preview() {        
+        $view = View::factory('question/view')
+            ->set('preview', true)
+            ->bind('question_partial', $question_partial);
+        $question_id = $this->request->param('id');
+        $ques_obj = Question::factory((int)$question_id);   
+        $question_partial = $ques_obj->render_question(true);
+        $this->content = $view;
+    }
+
     public function action_delete() {
         if ($this->request->method() === 'POST' && $this->request->post('selected')) {
             $selected = $this->request->post('selected');
