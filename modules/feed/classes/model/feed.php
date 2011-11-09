@@ -25,10 +25,14 @@ class Model_Feed extends ORM {
         ) , $data);
         // TODO the streams for the current user can be cached
         $user_streams = Model_Feedstream::user_streams(null, Arr::get($data, 'course_id'));
+        $streams = $user_streams->as_array(null, 'id');
+        if (!$streams) {
+            return array();
+        }
         $feed = ORM::factory('feed')
             ->join('feeds_feedstreams')
             ->on('feeds.id' , ' = ' , 'feeds_feedstreams.feed_id')
-            ->where('feedstream_id', ' IN ', $user_streams->as_array(null, 'id'))
+            ->where('feedstream_id', ' IN ', $streams)
             ->order_by('time', 'DESC')
             ->limit($data['limit'])
             ->offset($data['offset']);
@@ -44,10 +48,14 @@ class Model_Feed extends ORM {
         }        
         // TODO the streams for the current user can be cached
         $user_streams = Model_Feedstream::user_streams(null, Arr::get($data, 'course_id'));
+        $streams = $user_streams->as_array(null, 'id');
+        if (!$streams) {
+            return array();
+        }
         $feed = ORM::factory('feed')
             ->join('feeds_feedstreams')
             ->on('feeds.id' , ' = ' , 'feeds_feedstreams.feed_id')
-            ->where('feedstream_id', ' IN ', $user_streams->as_array(null, 'id'));
+            ->where('feedstream_id', ' IN ', $streams);
         return $feed->count_all();                
     } 
 }
