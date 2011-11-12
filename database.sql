@@ -3,9 +3,9 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Sep 05, 2011 at 07:31 PM
+-- Generation Time: Nov 12, 2011 at 01:15 PM
 -- Server version: 5.1.41
--- PHP Version: 5.3.2-1ubuntu4.9
+-- PHP Version: 5.3.2-1ubuntu4.10
 
 SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 
@@ -116,6 +116,63 @@ CREATE TABLE IF NOT EXISTS `courses_users` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `documents`
+--
+
+CREATE TABLE IF NOT EXISTS `documents` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `title` varchar(255) CHARACTER SET latin1 NOT NULL,
+  `name` varchar(255) CHARACTER SET latin1 NOT NULL,
+  `user_id` int(11) unsigned NOT NULL,
+  `time` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `user_id` (`user_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+--
+-- Dumping data for table `documents`
+--
+
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `documents_courses`
+--
+
+CREATE TABLE IF NOT EXISTS `documents_courses` (
+  `course_id` int(11) unsigned NOT NULL,
+  `document_id` int(11) unsigned NOT NULL,
+  KEY `course_id` (`course_id`),
+  KEY `document_id` (`document_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `documents_courses`
+--
+
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `documents_roles`
+--
+
+CREATE TABLE IF NOT EXISTS `documents_roles` (
+  `role_id` int(11) unsigned NOT NULL,
+  `document_id` int(11) unsigned NOT NULL,
+  KEY `role_id` (`role_id`),
+  KEY `document_id` (`document_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `documents_roles`
+--
+
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `events`
 --
 
@@ -186,11 +243,12 @@ CREATE TABLE IF NOT EXISTS `exams` (
   `total_marks` int(10) unsigned NOT NULL,
   `passing_marks` int(10) unsigned NOT NULL,
   `reminder` enum('1','0') NOT NULL DEFAULT '1',
+  `reminder_days` int(10) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `FK_exams_examgroups` (`examgroup_id`),
   KEY `FK_exams_events` (`event_id`),
   KEY `FK_exams_courses` (`course_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=14 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 --
 -- Dumping data for table `exams`
@@ -214,7 +272,7 @@ CREATE TABLE IF NOT EXISTS `feeds` (
   PRIMARY KEY (`id`),
   KEY `FK_feed_courses` (`course_id`),
   KEY `FK_feed_users` (`actor_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=12 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 --
 -- Dumping data for table `feeds`
@@ -224,18 +282,39 @@ CREATE TABLE IF NOT EXISTS `feeds` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `feeds_users`
+-- Table structure for table `feedstreams`
 --
 
-CREATE TABLE IF NOT EXISTS `feeds_users` (
+CREATE TABLE IF NOT EXISTS `feedstreams` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) NOT NULL DEFAULT '0',
+  `role_id` int(11) NOT NULL DEFAULT '0',
+  `course_id` int(11) NOT NULL DEFAULT '0',
+  `batch_id` int(11) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `idk_unique_combination` (`id`,`user_id`,`role_id`,`course_id`,`batch_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+
+--
+-- Dumping data for table `feedstreams`
+--
+
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `feeds_feedstreams`
+--
+
+CREATE TABLE IF NOT EXISTS `feeds_feedstreams` (
   `feed_id` int(11) unsigned NOT NULL,
-  `user_id` int(11) unsigned NOT NULL,
-  KEY `FK_feed_users_feed` (`feed_id`),
-  KEY `FK_feed_users_users` (`user_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `feedstream_id` int(11) NOT NULL,
+  KEY `feedstream_id` (`feedstream_id`),
+  KEY `feed_id` (`feed_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `feeds_users`
+-- Dumping data for table `feeds_feedstreams`
 --
 
 
@@ -304,7 +383,7 @@ CREATE TABLE IF NOT EXISTS `lectures` (
   `end_date` varchar(15) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `FK_lectures_courses` (`course_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=11 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 --
 -- Dumping data for table `lectures`
@@ -360,10 +439,74 @@ CREATE TABLE IF NOT EXISTS `posts` (
   `user_id` int(11) unsigned NOT NULL,
   PRIMARY KEY (`id`),
   KEY `FK_posts_users` (`user_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=16 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 --
 -- Dumping data for table `posts`
+--
+
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `questionattributes`
+--
+
+CREATE TABLE IF NOT EXISTS `questionattributes` (
+  `question_id` int(11) NOT NULL,
+  `attribute_name` varchar(32) NOT NULL,
+  `attribute_value` text NOT NULL,
+  `explanation` text NOT NULL,
+  `correctness` tinyint(1) NOT NULL,
+  KEY `question_id` (`question_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `questionattributes`
+--
+
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `questionhints`
+--
+
+CREATE TABLE IF NOT EXISTS `questionhints` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `question_id` int(11) NOT NULL,
+  `hint` text NOT NULL,
+  `deduction` float NOT NULL,
+  `sort_order` tinyint(4) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `question_id` (`question_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+
+--
+-- Dumping data for table `questionhints`
+--
+
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `questions`
+--
+
+CREATE TABLE IF NOT EXISTS `questions` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `question` text NOT NULL,
+  `extra` varchar(255) NOT NULL,
+  `type` enum('choice','grouped','matching','open','ordering') NOT NULL,
+  `parent_id` int(11) DEFAULT NULL,
+  `user_id` int(11) NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  KEY `parent_id` (`parent_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+
+--
+-- Dumping data for table `questions`
 --
 
 
@@ -387,10 +530,10 @@ CREATE TABLE IF NOT EXISTS `roles` (
 --
 
 INSERT INTO `roles` (`id`, `name`, `description`, `permissions`) VALUES
-(2, 'Admin', 'Administrative user, has access to everything.cd', 'a:67:{s:12:"account_view";s:1:"1";s:14:"account_create";s:1:"1";s:12:"account_edit";s:1:"1";s:14:"account_delete";s:1:"1";s:15:"attendance_view";s:1:"1";s:17:"attendance_create";s:1:"1";s:15:"attendance_edit";s:1:"1";s:17:"attendance_delete";s:1:"1";s:10:"batch_view";s:1:"1";s:12:"batch_create";s:1:"1";s:10:"batch_edit";s:1:"1";s:12:"batch_delete";s:1:"1";s:13:"calendar_view";s:1:"1";s:11:"course_view";s:1:"1";s:13:"course_create";s:1:"1";s:11:"course_edit";s:1:"1";s:13:"course_delete";s:1:"1";s:11:"course_join";s:1:"1";s:13:"document_view";s:1:"1";s:15:"document_upload";s:1:"1";s:10:"event_view";s:1:"1";s:12:"event_create";s:1:"1";s:10:"event_edit";s:1:"1";s:12:"event_delete";s:1:"1";s:9:"exam_view";s:1:"1";s:11:"exam_create";s:1:"1";s:9:"exam_edit";s:1:"1";s:11:"exam_delete";s:1:"1";s:14:"examgroup_view";s:1:"1";s:16:"examgroup_create";s:1:"1";s:14:"examgroup_edit";s:1:"1";s:16:"examgroup_delete";s:1:"1";s:18:"exammarksheet_view";s:1:"1";s:20:"exammarksheet_create";s:1:"1";s:18:"exammarksheet_edit";s:1:"1";s:20:"exammarksheet_delete";s:1:"1";s:15:"examresult_view";s:1:"1";s:17:"examresult_create";s:1:"1";s:15:"examresult_edit";s:1:"1";s:17:"examresult_delete";s:1:"1";s:9:"feed_view";s:1:"1";s:12:"lecture_view";s:1:"1";s:14:"lecture_create";s:1:"1";s:12:"lecture_edit";s:1:"1";s:14:"lecture_delete";s:1:"1";s:13:"location_view";s:1:"1";s:15:"location_create";s:1:"1";s:13:"location_edit";s:1:"1";s:15:"location_delete";s:1:"1";s:9:"role_view";s:1:"1";s:11:"role_create";s:1:"1";s:9:"role_edit";s:1:"1";s:11:"role_delete";s:1:"1";s:19:"role_set_permission";s:1:"1";s:9:"room_view";s:1:"1";s:11:"room_create";s:1:"1";s:9:"room_edit";s:1:"1";s:11:"room_delete";s:1:"1";s:11:"system_view";s:1:"1";s:13:"system_create";s:1:"1";s:11:"system_edit";s:1:"1";s:13:"system_delete";s:1:"1";s:9:"user_view";s:1:"1";s:11:"user_create";s:1:"1";s:9:"user_edit";s:1:"1";s:11:"user_delete";s:1:"1";s:15:"user_upload_csv";s:1:"1";}'),
-(3, 'Teacher', 'Courses and Limited Admin accessdfdf', 'a:23:{s:11:"user_create";s:1:"1";s:9:"user_edit";s:1:"1";s:11:"user_delete";s:1:"1";s:9:"role_view";s:1:"1";s:11:"role_create";s:1:"1";s:9:"role_edit";s:1:"1";s:11:"role_delete";s:1:"1";s:12:"account_view";s:1:"1";s:14:"account_create";s:1:"1";s:12:"account_edit";s:1:"1";s:14:"account_delete";s:1:"1";s:15:"attendance_view";s:1:"1";s:17:"attendance_create";s:1:"1";s:15:"attendance_edit";s:1:"1";s:17:"attendance_delete";s:1:"1";s:10:"batch_view";s:1:"1";s:12:"batch_create";s:1:"1";s:10:"batch_edit";s:1:"1";s:12:"batch_delete";s:1:"1";s:13:"calendar_view";s:1:"1";s:15:"calendar_create";s:1:"1";s:13:"calendar_edit";s:1:"1";s:15:"calendar_delete";s:1:"1";}'),
-(4, 'Student', 'Restricted access', 'a:12:{s:12:"account_view";s:1:"1";s:15:"attendance_view";s:1:"1";s:13:"calendar_view";s:1:"1";s:11:"course_view";s:1:"1";s:11:"course_join";s:1:"1";s:9:"exam_view";s:1:"1";s:18:"exammarksheet_view";s:1:"1";s:9:"feed_view";s:1:"1";s:9:"post_view";s:1:"1";s:11:"post_create";s:1:"1";s:9:"post_edit";s:1:"1";s:11:"post_delete";s:1:"1";}'),
-(5, 'Parent', 'Restricted access', 'a:16:{s:11:"user_create";s:1:"1";s:9:"user_edit";s:1:"1";s:11:"user_delete";s:1:"1";s:17:"user_manage_roles";s:1:"1";s:12:"account_view";s:1:"1";s:14:"account_create";s:1:"1";s:12:"account_edit";s:1:"1";s:14:"account_delete";s:1:"1";s:10:"batch_view";s:1:"1";s:12:"batch_create";s:1:"1";s:10:"batch_edit";s:1:"1";s:12:"batch_delete";s:1:"1";s:9:"role_view";s:1:"1";s:11:"role_create";s:1:"1";s:9:"role_edit";s:1:"1";s:11:"role_delete";s:1:"1";}');
+(2, 'Admin', 'Administrative user, has access to everything.cd', 'a:94:{s:12:"account_view";s:1:"1";s:14:"account_create";s:1:"1";s:12:"account_edit";s:1:"1";s:14:"account_delete";s:1:"1";s:15:"assignment_view";s:1:"1";s:17:"assignment_create";s:1:"1";s:15:"assignment_edit";s:1:"1";s:17:"assignment_delete";s:1:"1";s:15:"attendance_view";s:1:"1";s:17:"attendance_create";s:1:"1";s:15:"attendance_edit";s:1:"1";s:17:"attendance_delete";s:1:"1";s:10:"batch_view";s:1:"1";s:12:"batch_create";s:1:"1";s:10:"batch_edit";s:1:"1";s:12:"batch_delete";s:1:"1";s:13:"calendar_view";s:1:"1";s:11:"course_view";s:1:"1";s:13:"course_create";s:1:"1";s:11:"course_edit";s:1:"1";s:13:"course_delete";s:1:"1";s:11:"course_join";s:1:"1";s:13:"document_view";s:1:"1";s:15:"document_upload";s:1:"1";s:17:"document_download";s:1:"1";s:13:"document_edit";s:1:"1";s:15:"document_delete";s:1:"1";s:10:"event_view";s:1:"1";s:12:"event_create";s:1:"1";s:10:"event_edit";s:1:"1";s:12:"event_delete";s:1:"1";s:9:"exam_view";s:1:"1";s:11:"exam_create";s:1:"1";s:9:"exam_edit";s:1:"1";s:11:"exam_delete";s:1:"1";s:14:"examgroup_view";s:1:"1";s:16:"examgroup_create";s:1:"1";s:14:"examgroup_edit";s:1:"1";s:16:"examgroup_delete";s:1:"1";s:18:"exammarksheet_view";s:1:"1";s:20:"exammarksheet_create";s:1:"1";s:18:"exammarksheet_edit";s:1:"1";s:20:"exammarksheet_delete";s:1:"1";s:15:"examresult_view";s:1:"1";s:17:"examresult_create";s:1:"1";s:15:"examresult_edit";s:1:"1";s:17:"examresult_delete";s:1:"1";s:9:"feed_view";s:1:"1";s:14:"flashcard_view";s:1:"1";s:16:"flashcard_create";s:1:"1";s:14:"flashcard_edit";s:1:"1";s:16:"flashcard_delete";s:1:"1";s:12:"lecture_view";s:1:"1";s:14:"lecture_create";s:1:"1";s:12:"lecture_edit";s:1:"1";s:14:"lecture_delete";s:1:"1";s:11:"lesson_view";s:1:"1";s:13:"lesson_create";s:1:"1";s:11:"lesson_edit";s:1:"1";s:13:"lesson_delete";s:1:"1";s:13:"location_view";s:1:"1";s:15:"location_create";s:1:"1";s:13:"location_edit";s:1:"1";s:15:"location_delete";s:1:"1";s:9:"post_view";s:1:"1";s:11:"post_create";s:1:"1";s:9:"post_edit";s:1:"1";s:11:"post_delete";s:1:"1";s:13:"question_view";s:1:"1";s:15:"question_create";s:1:"1";s:13:"question_edit";s:1:"1";s:15:"question_delete";s:1:"1";s:9:"quiz_view";s:1:"1";s:11:"quiz_create";s:1:"1";s:9:"quiz_edit";s:1:"1";s:11:"quiz_delete";s:1:"1";s:9:"role_view";s:1:"1";s:11:"role_create";s:1:"1";s:9:"role_edit";s:1:"1";s:11:"role_delete";s:1:"1";s:19:"role_set_permission";s:1:"1";s:9:"room_view";s:1:"1";s:11:"room_create";s:1:"1";s:9:"room_edit";s:1:"1";s:11:"room_delete";s:1:"1";s:11:"system_view";s:1:"1";s:13:"system_create";s:1:"1";s:11:"system_edit";s:1:"1";s:13:"system_delete";s:1:"1";s:9:"user_view";s:1:"1";s:11:"user_create";s:1:"1";s:9:"user_edit";s:1:"1";s:11:"user_delete";s:1:"1";s:15:"user_upload_csv";s:1:"1";}'),
+(3, 'Teacher', 'Courses and Limited Admin accessdfdf', 'a:91:{s:12:"account_view";s:1:"1";s:14:"account_create";s:1:"1";s:12:"account_edit";s:1:"1";s:14:"account_delete";s:1:"1";s:15:"assignment_view";s:1:"1";s:17:"assignment_create";s:1:"1";s:15:"assignment_edit";s:1:"1";s:17:"assignment_delete";s:1:"1";s:15:"attendance_view";s:1:"1";s:17:"attendance_create";s:1:"1";s:15:"attendance_edit";s:1:"1";s:17:"attendance_delete";s:1:"1";s:10:"batch_view";s:1:"1";s:12:"batch_create";s:1:"1";s:10:"batch_edit";s:1:"1";s:12:"batch_delete";s:1:"1";s:13:"calendar_view";s:1:"1";s:11:"course_view";s:1:"1";s:13:"course_create";s:1:"1";s:11:"course_edit";s:1:"1";s:13:"course_delete";s:1:"1";s:13:"document_view";s:1:"1";s:15:"document_upload";s:1:"1";s:17:"document_download";s:1:"1";s:13:"document_edit";s:1:"1";s:15:"document_delete";s:1:"1";s:10:"event_view";s:1:"1";s:12:"event_create";s:1:"1";s:10:"event_edit";s:1:"1";s:12:"event_delete";s:1:"1";s:9:"exam_view";s:1:"1";s:11:"exam_create";s:1:"1";s:9:"exam_edit";s:1:"1";s:11:"exam_delete";s:1:"1";s:14:"examgroup_view";s:1:"1";s:16:"examgroup_create";s:1:"1";s:14:"examgroup_edit";s:1:"1";s:16:"examgroup_delete";s:1:"1";s:18:"exammarksheet_view";s:1:"1";s:20:"exammarksheet_create";s:1:"1";s:18:"exammarksheet_edit";s:1:"1";s:20:"exammarksheet_delete";s:1:"1";s:15:"examresult_view";s:1:"1";s:17:"examresult_create";s:1:"1";s:15:"examresult_edit";s:1:"1";s:17:"examresult_delete";s:1:"1";s:9:"feed_view";s:1:"1";s:14:"flashcard_view";s:1:"1";s:16:"flashcard_create";s:1:"1";s:14:"flashcard_edit";s:1:"1";s:16:"flashcard_delete";s:1:"1";s:12:"lecture_view";s:1:"1";s:14:"lecture_create";s:1:"1";s:12:"lecture_edit";s:1:"1";s:14:"lecture_delete";s:1:"1";s:11:"lesson_view";s:1:"1";s:13:"lesson_create";s:1:"1";s:11:"lesson_edit";s:1:"1";s:13:"lesson_delete";s:1:"1";s:13:"location_view";s:1:"1";s:15:"location_create";s:1:"1";s:13:"location_edit";s:1:"1";s:15:"location_delete";s:1:"1";s:9:"post_view";s:1:"1";s:11:"post_create";s:1:"1";s:9:"post_edit";s:1:"1";s:11:"post_delete";s:1:"1";s:13:"question_view";s:1:"1";s:15:"question_create";s:1:"1";s:13:"question_edit";s:1:"1";s:15:"question_delete";s:1:"1";s:9:"quiz_view";s:1:"1";s:11:"quiz_create";s:1:"1";s:9:"quiz_edit";s:1:"1";s:11:"quiz_delete";s:1:"1";s:9:"role_view";s:1:"1";s:11:"role_create";s:1:"1";s:9:"role_edit";s:1:"1";s:11:"role_delete";s:1:"1";s:9:"room_view";s:1:"1";s:11:"room_create";s:1:"1";s:9:"room_edit";s:1:"1";s:11:"room_delete";s:1:"1";s:11:"system_view";s:1:"1";s:13:"system_create";s:1:"1";s:11:"system_edit";s:1:"1";s:13:"system_delete";s:1:"1";s:9:"user_view";s:1:"1";s:11:"user_create";s:1:"1";s:9:"user_edit";s:1:"1";s:11:"user_delete";s:1:"1";}'),
+(4, 'Student', 'Restricted access', 'a:29:{s:12:"account_view";s:1:"1";s:15:"assignment_view";s:1:"1";s:15:"attendance_view";s:1:"1";s:10:"batch_view";s:1:"1";s:13:"calendar_view";s:1:"1";s:11:"course_view";s:1:"1";s:11:"course_join";s:1:"1";s:13:"document_view";s:1:"1";s:17:"document_download";s:1:"1";s:10:"event_view";s:1:"1";s:9:"exam_view";s:1:"1";s:14:"examgroup_view";s:1:"1";s:18:"exammarksheet_view";s:1:"1";s:15:"examresult_view";s:1:"1";s:9:"feed_view";s:1:"1";s:14:"flashcard_view";s:1:"1";s:12:"lecture_view";s:1:"1";s:11:"lesson_view";s:1:"1";s:13:"location_view";s:1:"1";s:9:"post_view";s:1:"1";s:11:"post_create";s:1:"1";s:9:"post_edit";s:1:"1";s:11:"post_delete";s:1:"1";s:13:"question_view";s:1:"1";s:9:"quiz_view";s:1:"1";s:9:"role_view";s:1:"1";s:9:"room_view";s:1:"1";s:11:"system_view";s:1:"1";s:9:"user_view";s:1:"1";}'),
+(5, 'Parent', 'Restricted access', 'a:36:{s:12:"account_view";s:1:"1";s:14:"account_create";s:1:"1";s:12:"account_edit";s:1:"1";s:14:"account_delete";s:1:"1";s:15:"assignment_view";s:1:"1";s:15:"attendance_view";s:1:"1";s:10:"batch_view";s:1:"1";s:12:"batch_create";s:1:"1";s:10:"batch_edit";s:1:"1";s:12:"batch_delete";s:1:"1";s:13:"calendar_view";s:1:"1";s:11:"course_view";s:1:"1";s:13:"document_view";s:1:"1";s:10:"event_view";s:1:"1";s:9:"exam_view";s:1:"1";s:14:"examgroup_view";s:1:"1";s:18:"exammarksheet_view";s:1:"1";s:15:"examresult_view";s:1:"1";s:9:"feed_view";s:1:"1";s:14:"flashcard_view";s:1:"1";s:12:"lecture_view";s:1:"1";s:11:"lesson_view";s:1:"1";s:13:"location_view";s:1:"1";s:9:"post_view";s:1:"1";s:13:"question_view";s:1:"1";s:9:"quiz_view";s:1:"1";s:9:"role_view";s:1:"1";s:11:"role_create";s:1:"1";s:9:"role_edit";s:1:"1";s:11:"role_delete";s:1:"1";s:9:"room_view";s:1:"1";s:11:"system_view";s:1:"1";s:9:"user_view";s:1:"1";s:11:"user_create";s:1:"1";s:9:"user_edit";s:1:"1";s:11:"user_delete";s:1:"1";}');
 
 -- --------------------------------------------------------
 
@@ -444,7 +587,7 @@ CREATE TABLE IF NOT EXISTS `setting` (
   `config_key` varchar(128) NOT NULL,
   `config_value` varchar(255) NOT NULL,
   PRIMARY KEY (`setting_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=5 ;
 
 --
 -- Dumping data for table `setting`
@@ -503,7 +646,7 @@ CREATE TABLE IF NOT EXISTS `user_tokens` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `uniq_token` (`token`),
   KEY `fk_user_id` (`user_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=18 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 --
 -- Dumping data for table `user_tokens`
@@ -518,6 +661,8 @@ CREATE TABLE IF NOT EXISTS `user_tokens` (
 -- Constraints for table `batches_users`
 --
 ALTER TABLE `batches_users`
+  ADD CONSTRAINT `batches_users_ibfk_1` FOREIGN KEY (`batch_id`) REFERENCES `batches` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `batches_users_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `FK_batches_users_batches` FOREIGN KEY (`batch_id`) REFERENCES `batches` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `FK_batches_users_users` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE;
 
@@ -525,19 +670,50 @@ ALTER TABLE `batches_users`
 -- Constraints for table `courses_users`
 --
 ALTER TABLE `courses_users`
+  ADD CONSTRAINT `courses_users_ibfk_1` FOREIGN KEY (`course_id`) REFERENCES `courses` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `courses_users_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `FK_courses_users_courses` FOREIGN KEY (`course_id`) REFERENCES `courses` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `FK_courses_users_users` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `documents`
+--
+ALTER TABLE `documents`
+  ADD CONSTRAINT `documents_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON UPDATE CASCADE,
+  ADD CONSTRAINT `documents_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON UPDATE CASCADE;
+
+--
+-- Constraints for table `documents_courses`
+--
+ALTER TABLE `documents_courses`
+  ADD CONSTRAINT `documents_courses_ibfk_3` FOREIGN KEY (`course_id`) REFERENCES `courses` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `documents_courses_ibfk_4` FOREIGN KEY (`document_id`) REFERENCES `documents` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `documents_courses_ibfk_1` FOREIGN KEY (`course_id`) REFERENCES `courses` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `documents_courses_ibfk_2` FOREIGN KEY (`document_id`) REFERENCES `documents` (`id`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `documents_roles`
+--
+ALTER TABLE `documents_roles`
+  ADD CONSTRAINT `documents_roles_ibfk_3` FOREIGN KEY (`role_id`) REFERENCES `roles` (`id`) ON UPDATE CASCADE,
+  ADD CONSTRAINT `documents_roles_ibfk_4` FOREIGN KEY (`document_id`) REFERENCES `documents` (`id`) ON UPDATE CASCADE,
+  ADD CONSTRAINT `documents_roles_ibfk_1` FOREIGN KEY (`role_id`) REFERENCES `roles` (`id`) ON UPDATE CASCADE,
+  ADD CONSTRAINT `documents_roles_ibfk_2` FOREIGN KEY (`document_id`) REFERENCES `documents` (`id`) ON UPDATE CASCADE;
 
 --
 -- Constraints for table `events`
 --
 ALTER TABLE `events`
+  ADD CONSTRAINT `events_ibfk_1` FOREIGN KEY (`room_id`) REFERENCES `rooms` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `FK_events_rooms` FOREIGN KEY (`room_id`) REFERENCES `rooms` (`id`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `exams`
 --
 ALTER TABLE `exams`
+  ADD CONSTRAINT `exams_ibfk_1` FOREIGN KEY (`course_id`) REFERENCES `courses` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `exams_ibfk_2` FOREIGN KEY (`event_id`) REFERENCES `events` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `exams_ibfk_3` FOREIGN KEY (`examgroup_id`) REFERENCES `examgroups` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `FK_exams_courses` FOREIGN KEY (`course_id`) REFERENCES `courses` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `FK_exams_events` FOREIGN KEY (`event_id`) REFERENCES `events` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `FK_exams_examgroups` FOREIGN KEY (`examgroup_id`) REFERENCES `examgroups` (`id`) ON DELETE CASCADE;
@@ -546,25 +722,31 @@ ALTER TABLE `exams`
 -- Constraints for table `feeds`
 --
 ALTER TABLE `feeds`
+  ADD CONSTRAINT `feeds_ibfk_1` FOREIGN KEY (`actor_id`) REFERENCES `users` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `FK_feed_users` FOREIGN KEY (`actor_id`) REFERENCES `users` (`id`) ON DELETE CASCADE;
 
 --
--- Constraints for table `feeds_users`
+-- Constraints for table `feeds_feedstreams`
 --
-ALTER TABLE `feeds_users`
-  ADD CONSTRAINT `FK_feed_users_feed` FOREIGN KEY (`feed_id`) REFERENCES `feeds` (`id`) ON DELETE CASCADE,
-  ADD CONSTRAINT `FK_feed_users_users` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE;
+ALTER TABLE `feeds_feedstreams`
+  ADD CONSTRAINT `feeds_feedstreams_ibfk_3` FOREIGN KEY (`feedstream_id`) REFERENCES `feedstreams` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `feeds_feedstreams_ibfk_4` FOREIGN KEY (`feed_id`) REFERENCES `feeds` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `feeds_feedstreams_ibfk_1` FOREIGN KEY (`feedstream_id`) REFERENCES `feedstreams` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `feeds_feedstreams_ibfk_2` FOREIGN KEY (`feed_id`) REFERENCES `feeds` (`id`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `lectures`
 --
 ALTER TABLE `lectures`
+  ADD CONSTRAINT `lectures_ibfk_1` FOREIGN KEY (`course_id`) REFERENCES `courses` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `FK_lectures_courses` FOREIGN KEY (`course_id`) REFERENCES `courses` (`id`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `lectures_events`
 --
 ALTER TABLE `lectures_events`
+  ADD CONSTRAINT `lectures_events_ibfk_1` FOREIGN KEY (`event_id`) REFERENCES `events` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `lectures_events_ibfk_2` FOREIGN KEY (`lecture_id`) REFERENCES `lectures` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `FK_lectures_events_events` FOREIGN KEY (`event_id`) REFERENCES `events` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `FK_lectures_events_lectures` FOREIGN KEY (`lecture_id`) REFERENCES `lectures` (`id`) ON DELETE CASCADE;
 
@@ -572,12 +754,36 @@ ALTER TABLE `lectures_events`
 -- Constraints for table `posts`
 --
 ALTER TABLE `posts`
+  ADD CONSTRAINT `posts_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `FK_posts_users` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `questionattributes`
+--
+ALTER TABLE `questionattributes`
+  ADD CONSTRAINT `questionattributes_ibfk_2` FOREIGN KEY (`question_id`) REFERENCES `questions` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `questionattributes_ibfk_1` FOREIGN KEY (`question_id`) REFERENCES `questions` (`id`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `questionhints`
+--
+ALTER TABLE `questionhints`
+  ADD CONSTRAINT `questionhints_ibfk_2` FOREIGN KEY (`question_id`) REFERENCES `questions` (`id`),
+  ADD CONSTRAINT `questionhints_ibfk_1` FOREIGN KEY (`question_id`) REFERENCES `questions` (`id`);
+
+--
+-- Constraints for table `questions`
+--
+ALTER TABLE `questions`
+  ADD CONSTRAINT `questions_ibfk_2` FOREIGN KEY (`parent_id`) REFERENCES `questions` (`id`),
+  ADD CONSTRAINT `questions_ibfk_1` FOREIGN KEY (`parent_id`) REFERENCES `questions` (`id`);
 
 --
 -- Constraints for table `roles_users`
 --
 ALTER TABLE `roles_users`
+  ADD CONSTRAINT `roles_users_ibfk_3` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `roles_users_ibfk_4` FOREIGN KEY (`role_id`) REFERENCES `roles` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `roles_users_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `roles_users_ibfk_2` FOREIGN KEY (`role_id`) REFERENCES `roles` (`id`) ON DELETE CASCADE;
 
@@ -585,10 +791,12 @@ ALTER TABLE `roles_users`
 -- Constraints for table `rooms`
 --
 ALTER TABLE `rooms`
+  ADD CONSTRAINT `rooms_ibfk_2` FOREIGN KEY (`location_id`) REFERENCES `locations` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `rooms_ibfk_1` FOREIGN KEY (`location_id`) REFERENCES `locations` (`id`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `user_tokens`
 --
 ALTER TABLE `user_tokens`
+  ADD CONSTRAINT `user_tokens_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `user_tokens_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE;
