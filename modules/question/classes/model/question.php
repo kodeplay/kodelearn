@@ -2,6 +2,10 @@
 
 class Model_Question extends ORM {
 
+    public static $TYPES = array(
+        'choice', 'matching', 'open', 'ordering' // grouped is disabled for now
+    );
+
     protected $_has_many = array(
         'attributes' => array('model' => 'questionattribute'),
         'hints' => array('model' => 'questionhint')
@@ -10,6 +14,36 @@ class Model_Question extends ORM {
     public function validator($data) {
         return Validation::factory($data)
             ->rule('question', 'not_empty');
+    }
+
+    /**
+     * Method to get the questions as per the criteria
+     * @param Array $criteria
+     * @return Database_MySQL_Result
+     */
+    public static function get_questions($criteria) {
+        $questions = ORM::factory('question');
+        if (!empty($criteria['filter_type'])) {
+            $questions->where('type', ' = ', $criteria['filter_type']);
+        }
+        if (!empty($criteria['limit'])) {
+            $questions->limit($criteria['limit'])
+                ->offset(Arr::get($criteria, 'offset', 0));            
+        }
+        return $questions->find_all();
+    }
+
+    /**
+     * Method to get the total number of questions as per the criteria
+     * @param Array $criteria
+     * @return int 
+     */
+    public static function get_total_question_count($criteria) {
+        $questions = ORM::factory('question');
+        if (!empty($criteria['filter_type'])) {
+            $questions->where('type', ' = ', $criteria['filter_type']);
+        }
+        return $questions->count_all();
     }
 
     /**

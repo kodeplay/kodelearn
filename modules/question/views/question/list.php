@@ -13,8 +13,8 @@
         <?php echo $links['add']; ?>
         <ul id="question-type-selector">    
             <li>Select question type</li>
-            <?php foreach ($types as $type) { ?>
-            <li rel="<?php echo $type; ?>"><?php echo $type; ?></li>
+            <?php foreach ($types as $k=>$type) { ?>
+            <li rel="<?php echo $k; ?>"><?php echo $type; ?></li>
             <?php } ?>
         </ul>
         <?php } ?>        
@@ -30,7 +30,16 @@
     
     
     <form name="question" id="question" method="POST" class="selection-required" action="<?php echo $links['delete'] ?>">
-    
+    <div class="vm5" align="right">
+        <select name="filter_type" style="padding:2px; width:150px"> 
+          <option value="0">--No Filter--</option>
+          <?php foreach ($types as $k=>$type) { ?>
+          <option value="<?php echo $k; ?>" <?php echo ($k === $filter_type ? 'selected="selected"' : ''); ?>><?php echo ucfirst($type); ?></option>      
+          <?php } ?>    
+        </select>        
+        <a class="button" id="trigger_filter_type"><?php echo __('Filter'); ?></a>
+        <input type="hidden" id="filter_url" value="<?php echo $filter_url ?>" />
+    </div>
     <table class="vm10 datatable fullwidth">
         <?php echo $table['headings'] ?>
         <?php foreach($table['data'] as $question){ ?>
@@ -82,7 +91,16 @@ KODELEARN.modules.add('question', (function () {
                 if(type) {
                     window.location.href = location + '/type/' + type;
                 }
-            });
+            });     
+            $('#trigger_filter_type').click(function(){
+		        var url = $('#filter_url').val();		        
+		        if($("select[name='filter_type']").val()){		            
+			        url += '/filter_type/' + encodeURIComponent($("select[name='filter_type']").val());			
+		        }
+		        console.log(url);
+		        window.location = url;
+	        });	          
+                 
         }
     };
 })());

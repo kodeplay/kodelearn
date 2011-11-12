@@ -10,13 +10,18 @@ class Controller_Question extends Controller_Base {
             ->bind('total', $total)
             ->bind('links', $links)
             ->bind('success', $success)
+            ->bind('filter_url', $filter_url)
+            ->bind('filter_type', $filter_type)
             ->bind('types', $types);
-        // get all the courses
-        $questions = ORM::factory('question')->find_all();
-        $total = ORM::factory('question')->count_all();
+        $filter_type = (string) $this->request->param('filter_type', '');
+        $criteria = array(
+            'filter_type' => $this->request->param('filter_type', '')
+        );
+        $questions = Model_Question::get_questions($criteria);
+        $total = Model_Question::get_total_question_count($criteria);
         $sortables = new Sort(array(
-            'Question' => 'question',
-            'Type' => 'type',
+            'Question' => '',
+            'Type' => '',
             'Actions' => '',
         ));
         $headings = $sortables->render();
@@ -24,7 +29,8 @@ class Controller_Question extends Controller_Base {
             'headings' => $headings,
             'data' => $questions
         );
-        $types = array('choice', 'open', 'ordering', 'matching');
+        $types = array_combine(Model_Question::$TYPES, array_map('ucfirst', Model_Question::$TYPES));
+        $filter_url = URL::site('question/index');
         $links = array(
             'add' => Html::anchor('/question/add/', 'Create a question', array('class' => 'createButton l')),
             'delete' => URL::site('/question/delete/'),
