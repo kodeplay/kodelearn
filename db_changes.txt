@@ -384,3 +384,65 @@ ALTER TABLE `feeds_feedstreams`
   ADD CONSTRAINT `feeds_feedstreams_ibfk_2` FOREIGN KEY (`feed_id`) REFERENCES `feeds` (`id`) ON DELETE CASCADE;
 
 --------------------------------------------------------------------
+
+--
+-- Table structure for table `questions`
+--
+
+CREATE TABLE IF NOT EXISTS `questions` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `question` text NOT NULL,
+  `extra` varchar(255) NOT NULL,
+  `type` enum('choice','grouped','matching','open','ordering') NOT NULL,
+  `parent_id` int(11) DEFAULT NULL,
+  `user_id` int(11) NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  KEY `parent_id` (`parent_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1;
+
+--
+-- Table structure for table `questionattributes`
+--
+
+CREATE TABLE IF NOT EXISTS `questionattributes` (
+  `question_id` int(11) NOT NULL,
+  `attribute_name` varchar(32) NOT NULL,
+  `attribute_value` text NOT NULL,
+  `explanation` text NOT NULL,
+  `correctness` tinyint(1) NOT NULL,
+  KEY `question_id` (`question_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Table structure for table `questionhints`
+--
+
+CREATE TABLE IF NOT EXISTS `questionhints` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `question_id` int(11) NOT NULL,
+  `hint` text NOT NULL,
+  `deduction` float NOT NULL,
+  `sort_order` tinyint(4) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `question_id` (`question_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1;
+
+--
+-- Constraints for table `questionattributes`
+--
+ALTER TABLE `questionattributes`
+  ADD CONSTRAINT `questionattributes_ibfk_1` FOREIGN KEY (`question_id`) REFERENCES `questions` (`id`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `questionhints`
+--
+ALTER TABLE `questionhints`
+  ADD CONSTRAINT `questionhints_ibfk_1` FOREIGN KEY (`question_id`) REFERENCES `questions` (`id`);
+
+--
+-- Constraints for table `questions`
+--
+ALTER TABLE `questions`
+  ADD CONSTRAINT `questions_ibfk_1` FOREIGN KEY (`parent_id`) REFERENCES `questions` (`id`);
+
