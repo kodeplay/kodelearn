@@ -4,6 +4,16 @@ class Controller_Question extends Controller_Base {
 
     protected $_errors = array();
 
+    protected function breadcrumbs() {
+        parent::breadcrumbs();
+        $course = ORM::factory('course', Session::instance()->get('course_id'));
+        if (!$this->request->is_ajax() && $this->request->is_initial()) {
+            Breadcrumbs::add(array('Courses', Url::site('course')));
+            Breadcrumbs::add(array(sprintf($course->name), Url::site('course/id/'.$course->id)));        
+            Breadcrumbs::add(array('Question Bank', Url::site('question')));
+        }
+    }
+
     public function action_index() {
         $view = View::factory('question/list')
             ->bind('table', $table)
@@ -14,8 +24,11 @@ class Controller_Question extends Controller_Base {
             ->bind('filter_type', $filter_type)
             ->bind('types', $types);
         $filter_type = (string) $this->request->param('filter_type', '');
+        $course_id = Session::instance()->get('course_id');
+        $course = ORM::factory('course', (int)$course_id);
         $criteria = array(
-            'filter_type' => $this->request->param('filter_type', '')
+            'filter_type' => $this->request->param('filter_type', ''),
+            'course_id' => $course_id
         );
         $questions = Model_Question::get_questions($criteria);
         $total = Model_Question::get_total_question_count($criteria);
@@ -42,6 +55,7 @@ class Controller_Question extends Controller_Base {
     public function action_add() {
         $view = View::factory('question/form')
             ->bind('type', $type)
+            ->bind('course', $course)
             ->bind('form', $form)
             ->bind('hints', $hints)
             ->bind('error_notif', $error_notif)
@@ -51,6 +65,8 @@ class Controller_Question extends Controller_Base {
         $type = $this->request->param('type');
         $question = Question::factory($type);
         $hints = array();
+        $course_id = Session::instance()->get('course_id');
+        $course = ORM::factory('course', (int)$course_id);
         if ($this->request->method() === 'POST' && $this->request->post()) {
             $submitted = true;
             if ($question->validate($this->request->post())) {
@@ -76,11 +92,8 @@ class Controller_Question extends Controller_Base {
                 'deduction' => '',
             );
         }
-    	Breadcrumbs::add(array(
-            'Questions', Url::site('question')
-        ));        
         Breadcrumbs::add(array(
-            'Create', Url::site('question/add')
+            'Add', Url::site('question/add')
         ));
         $this->content = $view;
     }
@@ -90,12 +103,15 @@ class Controller_Question extends Controller_Base {
             ->bind('type', $type)
             ->bind('form', $form)
             ->bind('hints', $hints)
+            ->bind('course', $course)
             ->bind('error_notif', $error_notif)
             ->bind('solution_form', $solution_form)
             ->bind('solution_tab', $solution_tab);        
         $submitted = false;
         $question = Question::factory((int) $this->request->param('id'));
         $hints = $question->orm()->hints_as_array();
+        $course_id = Session::instance()->get('course_id');
+        $course = ORM::factory('course', (int)$course_id);
         if ($this->request->method() === 'POST' && $this->request->post()) {
             $submitted = true;
             if ($question->validate($this->request->post())) {
@@ -120,11 +136,8 @@ class Controller_Question extends Controller_Base {
                 'deduction' => '',
             );
         }
-    	Breadcrumbs::add(array(
-            'Questions', Url::site('question')
-        ));        
         Breadcrumbs::add(array(
-            'Edit', Url::site('question/add')
+            'Edit', Url::site('question/edit/'.$question->orm()->id)
         ));
         $this->content = $view;
     }
@@ -134,11 +147,14 @@ class Controller_Question extends Controller_Base {
         $form->default_data = array(
             'question' => '',
             'extra' => '',
+            'course_id' => Session::instance()->get('course_id')
         );
         $form->saved_data = $saved_data;
         $form->posted_data = $submitted ? $this->request->post() : array();
         $form->append('Question', 'question', 'textarea', array('attributes' => array('class' => 'w70 ht120')));
         $form->append('Extra Info', 'extra', 'textarea', array('attributes' => array('class' => 'w70 ht120')));
+        $courses = ORM::factory('course')->find_all()->as_array('id', 'name');
+    	$form->append('Course', 'course_id', 'select', array('options' => $courses));
         $form->append('Save', 'save', 'submit', array('attributes' => array('class' => 'button r')));
         $form->process();
         return $form;        

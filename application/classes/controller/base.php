@@ -22,24 +22,18 @@ class Controller_Base extends Controller_Template {
         $config = Config::instance();
         $config->attach(new Config_Database());
         $this->template_filter();
-        if ($this->request->is_ajax() || !$this->request->is_initial()) {
-            $this->view = View::factory('template/content');
-        } else {
-            $this->view = View::factory($this->template);
-            Breadcrumbs::add(array('Home', Url::site('home')));
-        }
-        
+        $this->breadcrumbs();        
         //check if controller is of innerpage of course and courseid is there in session
-
+        // TODO - fix for modular extensibility
         if($this->request->is_initial()){ // check if this is initial request
-	        $course_pages = array('document', 'flashcard', 'lesson', 'quiz', 'assignment');
-	        $controller = $this->request->controller();
-	        $course_id = Session::instance()->get('course_id');
-	        if(in_array($controller, $course_pages) && (!$course_id)){
-	        	$this->request->redirect('course');
-	        } elseif(!in_array($controller, $course_pages)){
-	        	Session::instance()->delete('course_id');    
-	        }
+            $course_pages = array('document', 'flashcard', 'lesson', 'quiz', 'assignment', 'question');
+            $controller = $this->request->controller();
+            $course_id = Session::instance()->get('course_id');
+            if(in_array($controller, $course_pages) && (!$course_id)){
+                $this->request->redirect('course');
+            } elseif(!in_array($controller, $course_pages)){
+                Session::instance()->delete('course_id');    
+            }
         }
                 
         return parent::before();
@@ -128,6 +122,19 @@ class Controller_Base extends Controller_Template {
     protected function template_filter() {
         $logged_in = Auth::instance()->logged_in();        
         $this->template = !$logged_in ? 'template/template' : 'template/logged_template';
+    }
+
+    /**
+     * Method for adding breadcrumbs
+     * to be called from the before method
+     */
+    protected function breadcrumbs() {
+        if ($this->request->is_ajax() || !$this->request->is_initial()) {
+            $this->view = View::factory('template/content');
+        } else {
+            $this->view = View::factory($this->template);
+            Breadcrumbs::add(array('Home', Url::site('home')));
+        }
     }
 
     public function after() {

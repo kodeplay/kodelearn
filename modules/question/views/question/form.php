@@ -42,7 +42,13 @@
 			    <td>
 			        <?php echo $form->extra->element(); ?>
 			    </td>
-		    </tr>		
+		    </tr>	
+		    <tr>
+			    <td class="vatop"><?php echo $form->course_id->label(); ?></td>
+			    <td>
+			        <?php echo $form->course_id->element(); ?>
+			    </td>
+		    </tr>		    	
 	    </table>
 	    </div>
 	

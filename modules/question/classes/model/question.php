@@ -23,6 +23,9 @@ class Model_Question extends ORM {
      */
     public static function get_questions($criteria) {
         $questions = ORM::factory('question');
+        if (!empty($criteria['course_id'])) {
+            $questions->where('course_id', ' = ', $criteria['course_id']);
+        }
         if (!empty($criteria['filter_type'])) {
             $questions->where('type', ' = ', $criteria['filter_type']);
         }
@@ -40,6 +43,9 @@ class Model_Question extends ORM {
      */
     public static function get_total_question_count($criteria) {
         $questions = ORM::factory('question');
+        if (!empty($criteria['course_id'])) {
+            $questions->where('course_id', ' = ', $criteria['course_id']);
+        }
         if (!empty($criteria['filter_type'])) {
             $questions->where('type', ' = ', $criteria['filter_type']);
         }

@@ -155,6 +155,7 @@ abstract class Question {
         $this->_attributes = $this->process_attrs($data['attributes']);
         $this->_orm->question = $data['question'];
         $this->_orm->extra = Arr::get($data, 'extra', '');
+        $this->_orm->course_id = Arr::get($data, 'course_id');
         $this->_orm->user_id = Auth::instance()->get_user()->id;
         $this->_orm->type = $this->_type;
         $this->_orm->save();
