@@ -122,6 +122,11 @@ class Controller_Base extends Controller_Template {
     protected function template_filter() {
         $logged_in = Auth::instance()->logged_in();        
         $this->template = !$logged_in ? 'template/template' : 'template/logged_template';
+        if ($this->request->is_ajax() || !$this->request->is_initial()) {
+            $this->view = View::factory('template/content');
+        } else {
+            $this->view = View::factory($this->template);
+        }
     }
 
     /**
@@ -129,10 +134,7 @@ class Controller_Base extends Controller_Template {
      * to be called from the before method
      */
     protected function breadcrumbs() {
-        if ($this->request->is_ajax() || !$this->request->is_initial()) {
-            $this->view = View::factory('template/content');
-        } else {
-            $this->view = View::factory($this->template);
+        if (!$this->request->is_ajax() && $this->request->is_initial()) {
             Breadcrumbs::add(array('Home', Url::site('home')));
         }
     }
