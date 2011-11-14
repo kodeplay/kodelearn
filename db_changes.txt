@@ -446,3 +446,8 @@ ALTER TABLE `questionhints`
 ALTER TABLE `questions`
   ADD CONSTRAINT `questions_ibfk_1` FOREIGN KEY (`parent_id`) REFERENCES `questions` (`id`);
 
+ALTER TABLE `questions` ADD COLUMN `course_id` int(11) unsigned NOT NULL AFTER `user_id`
+
+ALTER TABLE `questions
+  ADD CONSTRAINT `questions_ibfk_2` FOREIGN KEY (`course_id`) REFERENCES `courses` (`id`); 
+

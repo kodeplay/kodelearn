@@ -500,9 +500,11 @@ CREATE TABLE IF NOT EXISTS `questions` (
   `type` enum('choice','grouped','matching','open','ordering') NOT NULL,
   `parent_id` int(11) DEFAULT NULL,
   `user_id` int(11) NOT NULL,
+  `course_id` int(11) unsigned NOT NULL,   
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   KEY `parent_id` (`parent_id`)
+  KEY `course_id` (`course_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
 --
