@@ -3,10 +3,6 @@
 class Model_Feed extends ORM {
 
     protected $_has_many = array(
-        'users' => array(
-            'model'   => 'user',
-            'through' => 'feeds_users',
-        ),
         'feedstreams' => array(
             'model' => 'feedstream',
             'through' => 'feeds_feedstreams'
