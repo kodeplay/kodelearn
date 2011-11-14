@@ -34,8 +34,7 @@ class Controller_Base extends Controller_Template {
             } elseif(!in_array($controller, $course_pages)){
                 Session::instance()->delete('course_id');    
             }
-        }
-                
+        }                
         return parent::before();
     }
 	

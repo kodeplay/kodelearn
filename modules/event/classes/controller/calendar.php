@@ -3,8 +3,7 @@
 class Controller_Calendar extends Controller_Base {
 
     protected function template_filter() {
-        $logged_in = Auth::instance()->logged_in();        
-        $this->template = 'template/template_one_column';
+        $this->view = View::factory('template/template_one_column');
     }
 
     public function action_index() {
