@@ -159,4 +159,16 @@ class Acl_Config {
     public static function is_resource_ignored($resource) {
         return in_array($resource, self::$ignoredControllers);
     }
+
+    /**
+     * Method to add ignored controllers from outside the class
+     * @param mixed (string/array) 
+     */
+    public static function ignore_controllers($ignore) {
+        if (is_array($ignore)) {
+            self::$ignoredControllers = array_merge(self::$ignoredControllers, $ignore);
+        } else if (is_string($ignore)) {
+            self::$ignoredControllers[] = $ignore;
+        }
+    }
 }
