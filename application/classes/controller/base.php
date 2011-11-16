@@ -21,7 +21,6 @@ class Controller_Base extends Controller_Template {
         // create a new Config reader and attach to the Config instance
         $config = Config::instance();
         $config->attach(new Config_Database());
-        $this->template_filter();
         $this->breadcrumbs();        
         //check if controller is of innerpage of course and courseid is there in session
         // TODO - fix for modular extensibility
@@ -139,6 +138,7 @@ class Controller_Base extends Controller_Template {
     }
 
     public function after() {
+        $this->template_filter();
         $controller = $this->request->controller();
         $action = $this->request->action();
         $page_description = Kohana::message('page_title', $controller.'_'.$action.'.description');
