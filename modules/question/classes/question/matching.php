@@ -4,7 +4,7 @@ class Question_Matching extends Question {
 
     protected $_type = 'matching';
     
-        public function render_form($postdata=array()) {
+    public function render_form($postdata=array()) {
         $view = View::factory('question/matching/partial_form')
             ->set('error_matched_pairs', $this->validation_errors('attributes'))
             ->bind('attribute', $attribute);
@@ -69,5 +69,17 @@ class Question_Matching extends Question {
         shuffle($rights);
         // var_dump($lefts, $rights, $pairs); exit;
         return $view->render();
+    }
+
+    /**
+     * To check that the submitted answer for matching type
+     * question is correct, serialize the array and
+     * compare it to the serialized answer stored as the question attribute
+     */
+    public function check_answer($answer) {
+        $attrs = $this->_orm->attributes_as_array();
+        $answer_attr = $attrs[0];
+        $expected_answer = $answer_attr['attribute_value'];
+        return serialize($answer) == $expected_answer;
     }
 }

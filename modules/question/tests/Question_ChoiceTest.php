@@ -75,5 +75,18 @@ class Question_ChoiceTest extends Kohana_UnitTest_TestCase {
         );
         $this->assertEquals($question->choice_type($attributes), 'multiple');
     }    
+
+    // TODO testing using a test database
+    public function test_check_answer() {
+        // try to load a question of type choice
+        $ques = ORM::factory('question', 2);        
+        $question = Question::factory($ques);
+        $submitted = array(4);
+        $this->assertTrue($question->check_answer($submitted));
+        $ques = ORM::factory('question', 1);        
+        $question = Question::factory($ques);
+        $submitted = array('echo', 'print_r');
+        $this->assertTrue($question->check_answer($submitted));
+    }
 }
 

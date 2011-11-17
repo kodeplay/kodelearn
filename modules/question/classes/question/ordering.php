@@ -61,5 +61,17 @@ class Question_Ordering extends Question {
         return $view->render();
     }
 
+    /**
+     * HEre the answer is stored in the form of
+     * serialized array of ordered elements
+     * hence we serialize the submitted answer and compare
+     */
+    public function check_answer($answer) {
+        $attrs = $this->_orm->attributes_as_array();
+        $answer_attr = $attrs[0];
+        $expected_answer = $answer_attr['attribute_value'];
+        return serialize($answer) == $expected_answer;
+        return false;
+    }
 }
 

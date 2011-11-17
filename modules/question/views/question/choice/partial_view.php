@@ -7,6 +7,7 @@
                 <input type="checkbox" name="selected[]" />
             <?php } ?>
             <?php echo $choice['attribute_value']; ?>
+            <input type="hidden" value="<?php echo $choice['attribute_value']; ?>" />
         </li>    
     <?php } ?>
 </ul>

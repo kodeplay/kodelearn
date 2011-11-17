@@ -173,7 +173,6 @@ abstract class Question {
         $view = View::factory('question/partial_question')
             ->set('preview', $preview)
             ->bind('question', $question)
-            ->bind('hints', $hints)
             ->bind('answer_template', $answer_template);
         $question = $this->_orm;
         $hints = $this->_orm->hints_as_array();
@@ -188,4 +187,13 @@ abstract class Question {
      * @return String html
      */
     abstract public function render_answer_partial();
+    
+    /**
+     * Method to check if the answer to this question is correct
+     * This will depend upon the type of question and hence implementation
+     * will be in the subclasses
+     * @param String $answer
+     * @return Boolean $result whether correct or not
+     */
+    abstract public function check_answer($answer);
 }

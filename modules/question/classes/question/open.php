@@ -51,4 +51,21 @@ class Question_Open extends Question {
         $view = View::factory('question/open/partial_view');
         return $view->render();
     }
+
+    /**
+     * Here we check the answer directly with the question attribute saved
+     * Also there may be multiple possible correct forms for answers
+     * which we will know by exploding the string with '||'
+     */
+    public function check_answer($answer) {
+        $attrs = $this->_orm->attributes_as_array();
+        $answer_attr = $attrs[0];
+        $expected_answer = $answer_attr['attribute_value'];
+        $multiple_possible = explode('||', $expected_answer);
+        if (count($multiple_possible) > 1) {
+            return in_array($answer, $multiple_possible);
+        } else {
+            return $answer == $expected_answer;
+        }
+    }
 }

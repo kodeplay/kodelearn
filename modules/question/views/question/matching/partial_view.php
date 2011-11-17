@@ -11,7 +11,7 @@
     <?php foreach ($rights as $right) { ?>
         <li>
             <?php echo $right; ?>
-            <input type="hidden" name="left[]" value="<?php echo $right; ?>" />
+            <input type="hidden" name="right[]" value="<?php echo $right; ?>" />
         </li>    
     <?php } ?>
 </ul>

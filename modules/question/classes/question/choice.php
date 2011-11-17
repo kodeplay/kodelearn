@@ -96,4 +96,15 @@ class Question_Choice extends Question {
         $choice_type = $this->choice_type($choices);
         return $view->render();
     }
+
+    /**
+     * We find the correct answers and then compare the array with the submitted answers
+     */
+    public function check_answer($answer) {
+        $correct_answers = $this->_orm->attributes
+            ->where('correctness', ' = ', 1)
+            ->find_all()
+            ->as_array(null, 'attribute_value');        
+        return !array_diff($answer, $correct_answers) && !array_diff($correct_answers, $answer);
+    }
 }
