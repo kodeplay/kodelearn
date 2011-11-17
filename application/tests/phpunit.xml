@@ -15,5 +15,8 @@
         <testsuite name="Exam/Exam Results Tests"> 
             <directory>../../modules/exam/tests/</directory> 
         </testsuite> 
+        <testsuite name="Question API Tests"> 
+            <directory>../../modules/question/tests/</directory> 
+        </testsuite> 
     </testsuites> 
 </phpunit>
