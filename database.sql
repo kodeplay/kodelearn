@@ -503,7 +503,7 @@ CREATE TABLE IF NOT EXISTS `questions` (
   `course_id` int(11) unsigned NOT NULL,   
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
-  KEY `parent_id` (`parent_id`)
+  KEY `parent_id` (`parent_id`),
   KEY `course_id` (`course_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
