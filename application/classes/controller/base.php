@@ -25,7 +25,7 @@ class Controller_Base extends Controller_Template {
         //check if controller is of innerpage of course and courseid is there in session
         // TODO - fix for modular extensibility
         if($this->request->is_initial()){ // check if this is initial request
-            $course_pages = array('document', 'flashcard', 'lesson', 'quiz', 'assignment', 'question');
+            $course_pages = array('document', 'flashcard', 'lesson', 'quiz', 'assignment', 'question', 'quiz', 'exercise');
             $controller = $this->request->controller();
             $course_id = Session::instance()->get('course_id');
             if(in_array($controller, $course_pages) && (!$course_id)){

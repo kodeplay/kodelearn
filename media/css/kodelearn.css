@@ -638,6 +638,8 @@ tr.bad { background: #f4dcdc; }
 	text-align: left;
 	font-weight: bold;
 }
+.datatable th.tac { text-align: center; }
+.datatable th.tar { text-align: right; }
 .datatable td {
 	padding: 10px 5px;
 	border-bottom: 1px solid #d7c2b5;
@@ -1275,9 +1277,10 @@ ol.form-assist { font-size:12px; margin-top: 10px; line-height: 16px; }
 .question-block h3 { padding: 10px 0; font-weight: bold; font-size: 18px; color: #415666; text-shadow: 1px 1px 1px #FFFFFF; border-bottom: 1px solid #FEB100;}
 .question-help { padding-bottom: 20px; padding-left: 10px; font-size: 12px; font-style: italic; }
 .answer-section { margin-top: 30px; height: auto; overflow: hidden; }
-ul#questions-right { float: right; width: 35%; min-height: 200px; margin: 20px 0; padding: 10px; }
-ul#questions-right>li { border: 1px solid #ddd; min-height: 60px; }
+ul#questions-right { float: right; width: 35%; min-height: 200px; padding: 10px; }
+ul#questions-right>li { border: 1px solid #ddd; min-height: 40px; margin: 20px 0; }
 ul#questions-right li div, ul#questions-right li h4 { padding: 10px 15px; }
+ul#questions-right li div a.button { display: inline-block; }
 ul#questions-right li h4 { 
     background: url("../image/thback.png") repeat-x scroll left bottom #F3F3F3; 
     border-bottom: 1px solid #FEB100;
@@ -1295,6 +1298,12 @@ ul.pairs-matching-section { width: 48%; }
 ul.pairs-matching-section li { line-height: 20px; padding: 10px; height: 24px; }
 ul.pairs-matching-section.items-right li:hover { border: 1px dashed #373736; opacity: 40%; cursor: move; background: #f1edd3; }
 
+table.frame-table { height: 200px; width: 90%; overflow-y: auto; border: 1px solid #ddd; }
+table.frame-table tr.even { background: #eee; }
+table.frame-table tr+tr:hover { background: #FDF6E6; }
+table.frame-table td { padding: 4px; }
+table.frame-table th { padding: 8px; }
+table.frame-table td input { padding: 2px; width:30px; }
 
 
 
