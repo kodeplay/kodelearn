@@ -56,10 +56,10 @@
 	                <td class="vatop"><?php echo $form->pub_status->label(); ?></td>
 	                <td><?php echo $form->pub_status->element(); ?></td>
 	            </tr>
-	            <tr>
-	                <td class="vatop"><?php echo $form->session_resumable->label(); ?></td>
-	                <td><?php echo $form->session_resumable->element(); ?></td>
-	            </tr>
+	            <!-- <tr>
+	                <td class="vatop"><?php // echo $form->session_resumable->label(); ?></td>
+	                <td><?php //echo $form->session_resumable->element(); ?></td>
+	            </tr> -->
 	            <tr>
 	                <td class="vatop">
 	                    <?php echo $form->time_minutes->label(); ?>

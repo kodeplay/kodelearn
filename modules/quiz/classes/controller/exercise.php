@@ -136,7 +136,7 @@ class Controller_Exercise extends Controller_Base {
             'format' => 'quiz',
             'description' => '',
             'pub_status' => 1,
-            'session_resumable' => 0,
+            // 'session_resumable' => 0,
             'time_minutes' => '',            
         );
         $form->saved_data = $saved_data;
@@ -148,7 +148,7 @@ class Controller_Exercise extends Controller_Base {
             'test' => 'Test Format'
         )));
         $form->append('Status', 'pub_status', 'select', array('options' => array(1 => 'Published', 0 => 'Unpublished')));
-        $form->append('Resume Session?', 'session_resumable', 'select', array('options' => array(1 => 'Yes', 0 => 'No')));
+        // $form->append('Resume Session?', 'session_resumable', 'select', array('options' => array(1 => 'Yes', 0 => 'No')));
         $form->append('Time (in mins)', 'time_minutes', 'text');
         $form->append('Save', 'save', 'submit', array('attributes' => array('class' => 'button r')));
         $form->process();
