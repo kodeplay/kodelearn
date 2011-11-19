@@ -28,6 +28,13 @@ abstract class Question {
     protected $_solution_tab;
 
     /**
+     * How many marks is will a correct answer to this question give
+     * Default value is 1
+     * Can be set from outside using a setter function
+     */
+    protected $_marks = 1;
+
+    /**
      * Method to return a new instance of Question or its subclasses
      * @param mixed (int, string, Model_Question) $input
      */
@@ -96,6 +103,18 @@ abstract class Question {
      */
     public function type() {
         return $this->_type;
+    }
+
+    /**
+     * Combined setter-getter for marks
+     */
+    public function marks($marks=null) {
+        if ($marks == null) {
+            return $this->_marks;
+        }
+        if (is_numeric($marks)) {
+            $this->_marks = $marks;
+        }
     }
 
     /**

@@ -2,7 +2,7 @@
 return array(
     'exercise' => array(
         'levels' => array(
-            'solve'
+            'attempt'
         ),
     ),
 );

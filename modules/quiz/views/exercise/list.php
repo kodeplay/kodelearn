@@ -18,6 +18,10 @@
         <span class="clear">&nbsp;</span>
         </div>
     <?php } ?>
+    <?php 
+        $edit_permissions = Acl::instance()->is_allowed('exercise_edit');
+        $attempt_permissions = Acl::instance()->is_allowed('exercise_attempt');
+    ?>
     <form name="exercise" id="exercise" method="POST" class="selection-required" action="<?php echo $links['delete'] ?>">    
         <table class="vm10 datatable fullwidth">
         <?php echo $table['headings'] ?>
@@ -30,7 +34,14 @@
             <td class="tac"><?php echo $exercise->num_questions(); ?></td>
             <td class="tac"><?php echo $exercise->marks(); ?></td>
             <td class="tac"><?php echo $exercise->pub_status ? __('Published') : __('Unpublished'); ?></td>
-            <td class="tac"><a href="<?php echo Url::site('exercise/edit/id/'.$exercise->id); ?>">Edit</a></td>
+            <td class="tac">
+                <?php if ($edit_permissions) { ?>
+                <a href="<?php echo Url::site('exercise/edit/id/'.$exercise->id); ?>">Edit</a>&nbsp;
+                <?php } ?>
+                <?php if ($attempt_permissions) { ?>
+                <a href="<?php echo Url::site('exercise/start/id/'.$exercise->id); ?>">Attempt</a>
+                <?php } ?>
+            </td>
         </tr>        
         <?php } ?>
         <?php } else { ?>        
