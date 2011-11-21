@@ -451,3 +451,17 @@ ALTER TABLE `questions` ADD COLUMN `course_id` int(11) unsigned NOT NULL AFTER `
 ALTER TABLE `questions
   ADD CONSTRAINT `questions_ibfk_2` FOREIGN KEY (`course_id`) REFERENCES `courses` (`id`); 
 
+-----------------------------------------------------
+
+
+CREATE TABLE IF NOT EXISTS `flashcards` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `title` varchar(255) NOT NULL,
+  `description` text NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=9 ;
+
+CREATE TABLE IF NOT EXISTS `flashcards_questions` (
+  `flashcard_id` int(11) NOT NULL,
+  `question_id` int(11) NOT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
