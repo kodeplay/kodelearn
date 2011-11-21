@@ -80,5 +80,15 @@ class Model_Flashcard extends ORM {
        
        return $query;
         
-    } 
+    }
+
+    public static function getQuestionsAndAnswers($question_id = array()) {
+        $questions = ORM::factory('question');    
+        $questions->select('questionattributes.*')
+                  ->join('questionattributes', 'LEFT')
+                  ->on('questions.id', ' = ', 'questionattributes.question_id');
+        $questions->where('id', ' IN ', $question_id);
+        
+        return $questions->find_all();
+    }
 }

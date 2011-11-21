@@ -1295,9 +1295,13 @@ ul.pairs-matching-section { width: 48%; }
 ul.pairs-matching-section li { line-height: 20px; padding: 10px; height: 24px; }
 ul.pairs-matching-section.items-right li:hover { border: 1px dashed #373736; opacity: 40%; cursor: move; background: #f1edd3; }
 
-
-
-
-
-
-
+.flipbox {
+  width: 350px;
+  height: 200px;
+  padding: 10px;
+  background-color: #dfcbb0;
+  font-family: 'ChunkFive Regular', Tahoma, Helvetica;
+  color: #4f3e24;
+  text-align: center;
+  vertical-align: middle !important;
+}

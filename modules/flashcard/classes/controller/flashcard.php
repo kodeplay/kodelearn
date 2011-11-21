@@ -229,4 +229,66 @@ class Controller_Flashcard extends Controller_Base {
         Session::instance()->set('success', 'Flashcard(s) deleted successfully.');
         Request::current()->redirect('flashcard');
     }
+    
+    public function action_study() {
+        $id = $this->request->param('id');
+        $question_id = array();
+        if($id != "") {
+            $question_id = Model_Flashcard::getQuestions($id);
+        }  
+        $questions = Model_Flashcard::getQuestionsAndAnswers($question_id);
+        $view = View::factory('flashcard/view')
+            ->bind('questions', $questions)
+            ;
+        
+         Breadcrumbs::add(array(
+            'Flashcard', Url::site('flashcard')
+        ));
+
+        Breadcrumbs::add(array(
+            'View', Url::site('flashcard/study/id/'.$id )
+        ));
+        
+        $this->content = $view;
+    }
+    
+    public function action_revision() {
+        $id = $this->request->param('id');
+        $question_id = array();
+        if($id != "") {
+            $question_id = Model_Flashcard::getQuestions($id);
+        }  
+        $questions = Model_Flashcard::getQuestionsAndAnswers($question_id);
+        $view = View::factory('flashcard/viewFlash')
+            ->bind('questions', $questions)
+            ;
+        
+         Breadcrumbs::add(array(
+            'Flashcard', Url::site('flashcard')
+        ));
+
+        Breadcrumbs::add(array(
+            'View', Url::site('flashcard/revision/id/'.$id )
+        ));
+        
+        $this->content = $view;
+    }
+    
+    public function action_preview() {
+        $id = $this->request->param('id');
+        
+        $view = View::factory('flashcard/preview')
+            ->bind('id', $id)
+            ;
+        
+         Breadcrumbs::add(array(
+            'Flashcard', Url::site('flashcard')
+        ));
+
+        Breadcrumbs::add(array(
+            'View', Url::site('flashcard/preview/id/'.$id )
+        ));
+        
+        $this->content = $view;
+    }
 }

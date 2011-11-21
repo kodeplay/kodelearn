@@ -48,7 +48,7 @@
                 <td><?php echo Model_Flashcard::question_count($flashcard->id); ?></td>
                 <td>
                     <p>
-                    <?php echo Html::anchor('/flashcard/summary/id/'.$flashcard->id, 'View')?> 
+                    <?php echo Html::anchor('/flashcard/preview/id/'.$flashcard->id, 'View')?> 
                     <?php if (Acl::instance()->is_allowed('course_edit')) { 
                         echo '/ ' . Html::anchor('/flashcard/edit/id/'.$flashcard->id, 'Edit');
                     } ?>
