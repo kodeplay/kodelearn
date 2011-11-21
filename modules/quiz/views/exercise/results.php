@@ -6,7 +6,7 @@
     </div><!-- pageTop -->    
     
     <div class="tm40">
-        <h2 class="h2 hm15"><?php echo __('Score: ') .  $result->score(); ?></h2>        
+        <h2 class="h2 hm15"><?php echo __('Score: ') .  $result->score() . ' out of ' . $result->total_marks(); ?></h2>        
     </div> 
     <div class="tm30">
         <h3 class="h3 l hm15 tGreen"><?php echo __('Correct Answers: ') .  $result->num_correct(); ?></h3>    
@@ -15,7 +15,15 @@
     </div>   
     <div class="tm30 hm15">
         <h3 class="h3 underline"><?php echo __('Answers Review'); ?></h3>
-        <ul>
+        <ul id="answer-reviews">        
+            <?php foreach ($result->answer_reviews() as $review) { ?>
+            <li>
+                <h4 class="h4 vpad5 bold">Q. <?php echo $review['question']; ?></h4>
+                <p class="vpad5"><?php echo __('Score: '); ?><?php echo $review['score'] . '/' . $review['total_marks']; ?>
+                <?php echo $review['answer_review']; ?>
+            </li>
+            <?php } ?>
+        </ul>
     </div>      
 </div><!-- content -->
 

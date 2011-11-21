@@ -107,4 +107,20 @@ class Question_Choice extends Question {
             ->as_array(null, 'attribute_value');        
         return !array_diff($answer, $correct_answers) && !array_diff($correct_answers, $answer);
     }
+
+    public function answer_review($submitted_answer) {
+        $view = View::factory('question/choice/answer_review')
+            ->bind('choices', $choices);
+        $choices = array();
+        $attr = $this->_orm->attributes_as_array();
+        foreach ($attr as $a) {
+            $choices[] = array(
+                'choice' => $a['attribute_value'],
+                'explanation' => $a['explanation'],
+                'correctness' => $a['correctness'],
+                'answered' => in_array($a['attribute_value'], $submitted_answer)
+            );
+        }
+        return $view->render();
+    }
 }

@@ -68,4 +68,16 @@ class Question_Open extends Question {
             return $answer == $expected_answer;
         }
     }
+
+    public function answer_review($submitted_answer) {
+        $view = View::factory('question/open/answer_review')
+            ->bind('answer', $answer);
+        $attrs = $this->_orm->attributes_as_array();
+        $answer = array(
+            'submitted_answer' => $submitted_answer,
+            'correct_answer' => $attrs[0]['attribute_value'],
+            'explanation' => $attrs[0]['explanation']
+        );
+        return $view->render();
+    }
 }

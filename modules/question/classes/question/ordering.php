@@ -73,5 +73,17 @@ class Question_Ordering extends Question {
         return serialize($answer) == $expected_answer;
         return false;
     }
+
+    public function answer_review($submitted_answer) {
+        $view = View::factory('question/ordering/answer_review')
+            ->bind('answer', $answer);
+        $attrs = $this->_orm->attributes_as_array();
+        $answer = array(
+            'submitted_order' => $submitted_answer,
+            'correct_order' => unserialize($attrs[0]['attribute_value']),
+            'explanation' => $attrs[0]['explanation']
+        );
+        return $view->render();
+    }
 }
 

@@ -1306,7 +1306,21 @@ table.frame-table td { padding: 4px; }
 table.frame-table th { padding: 8px; }
 table.frame-table td input { padding: 2px; width:30px; }
 
+ul#answer-reviews { color: #636363; }
+ul#answer-reviews>li { padding: 20px 10px;  line-height: 20px; border-bottom: 1px dashed #636363; }
+ul#answer-reviews>li table { border: 1px solid #4C3D34; }
+ul#answer-reviews>li table td, ul#answer-reviews li table th { padding: 5px; }
+ul#answer-reviews>li table th { font-weight: bold; border-bottom: 1px solid #4C3D34; }
+ul#answer-reviews>li h4 { color: #4C3D34; }
 
+#test-page>ul { width: 72%; float: left; }
+#test-page>ul>li { border-bottom: 1px dashed #636363;}
+#test-page>ul>li h3 { color: #4C3D34; font-weight: bold;  }
+#test-page #test-right { width: 26%; float: right; margin-top: 40px; }
+#test-page #test-ques-board { width: 100%; border: 1px solid #eee; margin-top: 20px; height: 330px; overflow: hidden; }
+#test-page #test-ques-board td, #test-page #test-ques-board th { padding: 3px 0px; line-height: 18px; text-align: center; border-bottom: 1px solid #eee; }
+#test-page #test-ques-board th { background: #373736; color: #fff; text-shadow: 1px 1px 1px #000000; }
+#test-page #test-ques-board tr.bookmarked-question { background: #eee; }
 
 
 

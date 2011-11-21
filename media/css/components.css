@@ -55,6 +55,7 @@
 .pfix {	position:fixed; }
 
 .lsNone {	list-style-type: none;	}
+.lsPosIn {	list-style-position: inside;	}
 
 .icon16 {	width: 16px; height: 16px;	margin: 3px;	}
 .icon32 {	width: 32px; height: 32px;	margin: 5px;	}

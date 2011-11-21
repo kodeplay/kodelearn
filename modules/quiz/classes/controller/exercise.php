@@ -205,10 +205,18 @@ class Controller_Exercise extends Controller_Base {
             ));
             $partial_view = View::factory('exercise/partial_quiz');
         } elseif ($format == 'test') {
+            $question_list = array();
+            foreach ($questions as $k=>$question) {
+                $q = Question::factory((int)$question->question_id);
+                $q->idx($k+1);
+                $question_list[] = $q;
+            }
             $partial_view = View::factory('exercise/partial_test')
-                ->set('questions', $questions);
+                ->set('questions', $question_list);
         }
-        $partial = $partial_view->render();
+        $partial = $partial_view
+            ->set('exercise', $exercise)
+            ->render();
         Session::instance()->set('exercise_attempt', $attempt_session);
         $this->content = $view;
     }
@@ -258,7 +266,10 @@ class Controller_Exercise extends Controller_Base {
             $answer = Arr::get($this->request->post(), 'answer', array());
             $question = Question::factory($question_id); // load from the question id
             $result = $question->check_answer($answer);
-            $attempt_session['ques_attempted'][$question_id] = $result; 
+            $attempt_session['ques_attempted'][$question_id] = array(
+                'answer' => $answer,
+                'result' => $result
+            );
             Session::instance()->set('exercise_attempt', $attempt_session);
             $ques_remaining = (int)$attempt_session['ques_total'] - count($attempt_session['ques_upcoming']);
             $response = array(
@@ -273,15 +284,37 @@ class Controller_Exercise extends Controller_Base {
     }
 
     public function action_results() {
-        error_reporting(E_ALL|E_STRICT);
-        ini_set('display_errors', 'on');
         $view = View::factory('exercise/results')
             ->bind('result', $result);
         $attempt_session = Session::instance()->get('exercise_attempt');
+        // var_dump($attempt_session); exit;
         if ($attempt_session === null) {
             throw new Exception('No on going Exercise session found');
         }
         $result = new Exercise_Result($attempt_session);
         $this->content = $view;
+    }
+
+    public function action_ajax_test_submit() {
+        Session::instance()->delete('exercise_attempt');
+        $responses = $this->request->post('responses');
+        $arr = array();
+        foreach ($responses as $response) {
+            $question = Question::factory((int)$response['question_id']);
+            $result = $question->check_answer($response['answer']);
+            $arr[$response['question_id']] = array(
+                'answer' => $response['answer'],
+                'result' => $result,
+            );
+        }
+        $attempt_session = array(
+            'exercise_id' => $this->request->post('exercise_id'),
+            'format' => 'test',
+            'ques_total' => count($responses),
+            'ques_attempted' => $arr
+        );
+        // save in the session
+        Session::instance()->set('exercise_attempt', $attempt_session);
+        $this->content = json_encode(array('status' => 1));
     }
 }
