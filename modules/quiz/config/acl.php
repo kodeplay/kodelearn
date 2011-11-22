@@ -1,9 +1,8 @@
 <?php defined('SYSPATH') or die('No direct access allowed.');
 return array(
-    'document' => array(
-        'inherit_default' => false,
+    'exercise' => array(
         'levels' => array(
-            'view',
+            'attempt'
         ),
     ),
 );
