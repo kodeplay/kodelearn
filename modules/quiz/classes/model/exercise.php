@@ -2,6 +2,12 @@
 
 class Model_Exercise extends ORM {
 
+    protected $_has_many = array(
+        'results' => array(
+            'model' => 'exerciseresult', 
+        )
+    );
+
     public function validator($data) {
         return Validation::factory($data)
             ->rule('title', 'not_empty');
@@ -27,8 +33,11 @@ class Model_Exercise extends ORM {
             ->find_all();
     }
 
+    /**
+     * Get the total marks for exercise = Sum of marks of all questions
+     */
     public function marks() {
-        return 0;
+        return array_sum($this->questions()->as_array(null, 'marks'));
     }
 
     /**
@@ -58,5 +67,23 @@ class Model_Exercise extends ORM {
             ->where('exercise_id', ' = ', $this->id)
             ->execute();
         return $this;
+    }
+
+    /**
+     * Method to check if the user has attempted the exercise atleast once
+     */
+    public function is_attempted() {
+        return $this->results
+            ->where('user_id', ' = ', Auth::instance()->get_user()->id)
+            ->count_all();
+    }
+
+    /**
+     * Method to get the attempts of the current user
+     */
+    public function attempts() {
+        return $this->results
+            ->where('user_id', ' = ', Auth::instance()->get_user()->id)
+            ->find_all();
     }
 }

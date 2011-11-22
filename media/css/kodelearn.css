@@ -325,7 +325,7 @@ a{ color: #427693; }
 .sidemenu.Assignments a {	background-position:0 -532px; }
 .sidemenu.Lesson a {	background-position:0 -585px; }
 .sidemenu.Calendar a {	background-position:0 -173px; }
-.sidemenu.Quiz a {	background-position:0 -422px; }
+.sidemenu.Quiz a, .sidemenu.Exercises a { background-position:0 -422px; }
 
 .sidemenu a:hover {	color: #415666; }
 .sidemenu.active {

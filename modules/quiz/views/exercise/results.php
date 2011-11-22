@@ -3,7 +3,13 @@
         <div class="pageTitle l w60">Your Results for: <?php echo $result->exercise()->title; ?></div>
         <div class="pageDesc r">replace_here_page_description</div>
         <div class="clear"></div>
-    </div><!-- pageTop -->    
+    </div><!-- pageTop -->
+    
+    <?php if (isset($attempted_at)) { ?>
+    <div class="tm40">
+        <h4 class="h4 hm15"><?php echo __('Attempted On: ') .  date('Y-m-d H:i:s', strtotime($attempted_at)); ?></h4>        
+    </div> 
+    <?php } ?>   
     
     <div class="tm40">
         <h2 class="h2 hm15"><?php echo __('Score: ') .  $result->score() . ' out of ' . $result->total_marks(); ?></h2>        

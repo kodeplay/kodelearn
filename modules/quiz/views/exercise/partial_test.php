@@ -23,7 +23,7 @@
                                     <tbody>                                    
                                         <?php foreach ($questions as $question) { ?>
                                         <tr id="qb-<?php echo $question->orm()->id; ?>">
-                                            <td><a href="javascript:void(0);" title="<?php echo $question->orm()->question; ?>">Q.<?php echo $question->idx(); ?></a></td>
+                                            <td><a class="qb-links" href="javascript:void(0);" title="<?php echo $question->orm()->question; ?>">Q.<?php echo $question->idx(); ?></a></td>
                                             <td class="tRed">No</td>
                                             <td><input type="checkbox" /></td>
                                         </tr>
@@ -68,6 +68,14 @@ KODELEARN.modules.add('test', (function () {
                 } else {
                     $(this).parent().parent().addClass('bookmarked-question');
                 }
+            });
+            $(".qb-links").click(function () {
+                var question_id = $(this).parent().parent().attr('id').replace('qb-', ''),
+                $li = $("#q-"+question_id);
+                $('html,body').animate({
+                    scrollTop: $li.offset().top
+                }, 'slow');
+                
             });
             this.openBindings();
             this.choiceBindings();

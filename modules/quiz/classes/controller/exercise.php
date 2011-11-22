@@ -37,6 +37,7 @@ class Controller_Exercise extends Controller_Base {
             'Questions' => array('sort' => '', 'attributes' => array('class' => 'tac')),
             'Marks' => array('sort' => '', 'attributes' => array('class' => 'tac')),
             'Status' => array('sort' => '', 'attributes' => array('class' => 'tac')),
+            'Attempts' => '',
             'Actions' => array('sort' => '', 'attributes' => array('class' => 'tac')),
         ));
         $headings = $sortables->render();
@@ -196,7 +197,8 @@ class Controller_Exercise extends Controller_Base {
         $attempt_session = array(
             'exercise_id' => $exercise->id,
             'format' => $format,
-            'ques_total' => count($questions->as_array())
+            'ques_total' => count($questions->as_array()),
+            'questions' => $questions->as_array('question_id', 'marks')
         );
         if ($format == 'quiz') {
             $attempt_session = array_merge($attempt_session, array(
@@ -283,36 +285,59 @@ class Controller_Exercise extends Controller_Base {
         $this->content = json_encode($response);
     }
 
+    /**
+     * Action for calculating the results of the submitted exercise
+     * To see results for an exercise action_result will be used
+     */
     public function action_results() {
-        $view = View::factory('exercise/results')
-            ->bind('result', $result);
-        $attempt_session = Session::instance()->get('exercise_attempt');
-        // var_dump($attempt_session); exit;
+        $attempt_session = Session::instance()->get_once('exercise_attempt');
+        // var_dump($attempt_session); exit;        
         if ($attempt_session === null) {
             throw new Exception('No on going Exercise session found');
         }
+        $result = new Exercise_Result($attempt_session);
+        $res = ORM::factory('exerciseresult');
+        $res->exercise_id = $attempt_session['exercise_id'];
+        $res->user_id = Auth::instance()->get_user()->id;
+        $res->score = $result->score();
+        $res->session_data = serialize($attempt_session);
+        $res->save();
+        Request::current()->redirect('exercise/result/id/' . $res->id);
+    }
+
+    /**
+     * This action will be used to view a result for a past attempt
+     * and will require the id of the result to be passed as the Get param
+     */
+    public function action_result() {
+        $view = View::factory('exercise/results')
+            ->bind('result', $result)
+            ->bind('attempted_at', $attempted_at);
+        $result_id = $this->request->param('id');
+        $saved_result = ORM::factory('exerciseresult', $result_id);
+        $attempt_session = unserialize($saved_result->session_data);
+        $attempted_at = date('Y-m-d H:i:s', strtotime($saved_result->attempted_at));
         $result = new Exercise_Result($attempt_session);
         $this->content = $view;
     }
 
     public function action_ajax_test_submit() {
-        Session::instance()->delete('exercise_attempt');
+        $attempt_session = Session::instance()->get('exercise_attempt');
         $responses = $this->request->post('responses');
         $arr = array();
-        foreach ($responses as $response) {
-            $question = Question::factory((int)$response['question_id']);
-            $result = $question->check_answer($response['answer']);
-            $arr[$response['question_id']] = array(
-                'answer' => $response['answer'],
-                'result' => $result,
-            );
+        if ($responses) {
+            foreach ($responses as $response) {
+                $question = Question::factory((int)$response['question_id']);
+                $result = $question->check_answer($response['answer']);
+                $arr[$response['question_id']] = array(
+                    'answer' => $response['answer'],
+                    'result' => $result,
+                );
+            }
         }
-        $attempt_session = array(
-            'exercise_id' => $this->request->post('exercise_id'),
-            'format' => 'test',
-            'ques_total' => count($responses),
-            'ques_attempted' => $arr
-        );
+        $exercise = ORM::factory('exercise', $this->request->post('exercise_id'));
+        $questions = $exercise->questions();
+        $attempt_session['ques_attempted'] = $arr;
         // save in the session
         Session::instance()->set('exercise_attempt', $attempt_session);
         $this->content = json_encode(array('status' => 1));

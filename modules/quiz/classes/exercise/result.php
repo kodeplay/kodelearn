@@ -54,11 +54,11 @@ class Exercise_Result {
      */
     public function __construct($attempt_session) {
         $this->_exercise = ORM::factory('exercise', $attempt_session['exercise_id']);
-        $questions = $this->_exercise->questions();                                
-        foreach ($questions as $question) {
-            $q = Question::factory((int)$question->question_id);
-            $q->marks($question->marks);
-            $this->_total_marks += $question->marks;
+        $questions = $attempt_session['questions'];
+        foreach ($questions as $question_id=>$marks) {
+            $q = Question::factory((int)$question_id);
+            $q->marks($marks);
+            $this->_total_marks += $marks;
             $this->_questions[] = $q;
         }        
         $this->_questions_attempted = $this->questions_attempted($attempt_session['ques_attempted']);
@@ -172,5 +172,17 @@ class Exercise_Result {
      */
     public function num_incorrect() {
         return $this->_num_incorrect;
+    }
+    
+    /**
+     * Method to get the list of question ids of questions
+     * in this exercise
+     */
+    public function question_id_list() {
+        $list = array();
+        foreach ($this->_questions as $question) {
+            $list[] = $question->orm()->id;
+        }
+        return $list;
     }
 }

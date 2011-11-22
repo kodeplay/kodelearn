@@ -113,6 +113,9 @@ class Question_Choice extends Question {
             ->bind('choices', $choices);
         $choices = array();
         $attr = $this->_orm->attributes_as_array();
+        if ($submitted_answer == null) {
+            $submitted_answer = array();
+        }
         foreach ($attr as $a) {
             $choices[] = array(
                 'choice' => $a['attribute_value'],

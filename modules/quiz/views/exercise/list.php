@@ -34,12 +34,26 @@
             <td class="tac"><?php echo $exercise->num_questions(); ?></td>
             <td class="tac"><?php echo $exercise->marks(); ?></td>
             <td class="tac"><?php echo $exercise->pub_status ? __('Published') : __('Unpublished'); ?></td>
+            <td>
+                <?php if ($exercise->is_attempted()) { ?>
+                    <table>
+                    <?php foreach ($exercise->attempts() as $attempt) { ?>
+                        <tr>
+                            <td><?php echo $attempt->date_repr(); ?></td>
+                            <td><?php echo  $attempt->to_link(); ?></td>
+                        </tr>
+                    <?php } ?>
+                    </table>
+                <?php } else { ?>
+                    <?php echo __('Not attempted'); ?>
+                <?php } ?>
+            </td>
             <td class="tac">
                 <?php if ($edit_permissions) { ?>
                 <a href="<?php echo Url::site('exercise/edit/id/'.$exercise->id); ?>">Edit</a>&nbsp;
                 <?php } ?>
                 <?php if ($attempt_permissions) { ?>
-                <a href="<?php echo Url::site('exercise/start/id/'.$exercise->id); ?>">Attempt</a>
+                    <a href="<?php echo Url::site('exercise/start/id/'.$exercise->id); ?>">Attempt</a>                    
                 <?php } ?>
             </td>
         </tr>        
