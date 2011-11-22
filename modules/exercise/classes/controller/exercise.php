@@ -44,8 +44,8 @@ class Controller_Exercise extends Controller_Base {
         $table = array(
             'headings' => $headings,
             'data' => $exercises,
+            'total' => $exercises->count()
         );
-
         $this->content = $view;
     }
 

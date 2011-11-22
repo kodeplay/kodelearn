@@ -25,7 +25,7 @@
     <form name="exercise" id="exercise" method="POST" class="selection-required" action="<?php echo $links['delete'] ?>">    
         <table class="vm10 datatable fullwidth">
         <?php echo $table['headings'] ?>
-        <?php if ($table['data']) { ?>
+        <?php if ($table['total']) { ?>
         <?php foreach ($table['data'] as $exercise) { ?>
         <tr>
             <td><input type="checkbox" class="selected" name="selected[]" value="<?php echo $exercise->id ?>" /></td>
@@ -60,7 +60,7 @@
         <?php } ?>
         <?php } else { ?>        
         <tr>
-            <td colspan="6" align="center">
+            <td colspan="8" align="center">
                 No Records Found
             </td>
         </tr>
