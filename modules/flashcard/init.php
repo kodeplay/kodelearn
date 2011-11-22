@@ -2,6 +2,6 @@
 
 DynamicMenu::extend(array(
     'coursemenu' => array(
-        array('flashcard', 'Flashcard', 5, array()),
+        array('flashcard', 'Flashcards', 5, array()),
     ),
 ));
