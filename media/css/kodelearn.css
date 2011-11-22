@@ -1305,3 +1305,9 @@ ul.pairs-matching-section.items-right li:hover { border: 1px dashed #373736; opa
   text-align: center;
   vertical-align: middle !important;
 }
+
+.roleContainer a {
+    left: 43%;
+    position: absolute;
+    z-index: 10;
+}
