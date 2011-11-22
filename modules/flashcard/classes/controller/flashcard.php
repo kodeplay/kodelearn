@@ -2,6 +2,18 @@
 
 class Controller_Flashcard extends Controller_Base {
 	
+    protected $_errors = array();
+
+    protected function breadcrumbs() {
+        parent::breadcrumbs();
+        $course = ORM::factory('course', Session::instance()->get('course_id'));
+        if (!$this->request->is_ajax() && $this->request->is_initial()) {
+            Breadcrumbs::add(array('Courses', Url::site('course')));
+            Breadcrumbs::add(array(sprintf($course->name), Url::site('course/id/'.$course->id)));        
+            Breadcrumbs::add(array('Flashcard', Url::site('flashcard')));
+        }
+    }
+    
     public function action_index() {
         $sort = $this->request->param('sort', 'title');        
         $order = $this->request->param('order', 'ASC');
@@ -86,10 +98,6 @@ class Controller_Flashcard extends Controller_Base {
             ->bind('success', $success)
             ;
         
-        Breadcrumbs::add(array(
-            'Flashcard', Url::site('flashcard')
-        ));
-        
         $this->content = $view;
         
     }
@@ -118,11 +126,7 @@ class Controller_Flashcard extends Controller_Base {
                 }
             }
         }
-
-        Breadcrumbs::add(array(
-            'Flashcard', Url::site('flashcard')
-        ));
-
+        
         Breadcrumbs::add(array(
             'Create', Url::site('flashcard/add')
         ));
@@ -211,10 +215,6 @@ class Controller_Flashcard extends Controller_Base {
         }
 
         Breadcrumbs::add(array(
-            'Flashcard', Url::site('flashcard')
-        ));
-
-        Breadcrumbs::add(array(
             'Edit', Url::site('flashcard/edit/id/'.$id )
         ));
         
@@ -241,13 +241,12 @@ class Controller_Flashcard extends Controller_Base {
         $view = View::factory('flashcard/view')
             ->bind('questions', $questions)
             ;
-        
-         Breadcrumbs::add(array(
-            'Flashcard', Url::site('flashcard')
-        ));
-
         Breadcrumbs::add(array(
-            'View', Url::site('flashcard/study/id/'.$id )
+            'View', Url::site('flashcard/preview/id/'.$id )
+        ));
+         
+        Breadcrumbs::add(array(
+            'Study Mode', Url::site('flashcard/study/id/'.$id )
         ));
         
         $this->content = $view;
@@ -265,11 +264,11 @@ class Controller_Flashcard extends Controller_Base {
             ;
         
          Breadcrumbs::add(array(
-            'Flashcard', Url::site('flashcard')
+            'View', Url::site('flashcard/preview/id/'.$id )
         ));
 
         Breadcrumbs::add(array(
-            'View', Url::site('flashcard/revision/id/'.$id )
+            'Revision Mode', Url::site('flashcard/revision/id/'.$id )
         ));
         
         $this->content = $view;
@@ -282,10 +281,6 @@ class Controller_Flashcard extends Controller_Base {
             ->bind('id', $id)
             ;
         
-         Breadcrumbs::add(array(
-            'Flashcard', Url::site('flashcard')
-        ));
-
         Breadcrumbs::add(array(
             'View', Url::site('flashcard/preview/id/'.$id )
         ));
