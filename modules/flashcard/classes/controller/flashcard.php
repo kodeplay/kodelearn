@@ -9,7 +9,7 @@ class Controller_Flashcard extends Controller_Base {
         $course = ORM::factory('course', Session::instance()->get('course_id'));
         if (!$this->request->is_ajax() && $this->request->is_initial()) {
             Breadcrumbs::add(array('Courses', Url::site('course')));
-            Breadcrumbs::add(array(sprintf($course->name), Url::site('course/id/'.$course->id)));        
+            Breadcrumbs::add(array(sprintf($course->name), Url::site('course/summary/id/'.$course->id)));        
             Breadcrumbs::add(array('Flashcard', Url::site('flashcard')));
         }
     }
