@@ -293,7 +293,7 @@ class Controller_Exercise extends Controller_Base {
         $attempt_session = Session::instance()->get_once('exercise_attempt');
         // var_dump($attempt_session); exit;        
         if ($attempt_session === null) {
-            throw new Exception('No on going Exercise session found');
+            Request::current()->redirect('error/session_timedout');
         }
         $result = new Exercise_Result($attempt_session);
         $res = ORM::factory('exerciseresult');
@@ -315,6 +315,9 @@ class Controller_Exercise extends Controller_Base {
             ->bind('attempted_at', $attempted_at);
         $result_id = $this->request->param('id');
         $saved_result = ORM::factory('exerciseresult', $result_id);
+        if (!$saved_result->loaded()) {
+            Request::current()->redirect('error/not_found');
+        }
         $attempt_session = unserialize($saved_result->session_data);
         $attempted_at = date('Y-m-d H:i:s', strtotime($saved_result->attempted_at));
         $result = new Exercise_Result($attempt_session);
