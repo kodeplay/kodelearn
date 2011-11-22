@@ -114,6 +114,7 @@ class Controller_Flashcard extends Controller_Base {
                 if ($validator->check()) {
                     $flashcard->title = Arr::get($safepost, 'title');
                     $flashcard->description = Arr::get($safepost, 'description');
+                    $flashcard->course_id = Session::instance()->get('course_id');
                     $flashcard->save();
                     if(Arr::get($safepost, 'question_selected')) {
                         Model_Flashcard::insert_flashcard_question($flashcard->id, Arr::get($safepost, 'question_selected'));
@@ -201,6 +202,7 @@ class Controller_Flashcard extends Controller_Base {
                 if ($validator->check()) {
                     $flashcard->title = Arr::get($safepost, 'title');
                     $flashcard->description = Arr::get($safepost, 'description');
+                    $flashcard->course_id = Session::instance()->get('course_id');
                     $flashcard->save();
                     if(Arr::get($safepost, 'question_selected')) {
                         Model_Flashcard::insert_flashcard_question($flashcard->id, Arr::get($safepost, 'question_selected'));

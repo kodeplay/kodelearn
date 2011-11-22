@@ -22,6 +22,8 @@ class Model_Flashcard extends ORM {
             $flashcard->where('flashcards.description', 'LIKE', '%' . $filters['description'] . '%');
         }        
         
+        $flashcard->where('flashcards.course_id', '=',  Session::instance()->get('course_id'));
+        
         if (isset($criteria['sort'])) {
             $flashcard->order_by("flashcards.".$criteria['sort'], Arr::get($criteria, 'order', 'ASC'));
         }
@@ -46,6 +48,7 @@ class Model_Flashcard extends ORM {
         if (isset($filters['description'])) {
             $flashcard->where('flashcards.description', 'LIKE', '%' . $filters['description'] . '%');
         }        
+        $flashcard->where('flashcards.course_id', '=',  Session::instance()->get('course_id'));
         
         return $flashcard->count_all();
     } 
