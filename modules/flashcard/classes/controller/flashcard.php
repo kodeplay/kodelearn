@@ -153,7 +153,8 @@ class Controller_Flashcard extends Controller_Base {
         }
         
         $links = array(
-            'cancel' => Html::anchor('/flashcard/', 'or cancel')
+            'cancel' => Html::anchor('/flashcard/', 'or cancel'),
+            'click_here' => Html::anchor('/question/add/type/open', 'Click here')
         );
 
         $action = $this->request->action();

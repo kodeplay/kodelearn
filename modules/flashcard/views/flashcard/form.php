@@ -23,6 +23,7 @@
             </tr>
             <tr>
                 <td colspan="2">
+                    <p style="margin-top: -15px; padding-bottom: 5px; font-size: 12px; color: #777; font-style: italic"><?php echo __('Want to add more questions.'); ?> <?php echo $links['click_here']; ?></p>
                     <table style="width: 90%;" class="datatable">
                         <tr>
                             <th style="width: 30%;">
