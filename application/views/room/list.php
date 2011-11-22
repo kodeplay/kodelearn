@@ -20,7 +20,7 @@
          <?php if($msg > 0){?>
             <div class="formMessages"><span class="fmIcon bad"></span> <span class="fmText">Room assigned to some event(s)</span><span class="clear">&nbsp;</span></div>
         <?php }?>
-        <form name="room" id="room" method="POST" action="<?php echo $links['delete'] ?>">
+        <form name="room" id="room" class="selection-required" method="POST" action="<?php echo $links['delete'] ?>">
         <div class="vm5" align="right">
             <select id="filter_select" name="filter_select" style="padding:2px; width:150px"> 
               <option value="filter_room_name">Name</option>
