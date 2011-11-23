@@ -170,6 +170,17 @@ class Controller_Question extends Controller_Base {
         $this->content = $view;
     }
 
+    public function action_preview_overlay() {
+        // incase the request is not an ajax request, redirect to the not_found page
+        if (!$this->request->is_ajax()) {
+            Request::current()->redirect('error/not_found');
+        }
+        $question_id = $this->request->param('id');
+        $ques_obj = Question::factory((int)$question_id);   
+        $question_partial = $ques_obj->render_question(true);
+        $this->content = $question_partial;
+    }
+
     public function action_delete() {
         if ($this->request->method() === 'POST' && $this->request->post('selected')) {
             $selected = $this->request->post('selected');
