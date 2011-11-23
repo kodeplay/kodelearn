@@ -86,13 +86,15 @@
 	                <td><input type="checkbox" name="selected[]" value="<?php echo $question->id; ?>" <?php echo in_array($question->id, $selected_questions) ? 'checked="checked"' : ''; ?>/></td>
 	                <td><?php echo $question->limit_words(10); ?></td>
 	                <td class="tac"><input class="w10" type="text" name="marks[]" disabled="disabled" value="<?php echo isset($exercise_questions[$question->id]) ? $exercise_questions[$question->id] : '' ?>"/></td>
-	                <td class="tac"><a href="javascript:void(0);">Preview</a></td>
+	                <td class="tac"><a class="ques-preview-link" href="<?php echo Url::site('question/preview_overlay/id/'.$question->id); ?>">Preview</a></td>
 	            </tr>
 	            <?php } ?>
 	            <?php } ?>
 	        </table>
 	    </div>	    
 	</div>
+	
+	<div id="ques-preview-dialog"></div>	
 	
 	<?php echo $form->endForm(); ?>
 	
@@ -119,6 +121,20 @@ $(document).ready(function () {
         var disable = $(this).attr('checked') == 'checked' ? false : 'disabled',
         bg = $(this).attr('checked') == 'checked' ? '#fff' : '#eee';        
         $(this).parent().siblings().eq(1).children().filter('input').attr('disabled', disable).css('background', bg);       
-    }).trigger('change');     
+    }).trigger('change'); 
+    
+    $("#ques-preview-dialog").dialog({
+		autoOpen: false,
+		show: "blind",
+		close: function (event, ui) {
+		    $("#ques-preview-dialog").html('');
+		}				
+	});    
+	
+	$(".ques-preview-link").click(function (e) {
+	    e.preventDefault();
+	    var url = e.target.href;
+	    $("#ques-preview-dialog").load(url).dialog('open');
+	});
 });
 </script>
