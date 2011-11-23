@@ -28,6 +28,7 @@
 .tm40 {	margin-top: 40px; }
 .tm5 { margin-top: 5px; }
 .tm10 {	margin-top: 10px; }
+.tm30 { margin-top: 30px; }
 .hm15 {	margin-right: 15px; margin-left: 15px; }
 .pad5 {	padding: 5px;	}
 .pad10 {	padding: 10px;	}
@@ -54,6 +55,7 @@
 .pfix {	position:fixed; }
 
 .lsNone {	list-style-type: none;	}
+.lsPosIn {	list-style-position: inside;	}
 
 .icon16 {	width: 16px; height: 16px;	margin: 3px;	}
 .icon32 {	width: 32px; height: 32px;	margin: 5px;	}

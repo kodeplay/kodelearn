@@ -3,6 +3,14 @@
 abstract class Question {
 
     /**
+     * @type int
+     * A pseudo index or question number that will be given to this question
+     * while a test is being taken
+     * Its NOT the question_id
+     */
+    protected $_idx;
+
+    /**
      * @type Model_Question
      */
     protected $_orm;
@@ -26,6 +34,13 @@ abstract class Question {
      * What the solution tabs will be called
      */
     protected $_solution_tab;
+
+    /**
+     * How many marks is will a correct answer to this question give
+     * Default value is 1
+     * Can be set from outside using a setter function
+     */
+    protected $_marks = 1;
 
     /**
      * Method to return a new instance of Question or its subclasses
@@ -96,6 +111,31 @@ abstract class Question {
      */
     public function type() {
         return $this->_type;
+    }
+
+    /**
+     * Combined Setter/Getter Method for the idx of the questions
+     * (refer property declaration for more info on what is idx) 
+     * It is _not_ equal to the question_id in database
+     * @return String idx
+     */
+    public function idx($idx=null) {
+        if ($idx == null) {
+            return $this->_idx;
+        }
+        $this->_idx = $idx;
+    }
+
+    /**
+     * Combined setter-getter for marks
+     */
+    public function marks($marks=null) {
+        if ($marks == null) {
+            return $this->_marks;
+        }
+        if (is_numeric($marks)) {
+            $this->_marks = $marks;
+        }
     }
 
     /**
@@ -172,6 +212,7 @@ abstract class Question {
     public function render_question($preview=false) {
         $view = View::factory('question/partial_question')
             ->set('preview', $preview)
+            ->set('idx', $this->_idx != null ? $this->_idx : '')
             ->bind('question', $question)
             ->bind('answer_template', $answer_template);
         $question = $this->_orm;
@@ -196,4 +237,13 @@ abstract class Question {
      * @return Boolean $result whether correct or not
      */
     abstract public function check_answer($answer);
+
+    /**
+     * Method to show the answer review which will give an idea to the student
+     * as to why the answer was correct or wrong and how much marks he/she
+     * gained/lost
+     * @param String submitted answer
+     * @return String Html the view of the answer review in the apt format
+     */
+    abstract public function answer_review($submitted_answer);
 }

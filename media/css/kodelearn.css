@@ -67,6 +67,7 @@ a{ color: #427693; }
 .tWhite {	color: #fff; } .bWhite {	background: #fff; }
 .tlGray {	color: #898989; } 	.tRed {	color: #c00000; }
 .tGreen {	color: #693; }
+.tRed { color: #900000; }
 .alert {	color: #f00; }
 
 .tpad10 {
@@ -324,7 +325,7 @@ a{ color: #427693; }
 .sidemenu.Assignments a {	background-position:0 -532px; }
 .sidemenu.Lesson a {	background-position:0 -585px; }
 .sidemenu.Calendar a {	background-position:0 -173px; }
-.sidemenu.Quiz a {	background-position:0 -422px; }
+.sidemenu.Quiz a, .sidemenu.Exercises a { background-position:0 -422px; }
 
 .sidemenu a:hover {	color: #415666; }
 .sidemenu.active {
@@ -638,6 +639,8 @@ tr.bad { background: #f4dcdc; }
 	text-align: left;
 	font-weight: bold;
 }
+.datatable th.tac { text-align: center; }
+.datatable th.tar { text-align: right; }
 .datatable td {
 	padding: 10px 5px;
 	border-bottom: 1px solid #d7c2b5;
@@ -1275,9 +1278,10 @@ ol.form-assist { font-size:12px; margin-top: 10px; line-height: 16px; }
 .question-block h3 { padding: 10px 0; font-weight: bold; font-size: 18px; color: #415666; text-shadow: 1px 1px 1px #FFFFFF; border-bottom: 1px solid #FEB100;}
 .question-help { padding-bottom: 20px; padding-left: 10px; font-size: 12px; font-style: italic; }
 .answer-section { margin-top: 30px; height: auto; overflow: hidden; }
-ul#questions-right { float: right; width: 35%; min-height: 200px; margin: 20px 0; padding: 10px; }
-ul#questions-right>li { border: 1px solid #ddd; min-height: 60px; }
+ul#questions-right { float: right; width: 35%; min-height: 200px; padding: 10px; }
+ul#questions-right>li { border: 1px solid #ddd; min-height: 40px; margin: 20px 0; }
 ul#questions-right li div, ul#questions-right li h4 { padding: 10px 15px; }
+ul#questions-right li div a.button { display: inline-block; }
 ul#questions-right li h4 { 
     background: url("../image/thback.png") repeat-x scroll left bottom #F3F3F3; 
     border-bottom: 1px solid #FEB100;
@@ -1313,6 +1317,7 @@ ul.pairs-matching-section.items-right li:hover { border: 1px dashed #373736; opa
     z-index: 10;
 }
 
+
 .min-screen {
     background: url("../image/minimize.png");
     width: 24px;
@@ -1333,3 +1338,26 @@ ul.pairs-matching-section.items-right li:hover { border: 1px dashed #373736; opa
 #other_links a:hover {
     color: #feb100;
 }
+
+table.frame-table { height: 200px; width: 90%; overflow-y: auto; border: 1px solid #ddd; }
+table.frame-table tr.even { background: #eee; }
+table.frame-table tr+tr:hover { background: #FDF6E6; }
+table.frame-table td { padding: 4px; }
+table.frame-table th { padding: 8px; }
+table.frame-table td input { padding: 2px; width:30px; }
+
+ul#answer-reviews { color: #636363; }
+ul#answer-reviews>li { padding: 20px 10px;  line-height: 20px; border-bottom: 1px dashed #636363; }
+ul#answer-reviews>li table { border: 1px solid #4C3D34; }
+ul#answer-reviews>li table td, ul#answer-reviews li table th { padding: 5px; }
+ul#answer-reviews>li table th { font-weight: bold; border-bottom: 1px solid #4C3D34; }
+ul#answer-reviews>li h4 { color: #4C3D34; }
+
+#test-page>ul { width: 72%; float: left; }
+#test-page>ul>li { border-bottom: 1px dashed #636363;}
+#test-page>ul>li h3 { color: #4C3D34; font-weight: bold;  }
+#test-page #test-right { width: 26%; float: right; margin-top: 40px; }
+#test-page #test-ques-board { width: 100%; border: 1px solid #eee; margin-top: 20px; height: 330px; overflow: hidden; }
+#test-page #test-ques-board td, #test-page #test-ques-board th { padding: 3px 0px; line-height: 18px; text-align: center; border-bottom: 1px solid #eee; }
+#test-page #test-ques-board th { background: #373736; color: #fff; text-shadow: 1px 1px 1px #000000; }
+#test-page #test-ques-board tr.bookmarked-question { background: #eee; }

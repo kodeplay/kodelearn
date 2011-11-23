@@ -9,7 +9,7 @@ class Controller_Question extends Controller_Base {
         $course = ORM::factory('course', Session::instance()->get('course_id'));
         if (!$this->request->is_ajax() && $this->request->is_initial()) {
             Breadcrumbs::add(array('Courses', Url::site('course')));
-            Breadcrumbs::add(array(sprintf($course->name), Url::site('course/id/'.$course->id)));        
+            Breadcrumbs::add(array(sprintf($course->name), Url::site('course/summary/id/'.$course->id)));        
             Breadcrumbs::add(array('Question Bank', Url::site('question')));
         }
     }
@@ -168,6 +168,17 @@ class Controller_Question extends Controller_Base {
         $ques_obj = Question::factory((int)$question_id);   
         $question_partial = $ques_obj->render_question(true);
         $this->content = $view;
+    }
+
+    public function action_preview_overlay() {
+        // incase the request is not an ajax request, redirect to the not_found page
+        if (!$this->request->is_ajax()) {
+            Request::current()->redirect('error/not_found');
+        }
+        $question_id = $this->request->param('id');
+        $ques_obj = Question::factory((int)$question_id);   
+        $question_partial = $ques_obj->render_question(true);
+        $this->content = $question_partial;
     }
 
     public function action_delete() {

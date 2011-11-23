@@ -2,6 +2,6 @@
 
 DynamicMenu::extend(array(
     'coursemenu' => array(
-        array('quiz', 'Quiz', 5, array()),
+        array('exercise', 'Exercises', 4, array()),
     ),
 ));

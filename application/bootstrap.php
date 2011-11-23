@@ -124,7 +124,7 @@ Kohana::modules(array(
     'post'          => MODPATH.'post',
     'document'      => MODPATH.'document',
     'assignment'    => MODPATH.'assignment',
-    'quiz'          => MODPATH.'quiz',
+    'exercise'      => MODPATH.'exercise',
     'lesson'        => MODPATH.'lesson',
     'flashcard'     => MODPATH.'flashcard',
     'question'      => MODPATH.'question',

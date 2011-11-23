@@ -615,6 +615,17 @@ KODELEARN.helpers.Formblocks = function (opts) {
     });
 }
 
+KODELEARN.helpers.tmpl_manipulation = {
+    
+    // hide the side bar and shift the page content to left
+    hideSidebar: function (shift_page_content) {
+        $(".sidebar").hide();
+        if (shift_page_content) {
+            $(".pagecontent").removeClass('r').css('width', '100%');
+        }
+    }
+}
+
 var Feeds = { };
 
 Feeds.show = function(d,m,y) {

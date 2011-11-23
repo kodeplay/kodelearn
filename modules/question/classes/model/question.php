@@ -131,4 +131,8 @@ class Model_Question extends ORM {
         }
         return $attributes;
     }
+
+    public function limit_words($limit=100) {
+        return Text::limit_words($this->question, $limit);
+    }
 }

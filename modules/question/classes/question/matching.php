@@ -82,4 +82,16 @@ class Question_Matching extends Question {
         $expected_answer = $answer_attr['attribute_value'];
         return serialize($answer) == $expected_answer;
     }
+
+    public function answer_review($submitted_answer) {
+        $view = View::factory('question/matching/answer_review')
+            ->bind('answer', $answer);
+        $attrs = $this->_orm->attributes_as_array();
+        $answer = array(
+            'submitted_pairs' => $submitted_answer,
+            'matched_pairs' => unserialize($attrs[0]['attribute_value']),
+            'explanation' => $attrs[0]['explanation']
+        );
+        return $view->render();
+    }
 }
