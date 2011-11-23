@@ -9,7 +9,7 @@ class Controller_Flashcard extends Controller_Base {
         $course = ORM::factory('course', Session::instance()->get('course_id'));
         if (!$this->request->is_ajax() && $this->request->is_initial()) {
             Breadcrumbs::add(array('Courses', Url::site('course')));
-            Breadcrumbs::add(array(sprintf($course->name), Url::site('course/id/'.$course->id)));        
+            Breadcrumbs::add(array(sprintf($course->name), Url::site('course/summary/id/'.$course->id)));        
             Breadcrumbs::add(array('Flashcard', Url::site('flashcard')));
         }
     }
@@ -165,11 +165,8 @@ class Controller_Flashcard extends Controller_Base {
         $action = $this->request->action();
         
         $course_id = Session::instance()->get('course_id');
-        $criteria = array(
-            'filter_type' => 'open',
-            'course_id' => $course_id
-        );
-        $questions = Model_Question::get_questions($criteria);
+        
+        $questions = Model_Flashcard::get_questions($course_id);
         
         $view = View::factory('flashcard/form')
             ->bind('links', $links)
@@ -240,15 +237,22 @@ class Controller_Flashcard extends Controller_Base {
             $question_id = Model_Flashcard::getQuestions($id);
         }  
         $questions = Model_Flashcard::getQuestionsAndAnswers($question_id);
+        $current_card = ORM:: factory('flashcard', $id);
+        $current_card = $current_card->title;
+        
+        $other_cards = ORM::factory('flashcard');
+        $other_cards->where('flashcards.course_id', '=',  Session::instance()->get('course_id'));
+        $other_cards->where('flashcards.id', '<>',  $id);
+        $other_cards->limit(5);
+        $cards = $other_cards->find_all();
+        
         $view = View::factory('flashcard/view')
             ->bind('questions', $questions)
+            ->bind('cards', $cards)
+            ->bind('current_card', $current_card)
             ;
         Breadcrumbs::add(array(
-            'View', Url::site('flashcard/preview/id/'.$id )
-        ));
-         
-        Breadcrumbs::add(array(
-            'Study Mode', Url::site('flashcard/study/id/'.$id )
+            'View', Url::site('flashcard/study/id/'.$id )
         ));
         
         $this->content = $view;

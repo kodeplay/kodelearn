@@ -1312,3 +1312,24 @@ ul.pairs-matching-section.items-right li:hover { border: 1px dashed #373736; opa
     position: absolute;
     z-index: 10;
 }
+
+.min-screen {
+    background: url("../image/minimize.png");
+    width: 24px;
+    height: 24px;
+}
+
+.max-screen {
+    background: url("../image/maximize.png");
+    width: 24px;
+    height: 24px;
+}
+
+#other_links a {
+    display: inline-block;
+    padding: 10px;  
+}
+
+#other_links a:hover {
+    color: #feb100;
+}

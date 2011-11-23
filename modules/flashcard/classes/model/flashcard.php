@@ -91,6 +91,19 @@ class Model_Flashcard extends ORM {
                   ->join('questionattributes', 'LEFT')
                   ->on('questions.id', ' = ', 'questionattributes.question_id');
         $questions->where('id', ' IN ', $question_id);
+        $questions->where('correctness', ' = ', '1');
+        
+        return $questions->find_all();
+    }
+    
+    public static function get_questions($course_id) {
+        $questions = ORM::factory('question');
+        $questions->select('questionattributes.*')
+                  ->join('questionattributes', 'LEFT')
+                  ->on('questions.id', ' = ', 'questionattributes.question_id');
+        $questions->where('course_id', ' = ', $course_id);
+        $questions->where('type', ' IN ', array('open','choice'));
+        $questions->where('correctness', ' = ', '1');
         
         return $questions->find_all();
     }
