@@ -1317,6 +1317,28 @@ ul.pairs-matching-section.items-right li:hover { border: 1px dashed #373736; opa
     z-index: 10;
 }
 
+
+.min-screen {
+    background: url("../image/minimize.png");
+    width: 24px;
+    height: 24px;
+}
+
+.max-screen {
+    background: url("../image/maximize.png");
+    width: 24px;
+    height: 24px;
+}
+
+#other_links a {
+    display: inline-block;
+    padding: 10px;  
+}
+
+#other_links a:hover {
+    color: #feb100;
+}
+
 table.frame-table { height: 200px; width: 90%; overflow-y: auto; border: 1px solid #ddd; }
 table.frame-table tr.even { background: #eee; }
 table.frame-table tr+tr:hover { background: #FDF6E6; }
