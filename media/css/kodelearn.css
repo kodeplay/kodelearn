@@ -1339,3 +1339,14 @@ ul#answer-reviews>li h4 { color: #4C3D34; }
 #test-page #test-ques-board td, #test-page #test-ques-board th { padding: 3px 0px; line-height: 18px; text-align: center; border-bottom: 1px solid #eee; }
 #test-page #test-ques-board th { background: #373736; color: #fff; text-shadow: 1px 1px 1px #000000; }
 #test-page #test-ques-board tr.bookmarked-question { background: #eee; }
+
+.act-math-link { font-size: 11px; }
+.act-math-link:hover { text-decoration: underline; cursor: pointer; }
+
+ul.math-editor-menu { width: 70%; padding: 3px; border: 1px solid #FEB100; height: auto; overflow: hidden; }
+ul.math-editor-menu li { float: left; margin-right: 10px; }
+ul.math-editor-menu a { font-size: 11px; }
+ul.math-editor-menu a:hover { text-decoration: underline; cursor: pointer; }
+.tex-help { background: #fffacd; width: 70%; border: 1px solid #FEB100; font-size: 11px; margin-bottom: 6px; padding: 3px;  }
+
+.tex-editor-preview { background: #eee; margin: 5px 0px; padding: 5px; width: 70%; }

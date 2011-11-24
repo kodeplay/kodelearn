@@ -12,6 +12,10 @@
             };
         </script>
         <?php foreach ($scripts as $file) echo HTML::script($file), PHP_EOL ?>
+        <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script type="text/x-mathjax-config">
+          MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});
+        </script>
     </head>
     <body>
     <?php if(isset($_SESSION['admin_logged'])) {?>

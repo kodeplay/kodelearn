@@ -615,6 +615,159 @@ KODELEARN.helpers.Formblocks = function (opts) {
     });
 }
 
+KODELEARN.helpers.editor = {
+
+    /**
+     * Function to insert anything inside a textarea at the position
+     * of the caret
+     * @param myField the textarea dom object
+     * @param myValue String to be inserted
+     */
+    insertAtCursor: function (myField, myValue) {
+        //IE support
+        if (document.selection) {
+            myField.focus();
+            sel = document.selection.createRange();
+            sel.text = myValue;
+        }
+        //MOZILLA/NETSCAPE support
+        else if (myField.selectionStart || myField.selectionStart == '0') {
+            var startPos = myField.selectionStart,
+            endPos = myField.selectionEnd,
+            before = myField.value.substring(0, startPos),
+            after = myField.value.substring(endPos, myField.value.length);
+            myField.value = before + myValue + after;
+        } else {
+            myField.value += myValue;
+        }
+    }
+}
+
+KODELEARN.helpers.editor.math = function () {
+    var current_status = false;
+    var expr = {
+        // In order - Name, tex, description, caret position
+        // \ char in tex needs to be escaped using another \
+        '{}' : ['{..}', '\\{ \\}', 'Curly braces {...}', 2],
+        '[]' : ['[..]', '\\[ \\]', 'Curly braces [...]', 2],
+        'ineq': ['!=', '\\not=', 'Not equal to', 5],
+        'leq' : ['<=', '\\leq', 'Less than or equal to', 5],
+        'geq' : ['>=', '\\leq', 'Less than or equal to', 5],
+        'sqrt': ['Square Root', '\\sqrt{arg}', 'square root of arg', 6],
+        'root': ['nth Root', '\\sqrt[n]{arg}', 'nth root of arg', 6],
+        'frac': ['Fraction', '\\frac{num}{den}', 'num=numerator, den=denominator', 6],
+        'fact': ['Factorial', 'n!', 'Factorial of n', 0],
+        'mod': ['Modulus', '|n|', 'Modulus of n', 1],
+        'pow': ['Power', 'a^n', 'A raised to the power of n', 0],
+        'sub': ['Subscript', 'x_i', 'x subscript i', 0],
+        'pi' : ['pi', '\\pi', 'pi=3.1416', 0],
+        'theta': ['Theta', '\\theta', 'Greek letter theta', 0],
+        'sin': ['sine', '\\sin \\theta', 'sine of theta', 6],
+        'cos': ['cos', '\\cos \\theta', 'cosine of theta', 6],
+        'tan': ['tan', '\\tan \\theta', 'tan of theta', 6],
+        'sec': ['sec', '\\sec \\theta', 'sec of theta', 6],
+        'cot': ['cot', '\\cot \\theta', 'cot of theta', 6],        
+        'cosec': ['cosec', '\\mathrm{cosec} \\theta', 'cot of theta', 8],        
+        'deg': ['Degrees', '^\\circ', 'Degrees', 0],
+        'infty': ['Infinity', '\\infty', 'Infinity', 0],
+        'dots' : ['Dots', '\\cdots', 'To imply \'and so on\'', 0],
+        'ln': ['ln', '\\ln', 'Natural Logarithm', 0],
+        'log': ['log', '\\log_a x', 'Logarithm to the base of a', 5],
+        'limit': ['Limit', '\\lim_{x\\to 0}', 'Limit x tends to 0', 6],
+        'sum': ['Summation', '\\displaystyle\\sum_{i=1}^n x_i', 'Summation x(i) for i = 1 to n', 25],
+        'mat': ['Matrix', '\\begin{bmatrix} 1 & 0 & 0 \\\\0 & 1 & 0 \\\\0 & 0 & 1 \\end{bmatrix}', 'An identity matrix, add data accordingly', 0],
+        'deriv': ['Derivative', '\\frac{d}{dx} y', 'dy by dx', 13],
+        'pderiv': ['Partial Derivative', '\\frac{\\partial}{\\partial x} y', 'dy by dx', 28],
+        'int_i': ['Indefinite Integral', '\\int y\\, \\mathrm{d}x', 'y=integrand, {d}x=variable of integration', 6],
+        'int_d': ['Definite Integral', '\\int^b_a y\\, \\mathrm{d}x', 'y=integrand, b=upper limit, a=lower limit, {d}x=variable of integration', 9]
+    }
+
+    function buildMathMenu() {
+        var html = '<ul class="math-editor-menu">';
+        for (k in expr) {
+            html += '<li><a class="btn_'+k+'" rel="'+k+'" title="'+expr[k][2]+'">'+expr[k][0]+'</a></li>';
+        }        
+        html += '</ul><div class="clear"></div><p class="tex-help">Please click on an expression above.</p>';
+        return html;
+    }
+
+    /**
+     * Function to insert anything inside a textarea at the position
+     * of the caret
+     * @param elem the textarea dom object
+     * @param tex String to be inserted
+     * @param caret_pos The position of the caret after the insertion is complete
+     */
+    function insertTex(elem, tex, caret_pos) {
+        if (elem.selectionStart || elem.selectionStart == '0') {
+            var startPos = elem.selectionStart,
+            endPos = elem.selectionEnd,
+            before = elem.value.substring(0, startPos),
+            after = elem.value.substring(endPos, elem.value.length);
+            // check if the point of insertion is already between latex begin/end ($$..$$)
+            var dollar_split = before.split('$$').length;
+            if (dollar_split > 0 && dollar_split%2) {
+                tex = '$$'+tex+'$$';
+            }
+            elem.value = before + tex + after;
+            var cp = elem.value.substring(0, startPos).length + caret_pos;
+            elem.focus();
+            elem.setSelectionRange(cp, cp);
+        } else {
+            elem.value += tex;
+            elem.focus();
+            elem.setSelectionRange(caret_pos, caret_pos);
+        }
+    }
+    
+    var menu_html = buildMathMenu();
+
+    $(".act-math-link").live('click', function () {
+        var $textarea = $(this).siblings().filter('textarea');
+        $textarea.before(menu_html);
+        $(this).after('<div class="tex-editor-preview"></div>');
+        $textarea.change(function () {
+            $(this).siblings().filter('.tex-editor-preview').text($(this).val());
+            MathJax.Hub.Typeset();
+        }).trigger('change');
+        $(this).hide();
+    });    
+
+    $(".math-editor-menu>li>a").live('click', function () {
+        var exp = $(this).attr('rel'),
+        tex = expr[exp][1],
+        caret_pos = expr[exp][3],
+        $ul = $(this).parent().parent(),
+        $ta = $ul.siblings().filter('textarea'),
+        $tex_help = $ul.siblings().filter('.tex-help');
+        insertTex($ta[0], tex, caret_pos+2); 
+        $ta.trigger('change');
+        $tex_help.text('Tex editing help: '+expr[exp][2]);
+    });
+
+    return function (elem) {
+        $elem = $(elem);
+        return {
+            initialize: function () {
+                $elem.after('<br/><a class="act-math-link">Add math expressions ?</a>');
+                // check if the textarea already contains a math expression 
+                // if yes, show preview right away
+                if (this.containsMath()) {
+                    $elem.siblings().filter(".act-math-link").trigger('click');
+                }
+            },
+
+            // checks whether the textarea contains any math
+            containsMath: function () {
+                var content = $elem.val();
+                return content.split('$$').length > 1 || /\$\$.+\$\$/.test(content);
+            }
+        }
+    }
+}
+
+KODELEARN.helpers.editor.mathEditor = KODELEARN.helpers.editor.math();
+
 KODELEARN.helpers.tmpl_manipulation = {
     
     // hide the side bar and shift the page content to left

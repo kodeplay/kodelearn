@@ -135,4 +135,22 @@ class Model_Question extends ORM {
     public function limit_words($limit=100) {
         return Text::limit_words($this->question, $limit);
     }
+
+    /**
+     * Method to check if the question contains math expressions
+     * so that Mathjax typesetting can be triggered for the new dom tree
+     */
+    public function has_math() {
+        $pattern = '/\$\$.+\$\$/';
+        $to_check = array($this->question, $this->extra);
+        $attrs = Arr::pluck($this->attributes_as_array(), 'attribute_value');
+        $to_check = array_merge($to_check, $attrs);
+        foreach ($to_check as $i) {
+            $match = preg_match($pattern, $i);
+            if ($match) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

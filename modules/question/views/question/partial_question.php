@@ -3,3 +3,8 @@
 <div class="answer-section">
     <?php echo $answer_template; ?>
 </div>
+<?php if ($has_math_expr) { ?>
+<script type="text/javascript">
+    MathJax.Hub.Typeset();  
+</script>
+<?php } ?>
