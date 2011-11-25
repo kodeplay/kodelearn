@@ -26,6 +26,7 @@ class Controller_Exercise extends Controller_Base {
         $course = ORM::factory('course', Session::instance()->get('course_id'));
         $exercises = ORM::factory('exercise')
             ->where('course_id', ' = ', $course->id)
+            ->order_by('created_at', 'DESC')
             ->find_all();
         $links = array(
             'add' => Html::anchor('/exercise/add/', 'Create an Exercise', array('class' => 'createButton l')),
