@@ -232,7 +232,7 @@ class Controller_Exercise extends Controller_Base {
      * A question will be requested by ajax and the response will
      * be sent in json
      * Incase the question has hints, we store them in a tmp array 
-     * in the session. If the user takes the hint, it will be popped out
+     * in the session. If the user takes the hint, it will be shifted out of the array
      * While evaulating the result, this array is of no use
      */
     public function action_ajax_next_question() {
