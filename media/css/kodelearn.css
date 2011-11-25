@@ -1332,7 +1332,7 @@ ul.pairs-matching-section.items-right li:hover { border: 1px dashed #373736; opa
 
 #other_links a {
     display: inline-block;
-    padding: 10px;  
+    padding: 3px;  
 }
 
 #other_links a:hover {

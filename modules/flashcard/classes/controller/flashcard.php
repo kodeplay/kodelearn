@@ -237,6 +237,31 @@ class Controller_Flashcard extends Controller_Base {
             $question_id = Model_Flashcard::getQuestions($id);
         }  
         $questions = Model_Flashcard::getQuestionsAndAnswers($question_id);
+        $result = array();
+        foreach($questions as $question) {
+            if($question->attribute_name == 'matched_pairs') {
+                $temps = unserialize($question->attribute_value);
+                foreach($temps as $temp) {
+                    $result[] =array( 
+                           'question_id'        => $question->question_id,
+                           'attribute_name'     => $question->attribute_name,
+                           'attribute_value'    => $temp[1], 
+                           'explanation'        => '',
+                           'question'           => $temp[0], 
+                        ); 
+                } 
+            } else {
+                $result[] =array( 
+                       'question_id'        => $question->question_id,
+                       'attribute_name'     => $question->attribute_name,
+                       'attribute_value'    => $question->attribute_value, 
+                       'explanation'        => $question->explanation,
+                       'question'           => $question->question, 
+                    );
+            }
+        }
+        
+        
         $current_card = ORM:: factory('flashcard', $id);
         $current_card = $current_card->title;
         
@@ -247,7 +272,7 @@ class Controller_Flashcard extends Controller_Base {
         $cards = $other_cards->find_all();
         
         $view = View::factory('flashcard/view')
-            ->bind('questions', $questions)
+            ->bind('questions', $result)
             ->bind('cards', $cards)
             ->bind('current_card', $current_card)
             ;
