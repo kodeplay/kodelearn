@@ -107,7 +107,8 @@ class Controller_Exercise extends Controller_Base {
             if ($validator->check() && $this->validate_form($safepost)) {
                 $exercise->values(array_merge($safepost, array(
                     'course_id' => $course->id,
-                    'slug' => Text::limit_chars(Inflector::underscore($safepost['title']))
+                    'slug' => Text::limit_chars(Inflector::underscore($safepost['title'])),
+                    'modified_at' => date('Y-m-d H:i:s', time())
                 )));
                 $exercise->save();
                 $zip_ques = Arr::zip($safepost['selected'],$safepost['marks']);
