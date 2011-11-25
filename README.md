@@ -19,7 +19,7 @@ Kodelearn is written in PHP using the Kohana PHP Framework (v3.1)
 #### Downloading Source Code
   * Download the stable source code from [Kodelearn website](http://kodelearn.com/download)
   
-  * Or clone from github
+  * Or clone from github specially if you are looking to hack around
     
     ```bash 
     $ git clone git@github.com:kodeplay/kodelearn.git
@@ -32,6 +32,19 @@ Kodelearn is written in PHP using the Kohana PHP Framework (v3.1)
     $ git submodule init
     $ git submodule update
     ```
+
+    We are using a [purifier](https://github.com/shadowhand/purifier) module for XSS filtering 
+    Since this module also has its own submodules, you will need to updates those submodules too
+
+    ```bash
+    $ cd modules/purifier
+    $ git submodule update --init 
+    ```
+    
+    After this, make the directories ```library/DefinitionCache/Serializer``` and 
+    ```MODPATH/purifier/vendor/htmlpurifier``` writable by the web server.
+    
+    For more info check the [purifier module repo](https://github.com/shadowhand/purifier#readme)
     
 #### Application Config
 

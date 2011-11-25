@@ -254,6 +254,60 @@ CREATE TABLE IF NOT EXISTS `exams` (
 -- Dumping data for table `exams`
 --
 
+--
+-- Table structure for table `exercisequestions`
+--
+
+CREATE TABLE IF NOT EXISTS `exercisequestions` (
+  `exercise_id` int(11) NOT NULL,
+  `question_id` int(11) NOT NULL,
+  `marks` int(11) NOT NULL,
+  KEY `exercise_id` (`exercise_id`),
+  KEY `question_id` (`question_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `exerciseresults`
+--
+
+CREATE TABLE IF NOT EXISTS `exerciseresults` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `exercise_id` int(11) NOT NULL,
+  `user_id` int(11) unsigned NOT NULL,
+  `score` decimal(5,2) NOT NULL,
+  `attempted_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `session_data` text NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `exercise_id` (`exercise_id`),
+  KEY `user_id` (`user_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `exercises`
+--
+
+CREATE TABLE IF NOT EXISTS `exercises` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `title` varchar(255) NOT NULL,
+  `slug` varchar(128) NOT NULL,
+  `description` text NOT NULL,
+  `format` enum('quiz','test') NOT NULL,
+  `pub_status` tinyint(1) NOT NULL,
+  `course_id` tinyint(4) NOT NULL,
+  `session_resumable` tinyint(4) NOT NULL,
+  `time_minutes` int(11) NOT NULL DEFAULT '0',
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `modified_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1;
+
+--
+-- Constraints for dumped tables
+--
 
 -- --------------------------------------------------------
 
@@ -316,6 +370,29 @@ CREATE TABLE IF NOT EXISTS `feeds_feedstreams` (
 --
 -- Dumping data for table `feeds_feedstreams`
 --
+
+--
+-- Table structure for table `flashcards`
+--
+
+CREATE TABLE IF NOT EXISTS `flashcards` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `title` varchar(255) NOT NULL,
+  `description` text NOT NULL,
+  `course_id` int(11) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `flashcards_questions`
+--
+
+CREATE TABLE IF NOT EXISTS `flashcards_questions` (
+  `flashcard_id` int(11) NOT NULL,
+  `question_id` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 
 -- --------------------------------------------------------
@@ -719,6 +796,20 @@ ALTER TABLE `exams`
   ADD CONSTRAINT `FK_exams_courses` FOREIGN KEY (`course_id`) REFERENCES `courses` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `FK_exams_events` FOREIGN KEY (`event_id`) REFERENCES `events` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `FK_exams_examgroups` FOREIGN KEY (`examgroup_id`) REFERENCES `examgroups` (`id`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `exercisequestions`
+--
+ALTER TABLE `exercisequestions`
+  ADD CONSTRAINT `exercisequestions_ibfk_1` FOREIGN KEY (`exercise_id`) REFERENCES `exercises` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `exercisequestions_ibfk_2` FOREIGN KEY (`question_id`) REFERENCES `questions` (`id`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `exerciseresults`
+--
+ALTER TABLE `exerciseresults`
+  ADD CONSTRAINT `exerciseresults_ibfk_1` FOREIGN KEY (`exercise_id`) REFERENCES `exercises` (`id`),
+  ADD CONSTRAINT `exerciseresults_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`);
 
 --
 -- Constraints for table `feeds`

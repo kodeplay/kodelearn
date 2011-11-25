@@ -214,9 +214,11 @@ abstract class Question {
             ->set('preview', $preview)
             ->set('idx', $this->_idx != null ? $this->_idx : '')
             ->bind('question', $question)
+            ->bind('has_math_expr', $has_math_expr)
             ->bind('answer_template', $answer_template);
         $question = $this->_orm;
         $hints = $this->_orm->hints_as_array();
+        $has_math_expr = $this->_orm->has_math();
         $answer_template = $this->render_answer_partial();
         return $view->render();
     }

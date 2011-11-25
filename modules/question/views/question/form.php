@@ -62,5 +62,12 @@
 	<?php echo $form->endForm(); ?>
     </div>	
 </div><!-- pagecontent -->
-
 <div class="clear"></div>	
+
+<script type="text/javascript">
+$(document).ready(function () {
+    var quesEditor = KODELEARN.helpers.editor.mathEditor("textarea[name='question']");
+    quesEditor.initialize();    
+});
+
+</script>
