@@ -25,7 +25,11 @@
             <?php foreach ($result->answer_reviews() as $review) { ?>
             <li>
                 <h4 class="h4 vpad5 bold">Q. <?php echo $review['question']; ?></h4>
-                <p class="vpad5"><?php echo __('Score: '); ?><?php echo $review['score'] . '/' . $review['total_marks']; ?>
+                <p class="vpad5">
+                    <?php echo __('Score: '); ?>
+                    <?php echo $review['score'] . '/' . $review['total_marks']; ?>
+                    <?php echo $review['hints_used'] ? __('(Marks reducted for using hints)') : ''; ?>                    
+                </p> 
                 <?php echo $review['answer_review']; ?>
             </li>
             <?php } ?>

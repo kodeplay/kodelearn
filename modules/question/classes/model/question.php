@@ -112,7 +112,7 @@ class Model_Question extends ORM {
 
     public function hints_as_array() {
         $hints = array();
-        $hints_arr = $this->hints->find_all()->as_array();
+        $hints_arr = $this->hints->order_by('sort_order', 'ASC')->find_all()->as_array();
         if ($hints_arr) {
             foreach ($hints_arr as $h) {
                 $hints[] = $h->as_array();
