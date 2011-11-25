@@ -1275,7 +1275,7 @@ ol.form-assist { font-size:12px; margin-top: 10px; line-height: 16px; }
 
 #questions-left { min-height: 200px; width: 60%; float:left; }
 .question-block { margin: 20px 0; padding: 10px; }
-.question-block h3 { padding: 10px 0; font-weight: bold; font-size: 18px; color: #415666; text-shadow: 1px 1px 1px #FFFFFF; border-bottom: 1px solid #FEB100;}
+.question-block h3 { padding: 10px 0; font-weight: bold; font-size: 18px; color: #415666; text-shadow: 1px 1px 1px #FFFFFF; border-bottom: 1px solid #FEB100; margin-bottom: 10px; }
 .question-help { padding-bottom: 20px; padding-left: 10px; font-size: 12px; font-style: italic; }
 .answer-section { margin-top: 30px; height: auto; overflow: hidden; }
 ul#questions-right { float: right; width: 35%; min-height: 200px; padding: 10px; }
