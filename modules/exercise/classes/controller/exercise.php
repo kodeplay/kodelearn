@@ -285,11 +285,11 @@ class Controller_Exercise extends Controller_Base {
                 'result' => $result
             );
             Session::instance()->set('exercise_attempt', $attempt_session);
-            $ques_remaining = (int)$attempt_session['ques_total'] - count($attempt_session['ques_upcoming']);
+            $ques_completed = (int)$attempt_session['ques_total'] - count($attempt_session['ques_upcoming']);
             $response = array(
                 'status' => 1,
                 'result' => (int)$result,
-                'progress' => sprintf('%d/%d', $ques_remaining, $attempt_session['ques_total']),
+                'progress' => sprintf('%d/%d', $ques_completed, $attempt_session['ques_total']),
             );
         } else {
             $response = array('status' => 0);
