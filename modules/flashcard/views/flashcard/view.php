@@ -33,12 +33,12 @@
                 <?php $i= "1"; ?>
                 <?php foreach($questions as $question) { ?>
                     <div id="question_<?php echo $i; ?>" style="display: none;" class="sec-container">
-                        <div id="f_question" style="font-size: 22px; font-weight: bold; padding-top: 10px;"><?php echo $question->question; ?></div>
+                        <div id="f_question" style="font-size: 22px; font-weight: bold; padding-top: 10px;"><?php echo $question['question']; ?></div>
                         
                     </div>
                     <div id="answer_<?php echo $i; ?>" style="display: none;">
-                        <div id="f_answer" style="font-size: 18px; padding-top: 20px;"><?php echo $question->attribute_value; ?></div>
-                        <div id="f_explanation" style="font-size: 16px; padding-top: 10px;"><?php echo $question->explanation; ?></div>
+                        <div id="f_answer" style="font-size: 18px; padding-top: 20px;"><?php echo $question['attribute_value']; ?></div>
+                        <div id="f_explanation" style="font-size: 16px; padding-top: 10px;"><?php echo $question['explanation']; ?></div>
                     </div>
                     <?php $i++; ?>
                 <?php } ?>
