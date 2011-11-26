@@ -119,6 +119,18 @@ class Controller_Flashcard extends Controller_Base {
                     if(Arr::get($safepost, 'question_selected')) {
                         Model_Flashcard::insert_flashcard_question($flashcard->id, Arr::get($safepost, 'question_selected'));
                     }
+                    
+                    $feed = new Feed_Flashcard();
+                    
+                    $feed->set_action('add');
+                    $feed->set_course_id(Session::instance()->get('course_id'));
+                    $feed->set_respective_id($flashcard->id);
+                    $feed->set_actor_id(Auth::instance()->get_user()->id); 
+                    $feed->streams(array(
+                        'course_id' => (int)Session::instance()->get('course_id'),                        
+                    ));
+                    $feed->save();
+                    
                     Session::instance()->set('success', 'Flashcard added successfully.');
                     Request::current()->redirect('flashcard');
                     exit;
@@ -204,6 +216,7 @@ class Controller_Flashcard extends Controller_Base {
                     if(Arr::get($safepost, 'question_selected')) {
                         Model_Flashcard::insert_flashcard_question($flashcard->id, Arr::get($safepost, 'question_selected'));
                     }
+                    
                     Session::instance()->set('success', 'Flashcard edited successfully.');
                     Request::current()->redirect('flashcard');
                     exit;

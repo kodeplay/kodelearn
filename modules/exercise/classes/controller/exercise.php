@@ -72,6 +72,19 @@ class Controller_Exercise extends Controller_Base {
                 $exercise->save();
                 $zip_ques = Arr::zip($safepost['selected'],$safepost['marks']);
                 $exercise->add_questions($zip_ques);
+                
+                if($safepost['pub_status'] == '1') {
+                    $feed = new Feed_Exercise();
+                    
+                    $feed->set_action('add');
+                    $feed->set_course_id(Session::instance()->get('course_id'));
+                    $feed->set_respective_id($exercise->id);
+                    $feed->set_actor_id(Auth::instance()->get_user()->id); 
+                    $feed->streams(array(
+                        'course_id' => (int)Session::instance()->get('course_id'),                        
+                    ));
+                    $feed->save();
+                }
                 Session::instance()->set('success', 'Exercise added successfully.');
                 Request::current()->redirect('exercise');
                 exit;
@@ -112,6 +125,30 @@ class Controller_Exercise extends Controller_Base {
                 $zip_ques = Arr::zip($safepost['selected'],$safepost['marks']);
                 $exercise->delete_questions()
                     ->add_questions($zip_ques);
+                
+                if($safepost['pub_status'] == '1') {
+                    $exist = ORM::factory('feed');
+                    $exist->where('type', ' = ', 'exercise');
+                    $exist->where('action', ' = ', 'add');
+                    $exist->where('respective_id', ' = ', $exercise->id);
+                    $exist->where('course_id', ' = ', Session::instance()->get('course_id'));
+                    $exists = $exist->find_all();
+                    
+                    if(count($exists) == 0) {
+                        
+                        $feed = new Feed_Exercise();
+                    
+                        $feed->set_action('add');
+                        $feed->set_course_id(Session::instance()->get('course_id'));
+                        $feed->set_respective_id($exercise->id);
+                        $feed->set_actor_id(Auth::instance()->get_user()->id); 
+                        $feed->streams(array(
+                            'course_id' => (int)Session::instance()->get('course_id'),                        
+                        ));
+                        $feed->save();
+                    }
+                    
+                }
                 Session::instance()->set('success', 'Exercise edited successfully.');
                 Request::current()->redirect('exercise');
                 exit;
@@ -302,6 +339,29 @@ class Controller_Exercise extends Controller_Base {
         $res->score = $result->score();
         $res->session_data = serialize($attempt_session);
         $res->save();
+        
+        $exist = ORM::factory('feed');
+        $exist->where('type', ' = ', 'exercise');
+        $exist->where('action', ' = ', 'attempted');
+        $exist->where('respective_id', ' = ', $attempt_session['exercise_id']);
+        $exist->where('course_id', ' = ', Session::instance()->get('course_id'));
+        $exist->where('actor_id', ' = ', Auth::instance()->get_user()->id);
+        $exists = $exist->find_all();
+        
+        if(count($exists) == 0) {
+        
+            $feed = new Feed_Exercise();
+            
+            $feed->set_action('attempted');
+            $feed->set_course_id(Session::instance()->get('course_id'));
+            $feed->set_respective_id($attempt_session['exercise_id']);
+            $feed->set_actor_id(Auth::instance()->get_user()->id); 
+            $feed->streams(array(
+                'course_id' => (int)Session::instance()->get('course_id'),                        
+            ));
+            $feed->save();
+        }
+        
         Request::current()->redirect('exercise/result/id/' . $res->id);
     }
 
