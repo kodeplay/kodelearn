@@ -92,6 +92,22 @@ class Controller_Post extends Controller_Base {
     	}
     }
     
+    
+    /* this function will delete the self posts
+     * to delete others posts the function is below
+     *  */
+    
+    public function action_selfDelete() {
+        
+        $id = $this->request->param('id');
+        ORM::factory('post', $id)->delete();
+        
+        Model_Post::delPosts($id);
+        
+        
+    }
+    
+    
     public function action_delete() {
         
         $id = $this->request->param('id');

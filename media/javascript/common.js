@@ -840,6 +840,20 @@ KODELEARN.modules.add('document', (function () {
     }
 })());
 
+function delete_selfpost(self,id) {
+	$.ajax(
+	{
+		type: "GET",
+		dataType:"html",
+		url:     KODELEARN.config.base_url+"post/selfDelete/id/" + id,
+		success: function(data1)
+				{
+					$(self).parent().parent().parent().parent().parent().css('display','none');
+				}
+	});
+	
+}
+
 function delete_post(self,id) {
 	$.ajax(
 	{

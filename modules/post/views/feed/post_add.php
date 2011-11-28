@@ -15,10 +15,18 @@
                 <p class = "h6 tlGray"><?php echo $span; ?></p>
             </td>
             <td class="vatop w2">
-                <?php if(Auth::instance()->get_user()->id == $user->id) { ?>
+                <?php if(Acl::instance()->is_allowed('post_delete') && $role == 'Admin') { ?>
+                    <a onclick="delete_post(this, <?php echo $post->id; ?>);" class="del-post" style="font-size: 13px; font-weight: bold; display: none; cursor: pointer;">X</a>
+                <?php } else if(Acl::instance()->is_allowed('post_delete') && $role == 'studentmoderator' && $user->role()->name == 'Student') { ?>
+                    <a onclick="delete_post(this, <?php echo $post->id; ?>);" class="del-post" style="font-size: 13px; font-weight: bold; display: none; cursor: pointer;">X</a>
+                <?php } else if(Acl::instance()->is_allowed('post_delete') && $role == 'Teacher' && $user->role()->name == 'Student') { ?>
                     <a onclick="delete_post(this, <?php echo $post->id; ?>);" class="del-post" style="font-size: 13px; font-weight: bold; display: none; cursor: pointer;">X</a>
                 <?php } else { ?>
-                    &nbsp;
+                    <?php if(Auth::instance()->get_user()->id == $user->id) { ?>
+                        <a onclick="delete_selfpost(this, <?php echo $post->id; ?>);" class="del-post" style="font-size: 13px; font-weight: bold; display: none; cursor: pointer;">X</a>
+                    <?php } else { ?>
+                        &nbsp;
+                    <?php } ?>
                 <?php } ?>
             </td>
         </tr>
