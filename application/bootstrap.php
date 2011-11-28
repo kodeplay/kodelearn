@@ -115,6 +115,7 @@ Kohana::modules(array(
     'cacheimage'    => MODPATH.'cacheimage', // for Image Caching
     'purifier'      => MODPATH.'purifier', // Shadowhand's html purifier
     'email'         => MODPATH.'email', // for mailling
+    'notice'        => MODPATH.'notice',  // Notice module (dependencies - email, sms*)
     'exam'          => MODPATH.'exam',
     'event'         => MODPATH.'event',
     'calendar'      => MODPATH.'calendar', // Kohana Calendar
