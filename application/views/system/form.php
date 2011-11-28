@@ -11,6 +11,9 @@
         <?php if (Acl::instance()->has_access('location')) { ?>
             <?php echo HTML::anchor('location','Locations and Rooms', array('class' => 'pageTab')); ?>
         <?php }?>
+        <?php if (Acl::instance()->has_access('notice')) { ?>
+            <?php echo HTML::anchor('notice/settings','Notice Settings', array('class' => 'pageTab')); ?>
+        <?php }?>
     </div><!-- topbar -->
         <?php if ($success) {  ?>
             <div class="formMessages w90">     
