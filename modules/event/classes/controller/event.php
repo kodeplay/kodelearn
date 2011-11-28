@@ -8,6 +8,8 @@ class Controller_Event extends Controller_Base {
             $event = ORM::factory('event', $this->request->post('event_id'));
             $validator = $event->validator($this->request->post());
             
+            $lecture = ORM::factory('lecture', $this->request->post('lecture_id'));
+            
             if ($validator->check()) {
                 
                 $from = strtotime($this->request->post('date')) + ($this->request->post('from') * 60); 
@@ -19,6 +21,10 @@ class Controller_Event extends Controller_Base {
             	$event->cancel = (int) $this->request->post('cancel');
             	$event->save();
                 
+            	$lecture->start_date = $from;
+            	$lecture->end_date  = $to;
+            	$lecture->save();
+            	
             	if($this->request->post('cancel')){
                     $feed = new Feed_Lecture();
                     
@@ -46,6 +52,8 @@ class Controller_Event extends Controller_Base {
         }
         
         $id = $this->request->param('id');
+        
+        $lecture_id = $this->request->param('lectId');
         
         $event = ORM::factory('event', $id);
         
@@ -87,7 +95,9 @@ class Controller_Event extends Controller_Base {
             ->bind('form', $form)
             ->bind('slider', $slider)
             ->bind('conflict_event', $conflict_event)
-            ->bind('event_details', $event_details);
+            ->bind('event_details', $event_details)
+            ->bind('lecture_id', $lecture_id)
+            ;
         
         echo json_encode(array(
             'success' => 1,

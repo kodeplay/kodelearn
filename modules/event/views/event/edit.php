@@ -4,6 +4,7 @@
     <div class="l">
         <span id="loading">Please wait... Loading Rooms</span>
         <input type="hidden" name="event_id" value="<?php echo $event->id ?>" />
+        <input type="hidden" name="lecture_id" value="<?php echo $lecture_id ?>" />
         <table class="formcontainer bm40">
             <tr>
                 <td><?php echo $form->room_id->label(); ?></td>
