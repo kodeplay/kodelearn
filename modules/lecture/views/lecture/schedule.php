@@ -21,7 +21,7 @@
                 <?php if ($can_edit) { ?>
                 <td>
                     <?php if(!$event->cancel){ ?>
-                        <a href="#" onclick="Events.edit(<?php echo $event->id ?>)" >Edit</a>
+                        <a href="#" onclick="Events.edit(<?php echo $event->id ?>, <?php echo $lecture->id; ?>)" >Edit</a>
                     <?php } else {?>
                     Canceled
                     <?php }?>

@@ -1,8 +1,8 @@
 var Events = { };
 
-Events.edit = function(eventId) {
+Events.edit = function(eventId, lectureId) {
     $("#ajax-loader").show();
-    $.get(KODELEARN.config.base_url + "event/edit/id/" + eventId,  {},
+    $.get(KODELEARN.config.base_url + "event/edit/id/" + eventId + "/lectId/" + lectureId,  {},
           function(resp){
               if (resp.success) {
     	          $('#event_from').remove();
