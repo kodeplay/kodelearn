@@ -15,10 +15,10 @@
         <li id="question-hints">
             <h4>Hints</h4>
             <div>
-                <span class="vpad5 h5">Hints reduce your points so try to avoid them as far as possible.</span>                        
+                <span class="vpad5 h5">Hints reduce your points so try to avoid them as far as possible.</span>                                     
             </div>
         </li>
-    </ul>
+    </ul>    
 </div> 
 <script type="text/javascript">
 KODELEARN.modules.add('quiz', (function () {
@@ -70,21 +70,54 @@ KODELEARN.modules.add('quiz', (function () {
 	                    return false;
 	                } 	  
 	                reset();              
-	                $(".question-block").html(resp.html);	               	                
-	                if (!resp.num_hints) {
-                        $("#question-hints").hide();
-                    } else {
-                        $("#question-hints").show();
-                    }
+	                $(".question-block").html(resp.html);	
 	                that.current = {
         	            question_id: resp.question_id,
 	                    type: resp.type,
 	                    answered: 0,
 	                    correct: 0
 	                };
-	                that.questions.push(that.current);	                             	            
+	                that.questions.push(that.current);	
+	                that.hints.init(resp.question_id, resp.num_hints);                             	            
 	            }
 	        });	        
+	    },
+	    
+	    hints: {
+	        question_id: null,
+	    
+	        init: function (question_id, num_hints) {
+	            this.question_id = question_id;
+	            if (!num_hints) {
+                    this.deactivate();
+                } else {
+                    this.activate(num_hints);
+                }
+	        },
+	    
+	        activate: function (num_hints) {
+	            $("#question-hints").show();
+	            for (i=1; i<=num_hints; i++) {	                
+	                $("#question-hints>div").append('<a class="button tm10" rel="'+i+'">Take Hint #'+i+'</a>');
+	            }
+	            var that = this;
+	            $("#question-hints>div>a.button").live('click', function () {
+	                var elem = this;
+                    $.get(KODELEARN.config.base_url+'exercise/ajax_next_hint/question_id/'+that.question_id, function (resp) {
+	                    if (resp.status == 1) {
+	                        var num = $(elem).attr('rel');
+	                        $(elem).replaceWith('<p class="tm10">Hint #'+num+' '+resp.hint+'</p>');
+	                    } else {
+	                        alert('something wrong happened!');
+	                    }
+	                }, 'json');                 
+                });
+	        },
+	        
+	        deactivate: function () {
+	            $("#question-hints>div").children().filter('a.button').remove();
+	            $("#question-hints").hide();
+	        }    
 	    },
 	    
 	    // submit the answer and get the result

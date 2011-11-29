@@ -1,5 +1,5 @@
 $(document).ready(function() {
-    
+
     // Confirm Delete
     $('form').submit(function (event) {
         if ($(this).hasClass('selection-required') && $("input[type='checkbox']:checked").length === 0) {
@@ -14,15 +14,15 @@ $(document).ready(function() {
     });
 
     KODELEARN.modules.load();
-    
+
     if($('#filter').val()){
-    	$("#filter_select").val($('#select_val').val());
+        $("#filter_select").val($('#select_val').val());
     }
-    
+
     $('.ui-icon-closethick').live('click', function(){
-    	$('.lightoverlay').hide();    
+        $('.lightoverlay').hide();
     });
-    
+
 });
 
 /**
@@ -31,7 +31,7 @@ $(document).ready(function() {
 var KODELEARN = KODELEARN || { };
 
 KODELEARN.modules = {
-    
+
     /**
      * Object containing all modules
      */
@@ -48,7 +48,7 @@ KODELEARN.modules = {
 
     /**
      * Method to load all the modules by calling their init method
-     * Typically, it will be only called once in the callback of 
+     * Typically, it will be only called once in the callback of
      * document.ready event
      */
     load: function () {
@@ -61,7 +61,7 @@ KODELEARN.modules = {
     /**
      * Get the module object from the unique key
      * @param String key
-     * @return Object 
+     * @return Object
      */
     get: function (key) {
         return this.collection[key];
@@ -76,125 +76,125 @@ KODELEARN.modules = {
     }
 };
 
-KODELEARN.modules.add('add_datepicker' , (function () {        
+KODELEARN.modules.add('add_datepicker' , (function () {
     return {
-        init: function () { 
-    	    $('.date').datepicker({dateFormat: 'yy-mm-dd'});
+        init: function () {
+            $('.date').datepicker({dateFormat: 'yy-mm-dd'});
         }
-    }; 
+    };
 })());
 
-KODELEARN.modules.add('sidebar' , (function () {        
+KODELEARN.modules.add('sidebar' , (function () {
     return {
-    	el: $('.sidebar'),
-        init: function () { 
-    		// var win = $(window);
-    		// var el = $('.sidebar');
-    		// if(el.size()){
-	    	// 	window.onscroll = function() {
-	    	// 		var eltop = el.position().top;
-	    	// 		var winscroll = win.scrollTop();
-	    	// 		var adminbar = $(".roleContainer").outerHeight();
-	    	// 		if(adminbar === "NaN") {
-	    	// 			adminbar = 0;
-	    	// 		}
-	    	// 		if(winscroll > (178 + +adminbar)){
-	    	// 			el.css({position: 'fixed', top: 0});
-	    	// 		} else {
-	    	// 			el.css({position: 'absolute', top: (178+ +adminbar)});
-	    	// 		}
-	    	// 	};
-	    	// 	this.highlight();
-    		// }
-    	},
-    	highlight: function (controller) {
-    		
-    		if(typeof controller === 'undefined') controller = KODELEARN.config.controller;
-    		
-    		$('.sidemenu a[href*="'+controller+'"]').parent().addClass('active');
-    	}
-    }; 
+        el: $('.sidebar'),
+        init: function () {
+                // var win = $(window);
+                // var el = $('.sidebar');
+                // if(el.size()){
+                //      window.onscroll = function() {
+                //              var eltop = el.position().top;
+                //              var winscroll = win.scrollTop();
+                //              var adminbar = $(".roleContainer").outerHeight();
+                //              if(adminbar === "NaN") {
+                //                      adminbar = 0;
+                //              }
+                //              if(winscroll > (178 + +adminbar)){
+                //                      el.css({position: 'fixed', top: 0});
+                //              } else {
+                //                      el.css({position: 'absolute', top: (178+ +adminbar)});
+                //              }
+                //      };
+                //      this.highlight();
+                // }
+        },
+        highlight: function (controller) {
+
+                if(typeof controller === 'undefined') controller = KODELEARN.config.controller;
+
+                $('.sidemenu a[href*="'+controller+'"]').parent().addClass('active');
+        }
+    };
 })());
 
-KODELEARN.modules.add('add_timepicker' , (function () {    
+KODELEARN.modules.add('add_timepicker' , (function () {
     return {
-        init: function () { 
-    	    $('.time').timepicker({});
+        init: function () {
+            $('.time').timepicker({});
         }
-    }; 
+    };
 })());
 
 KODELEARN.modules.add('filter', (function () {
-    
-    return {
-	init: function () {
-	    
-	    $('#trigger_filter').click(function(){
-		var url = $('#filter_url').val();
-		if($('#filter').val()){
-			url += '/' + $('#filter_select').val() + '/' + encodeURIComponent($('#filter').val());
-			
-		}
-		location = url;
-	    });
-	    $('#filter').keypress(function(e){
-		var key;      
-		if(window.event)
-		    key = window.event.keyCode; //IE
-		else
-		    key = e.which; //firefox      
 
-		return (key != 13);
-	    });
-	    
-	}
+    return {
+        init: function () {
+
+            $('#trigger_filter').click(function(){
+                var url = $('#filter_url').val();
+                if($('#filter').val()){
+                        url += '/' + $('#filter_select').val() + '/' + encodeURIComponent($('#filter').val());
+
+                }
+                location = url;
+            });
+            $('#filter').keypress(function(e){
+                var key;
+                if(window.event)
+                    key = window.event.keyCode; //IE
+                else
+                    key = e.which; //firefox
+
+                return (key != 13);
+            });
+
+        }
     };
-    
+
 })());
 
 KODELEARN.modules.add('toggle_buttons', (function () {
-    
+
     return {
-	init: function () {
-	    
-	    //Toggle buttons
-	    $(".toggleButton > a").click(function (ev) {
-		$(this).parent().find("a").removeClass("on");
-		$(this).addClass("on");
-		$(".toggleButton >input").val($(this).attr('data'));
-		ev.preventDefault();
-	    });
-	}
+        init: function () {
+
+            //Toggle buttons
+            $(".toggleButton > a").click(function (ev) {
+                $(this).parent().find("a").removeClass("on");
+                $(this).addClass("on");
+                $(".toggleButton >input").val($(this).attr('data'));
+                ev.preventDefault();
+            });
+        }
     };
-    
+
 })());
 
 KODELEARN.modules.add('time_slider', (function () {
-    
+
     return {
-	init: function () {
-	    //do something
-	},
-	getTime: function (hours, minutes) {
-    	    var time = null;
-    	    minutes = minutes + "";
-    	    if (hours < 12) {
-    	        time = "AM";
-    	    }
-    	    else {
-    	        time = "PM";
-    	    }
-    	    if (hours == 0) {
-    	        hours = 12;
-    	    }
-    	    if (hours > 12) {
-    	        hours = hours - 12;
-    	    }
-    	    if (minutes.length == 1) {
-    	        minutes = "0" + minutes;
-    	    }
-    	    return hours + ":" + minutes + " " + time;
-    	},
+        init: function () {
+            //do something
+        },
+        getTime: function (hours, minutes) {
+            var time = null;
+            minutes = minutes + "";
+            if (hours < 12) {
+                time = "AM";
+            }
+            else {
+                time = "PM";
+            }
+            if (hours == 0) {
+                hours = 12;
+            }
+            if (hours > 12) {
+                hours = hours - 12;
+            }
+            if (minutes.length == 1) {
+                minutes = "0" + minutes;
+            }
+            return hours + ":" + minutes + " " + time;
+        },
         slideTime: function (event, ui){
             var that = KODELEARN.modules.get('time_slider');
             var minutes0 = parseInt($("#" + event.target.id).slider("values", 0) % 60);
@@ -204,7 +204,7 @@ KODELEARN.modules.add('time_slider', (function () {
             $("#" + event.target.id + "_from").val(parseInt($("#" + event.target.id).slider("values", 0)));
             $("#" + event.target.id + "_to").val(parseInt($("#" + event.target.id).slider("values", 1)));
             $("#" + event.target.id + "_time").text(that.getTime(hours0, minutes0) + ' - ' + that.getTime(hours1, minutes1));
-        }		
+        }
     };
 
 })());
@@ -213,7 +213,7 @@ KODELEARN.modules.add('user', (function () {
     return {
         init: function () {
             var $batch_tr = $("#batch-list"),
-            $course_tr = $("#course-list");            
+            $course_tr = $("#course-list");
             $("select[name='role_id']","#user-form").change(function () {
                 $batch_tr.addClass('hidden');
                 $course_tr.addClass('hidden');
@@ -231,118 +231,118 @@ KODELEARN.modules.add('user', (function () {
 })());
 
 KODELEARN.modules.add('course', (function () {
-    
+
     return {
-	init: function () {
-	    //do something
-	},
-	getCourseStudents : function(courseId, container){
-	    
-	    $('#' + container).html('<p class="tip">Please wait... Loading Course Students</p>');
-	    
-	    $.post(KODELEARN.config.base_url + "course/get_students",  {'course_id' : courseId},
-		   function(data){
-		       $('#' + container).html(data.html);
-		   }, "json");	    
-	}
+        init: function () {
+            //do something
+        },
+        getCourseStudents : function(courseId, container){
+
+            $('#' + container).html('<p class="tip">Please wait... Loading Course Students</p>');
+
+            $.post(KODELEARN.config.base_url + "course/get_students",  {'course_id' : courseId},
+                   function(data){
+                       $('#' + container).html(data.html);
+                   }, "json");
+        }
     };
 
 })());
 
 KODELEARN.modules.add('ajax_message', (function () {
     return {
-	init : function () {
-	    
-	},
-	showAjaxError: function (beforeDiv,msgArr){
+        init : function () {
 
-	    $('#error').remove();
-	    var warning = '<div id="error" class="formMessages"><span class="fmIcon bad"></span> <span class="fmText"><ul>';
-	    
-	    for(var i = 0; i < msgArr.length ; i++ ){		
-	    	warning += '<li>'+msgArr[i]+'</li>';	
-	    }		
-	    
-	    warning += '</ul></span><span class="clear">&nbsp;</span></div>';
-	    beforeDiv.before(warning);
-	    scroll(0,0);
-	    $('#error').slideDown(200);
-	    
-	},
-	showAjaxSuccess : function (beforeDiv,msgArr){
-	    
-	    $('#success').remove();
-	    var warning = '<div id="success" class="formMessages"><span class="fmIcon good"></span> <span class="fmText"><ul>';
-	    
-	    for(var i = 0; i < msgArr.length ; i++ ){
-		warning += '<li>'+msgArr[i]+'</li>';	
-	    }		
-	    
-	    warning += '</ul></span><span class="clear">&nbsp;</span></div>';
-	    beforeDiv.before(warning);
-	    scroll(0,0);
-	    $('#success').slideDown(200);
-	    setTimeout('$("#success").slideUp()', 2000);
-	    
-	}	
+        },
+        showAjaxError: function (beforeDiv,msgArr){
+
+            $('#error').remove();
+            var warning = '<div id="error" class="formMessages"><span class="fmIcon bad"></span> <span class="fmText"><ul>';
+
+            for(var i = 0; i < msgArr.length ; i++ ){
+                warning += '<li>'+msgArr[i]+'</li>';
+            }
+
+            warning += '</ul></span><span class="clear">&nbsp;</span></div>';
+            beforeDiv.before(warning);
+            scroll(0,0);
+            $('#error').slideDown(200);
+
+        },
+        showAjaxSuccess : function (beforeDiv,msgArr){
+
+            $('#success').remove();
+            var warning = '<div id="success" class="formMessages"><span class="fmIcon good"></span> <span class="fmText"><ul>';
+
+            for(var i = 0; i < msgArr.length ; i++ ){
+                warning += '<li>'+msgArr[i]+'</li>';
+            }
+
+            warning += '</ul></span><span class="clear">&nbsp;</span></div>';
+            beforeDiv.before(warning);
+            scroll(0,0);
+            $('#success').slideDown(200);
+            setTimeout('$("#success").slideUp()', 2000);
+
+        }
     };
 })());
 
 KODELEARN.modules.add('rooms', (function () {
-    
+
     return {
-	init: function () {
-	    //do something
-	},
-	getAvaliableRooms: function (data){
-	    $('#loading').fadeIn();
-	    var data = $('form').serializeArray();
-	    $.post(KODELEARN.config.base_url + "event/get_avaliable_rooms",  data, function(data){
-		$('select[name="room_id"]').replaceWith(data.element);
-		$('#loading').fadeOut();
-	    }, "json");
-	},
-	showMap: function (roomId){
-		$("#ajax-loader").show();
+        init: function () {
+            //do something
+        },
+        getAvaliableRooms: function (data){
+            $('#loading').fadeIn();
+            var data = $('form').serializeArray();
+            $.post(KODELEARN.config.base_url + "event/get_avaliable_rooms",  data, function(data){
+                $('select[name="room_id"]').replaceWith(data.element);
+                $('#loading').fadeOut();
+            }, "json");
+        },
+        showMap: function (roomId){
+                $("#ajax-loader").show();
         KODELEARN.helpers.request.ajax({
             url: KODELEARN.config.base_url+"room/show_map/id/" + roomId,
             async: true,
             success: function (resp) {
-        		$("#ajax-loader").hide();
-        		$('#maps div').html(resp.html);
-        		$('#maps').show();
-	        	
+                        $("#ajax-loader").hide();
+                        $('#maps div').html(resp.html);
+                        $('#maps').show();
+
             }
         });
-		
-	}
+
+        }
     };
 
 })());
 
 
-function ajaxRequest(controller,action){	
-    
+function ajaxRequest(controller,action){
+
     var l = new ajaxLoad({
-	'controller' : controller,
-	'action' : action
-    });	    
+        'controller' : controller,
+        'action' : action
+    });
 }
 
 KODELEARN.modules.add('calendar', (function () {
-    
+
     return {
 
-	init: function () {
+        init: function () {
             this.day_events();
             this.ajaxify();
             this.jumper();
-	},
+        },
 
         day_events: function () {
             var $days = $(".calendar>tbody>tr>td"),
             $eventlist = $("#day-events");
-	    $days.unbind('click').bind('click', function () {
+            $days.unbind('click').bind('click', function () {
                 var html = $(this).data('events_html');
                 $days.removeClass('curr');
                 // if cached, inject into the container and return
@@ -365,10 +365,10 @@ KODELEARN.modules.add('calendar', (function () {
                         'container': '#day-events',
                         'controller': 'calendar',
                         'action': 'day_events/year/'+year+'/month/'+month+'/day/'+day+'/type/'+event_type,
-                        'callback': function (resp) { 
+                        'callback': function (resp) {
                             // cache results (entire html) in data
                             $(that).data('events_html', resp).addClass('curr');
-                        }                        
+                        }
                     });
                 } else {
                     $eventlist.html('<h1>Events for '+date.join('-')+'</h1><ul><li>No events scheduled.</li></ul>');
@@ -418,9 +418,9 @@ KODELEARN.modules.add('calendar', (function () {
                     }
                 });
             });
-            
+
             $("#current_day").live('click', function () {
-            	var event_type = $("select[name='event_type']").val();
+                var event_type = $("select[name='event_type']").val();
                 new ajaxLoad({
                     'container': '#calendar-wrapper',
                     'controller': 'calendar',
@@ -433,7 +433,7 @@ KODELEARN.modules.add('calendar', (function () {
             });
         }
     };
-    
+
 })());
 
 KODELEARN.modules.add('post', (function () {
@@ -470,8 +470,8 @@ KODELEARN.modules.add('post', (function () {
                     async: true,
                     error_container: $("#post-form"),
                     success: function (resp) {
-                	$('#post').val("");
-                	$('#feeds').prepend(resp.html);
+                        $('#post').val("");
+                        $('#feeds').prepend(resp.html);
                     }
                 });
             });
@@ -482,7 +482,7 @@ KODELEARN.modules.add('post', (function () {
 KODELEARN.helpers = { };
 
 KODELEARN.helpers.url = {
-    
+
     // get the GET params from the url as an object
     get_param: function (name, url) {
         name = name.replace(/[\[]/, "\\\[").replace(/[\]]/, "\\\]");
@@ -521,12 +521,12 @@ KODELEARN.helpers.request = {
         });
     },
 
-    get: function (o) {        
+    get: function (o) {
         var options = {
-            data: { },         
+            data: { },
             async: false,
             success: function (resp) { },
-            access_denied: function (resp) { 
+            access_denied: function (resp) {
                 window.location.href = KODELEARN.config.base_url+'error/access_denied';
             }
         };
@@ -548,11 +548,11 @@ KODELEARN.helpers.request = {
 
     post: function (o) {
         var options = {
-            data: { },         
+            data: { },
             async: false,
             error_container: $("#event_form"),
             success: function (resp) { },
-            access_denied: function (resp) { 
+            access_denied: function (resp) {
                 window.location.href = KODELEARN.config.base_url+'error/access_denied';
             },
             error: function (resp) {
@@ -583,7 +583,7 @@ KODELEARN.helpers.request = {
 // will be a form block
 // for usage eg. refer: modules/question/views/question/form.php
 KODELEARN.helpers.Formblocks = function (opts) {
-    var options = { 
+    var options = {
         listElem: '', // ul or table element
         itemElem: '', // li or a td depending upon the listElem
         addBtn: '', // button for adding a block
@@ -597,19 +597,19 @@ KODELEARN.helpers.Formblocks = function (opts) {
         if (options.tmpl !== '') {
             $(options.listElem).append(options.tmpl);
         }
-        options.onAdd.call(this);        
-    });    
-    $(options.itemElem).live('mouseover mouseout', function (event) {                 
-        if (event.type == 'mouseover') {               
-            if ($(this).siblings().length > (options.min-1)) { 
+        options.onAdd.call(this);
+    });
+    $(options.itemElem).live('mouseover mouseout', function (event) {
+        if (event.type == 'mouseover') {
+            if ($(this).siblings().length > (options.min-1)) {
                 $(this).children().filter(options.rmBtn).show();
             }
         } else if (event.type == 'mouseout') {
             $(this).children().filter(options.rmBtn).hide();
         }
-    });    
+    });
     $(options.rmBtn, options.listElem).live('click', function () {
-        $(this).parent().fadeOut(200, function () { 
+        $(this).parent().fadeOut(200, function () {
             $(this).remove();
         });
     });
@@ -643,7 +643,7 @@ KODELEARN.helpers.editor = {
     }
 }
 
-KODELEARN.helpers.editor.math = function () {
+KODELEARN.helpers.editor.mathEditor = (function () {
     var current_status = false;
     var expr = {
         // In order - Name, tex, description, caret position
@@ -666,8 +666,8 @@ KODELEARN.helpers.editor.math = function () {
         'cos': ['cos', '\\cos \\theta', 'cosine of theta', 6],
         'tan': ['tan', '\\tan \\theta', 'tan of theta', 6],
         'sec': ['sec', '\\sec \\theta', 'sec of theta', 6],
-        'cot': ['cot', '\\cot \\theta', 'cot of theta', 6],        
-        'cosec': ['cosec', '\\mathrm{cosec} \\theta', 'cot of theta', 8],        
+        'cot': ['cot', '\\cot \\theta', 'cot of theta', 6],
+        'cosec': ['cosec', '\\mathrm{cosec} \\theta', 'cot of theta', 8],
         'deg': ['Degrees', '^\\circ', 'Degrees', 0],
         'infty': ['Infinity', '\\infty', 'Infinity', 0],
         'dots' : ['Dots', '\\cdots', 'To imply \'and so on\'', 0],
@@ -686,7 +686,7 @@ KODELEARN.helpers.editor.math = function () {
         var html = '<ul class="math-editor-menu">';
         for (k in expr) {
             html += '<li><a class="btn_'+k+'" rel="'+k+'" title="'+expr[k][2]+'">'+expr[k][0]+'</a></li>';
-        }        
+        }
         html += '</ul><div class="clear"></div><p class="tex-help">Please click on an expression above.</p>';
         return html;
     }
@@ -719,7 +719,7 @@ KODELEARN.helpers.editor.math = function () {
             elem.setSelectionRange(caret_pos, caret_pos);
         }
     }
-    
+
     var menu_html = buildMathMenu();
 
     $(".act-math-link").live('click', function () {
@@ -731,7 +731,7 @@ KODELEARN.helpers.editor.math = function () {
             MathJax.Hub.Typeset();
         }).trigger('change');
         $(this).hide();
-    });    
+    });
 
     $(".math-editor-menu>li>a").live('click', function () {
         var exp = $(this).attr('rel'),
@@ -740,7 +740,7 @@ KODELEARN.helpers.editor.math = function () {
         $ul = $(this).parent().parent(),
         $ta = $ul.siblings().filter('textarea'),
         $tex_help = $ul.siblings().filter('.tex-help');
-        insertTex($ta[0], tex, caret_pos+2); 
+        insertTex($ta[0], tex, caret_pos+2);
         $ta.trigger('change');
         $tex_help.text('Tex editing help: '+expr[exp][2]);
     });
@@ -750,7 +750,7 @@ KODELEARN.helpers.editor.math = function () {
         return {
             initialize: function () {
                 $elem.after('<br/><a class="act-math-link">Add math expressions ?</a>');
-                // check if the textarea already contains a math expression 
+                // check if the textarea already contains a math expression
                 // if yes, show preview right away
                 if (this.containsMath()) {
                     $elem.siblings().filter(".act-math-link").trigger('click');
@@ -764,12 +764,10 @@ KODELEARN.helpers.editor.math = function () {
             }
         }
     }
-}
-
-KODELEARN.helpers.editor.mathEditor = KODELEARN.helpers.editor.math();
+}) ();
 
 KODELEARN.helpers.tmpl_manipulation = {
-    
+
     // hide the side bar and shift the page content to left
     hideSidebar: function (shift_page_content) {
         $(".sidebar").hide();
@@ -783,11 +781,11 @@ var Feeds = { };
 
 Feeds.show = function(d,m,y) {
     $("#ajax-loader").show();
-    $.get(KODELEARN.config.base_url + "calendar/day_events/year/"+ y +"/month/"+ m +"/day/"+ d,  {},	
+    $.get(KODELEARN.config.base_url + "calendar/day_events/year/"+ y +"/month/"+ m +"/day/"+ d,  {},
           function(html){
-	      $('#feed_event').html(html);
-	      $("#ajax-loader").hide();
-	      
+              $('#feed_event').html(html);
+              $("#ajax-loader").hide();
+
           }, "html");
     $( "#feed_event" ).dialog({
         resizable: false,
@@ -799,44 +797,44 @@ Feeds.show = function(d,m,y) {
 KODELEARN.modules.add('document', (function () {
     return {
         init: function () {
-    		return;
-    	},
-    	del: function (Id) {
+                return;
+        },
+        del: function (Id) {
             KODELEARN.helpers.request.get({
                 url: KODELEARN.config.base_url+"document/delete/id/" + Id,
                 async: true,
                 success: function (resp) {
-            		KODELEARN.modules.get('ajax_message').showAjaxSuccess($('.documentsContainer'), resp.msg);
-            		$('#doc'+Id).fadeOut(500);
+                        KODELEARN.modules.get('ajax_message').showAjaxSuccess($('.documentsContainer'), resp.msg);
+                        $('#doc'+Id).fadeOut(500);
                 }
             });
-    	},
-    	edit: function (Id) {
-    		$("#ajax-loader").show();
-    		KODELEARN.helpers.request.get({
+        },
+        edit: function (Id) {
+                $("#ajax-loader").show();
+                KODELEARN.helpers.request.get({
                 url: KODELEARN.config.base_url+"document/edit/id/" + Id,
                 async: true,
                 success: function (resp) {
-    				$('#document_from').remove();
-    				$('#edit_document').html(resp.html);
-    				$("#ajax-loader").hide();
+                                $('#document_from').remove();
+                                $('#edit_document').html(resp.html);
+                                $("#ajax-loader").hide();
                 }
             });
-    	},
-    	save: function () {
-    		
-    		data = $('#document_form').serializeArray();
-    		KODELEARN.helpers.request.post({
+        },
+        save: function () {
+
+                data = $('#document_form').serializeArray();
+                KODELEARN.helpers.request.post({
                 url: KODELEARN.config.base_url+"document/edit/",
                 async: true,
                 error_container: $("#document_form"),
                 data: data,
                 success: function (resp) {
-    				KODELEARN.modules.get('ajax_message').showAjaxSuccess($("#document_form"),resp.msg);
-    				setTimeout('window.location.reload()', 2500);
+                                KODELEARN.modules.get('ajax_message').showAjaxSuccess($("#document_form"),resp.msg);
+                                setTimeout('window.location.reload()', 2500);
                 }
             });
-    	}
+        }
     }
 })());
 

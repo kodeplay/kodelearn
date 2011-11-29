@@ -50,6 +50,11 @@ class Exercise_Result {
     protected $_num_incorrect;
 
     /**
+     * Array containing data about the hints used for the questions
+     */
+    protected $_hints_taken = array();
+
+    /**
      * @param the exercise progress information stored in the Session
      */
     public function __construct($attempt_session) {
@@ -61,7 +66,8 @@ class Exercise_Result {
             $this->_total_marks += $marks;
             $this->_questions[] = $q;
         }        
-        $this->_questions_attempted = $this->questions_attempted($attempt_session['ques_attempted']);
+        $this->questions_attempted($attempt_session['ques_attempted']);
+        $this->_hints_taken = Arr::get($attempt_session, 'hints_taken', array());
         $this->_score = $this->calculate_score();
         $this->_num_correct = count(array_filter($this->_questions_results));
         $this->_num_incorrect = count($this->_questions) - $this->_num_correct;
@@ -74,11 +80,22 @@ class Exercise_Result {
     protected function calculate_score() {
         $total = 0;
         foreach ($this->_questions as $q) {
-            if ($this->is_correctly_answered($q->orm()->id)) {
-                $total += $q->marks();
-            }
+            $total += $this->score_per_question($q);
         }
         return (float)$total;
+    }
+
+    /**
+     * Method to get the score per question answered
+     * It will also calculate any reductions for the using hints
+     */
+    protected function score_per_question($question) {
+        $question_id = $question->orm()->id;
+        if ($this->is_correctly_answered($question_id)) {
+            $hints_reduction = $this->hints_reduction($question_id);
+            return $question->marks() - ($hints_reduction*$question->marks());            
+        }
+        return 0.00;
     }
 
     /**
@@ -87,6 +104,26 @@ class Exercise_Result {
      */
     protected function is_correctly_answered($question_id) {
         return Arr::get($this->_questions_results, (int)$question_id, false);
+    }
+
+    /**
+     * Method to check if hints are used 
+     */
+    protected function hints_used($question_id) {
+        return !empty($this->_hints_taken[$question_id]);
+    }
+
+    /**
+     * Method to get how many marks to be deducted due to hints
+     */
+    protected function hints_reduction($question_id) {
+        $dedn = 0.0;
+        if ($this->hints_used($question_id)) {
+            foreach ($this->_hints_taken[$question_id] as $hint) {
+                $dedn += (float) $hint[1]/100;
+            }
+        }
+        return $dedn;
     }
 
     /**
@@ -118,8 +155,9 @@ class Exercise_Result {
         foreach ($this->_questions as $ques) {
             $question_list[] = array(
                 'question' => $ques->orm()->question,
-                'score' => $this->is_correctly_answered($ques->orm()->id) ? $ques->marks() : 0,
+                'score' => $this->score_per_question($ques),
                 'total_marks' => $ques->marks(),
+                'hints_used' => $this->hints_used($ques->orm()->id),
                 'answer_review' => $ques->answer_review(Arr::get($this->_questions_answers, $ques->orm()->id))
             );
         }

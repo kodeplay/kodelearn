@@ -13,7 +13,7 @@ class Model_Exerciseresult extends ORM {
     }
 
     public function date_repr() {
-        return date('n M, Y', strtotime($this->attempted_at));
+        return date('d M, Y', strtotime($this->attempted_at));
     }
 }
 

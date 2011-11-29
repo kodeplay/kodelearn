@@ -163,10 +163,12 @@ class Controller_Question extends Controller_Base {
     public function action_preview() {        
         $view = View::factory('question/view')
             ->set('preview', true)
-            ->bind('question_partial', $question_partial);
+            ->bind('question_partial', $question_partial)
+            ->bind('hints', $hints);
         $question_id = $this->request->param('id');
         $ques_obj = Question::factory((int)$question_id);   
         $question_partial = $ques_obj->render_question(true);
+        $hints = $ques_obj->orm()->hints_as_array();
         $this->content = $view;
     }
 

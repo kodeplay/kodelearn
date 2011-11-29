@@ -26,6 +26,7 @@ class Controller_Exercise extends Controller_Base {
         $course = ORM::factory('course', Session::instance()->get('course_id'));
         $exercises = ORM::factory('exercise')
             ->where('course_id', ' = ', $course->id)
+            ->order_by('created_at', 'DESC')
             ->find_all();
         $links = array(
             'add' => Html::anchor('/exercise/add/', 'Create an Exercise', array('class' => 'createButton l')),
@@ -119,7 +120,8 @@ class Controller_Exercise extends Controller_Base {
             if ($validator->check() && $this->validate_form($safepost)) {
                 $exercise->values(array_merge($safepost, array(
                     'course_id' => $course->id,
-                    'slug' => Text::limit_chars(Inflector::underscore($safepost['title']))
+                    'slug' => Text::limit_chars(Inflector::underscore($safepost['title'])),
+                    'modified_at' => date('Y-m-d H:i:s', time())
                 )));
                 $exercise->save();
                 $zip_ques = Arr::zip($safepost['selected'],$safepost['marks']);
@@ -241,6 +243,8 @@ class Controller_Exercise extends Controller_Base {
             $attempt_session = array_merge($attempt_session, array(
                 'ques_upcoming' => array_map('intval', $questions->as_array(null, 'question_id')),
                 'ques_attempted' => array(),
+                'hints_upcoming' => array(), // tmp array for storing hints available for a question
+                'hints_taken' => array(), // record of which hints are taken along with the deduction 
             ));
             $partial_view = View::factory('exercise/partial_quiz');
         } elseif ($format == 'test') {
@@ -264,6 +268,9 @@ class Controller_Exercise extends Controller_Base {
      * Method to show a question while the exercise session is on
      * A question will be requested by ajax and the response will
      * be sent in json
+     * Incase the question has hints, we store them in a tmp array 
+     * in the session. If the user takes the hint, it will be shifted out of the array
+     * While evaulating the result, this array is of no use
      */
     public function action_ajax_next_question() {
         // get the exercise id from the session
@@ -277,13 +284,18 @@ class Controller_Exercise extends Controller_Base {
             $this->content = json_encode(array('status' => 404));
         } else {
             $question = Question::factory($question_id); // load from the question id
+            $hints = $question->orm()->hints_as_array();
+            // temporarily store the hints for this questions in an array as per the sort order
+            if ($hints) {
+                $attempt_session['hints_upcoming'][$question_id] = $hints;
+            }
             $attempt_session = Session::instance()->set('exercise_attempt', $attempt_session);
             $response = array(
                 'status' => 200,
                 'html' => $question->render_question(),
                 'question_id' => $question_id,
                 'type' => $question->type(),
-                'num_hints' => count($question->orm()->hints_as_array()),
+                'num_hints' => count($hints),
             );
             $this->content = json_encode($response);
         }
@@ -310,16 +322,37 @@ class Controller_Exercise extends Controller_Base {
                 'result' => $result
             );
             Session::instance()->set('exercise_attempt', $attempt_session);
-            $ques_remaining = (int)$attempt_session['ques_total'] - count($attempt_session['ques_upcoming']);
+            $ques_completed = (int)$attempt_session['ques_total'] - count($attempt_session['ques_upcoming']);
             $response = array(
                 'status' => 1,
                 'result' => (int)$result,
-                'progress' => sprintf('%d/%d', $ques_remaining, $attempt_session['ques_total']),
+                'progress' => sprintf('%d/%d', $ques_completed, $attempt_session['ques_total']),
             );
         } else {
             $response = array('status' => 0);
         }
         $this->content = json_encode($response);
+    }
+
+    /**
+     * Action to show the hint one by one from the temp array for a particular questions
+     * passed as the get param question_id
+     */
+    public function action_ajax_next_hint() {
+        $question_id = $this->request->param('question_id');
+        $attempt_session = Session::instance()->get('exercise_attempt');        
+        $hint = array_shift($attempt_session['hints_upcoming'][$question_id]);
+        if (!isset($attempt_session['hints_taken'][$question_id])) {
+            $attempt_session['hints_taken'][$question_id] = array();
+        }
+        $attempt_session['hints_taken'][$question_id][] = array($hint['hint'], $hint['deduction']);
+        // save it back in session
+        Session::instance()->set('exercise_attempt', $attempt_session);
+        if ($hint == null) {
+            $this->content = json_encode(array('status' => 0));
+        } else {
+            $this->content = json_encode(array_merge($hint, array('status' => 1)));
+        }
     }
 
     /**
