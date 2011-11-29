@@ -868,3 +868,40 @@ function delete_post(self,id) {
 	
 }
 
+function show_comment_entry_box(self, usr_img, feed_id) {
+	$(self).css('display','none');
+	var content = "<table style='width: 60%; background: #eee; border-top: 1px solid #fff;'>";
+	content += "<tr><td class='pad5' style='width: 40px;'><img src='"+ usr_img +"' style='width: 40px; height: 40px;' /></td>";
+	content += "<td class='vatop pad5'><input type='text' class='text-comment' onkeypress='onCommentPost(this, event, "+ feed_id +");' style='resize: none; height: 14px; font-size: 12px; padding: 5px; width: 95%;' /><p class='pad5' style='font-size: 11px; color: #777;'>Press Enter to post your comment.</p></td></tr>";
+	content += "</table>";
+	$(self).parent().parent().parent().children().find('.comments').append(content);
+	$(self).parent().parent().parent().children().find('.comments').children().find('.text-comment').focus();
+}
+
+function onCommentPost(self, e, feed_id) {
+	
+	var key = e.keyCode;
+	if (key == 13) {
+		if($(self).val() == "") {
+			return false;
+		}	
+		$.ajax(
+		{
+			type: "GET",
+			dataType:"json",
+			url:     KODELEARN.config.base_url+"post/comment/id/" + feed_id + "/data/" + $(self).val(),
+			success: function(data)
+					{
+						var content = "<tr style='border-top: 1px solid #fff;'><td class='pad5' style='width: 40px;'><img src='"+ data.img +"' style='width: 40px; height: 40px;' /></td>";
+						content += "<td class='vatop pad5'><a style='font-size: 14px; font-weight: bold;'>"+ data.name +"</a><span class='hpad10' style='font-size: 12px;'>"+ data.text +"</span><p class='vpad10' style='font-size: 11px; color: #777;'>"+ data.time +"</p></td></tr>";
+						$(self).parent().parent().parent().parent().parent().find('.new-comments').append(content);
+						$(self).val('')
+					}
+		});
+	}
+}
+
+function showViewLimit(self) {
+	$(self).parent().parent().parent().parent().children().find('.comments').children().children().children('.view-limit').css('display', 'block')
+}
+

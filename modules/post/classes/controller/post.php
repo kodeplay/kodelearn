@@ -103,10 +103,7 @@ class Controller_Post extends Controller_Base {
         ORM::factory('post', $id)->delete();
         
         Model_Post::delPosts($id);
-        
-        
     }
-    
     
     public function action_delete() {
         
@@ -114,7 +111,36 @@ class Controller_Post extends Controller_Base {
         ORM::factory('post', $id)->delete();
         
         Model_Post::delPosts($id);
+    }
+    
+    public function action_comment() {
         
+        $feed_id = $this->request->param('id');
+        $data = $this->request->param('data');
+        $comment = ORM::factory('feedcomment');
+        $comment->comment = $data;
+        $comment->feed_id = $feed_id;
+        $comment->date = strtotime(date('d-m-Y G:i:s'));
+        $comment->user_id = Auth::instance()->get_user()->id;
+        $comment->save();
+        
+        $image = CacheImage::instance();
+        $curr_user = Auth::instance()->get_user();
+        $curr_avatar = $image->resize($curr_user->avatar, 40, 40);
+       
+        $span = Date::fuzzy_span($comment->date);
+        
+        $json = array(
+                'name'  => $curr_user->firstname." ".$curr_user->lastname, 
+                'img'   => $curr_avatar,
+                'text'  => Html::chars($comment->comment),
+                'time'  => $span
+            );
+
+        echo  json_encode($json);
+        exit;
         
     }
+    
+    
 }

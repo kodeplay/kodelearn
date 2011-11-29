@@ -361,7 +361,7 @@ class Controller_Course extends Controller_Base {
             	$course = ORM::factory('course')->where('access_code' , '=' , $access_code)->find();
             	$user = Auth::instance()->get_user();
             	$user->add('courses', $course);
-            	$json = array('response' => 'You are joined in ' . $course->name . ' course.');                
+            	$json = array('response' => 'You successfully joined the ' . $course->name . ' course.');                
             } else {
             	$json = array('response' => 'Please enter access code.');
             }            
