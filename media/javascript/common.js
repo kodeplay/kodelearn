@@ -932,6 +932,4 @@ function delete_comment(self,id) {
 					$(self).parent().parent().remove();
 				}
 	});
-	
 }
-
