@@ -9,12 +9,21 @@ class Feed_Course extends Feed {
         if($this->check_deleted($course)) return View::factory('feed/unavaliable')->render();
         $count_user = Model_Course::get_users_count($this->respective_id,'student');
         $span = Date::fuzzy_span($this->time);
-                    
+
+        $feed_id = $this->id;
+        
+        $comment = ORM::factory('feedcomment');
+        $comment->where('feed_id', '=', $feed_id)
+                ->order_by('date', 'DESC');
+        $comments = $comment->find_all();
+        
         $view = View::factory('feed/'.$this->type . '_' . $this->action)
                ->bind('user', $user)
                ->bind('count_user', $count_user)
                ->bind('course', $course)
-               ->bind('span', $span);
+               ->bind('span', $span)
+               ->bind('feed_id', $feed_id)
+               ->bind('comments', $comments);
                
         return $view->render();
     }

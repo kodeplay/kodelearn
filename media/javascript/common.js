@@ -885,13 +885,17 @@ function onCommentPost(self, e, feed_id) {
 		}	
 		$.ajax(
 		{
-			type: "GET",
+			type: "POST",
 			dataType:"json",
-			url:     KODELEARN.config.base_url+"post/comment/id/" + feed_id + "/data/" + $(self).val(),
+			url:     KODELEARN.config.base_url+"post/comment",
+			data: "id=" + feed_id + "&data=" + $(self).val(),
 			success: function(data)
 					{
-						var content = "<tr style='border-top: 1px solid #fff;'><td class='pad5' style='width: 40px;'><img src='"+ data.img +"' style='width: 40px; height: 40px;' /></td>";
-						content += "<td class='vatop pad5'><a style='font-size: 14px; font-weight: bold;'>"+ data.name +"</a><span class='hpad10' style='font-size: 12px;'>"+ data.text +"</span><p class='vpad10' style='font-size: 11px; color: #777;'>"+ data.time +"</p></td></tr>";
+						var content = "<tr class='del-comm' style='border-top: 1px solid #fff;'><td class='pad5' style='width: 40px;'><img src='"+ data.img +"' style='width: 40px; height: 40px;' /></td>";
+						content += "<td class='vatop pad5' style='width: 350px;'><a style='font-size: 14px; font-weight: bold;'>"+ data.name +"</a><span class='hpad10' style='font-size: 12px;'>"+ data.text +"</span><p class='vpad10' style='font-size: 11px; color: #777;'>"+ data.time +"</p></td>";
+						content += "<td class='vatop w2 pad5'>";
+						content += "<a onclick='delete_selfcomment(this, "+ data.comment_id +");' class='del-comment' style='font-size: 11px; font-weight: bold; display: none; cursor: pointer;'>X</a>";
+						content += "</td></tr>";
 						$(self).parent().parent().parent().parent().parent().find('.new-comments').append(content);
 						$(self).val('')
 					}
@@ -901,5 +905,33 @@ function onCommentPost(self, e, feed_id) {
 
 function showViewLimit(self) {
 	$(self).parent().parent().parent().parent().children().find('.comments').children().children().children('.view-limit').css('display', 'block')
+}
+
+function delete_selfcomment(self,id) {
+	$.ajax(
+	{
+		type: "GET",
+		dataType:"html",
+		url:     KODELEARN.config.base_url+"post/selfdelete_comment/id/" + id,
+		success: function(data1)
+				{
+					$(self).parent().parent().remove();
+				}
+	});
+	
+}
+
+function delete_comment(self,id) {
+	$.ajax(
+	{
+		type: "GET",
+		dataType:"html",
+		url:     KODELEARN.config.base_url+"post/delete_comment/id/" + id,
+		success: function(data1)
+				{
+					$(self).parent().parent().remove();
+				}
+	});
+	
 }
 

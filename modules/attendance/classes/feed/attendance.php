@@ -15,12 +15,21 @@ class Feed_Attendance extends Feed {
         
         $span = Date::fuzzy_span($this->time);
         
+        $feed_id = $this->id;
+        
+        $comment = ORM::factory('feedcomment');
+        $comment->where('feed_id', '=', $feed_id)
+                ->order_by('date', 'DESC');
+        $comments = $comment->find_all();
+        
         $view = View::factory('feed/'.$this->type . '_' . $this->action)
                ->bind('user', $user)
                ->bind('event', $event)
                ->bind('event_details', $event_details)
                ->bind('attendance', $attendance)
-               ->bind('span', $span);
+               ->bind('span', $span)
+               ->bind('feed_id', $feed_id)
+               ->bind('comments', $comments);
                
         return $view->render();
     }

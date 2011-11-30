@@ -20,7 +20,7 @@
                 
                 <?php if(count($comments) > 4) { ?>
                     
-                    <a class="h6" style="cursor: pointer;" onclick="showViewLimit(this)"><span class="h6 tlGray">-</span> View All</a>
+                    <a class="h6" style="cursor: pointer;" onclick="showViewLimit(this)"><span class="h6 tlGray">-</span> View All (<?php echo count($comments); ?>)</a>
                 <?php } ?>
                 
             </td>
@@ -54,25 +54,39 @@
                             $comment_img = $image->resize($comment_user->avatar, 40, 40); 
                         ?>
                         <?php if($i > 4) { ?>
-                            <tr class="view-limit" style='border-top: 1px solid #fff; display: none'>
+                            <tr class="view-limit del-comm" style='border-top: 1px solid #fff; display: none'>
                                 <td class='pad5' style='width: 40px;'>
                                     <img src='<?php echo $comment_img; ?>' style='width: 40px; height: 40px;' />
                                 </td>
-                                <td class='vatop pad5'>
+                                <td class='vatop pad5' style='width: 350px;'>
                                     <a style='font-size: 14px; font-weight: bold;'><?php echo $comment_user->firstname." ".$comment_user->lastname ?></a>
                                     <span class='hpad10' style='font-size: 12px;'><?php echo Html::chars($comment->comment); ?></span>
                                     <p class='vpad10' style='font-size: 11px; color: #777;'><?php echo Date::fuzzy_span($comment->date); ?></p>
+                                </td>
+                                <td class="vatop w2 pad5">
+                                    <?php if(Auth::instance()->get_user()->id == $comment->user_id) { ?>
+                                        <a onclick="delete_selfcomment(this, <?php echo $comment->id; ?>);" class="del-comment" style="font-size: 11px; font-weight: bold; display: none; cursor: pointer;">X</a>
+                                    <?php } else { ?>
+                                        &nbsp;
+                                    <?php } ?>
                                 </td>
                             </tr>
                         <?php } else {?>
-                            <tr style='border-top: 1px solid #fff; display: block'>
+                            <tr class="del-comm" style='border-top: 1px solid #fff; display: block'>
                                 <td class='pad5' style='width: 40px;'>
                                     <img src='<?php echo $comment_img; ?>' style='width: 40px; height: 40px;' />
                                 </td>
-                                <td class='vatop pad5'>
+                                <td class='vatop pad5' style='width: 350px;'>
                                     <a style='font-size: 14px; font-weight: bold;'><?php echo $comment_user->firstname." ".$comment_user->lastname ?></a>
                                     <span class='hpad10' style='font-size: 12px;'><?php echo Html::chars($comment->comment); ?></span>
                                     <p class='vpad10' style='font-size: 11px; color: #777;'><?php echo Date::fuzzy_span($comment->date); ?></p>
+                                </td>
+                                <td class="vatop w2 pad5">
+                                    <?php if(Auth::instance()->get_user()->id == $comment->user_id) { ?>
+                                        <a onclick="delete_selfcomment(this, <?php echo $comment->id; ?>);" class="del-comment" style="font-size: 11px; font-weight: bold; display: none; cursor: pointer;">X</a>
+                                    <?php } else { ?>
+                                        &nbsp;
+                                    <?php } ?>
                                 </td>
                             </tr>
                         <?php } ?>
@@ -86,12 +100,20 @@
     </table>
 <script type="text/javascript">
 
-$(".posts").mouseenter(function () {
-    $(this).find(".del-post").css('display','block');
+$(".posts").hover(function () {
+	$(this).find(".del-post").css('display','block');
+},
+function () {
+    $(this).find(".del-post").css('display','none');
 });
 
-$(".posts").mouseleave(function () {
-	$(this).find(".del-post").css('display','none');
+
+$(".del-comm").live('mouseenter', function () {
+    $(this).find(".del-comment").css('display','block');
+});
+
+$(".del-comm").live('mouseleave', function () {
+    $(this).find(".del-comment").css('display','none');
 });
 
 </script>

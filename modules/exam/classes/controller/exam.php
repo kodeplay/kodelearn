@@ -379,15 +379,18 @@ class Controller_Exam extends Controller_Base {
                     $event_exam->set_value('eventend', $to);
                     
                     $event_exam->update($exam->event_id);
-
+                    
                     $feed = new Feed_Exam();
                     
                     $feed->set_action('edit');
                     $feed->set_course_id($this->request->post('course_id'));
                     $feed->set_respective_id($exam->id);
                     $feed->set_actor_id(Auth::instance()->get_user()->id); 
+                    $feed->streams(array(
+                        'course_id' => (int)$this->request->post('course_id'),                        
+                    ));
                     $feed->save();
-                    $feed->subscribe_users();
+                    
                     Session::instance()->set('success', 'Exam edited successfully.');
                     Request::current()->redirect('exam');
                     exit;

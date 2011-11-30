@@ -115,8 +115,8 @@ class Controller_Post extends Controller_Base {
     
     public function action_comment() {
         
-        $feed_id = $this->request->param('id');
-        $data = $this->request->param('data');
+        $feed_id = $this->request->post('id');
+        $data = $this->request->post('data');
         $comment = ORM::factory('feedcomment');
         $comment->comment = $data;
         $comment->feed_id = $feed_id;
@@ -131,14 +131,21 @@ class Controller_Post extends Controller_Base {
         $span = Date::fuzzy_span($comment->date);
         
         $json = array(
-                'name'  => $curr_user->firstname." ".$curr_user->lastname, 
-                'img'   => $curr_avatar,
-                'text'  => Html::chars($comment->comment),
-                'time'  => $span
+                'name'          => $curr_user->firstname." ".$curr_user->lastname, 
+                'img'           => $curr_avatar,
+                'text'          => Html::chars($comment->comment),
+                'time'          => $span,
+                'comment_id'    => $comment->id
             );
 
         echo  json_encode($json);
         exit;
+        
+    }
+    
+    public function action_selfdelete_comment() {
+        $id = $this->request->param('id');
+        ORM::factory('feedcomment', $id)->delete();
         
     }
     

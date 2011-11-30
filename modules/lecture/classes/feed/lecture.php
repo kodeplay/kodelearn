@@ -7,7 +7,9 @@ class Feed_Lecture extends Feed {
         $view = View::factory('feed/'.$this->type . '_' . $this->action)
                ->bind('lecture', $lecture)
                ->bind('user', $user)
-               ->bind('span', $span);
+               ->bind('span', $span)
+               ->bind('feed_id', $feed_id)
+               ->bind('comments', $comments);
                
     	if($this->action == 'add'){
 	        $lecture = ORM::factory('lecture', $this->respective_id);
@@ -20,6 +22,14 @@ class Feed_Lecture extends Feed {
     	}
         $user = ORM::factory('user', $this->actor_id);
         $span = Date::fuzzy_span($this->time);
+        
+        $feed_id = $this->id;
+        
+        $comment = ORM::factory('feedcomment');
+        $comment->where('feed_id', '=', $feed_id)
+                ->order_by('date', 'DESC');
+        $comments = $comment->find_all();
+        
         return $view->render();
     }
     
