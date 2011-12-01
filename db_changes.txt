@@ -539,4 +539,16 @@ ALTER TABLE `exerciseresults`
   
 INSERT INTO `roles` (`id`, `name`, `description`, `permissions`) VALUES
 (6, 'studentmoderator', 'restricted', 'a:30:{s:12:"account_view";s:1:"1";s:15:"assignment_view";s:1:"1";s:17:"assignment_create";s:1:"1";s:15:"assignment_edit";s:1:"1";s:17:"assignment_delete";s:1:"1";s:15:"attendance_view";s:1:"1";s:10:"batch_view";s:1:"1";s:13:"calendar_view";s:1:"1";s:11:"course_view";s:1:"1";s:11:"course_join";s:1:"1";s:13:"document_view";s:1:"1";s:17:"document_download";s:1:"1";s:10:"event_view";s:1:"1";s:9:"exam_view";s:1:"1";s:14:"examgroup_view";s:1:"1";s:18:"exammarksheet_view";s:1:"1";s:15:"examresult_view";s:1:"1";s:13:"exercise_view";s:1:"1";s:16:"exercise_attempt";s:1:"1";s:9:"feed_view";s:1:"1";s:14:"flashcard_view";s:1:"1";s:12:"lecture_view";s:1:"1";s:11:"lesson_view";s:1:"1";s:13:"location_view";s:1:"1";s:9:"post_view";s:1:"1";s:11:"post_create";s:1:"1";s:9:"post_edit";s:1:"1";s:11:"post_delete";s:1:"1";s:13:"question_view";s:1:"1";s:9:"room_view";s:1:"1";}');
+
+--for comments
+
+CREATE TABLE IF NOT EXISTS `feedcomments` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `comment` varchar(255) NOT NULL,
+  `feed_id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `date` varchar(255) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=116 ;
+
   
