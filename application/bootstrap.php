@@ -114,6 +114,7 @@ Kohana::modules(array(
     'pagination'    => MODPATH.'pagination', // for server side pagination
     'cacheimage'    => MODPATH.'cacheimage', // for Image Caching
     'purifier'      => MODPATH.'purifier', // Shadowhand's html purifier
+    'eventdispatch' => MODPATH.'eventdispatch', // Ollym's event dispatch module
     'email'         => MODPATH.'email', // for mailling
     'notice'        => MODPATH.'notice',  // Notice module (dependencies - email, sms*)
     'exam'          => MODPATH.'exam',
