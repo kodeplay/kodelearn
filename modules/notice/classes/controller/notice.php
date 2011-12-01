@@ -64,11 +64,11 @@ class Controller_Notice extends Controller_Base {
             ->bind('pref_email', $pref_email)
             ->bind('pref_sms', $pref_sms)
             ->bind('success', $success);
-        $noticesetting = ORM::factory('noticesetting')
-            ->where('institution_id', ' = ', 1)
-            ->find();
         if ($this->request->method() === 'POST' && $this->request->post()) {
             if ($this->request->post('pref')) {
+                $noticesetting = ORM::factory('noticesetting')
+                    ->where('institution_id' , ' = ', 1)
+                    ->find();
                 $noticesetting->preferences = serialize($this->request->post('pref'));
                 $noticesetting->save();
                 Session::instance()->set('success', 'Notice preferences modified successfully');
@@ -76,9 +76,8 @@ class Controller_Notice extends Controller_Base {
             }
         }
         $notices = Kohana::config('notices')->as_array();
-        $notice_preferences = unserialize($noticesetting->preferences ? $noticesetting->preferences : serialize(array()));
-        $pref_email = array_keys(Arr::get($notice_preferences, 'email', array()));
-        $pref_sms = array_keys(Arr::get($notice_preferences, 'sms', array()));
+        $pref_email = Notice::instance()->preferences('email');
+        $pref_sms = Notice::instance()->preferences('sms');
         $success = Session::instance()->get_once('success');
         $this->content = $view;
     }
