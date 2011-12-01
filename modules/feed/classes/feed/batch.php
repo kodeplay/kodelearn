@@ -15,11 +15,15 @@ class Feed_Batch extends Feed {
                 ->order_by('date', 'DESC');
         $comments = $comment->find_all();
         
+        $curr_user = Auth::instance()->get_user();
+        $role = $curr_user->role()->name;
+        
         $view = View::factory('feed/'.$this->type . '_' . $this->action)
                ->bind('user', $user)
                ->bind('count_user', $count_user)
                ->bind('batch', $batch)
                ->bind('span', $span)
+               ->bind('role', $role)
                ->bind('feed_id', $feed_id)
                ->bind('comments', $comments); 
                              

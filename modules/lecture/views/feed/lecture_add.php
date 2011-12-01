@@ -48,7 +48,7 @@
         </tr>
         <tr>
             <td></td>
-            <td class="comments vatop pad10">
+            <td colspan="2" class="comments vatop pad10">
                <table class="existing-comments" style='width: 60%; background: #eee;'>
                <?php if($comments) { ?>
                     <?php $i = 0; ?>
@@ -60,25 +60,55 @@
                             $comment_img = $image->resize($comment_user->avatar, 40, 40); 
                         ?>
                         <?php if($i > 4) { ?>
-                            <tr class="view-limit" style='border-top: 1px solid #fff; display: none'>
+                            <tr class="view-limit del-comm" style='border-top: 1px solid #fff; display: none'>
                                 <td class='pad5' style='width: 40px;'>
                                     <img src='<?php echo $comment_img; ?>' style='width: 40px; height: 40px;' />
                                 </td>
-                                <td class='vatop pad5'>
+                                <td class='vatop pad5' style='width: 350px;'>
                                     <a style='font-size: 14px; font-weight: bold;'><?php echo $comment_user->firstname." ".$comment_user->lastname ?></a>
                                     <span class='hpad10' style='font-size: 12px;'><?php echo Html::chars($comment->comment); ?></span>
                                     <p class='vpad10' style='font-size: 11px; color: #777;'><?php echo Date::fuzzy_span($comment->date); ?></p>
+                                </td>
+                                <td class="vatop w2 pad5">
+                                    <?php if(Acl::instance()->is_allowed('post_delete') && $role == 'Admin') { ?>
+                                        <a onclick="delete_comment(this, <?php echo $comment->id; ?>);" class="del-comment" style="font-size: 11px; font-weight: bold; display: none; cursor: pointer;">X</a>
+                                    <?php } else if(Acl::instance()->is_allowed('post_delete') && $role == 'studentmoderator' && $user->role()->name == 'Student') { ?>
+                                        <a onclick="delete_comment(this, <?php echo $comment->id; ?>);" class="del-comment" style="font-size: 11px; font-weight: bold; display: none; cursor: pointer;">X</a>
+                                    <?php } else if(Acl::instance()->is_allowed('post_delete') && $role == 'Teacher' && $user->role()->name == 'Student') { ?>
+                                        <a onclick="delete_comment(this, <?php echo $comment->id; ?>);" class="del-comment" style="font-size: 11px; font-weight: bold; display: none; cursor: pointer;">X</a>
+                                    <?php } else { ?>
+                                            <?php if(Auth::instance()->get_user()->id == $comment->user_id) { ?>
+                                                <a onclick="delete_selfcomment(this, <?php echo $comment->id; ?>);" class="del-comment" style="font-size: 11px; font-weight: bold; display: none; cursor: pointer;">X</a>
+                                            <?php } else { ?>
+                                                &nbsp;
+                                            <?php } ?>
+                                    <?php } ?>
                                 </td>
                             </tr>
                         <?php } else {?>
-                            <tr style='border-top: 1px solid #fff; display: block'>
+                            <tr class="del-comm" style='border-top: 1px solid #fff; display: block'>
                                 <td class='pad5' style='width: 40px;'>
                                     <img src='<?php echo $comment_img; ?>' style='width: 40px; height: 40px;' />
                                 </td>
-                                <td class='vatop pad5'>
+                                <td class='vatop pad5' style='width: 350px;'>
                                     <a style='font-size: 14px; font-weight: bold;'><?php echo $comment_user->firstname." ".$comment_user->lastname ?></a>
                                     <span class='hpad10' style='font-size: 12px;'><?php echo Html::chars($comment->comment); ?></span>
                                     <p class='vpad10' style='font-size: 11px; color: #777;'><?php echo Date::fuzzy_span($comment->date); ?></p>
+                                </td>
+                                <td class="vatop w2 pad5">
+                                    <?php if(Acl::instance()->is_allowed('post_delete') && $role == 'Admin') { ?>
+                                        <a onclick="delete_comment(this, <?php echo $comment->id; ?>);" class="del-comment" style="font-size: 11px; font-weight: bold; display: none; cursor: pointer;">X</a>
+                                    <?php } else if(Acl::instance()->is_allowed('post_delete') && $role == 'studentmoderator' && $user->role()->name == 'Student') { ?>
+                                        <a onclick="delete_comment(this, <?php echo $comment->id; ?>);" class="del-comment" style="font-size: 11px; font-weight: bold; display: none; cursor: pointer;">X</a>
+                                    <?php } else if(Acl::instance()->is_allowed('post_delete') && $role == 'Teacher' && $user->role()->name == 'Student') { ?>
+                                        <a onclick="delete_comment(this, <?php echo $comment->id; ?>);" class="del-comment" style="font-size: 11px; font-weight: bold; display: none; cursor: pointer;">X</a>
+                                    <?php } else { ?>
+                                        <?php if(Auth::instance()->get_user()->id == $comment->user_id) { ?>
+                                            <a onclick="delete_selfcomment(this, <?php echo $comment->id; ?>);" class="del-comment" style="font-size: 11px; font-weight: bold; display: none; cursor: pointer;">X</a>
+                                        <?php } else { ?>
+                                            &nbsp;
+                                        <?php } ?>
+                                    <?php } ?>
                                 </td>
                             </tr>
                         <?php } ?>
@@ -90,3 +120,15 @@
             </td>
         </tr>
     </table>
+
+<script type="text/javascript">
+
+$(".del-comm").live('mouseenter', function () {
+    $(this).find(".del-comment").css('display','block');
+});
+
+$(".del-comm").live('mouseleave', function () {
+    $(this).find(".del-comment").css('display','none');
+});
+
+</script>

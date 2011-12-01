@@ -11,6 +11,9 @@ class Feed_Exam extends Feed {
                 ->order_by('date', 'DESC');
         $comments = $comment->find_all();
         
+        $curr_user = Auth::instance()->get_user();
+        $role = $curr_user->role()->name;
+        
         if($this->action == "publish_result"){
             $examgroup = ORM::factory('examgroup', $this->respective_id);
             if($this->check_deleted($examgroup)) return View::factory('feed/unavaliable')->render();
@@ -23,6 +26,7 @@ class Feed_Exam extends Feed {
                    ->bind('percent', $percent)
                    ->bind('id', $this->respective_id)
                    ->bind('span', $span)
+                   ->bind('role', $role)
                    ->bind('feed_id', $feed_id)
                    ->bind('comments', $comments);
         } else {
@@ -36,6 +40,7 @@ class Feed_Exam extends Feed {
                    ->bind('user', $user)
                    ->bind('event', $event)
                    ->bind('span', $span)
+                   ->bind('role', $role)
                    ->bind('feed_id', $feed_id)
                    ->bind('comments', $comments);
             

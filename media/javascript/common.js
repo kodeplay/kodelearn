@@ -926,7 +926,7 @@ function delete_comment(self,id) {
 	{
 		type: "GET",
 		dataType:"html",
-		url:     KODELEARN.config.base_url+"post/delete_comment/id/" + id,
+		url:     KODELEARN.config.base_url+"post/deletecomment/id/" + id,
 		success: function(data1)
 				{
 					$(self).parent().parent().remove();

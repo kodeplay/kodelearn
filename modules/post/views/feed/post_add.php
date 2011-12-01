@@ -64,10 +64,18 @@
                                     <p class='vpad10' style='font-size: 11px; color: #777;'><?php echo Date::fuzzy_span($comment->date); ?></p>
                                 </td>
                                 <td class="vatop w2 pad5">
-                                    <?php if(Auth::instance()->get_user()->id == $comment->user_id) { ?>
-                                        <a onclick="delete_selfcomment(this, <?php echo $comment->id; ?>);" class="del-comment" style="font-size: 11px; font-weight: bold; display: none; cursor: pointer;">X</a>
+                                    <?php if(Acl::instance()->is_allowed('post_delete') && $role == 'Admin') { ?>
+                                        <a onclick="delete_comment(this, <?php echo $comment->id; ?>);" class="del-comment" style="font-size: 11px; font-weight: bold; display: none; cursor: pointer;">X</a>
+                                    <?php } else if(Acl::instance()->is_allowed('post_delete') && $role == 'studentmoderator' && $user->role()->name == 'Student') { ?>
+                                        <a onclick="delete_comment(this, <?php echo $comment->id; ?>);" class="del-comment" style="font-size: 11px; font-weight: bold; display: none; cursor: pointer;">X</a>
+                                    <?php } else if(Acl::instance()->is_allowed('post_delete') && $role == 'Teacher' && $user->role()->name == 'Student') { ?>
+                                        <a onclick="delete_comment(this, <?php echo $comment->id; ?>);" class="del-comment" style="font-size: 11px; font-weight: bold; display: none; cursor: pointer;">X</a>
                                     <?php } else { ?>
-                                        &nbsp;
+                                            <?php if(Auth::instance()->get_user()->id == $comment->user_id) { ?>
+                                                <a onclick="delete_selfcomment(this, <?php echo $comment->id; ?>);" class="del-comment" style="font-size: 11px; font-weight: bold; display: none; cursor: pointer;">X</a>
+                                            <?php } else { ?>
+                                                &nbsp;
+                                            <?php } ?>
                                     <?php } ?>
                                 </td>
                             </tr>
@@ -82,10 +90,18 @@
                                     <p class='vpad10' style='font-size: 11px; color: #777;'><?php echo Date::fuzzy_span($comment->date); ?></p>
                                 </td>
                                 <td class="vatop w2 pad5">
-                                    <?php if(Auth::instance()->get_user()->id == $comment->user_id) { ?>
-                                        <a onclick="delete_selfcomment(this, <?php echo $comment->id; ?>);" class="del-comment" style="font-size: 11px; font-weight: bold; display: none; cursor: pointer;">X</a>
+                                    <?php if(Acl::instance()->is_allowed('post_delete') && $role == 'Admin') { ?>
+                                        <a onclick="delete_comment(this, <?php echo $comment->id; ?>);" class="del-comment" style="font-size: 11px; font-weight: bold; display: none; cursor: pointer;">X</a>
+                                    <?php } else if(Acl::instance()->is_allowed('post_delete') && $role == 'studentmoderator' && $user->role()->name == 'Student') { ?>
+                                        <a onclick="delete_comment(this, <?php echo $comment->id; ?>);" class="del-comment" style="font-size: 11px; font-weight: bold; display: none; cursor: pointer;">X</a>
+                                    <?php } else if(Acl::instance()->is_allowed('post_delete') && $role == 'Teacher' && $user->role()->name == 'Student') { ?>
+                                        <a onclick="delete_comment(this, <?php echo $comment->id; ?>);" class="del-comment" style="font-size: 11px; font-weight: bold; display: none; cursor: pointer;">X</a>
                                     <?php } else { ?>
-                                        &nbsp;
+                                        <?php if(Auth::instance()->get_user()->id == $comment->user_id) { ?>
+                                            <a onclick="delete_selfcomment(this, <?php echo $comment->id; ?>);" class="del-comment" style="font-size: 11px; font-weight: bold; display: none; cursor: pointer;">X</a>
+                                        <?php } else { ?>
+                                            &nbsp;
+                                        <?php } ?>
                                     <?php } ?>
                                 </td>
                             </tr>

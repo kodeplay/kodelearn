@@ -29,4 +29,12 @@ return array(
     'play' => array(
         'ignore' => true,
     ),
+    
+    'post' => array(
+        'levels' => array(
+            'deletecomment',
+        )
+    ),
+    
+    
 );

@@ -8,6 +8,7 @@ class Feed_Lecture extends Feed {
                ->bind('lecture', $lecture)
                ->bind('user', $user)
                ->bind('span', $span)
+               ->bind('role', $role)
                ->bind('feed_id', $feed_id)
                ->bind('comments', $comments);
                
@@ -24,6 +25,9 @@ class Feed_Lecture extends Feed {
         $span = Date::fuzzy_span($this->time);
         
         $feed_id = $this->id;
+        
+        $curr_user = Auth::instance()->get_user();
+        $role = $curr_user->role()->name;
         
         $comment = ORM::factory('feedcomment');
         $comment->where('feed_id', '=', $feed_id)

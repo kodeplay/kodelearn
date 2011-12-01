@@ -149,5 +149,13 @@ class Controller_Post extends Controller_Base {
         
     }
     
+    public function action_deletecomment() {
+        $id = $this->request->param('id');
+        ORM::factory('feedcomment', $id)->delete();
+        
+    }
+    
+    
+    
     
 }

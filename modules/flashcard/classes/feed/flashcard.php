@@ -15,10 +15,14 @@ class Feed_Flashcard extends Feed {
                 ->order_by('date', 'DESC');
         $comments = $comment->find_all();
         
+        $curr_user = Auth::instance()->get_user();
+        $role = $curr_user->role()->name;
+        
         $view = View::factory('feed/'.$this->type.'_'.$this->action)
                ->bind('flashcard', $flashcard)
                ->bind('user', $user)
                ->bind('span', $span)
+               ->bind('role', $role)
                ->bind('feed_id', $feed_id)
                ->bind('comments', $comments);
         

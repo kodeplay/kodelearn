@@ -22,12 +22,16 @@ class Feed_Attendance extends Feed {
                 ->order_by('date', 'DESC');
         $comments = $comment->find_all();
         
+        $curr_user = Auth::instance()->get_user();
+        $role = $curr_user->role()->name;
+        
         $view = View::factory('feed/'.$this->type . '_' . $this->action)
                ->bind('user', $user)
                ->bind('event', $event)
                ->bind('event_details', $event_details)
                ->bind('attendance', $attendance)
                ->bind('span', $span)
+               ->bind('role', $role)
                ->bind('feed_id', $feed_id)
                ->bind('comments', $comments);
                
