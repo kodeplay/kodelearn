@@ -37,3 +37,6 @@
 [submodule "modules/purifier"]
 	path = modules/purifier
 	url = git://github.com/shadowhand/purifier.git
+[submodule "modules/eventdispatch"]
+	path = modules/eventdispatch
+	url = https://github.com/ollym/event.git

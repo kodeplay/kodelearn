@@ -6,6 +6,9 @@ DynamicMenu::extend(array(
     ),
 ));
 
+// register handler class for sending exam related notices upon various events
+Notice::instance()->register_handler('exam');
+
 Hook::instance()->register("send_reminder",'Model_Exam::send_exam_reminder');
 
 Hook::instance()->register("course_count",'Model_Exam::get_course_exams_count');
