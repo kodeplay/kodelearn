@@ -86,11 +86,35 @@ class Notice {
             $action = $mod . '_' . $conf;
             $event = Event::instance($action);
             foreach (self::$MEDIA as $m) {
-                if ($this->check_preference($action, $m)) {
-                    $callback = $m . '_' . $conf;
+                $callback = $m . '_' . $conf;
+                if ($this->check_preference($action, $m) && method_exists($handlerClass, $callback)) {
                     $event->callback(array($handlerClass, $callback));
                 }
             }            
         }
+    }    
+
+    /**
+     * Method to return the array of email recipients
+     * @param Database_MySQL_Result
+     * @return array of firstnames and emails of the recipients
+     */
+    public static function email_recipients(Database_MySQL_Result $users) {
+        $users = $users->as_array();
+        $recipients = array();
+        if ($users) {
+            foreach ($users as $user) {
+                $recipients[] = array(
+                    'firstname' => $user->firstname,
+                    'email' => $user->email,
+                );
+            }
+        }
+        return $recipients;        
+    }
+
+    public static function email($users, $subject, $body) {
+        $sender = Model_Noticesetting::settings()->sender_email;
+        Email::decoratedmail($users, $sender, $subject, $body);
     }    
 }
