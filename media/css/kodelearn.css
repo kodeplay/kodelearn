@@ -329,6 +329,9 @@ a{ color: #427693; }
 .sidemenu.Calendar a {	background-position:0 -173px; }
 .sidemenu.Quiz a, .sidemenu.Exercises a { background-position:0 -422px; }
 
+.sidemenu.Info a {  background-position:0 -375px; }
+.sidemenu.Wall a {    background-position:0 -284px; }
+
 .sidemenu a:hover {	color: #415666; }
 .sidemenu.active {
 	background: #f4f4f4;
@@ -1374,3 +1377,12 @@ ul.math-editor-menu a:hover { text-decoration: underline; cursor: pointer; }
 .tex-help { background: #fffacd; width: 70%; border: 1px solid #FEB100; font-size: 11px; margin-bottom: 6px; padding: 3px;  }
 
 .tex-editor-preview { background: #eee; margin: 5px 0px; padding: 5px; width: 70%; }
+
+
+#sbProfile-viewImg {
+    width: 155px;
+    height: 155px;
+    padding: 3px;
+    border: 1px solid #ccc;
+    margin: 10px auto;
+}

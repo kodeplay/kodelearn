@@ -158,5 +158,6 @@ return array(
     'attendance_add' => array(
         'description'     => 'You can add/edit attendance here.',
         'title'           => 'Mark Attendance',
-    ),    
+    ),  
+     
 );

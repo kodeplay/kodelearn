@@ -18,6 +18,8 @@ class Feed_Batch extends Feed {
         $curr_user = Auth::instance()->get_user();
         $role = $curr_user->role()->name;
         
+        $url = Url::site('profile/view/id/');
+        
         $view = View::factory('feed/'.$this->type . '_' . $this->action)
                ->bind('user', $user)
                ->bind('count_user', $count_user)
@@ -25,7 +27,8 @@ class Feed_Batch extends Feed {
                ->bind('span', $span)
                ->bind('role', $role)
                ->bind('feed_id', $feed_id)
-               ->bind('comments', $comments); 
+               ->bind('comments', $comments)
+               ->bind('url', $url); 
                              
         return $view->render();
     }

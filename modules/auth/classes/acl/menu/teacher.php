@@ -22,9 +22,14 @@ class Acl_Menu_Teacher extends Acl_Menu {
             ->set('myaccount', $myaccount);
         $coursemenu = DynamicMenu::factory('coursemenu');
         
+        $profilemenu = DynamicMenu::factory('profilemenu');
+        $profilemenu->add_link('profile/view/id', 'Info', 0)
+                ->add_link('profile', 'Wall', 1);
+                
         $this->set('topmenu', $topmenu)
             ->set('sidemenu', $sidemenu)
             ->set('coursemenu', $coursemenu)
-            ->set('myaccount', $myaccount);
+            ->set('myaccount', $myaccount)
+            ;
     }
 }

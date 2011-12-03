@@ -221,6 +221,7 @@ class Controller_Base extends Controller_Template {
         $topmenu = $menu->get('topmenu');
         $sidemenu = $menu->get('sidemenu');
         $coursemenu = $menu->get('coursemenu');
+        
         $myaccount = $menu->get('myaccount');
         $institution = ORM::factory('institution', $id=1);
         $image = CacheImage::instance()->resize($institution->logo, 240, 60);

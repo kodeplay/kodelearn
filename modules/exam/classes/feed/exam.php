@@ -13,6 +13,7 @@ class Feed_Exam extends Feed {
         
         $curr_user = Auth::instance()->get_user();
         $role = $curr_user->role()->name;
+        $url = Url::site('profile/view/id/');
         
         if($this->action == "publish_result"){
             $examgroup = ORM::factory('examgroup', $this->respective_id);
@@ -28,7 +29,8 @@ class Feed_Exam extends Feed {
                    ->bind('span', $span)
                    ->bind('role', $role)
                    ->bind('feed_id', $feed_id)
-                   ->bind('comments', $comments);
+                   ->bind('comments', $comments)
+                   ->bind('url', $url);
         } else {
             $exam = ORM::factory('exam', $this->respective_id);
             if($this->check_deleted($exam)) return View::factory('feed/unavaliable')->render();
@@ -42,7 +44,8 @@ class Feed_Exam extends Feed {
                    ->bind('span', $span)
                    ->bind('role', $role)
                    ->bind('feed_id', $feed_id)
-                   ->bind('comments', $comments);
+                   ->bind('comments', $comments)
+                   ->bind('url', $url);
             
         }
         

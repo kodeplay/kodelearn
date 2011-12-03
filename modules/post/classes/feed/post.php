@@ -10,7 +10,8 @@ class Feed_Post extends Feed {
             ->bind('span', $span)
             ->bind('role', $role)
             ->bind('feed_id', $feed_id)
-            ->bind('comments', $comments);    
+            ->bind('comments', $comments)
+            ->bind('url', $url);    
                 
         $feed_id = $this->id;
         $post = ORM::factory('post', $this->respective_id);
@@ -24,6 +25,8 @@ class Feed_Post extends Feed {
         $comment->where('feed_id', '=', $feed_id)
                 ->order_by('date', 'DESC');
         $comments = $comment->find_all();
+        
+        $url = Url::site('profile/view/id/');
         
         return $view->render();        
     }

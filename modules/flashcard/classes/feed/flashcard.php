@@ -18,13 +18,16 @@ class Feed_Flashcard extends Feed {
         $curr_user = Auth::instance()->get_user();
         $role = $curr_user->role()->name;
         
+        $url = Url::site('profile/view/id/');
+        
         $view = View::factory('feed/'.$this->type.'_'.$this->action)
                ->bind('flashcard', $flashcard)
                ->bind('user', $user)
                ->bind('span', $span)
                ->bind('role', $role)
                ->bind('feed_id', $feed_id)
-               ->bind('comments', $comments);
+               ->bind('comments', $comments)
+               ->bind('url', $url);
         
         return $view->render();
     }

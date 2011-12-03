@@ -10,7 +10,8 @@ class Feed_Lecture extends Feed {
                ->bind('span', $span)
                ->bind('role', $role)
                ->bind('feed_id', $feed_id)
-               ->bind('comments', $comments);
+               ->bind('comments', $comments)
+               ->bind('url', $url);
                
     	if($this->action == 'add'){
 	        $lecture = ORM::factory('lecture', $this->respective_id);
@@ -33,6 +34,8 @@ class Feed_Lecture extends Feed {
         $comment->where('feed_id', '=', $feed_id)
                 ->order_by('date', 'DESC');
         $comments = $comment->find_all();
+        
+        $url = Url::site('profile/view/id/');
         
         return $view->render();
     }

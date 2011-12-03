@@ -10,10 +10,10 @@
     <table class="fullwidth">
         <tr>
             <td class="w8">
-                <img src = "<?php echo $avatar; ?>" class = "h70 "></img>
+                <a href="<?php echo $url."/".$user->id; ?>"><img src = "<?php echo $avatar; ?>" class = "h70 "></img></a>
             </td>
             <td class="vatop hpad10">
-                <p class="h3"><span class = "roleIcon <?php echo $user->role(); ?>">&nbsp;</span><?php echo $user->fullname(); ?></p><br>
+                <p class="h3"><span class = "roleIcon <?php echo $user->role(); ?>">&nbsp;</span><a href="<?php echo $url."/".$user->id; ?>"><?php echo $user->fullname(); ?></a></p><br>
                 <p class="h5 lh140 tRed" >The <?php echo $lecture ?> Lecture On <?php echo date('d F Y h:i A',$event->eventstart) ?> has been cancelled.</p>
                 <br>
                 <span class="h6 tlGray"><?php echo $span; ?></span>
@@ -42,10 +42,10 @@
                         <?php if($i > 4) { ?>
                             <tr class="view-limit del-comm" style='border-top: 1px solid #fff; display: none'>
                                 <td class='pad5' style='width: 40px;'>
-                                    <img src='<?php echo $comment_img; ?>' style='width: 40px; height: 40px;' />
+                                    <a href="<?php echo $url."/".$comment->user_id; ?>"><img src='<?php echo $comment_img; ?>' style='width: 40px; height: 40px;' /></a>
                                 </td>
                                 <td class='vatop pad5' style='width: 350px;'>
-                                    <a style='font-size: 14px; font-weight: bold;'><?php echo $comment_user->firstname." ".$comment_user->lastname ?></a>
+                                    <a href="<?php echo $url."/".$comment->user_id; ?>" style='font-size: 14px; font-weight: bold;'><?php echo $comment_user->firstname." ".$comment_user->lastname ?></a>
                                     <span class='hpad10' style='font-size: 12px;'><?php echo Html::chars($comment->comment); ?></span>
                                     <p class='vpad10' style='font-size: 11px; color: #777;'><?php echo Date::fuzzy_span($comment->date); ?></p>
                                 </td>
@@ -68,10 +68,10 @@
                         <?php } else {?>
                             <tr class="del-comm" style='border-top: 1px solid #fff; display: block'>
                                 <td class='pad5' style='width: 40px;'>
-                                    <img src='<?php echo $comment_img; ?>' style='width: 40px; height: 40px;' />
+                                    <a href="<?php echo $url."/".$comment->user_id; ?>"><img src='<?php echo $comment_img; ?>' style='width: 40px; height: 40px;' /></a>
                                 </td>
                                 <td class='vatop pad5' style='width: 350px;'>
-                                    <a style='font-size: 14px; font-weight: bold;'><?php echo $comment_user->firstname." ".$comment_user->lastname ?></a>
+                                    <a href="<?php echo $url."/".$comment->user_id; ?>" style='font-size: 14px; font-weight: bold;'><?php echo $comment_user->firstname." ".$comment_user->lastname ?></a>
                                     <span class='hpad10' style='font-size: 12px;'><?php echo Html::chars($comment->comment); ?></span>
                                     <p class='vpad10' style='font-size: 11px; color: #777;'><?php echo Date::fuzzy_span($comment->date); ?></p>
                                 </td>
