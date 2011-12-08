@@ -22,28 +22,7 @@ class Model_Exam extends ORM {
             ->rule('passing_marks', 'Model_Exam::marks_check', array(':value',':total_marks'))
             ->rule('passing_marks', 'digit')
             ->rule('name', 'min_length', array(':value', 3));
-    }
-    
-    public static function time_check($from, $to = NULL) {
-        $s_from = strtotime($from);
-        
-        $s_to = strtotime($to);
-        
-        if($s_from > $s_to){
-            return false;
-        } else {
-            return true;
-        }
-    }
-    
-    public static function marks_check($passing_marks, $total_marks = NULL) {
-        
-        if($passing_marks > $total_marks){
-            return false;
-        } else {
-            return true;
-        }
-    }
+    }    
 
     /**
      * Method to get the students appearing for an exam
@@ -71,6 +50,55 @@ class Model_Exam extends ORM {
             $url = Url::site('exam');
         }
         return Html::anchor($url, (string)$this);
+    }
+
+    /**
+     * Method to return the formatted date of the exam
+     */
+    public function format_scheduled_date() {
+        return date('Y-m-d', $this->event->eventstart);
+    }
+
+    /**
+     * Method to return the formatted start time of the exam
+     */
+    public function format_starttime() {
+        return date('H:i:s', $this->event->eventstart);
+    }
+
+    /**
+     * Method to return the formatted end time of the exam
+     */
+    public function format_endtime() {
+        return date('H:i:s', $this->event->eventend);
+    }
+
+    /**
+     * Method to return the name of the room where the exam is going to be held
+     */
+    public function location() {
+        return $this->event->room;
+    }    
+
+    public static function time_check($from, $to = NULL) {
+        $s_from = strtotime($from);
+        
+        $s_to = strtotime($to);
+        
+        if($s_from > $s_to){
+            return false;
+        } else {
+            return true;
+        }
+    }
+    
+    public static function marks_check($passing_marks, $total_marks = NULL) {
+        
+        if($passing_marks > $total_marks){
+            return false;
+        } else {
+            return true;
+        }
     }
     
     public static function exams_total($filters=array()) {

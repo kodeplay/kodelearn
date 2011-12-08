@@ -14,43 +14,56 @@ abstract class Event_Abstract {
 
     protected $_event_id;
 
+    /**
+     * Flag that indicates whether an update event operation resulted in
+     * rescheduling of the event. If update is called, this variable
+     * will take value of either true or false
+     */
+    protected $_is_rescheduled = null;
+
+    /**
+     * Flag that indicates whether an update event operation resulted in
+     * relocating of the event
+     */
+    protected $_is_relocated = null;
+
     public function __construct($event_id = null) {
         $this->_event_id = $event_id;
     }
     
     public function get_room_id(){
-      return $this->_room_id;
+        return $this->_room_id;
     }
     
     public function set_room_id($value){
-      $this->_room_id = $value;
+        $this->_room_id = $value;
     }
-       
-     
+    
+    
     public function get_eventend(){
-      return $this->_eventend;
+        return $this->_eventend;
     }
     
     public function set_eventend($value){
-      $this->_eventend = $value;
+        $this->_eventend = $value;
     }
-       
-     
+    
+    
     public function get_eventstart(){
-      return $this->_eventstart;
+        return $this->_eventstart;
     }
     
     public function set_eventstart($value){
-      $this->_eventstart = $value;
+        $this->_eventstart = $value;
     }
-       
-     
+    
+    
     public function get_eventtype(){
-      return $this->_eventtype;
+        return $this->_eventtype;
     }
     
     public function set_eventtype($value){
-      $this->_eventtype = $value;
+        $this->_eventtype = $value;
     }
     
     
@@ -76,59 +89,51 @@ abstract class Event_Abstract {
         return (isset($values['eventstart']) && isset($values['eventend']) && isset($values['room_id']));
     }
     
-    public function add(){
-        
-        $event = ORM::factory('event');
-        
-        $event->values($this->_values);
-        
-        $event->save();
-        
-        return $event->id; 
-        
+    public function add(){        
+        $event = ORM::factory('event');        
+        $event->values($this->_values);        
+        $event->save();        
+        return $event->id;         
     }
     
     public static function get_room_conflict_events(){
-    	$sql = "SELECT e1.id FROM `events` e1 JOIN `events` e2 WHERE ((e1.eventstart BETWEEN e2.eventstart AND e2.eventend OR e1.eventend BETWEEN e2.eventstart AND e2.eventend) OR (e2.eventstart BETWEEN e1.eventstart AND e1.eventend OR e2.eventend BETWEEN e1.eventstart AND e1.eventend)) AND e1.id != e2.id  AND e1.room_id = e2.room_id AND e1.cancel = 0 AND e2.cancel = 0 ";
-    	
-    	$query = DB::query(Database::SELECT, $sql);
-    	
+    	$sql = "SELECT e1.id FROM `events` e1 JOIN `events` e2 WHERE ((e1.eventstart BETWEEN e2.eventstart AND e2.eventend OR e1.eventend BETWEEN e2.eventstart AND e2.eventend) OR (e2.eventstart BETWEEN e1.eventstart AND e1.eventend OR e2.eventend BETWEEN e1.eventstart AND e1.eventend)) AND e1.id != e2.id  AND e1.room_id = e2.room_id AND e1.cancel = 0 AND e2.cancel = 0 ";        
+    	$query = DB::query(Database::SELECT, $sql);        
     	return $query->execute()->as_array(NULL, 'id');
     } 
     
     public static function get_avaliable_rooms($from, $to, $event_id = FALSE){
-
-    	$sql = 'SELECT `events`.* FROM `events` WHERE ((`events`.`eventstart` BETWEEN :from AND :to OR `events`.`eventend` BETWEEN :from AND :to) OR (:from BETWEEN `events`.`eventstart` AND `events`.`eventend` OR :to BETWEEN `events`.`eventstart` AND `events`.`eventend`)) AND `events`.cancel = 0';
-    	
+    	$sql = 'SELECT `events`.* FROM `events` WHERE ((`events`.`eventstart` BETWEEN :from AND :to OR `events`.`eventend` BETWEEN :from AND :to) OR (:from BETWEEN `events`.`eventstart` AND `events`.`eventend` OR :to BETWEEN `events`.`eventstart` AND `events`.`eventend`)) AND `events`.cancel = 0';        
     	if($event_id){
-    		$sql .= ' AND `events`.id != ' . (int) $event_id;
+            $sql .= ' AND `events`.id != ' . (int) $event_id;
     	}
-
-		$query = DB::query(Database::SELECT, $sql);
-		 
-		$query->parameters(array(
-		    ':from' => $from,
-		    ':to' => $to,
-		));
-
-		$occupied_room_ids = $query->execute()->as_array(NULL, 'room_id');
-    	
+        $query = DB::query(Database::SELECT, $sql);        
+        $query->parameters(array(
+            ':from' => $from,
+            ':to' => $to,
+        ));
+        $occupied_room_ids = $query->execute()->as_array(NULL, 'room_id');        
         $room = ORM::factory('room');
-        if($occupied_room_ids)
+        if ($occupied_room_ids) {
             $room->where('id', 'NOT IN', $occupied_room_ids);
-        
-        $rooms = $room->find_all()->as_array();
-        
+        }        
+        $rooms = $room->find_all()->as_array();        
         return $rooms;
     }
     
-    public function update($id){
-        
-        $event = ORM::factory('event', $id);
-        
-        $event->values($this->_values);
-        
-        $event->save();
-        
+    public function update($id){        
+        $event = ORM::factory('event', $id);        
+        $this->_is_rescheduled = ($event->eventstart != $this->_values['eventstart'] || $event->eventend != $this->_values['eventend']);
+        $this->_is_relocated = ($event->room_id != $this->_values['room_id']);
+        $event->values($this->_values);        
+        $event->save();        
     } 
+
+    public function is_rescheduled() {
+        return $this->_is_rescheduled;
+    }
+
+    public function is_relocated() {
+        return $this->_is_relocated;
+    }
 }

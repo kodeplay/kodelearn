@@ -673,6 +673,10 @@ tr.bad { background: #f4dcdc; }
     width: 145px;
 }
 
+.datatable.nonzebra tr:nth-child(odd) td {
+    background-color: #fff;
+}
+
 .trid, .triu {	font-size: 9px; }
 
 /* .......................

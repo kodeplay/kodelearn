@@ -311,6 +311,11 @@ class Controller_Exam extends Controller_Base {
                         'course_id' => (int)$this->request->post('course_id'),                        
                     ));
                     $feed->save();
+
+                    Event::instance('exam_create')
+                        ->set('exam', $exam)
+                        ->execute();
+
                     Session::instance()->set('success', 'Exam added successfully.');
                     Request::current()->redirect('exam');
                     exit;
@@ -363,25 +368,32 @@ class Controller_Exam extends Controller_Base {
                 $validator->bind(':to', $this->request->post('to'));
                 $validator->bind(':total_marks', $this->request->post('total_marks'));
                 if ($validator->check()) {
-
                     $from = strtotime($this->request->post('date')) + ($this->request->post('from') * 60); 
-                    $to = strtotime($this->request->post('date')) + ($this->request->post('to') * 60); 
-                    
-                    $exam = ORM::factory('exam', $id);
-                    
-                    $exam->values($this->request->post());
-                    
-                    $exam->save();
-                    
-                    $event_exam = Event_Abstract::factory('exam');
+                    $to = strtotime($this->request->post('date')) + ($this->request->post('to') * 60);                     
+                    $exam = ORM::factory('exam', $id);                    
+                    $exam->values($this->request->post());                    
+                    $exam->save();                    
+
+                    $event_exam = Event_Abstract::factory('exam', $exam->event_id);
                     $event_exam->set_values($this->request->post());
                     $event_exam->set_value('eventstart', $from);
-                    $event_exam->set_value('eventend', $to);
-                    
+                    $event_exam->set_value('eventend', $to);                    
                     $event_exam->update($exam->event_id);
                     
-                    $feed = new Feed_Exam();
-                    
+                    // dispatch events for sending the notices and feeds (TODO to be refactored later)
+                    if ($event_exam->is_rescheduled()) {
+                        Event::instance('exam_reschedule')
+                            ->set('exam', $exam)
+                            ->execute();
+                    }
+
+                    if ($event_exam->is_relocated()) {
+                        Event::instance('exam_relocate')
+                            ->set('exam', $exam)
+                            ->execute();
+                    }
+
+                    $feed = new Feed_Exam();                    
                     $feed->set_action('edit');
                     $feed->set_course_id($this->request->post('course_id'));
                     $feed->set_respective_id($exam->id);
@@ -390,7 +402,6 @@ class Controller_Exam extends Controller_Base {
                         'course_id' => (int)$this->request->post('course_id'),                        
                     ));
                     $feed->save();
-                    
                     Session::instance()->set('success', 'Exam edited successfully.');
                     Request::current()->redirect('exam');
                     exit;
