@@ -552,3 +552,33 @@ CREATE TABLE IF NOT EXISTS `feedcomments` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=116 ;
 
   
+  
+  
+CREATE TABLE IF NOT EXISTS `post_meta` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `post_id` int(11) NOT NULL,
+  `key` varchar(255) NOT NULL,
+  `value` text NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=93 ;
+
+
+
+CREATE TABLE IF NOT EXISTS `links` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `title` varchar(255) NOT NULL,
+  `description` varchar(255) NOT NULL,
+  `image` varchar(255) NOT NULL,
+  `url` varchar(255) NOT NULL,
+  `course_id` int(11) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=18 ;
+
+CREATE TABLE IF NOT EXISTS `videos` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `title` varchar(255) NOT NULL,
+  `description` varchar(255) NOT NULL,
+  `code` varchar(255) NOT NULL,
+  `course_id` int(11) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=16 ;
