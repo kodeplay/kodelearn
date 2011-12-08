@@ -464,6 +464,7 @@ KODELEARN.modules.add('post', (function () {
             }).trigger('change');
             $("a.button", "#post-form").click(function () {
                 var formdata = $("form[name='post_status']").serializeArray();
+               
                 KODELEARN.helpers.request.post({
                     url: KODELEARN.config.base_url+"post/add/",
                     data: formdata,
@@ -472,6 +473,11 @@ KODELEARN.modules.add('post', (function () {
                     success: function (resp) {
                         $('#post').val("");
                         $('#feeds').prepend(resp.html);
+                        $("#link_share").val('0');
+                        $("#loader").html("");
+                        $("#link").html("");
+                        $("#loader").css('display', 'none');
+                        $("#link").css('display', 'none'); 
                     }
                 });
             });
@@ -897,7 +903,7 @@ function onCommentPost(self, e, feed_id) {
 						content += "<a onclick='delete_selfcomment(this, "+ data.comment_id +");' class='del-comment' style='font-size: 11px; font-weight: bold; display: none; cursor: pointer;'>X</a>";
 						content += "</td></tr>";
 						$(self).parent().parent().parent().parent().parent().find('.new-comments').append(content);
-						$(self).val('')
+						$(self).val('');
 					}
 		});
 	}

@@ -11,7 +11,10 @@ class Feed_Post extends Feed {
             ->bind('role', $role)
             ->bind('feed_id', $feed_id)
             ->bind('comments', $comments)
-            ->bind('url', $url);    
+            ->bind('url', $url)
+            ->bind('link', $query)
+            ->bind('video', $query_video)
+            ;    
                 
         $feed_id = $this->id;
         $post = ORM::factory('post', $this->respective_id);
@@ -27,6 +30,20 @@ class Feed_Post extends Feed {
         $comments = $comment->find_all();
         
         $url = Url::site('profile/view/id/');
+        $query = "";
+        if($post->link == 'link') {
+            $query = DB::select('key', 'value')
+                    ->from('post_meta')
+                    ->where('post_id', '=', $post->id)
+                    ->execute()->as_array('key','value');
+        }
+        $query_video = "";
+        if($post->link == 'video') {
+            $query_video = DB::select('key', 'value')
+                    ->from('post_meta')
+                    ->where('post_id', '=', $post->id)
+                    ->execute()->as_array('key','value');
+        }
         
         return $view->render();        
     }

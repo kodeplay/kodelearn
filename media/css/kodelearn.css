@@ -1386,3 +1386,49 @@ ul.math-editor-menu a:hover { text-decoration: underline; cursor: pointer; }
     border: 1px solid #ccc;
     margin: 10px auto;
 }
+
+.button-arrow {
+    font-weight: bold;
+    padding: 3px 10px;
+    border-radius: 9px;
+    background: #415665 url("../image/button.png") repeat-x left bottom;
+    color: #fff;
+    text-shadow: 1px 1px 1px #1f2830;
+    -webkit-transition: -webkit-box-shadow 0.3s ease;
+    -moz-transition: -moz-box-shadow 0.3s ease;
+    transition: box-shadow 0.3s ease;
+    border: none;
+    cursor: pointer;
+}
+.button-arrow:hover {
+    -webkit-box-shadow: 0 0 8px #4f6473;
+    -moz-box-shadow: 0 0 8px #4f6473;
+    box-shadow: 0 0 8px #4f6473;
+}
+.button-arrow.disabled {
+    background: url("../image/disabledBtn.png") repeat-x left bottom;
+    color: #7c7c7c;
+    cursor: text;
+}
+.button-arrow.disabled:hover {
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    -ms-box-shadow: none;
+    box-shadow: none;
+}
+
+.link_text_area {
+    height: 100px; 
+    width: 550px; 
+    
+}
+
+.link_text {
+    width: 550px; 
+}
+
+.youtube {
+    background: url("../image/youtube-logo.png");
+    width: 100px;
+    height: 50px;
+}

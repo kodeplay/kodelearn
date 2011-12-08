@@ -128,6 +128,8 @@ Kohana::modules(array(
     'lesson'        => MODPATH.'lesson',
     'flashcard'     => MODPATH.'flashcard',
     'question'      => MODPATH.'question',
+    'link'          => MODPATH.'link',
+    'video'         => MODPATH.'video',
 ));
 
 /**

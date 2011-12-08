@@ -1,9 +1,15 @@
 <?php defined('SYSPATH') or die('No direct script access.');
+include(DOCROOT.'vendor/simple_html_dom.php');
 
 class Controller_Profile extends Controller_Base {
     
     public function action_index() {
         
+        $html = file_get_html('http://www.kodeplay.com/');
+
+        // Find all images 
+        foreach($html->find('img') as $element) 
+               echo "<img src='".$element->src ."' style='width: 150px; height: 125px;' />" ;
     }
     
     public function action_view(){

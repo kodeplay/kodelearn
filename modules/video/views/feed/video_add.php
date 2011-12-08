@@ -5,44 +5,17 @@
     $curr_user = Auth::instance()->get_user();
     $curr_avatar = $image->resize($curr_user->avatar, 40, 40);
 ?>
+
     
-    <table class="fullwidth posts">
+    <table class="fullwidth">
         <tr>
             <td class="w8">
                 <a href="<?php echo $url."/".$user->id; ?>"><img src = "<?php echo $avatar; ?>" class = "h70 "></img></a>
             </td>
             <td class="vatop hpad10">
                 <p class="h3"><span class = "roleIcon <?php echo $user->role(); ?>">&nbsp;</span><a href="<?php echo $url."/".$user->id; ?>"><?php echo $user->fullname(); ?></a></p><br>
-                
-                <?php if($link) { ?>
-                    <p class="h5 lh140" ><a href="<?php echo $link['link']; ?>" target="_blank"><?php echo Html::chars($post->message); ?></a></p><br/>
-                    <table style='width: 90%;'>
-                        <tr>
-                            <td style='vertical-align: top; padding: 5px;'>
-                                <a href="<?php echo $link['link']; ?>" target="_blank"><img src='<?php echo $link['image']; ?>' style='width: 120px;' /></a>
-                            </td>
-                            <td style='vertical-align: top; padding: 5px; font-size: 13px;'>
-                                <div id='title' style='color: #333; font-weight: bold;'><a href="<?php echo $link['link']; ?>" target="_blank"><?php echo $link['title']; ?></a></div>
-                                <div id='text' style='padding-top: 10px; color: #777;'><?php echo htmlentities($link['text'], ENT_QUOTES, 'UTF-8'); ?></div>
-                            </td>
-                        </tr>
-                    </table>
-                <?php } else if($video) { ?>
-                    <p class="h5 lh140" ><a href="<?php echo $video['link']; ?>" target="_blank"><?php echo Html::chars($post->message); ?></a></p><br/>
-                    <table style='width: 99%;'>
-                        <tr>
-                            <td style='vertical-align: top; padding: 5px;'>
-                                <iframe width="450" height="240" src="http://www.youtube.com/embed/<?php echo $video['code']; ?>?version=3&autohide=1" frameborder="0" allowfullscreen></iframe>
-                            </td>
-                            <td style='vertical-align: top; padding: 5px; font-size: 12px;'>
-                                <div id='title' style='color: #333; font-weight: bold;'><a href="<?php echo $video['link']; ?>" target="_blank"><?php echo $video['title']; ?></a></div>
-                                <div id='text' style='padding-top: 10px; color: #777;'><?php echo htmlentities($video['text'], ENT_QUOTES, 'UTF-8'); ?></div>
-                            </td>
-                        </tr>
-                    </table>    
-                <?php } else { ?>
-                    <p class="h5 lh140" ><?php echo Html::chars($post->message); ?></p><br/>
-                <?php } ?>
+                <p class="h5 lh140" >Has added a new set of flashcards <a href="<?php echo Url::site('flashcard/study/id/'.$flashcard->id); ?>"><?php echo $flashcard->title; ?></a><br>
+                </p><br>
                 <span class="h6 tlGray"><?php echo $span; ?></span>
                 
                 <a class="h6" style="cursor: pointer;" onclick="show_comment_entry_box(this, '<?php echo $curr_avatar; ?>', '<?php echo $feed_id; ?>')"><span class="h6 tlGray">-</span> Comment</a>
@@ -50,22 +23,6 @@
                 <?php if(count($comments) > 4) { ?>
                     
                     <a class="h6" style="cursor: pointer;" onclick="showViewLimit(this)"><span class="h6 tlGray">-</span> View All (<?php echo count($comments); ?>)</a>
-                <?php } ?>
-                
-            </td>
-            <td class="vatop w2">
-                <?php if(Acl::instance()->is_allowed('post_delete') && $role == 'Admin') { ?>
-                    <a onclick="delete_post(this, <?php echo $post->id; ?>);" class="del-post" style="font-size: 13px; font-weight: bold; display: none; cursor: pointer;">X</a>
-                <?php } else if(Acl::instance()->is_allowed('post_delete') && $role == 'studentmoderator' && $user->role()->name == 'Student') { ?>
-                    <a onclick="delete_post(this, <?php echo $post->id; ?>);" class="del-post" style="font-size: 13px; font-weight: bold; display: none; cursor: pointer;">X</a>
-                <?php } else if(Acl::instance()->is_allowed('post_delete') && $role == 'Teacher' && $user->role()->name == 'Student') { ?>
-                    <a onclick="delete_post(this, <?php echo $post->id; ?>);" class="del-post" style="font-size: 13px; font-weight: bold; display: none; cursor: pointer;">X</a>
-                <?php } else { ?>
-                    <?php if(Auth::instance()->get_user()->id == $user->id) { ?>
-                        <a onclick="delete_selfpost(this, <?php echo $post->id; ?>);" class="del-post" style="font-size: 13px; font-weight: bold; display: none; cursor: pointer;">X</a>
-                    <?php } else { ?>
-                        &nbsp;
-                    <?php } ?>
                 <?php } ?>
             </td>
         </tr>
@@ -143,15 +100,8 @@
             </td>
         </tr>
     </table>
+
 <script type="text/javascript">
-
-$(".posts").hover(function () {
-	$(this).find(".del-post").css('display','block');
-},
-function () {
-    $(this).find(".del-post").css('display','none');
-});
-
 
 $(".del-comm").live('mouseenter', function () {
     $(this).find(".del-comment").css('display','block');
