@@ -582,3 +582,27 @@ CREATE TABLE IF NOT EXISTS `videos` (
   `course_id` int(11) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=16 ;
+
+--
+-- Table structure for table `noticesettings`
+--
+
+CREATE TABLE IF NOT EXISTS `noticesettings` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `institution_id` int(11) NOT NULL,
+  `status` tinyint(1) NOT NULL,
+  `sender_email` varchar(128) NOT NULL,
+  `preferences` text NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `institution_id` (`institution_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=2 ;
+
+--
+-- Constraints for dumped tables
+--
+
+--
+-- Constraints for table `noticesettings`
+--
+ALTER TABLE `noticesettings`
+  ADD CONSTRAINT `noticesettings_ibfk_1` FOREIGN KEY (`institution_id`) REFERENCES `institutions` (`id`);
