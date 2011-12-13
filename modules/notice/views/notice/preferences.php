@@ -5,8 +5,7 @@
         <div class="clear"></div>
     </div><!-- pageTop -->
     <div class="topbar">
-        <?php echo HTML::anchor('notice/settings','Notice Settings', array('class' => 'pageTab')); ?> 
-        <?php echo HTML::anchor('notice/preferences','Notice Preferences', array('class' => 'pageTab active')); ?>       
+        <?php require 'menu.php'; ?>      
     </div><!-- topbar -->
     <?php if ($success) {  ?>
         <div class="formMessages w90">     

@@ -69,6 +69,7 @@ a{ color: #427693; }
 .tGreen {	color: #693; }
 .tRed { color: #900000; }
 .alert {	color: #f00; }
+.bOffBrown { background: #F1EDD3; }
 
 .tpad10 {
 	padding-top: 10px;
@@ -1436,3 +1437,6 @@ ul.math-editor-menu a:hover { text-decoration: underline; cursor: pointer; }
     width: 100px;
     height: 50px;
 }
+
+#manual-notice-userlist { height: 300px; border: 1px solid #eee; }
+#manual-notice-userlist td { padding: 5px; }
