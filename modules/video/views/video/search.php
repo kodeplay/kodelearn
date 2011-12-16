@@ -52,6 +52,7 @@
                         </tr>
                 </table>
             </div>
+                
             <?php } ?>
             </form>       
     </div><!-- content -->
