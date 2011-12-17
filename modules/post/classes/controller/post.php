@@ -202,29 +202,9 @@ class Controller_Post extends Controller_Base {
         
         $youtube = substr($matches[0], 0, 15); // returns "d"
         if($youtube == "http://www.yout" || $youtube == "http://youtu.be") {
-            $img_j = $this->parse_youtube_url($matches[0],'thumb');
-            
-            $title_text = array();
-            foreach($html->find('title') as $title) { 
-                   $title_text[] = $title->plaintext;
-            }
-            $title_j = "";
-            
-            if($title_text) {
-                $title_j = $title_text[0];
-            }
-            
-            $description = $html->find('p[id=eow-description]', 0)->plaintext;
-            $description = substr($description, 0, 255);
-            $json = array(
-            'img' => $img_j,
-            'title' => $title_j,
-            'text'=> $description,
-            'link' => $matches[0],
-            'error' => 0,
-            'video_share' => 1
-            );
-            echo  json_encode($json);
+            $video_embed = Video::embed($matches[0]);
+            $video_result_json = $video_embed->getDataFromLink();
+            echo  json_encode($video_result_json);
             exit;
         }
         
@@ -316,5 +296,6 @@ class Controller_Post extends Controller_Base {
             return $id; 
         } 
     } 
+    
     
 }

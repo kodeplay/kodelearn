@@ -59,38 +59,6 @@
                 data: "post=" + post,
                 success: function(data)
                         {
-                              if(data.link_share == '1') {
-                                  $("#link_share").val('1');  
-                                  var content = "<table style='width: 90%;'><tr>";
-                                  content += "<td style='vertical-align: top; padding: 5px;'>";
-                                  var j = 1;
-                                  for(i=0; i<data.img.length; i++) {
-                                      content += "<img id='logo_img_"+ j +"' src='"+ data.img[i] +"' style='width: 120px; display: none;' />";
-                                      j++;
-                                  }
-                                  content += "</td>";
-                                  content += "<td style='vertical-align: top; padding: 5px; font-size: 13px;'>";
-                                  content += "<div id='title' style='color: #333; font-weight: bold;'>"+ data.title +"</div>";
-                                  content += "<div id='text' style='padding-top: 10px; color: #777;'>"+ data.text +"</div>";
-                                  content += "<div style='padding-top: 20px;'><a id='img_prev' class='button-arrow disabled' onclick='prev();'><</a> &nbsp; <a id='img_next' class='button-arrow' onclick='next();'>></a></div>";
-                                  content += "<input type='hidden' id='post_img' name='post_img' value='"+ data.img[0] +"'>";
-                                  content += "<input type='hidden' id='post_title' name='post_title' value='"+ data.title +"'>";
-                                  content += "<input type='hidden' id='post_text' name='post_text' value='"+ data.text +"'>";
-                                  content += "<input type='hidden' id='post_link' name='post_link' value='"+ data.link +"'>";
-                                  content += "<input type='hidden' id='post_counter' value='1'>";
-                                  content += "<input type='hidden' id='post_total_img' value='"+ data.img.length +"'>";
-                                  content += "</td>";
-                                  content += "</tr></table>";
-                                  
-                                  $("#link").html(content);
-                                  $("#logo_img_1").css('display', 'block');
-                                  $("#link").css('display', 'block');
-                                  $("#loader").html("");
-                                  $("#loader").css('display', 'none');
-                                  if(data.img.length == 1){
-                                      $("#img_next").addClass('disabled'); 
-                                  }
-                              } 
                               if(data.video_share == '1') {
                                   $("#video_share").val('1');
                                   var content = "<table style='width: 99%;'><tr>";
@@ -119,7 +87,14 @@
                                   $("#loader").html("");
                                   $("#loader").css('display', 'none');
                                   
-                              } 
+                              } else {
+                            	  $("#link_share").val('0');
+                                  $("#video_share").val('0');
+                                  $("#loader").html("");
+                                  $("#link").html("No content found");
+                                  $("#loader").css('display', 'none');
+                                  $("#link").css('display', 'block'); 
+                              }     
                             
                         },
                  error: function() {
@@ -134,35 +109,6 @@
         }
         
     });
-
-    function next() {
-        var total = parseInt($('#post_total_img').val());
-        var counter = parseInt($('#post_counter').val());
-        var counter_plus_one = counter + 1;
-        if(total < counter_plus_one) {
-            $("#img_next").addClass('disabled');
-            return false
-        }
-        $('#img_prev').removeClass('disabled')
-        $('#post_counter').val(counter_plus_one);
-        $("#logo_img_"+counter).css('display', 'none');
-        $("#logo_img_"+counter_plus_one).css('display', 'block');
-        $("#post_img").val($("#logo_img_"+counter_plus_one).attr('src'));
-    }
-
-    function prev() {
-        var counter = parseInt($('#post_counter').val());
-        var counter_minus_one = counter - 1;
-        if(counter_minus_one < 1) {
-            $("#img_prev").addClass('disabled');
-            return false
-        }
-        $('#img_next').removeClass('disabled')
-        $('#post_counter').val(counter_minus_one);
-        $("#logo_img_"+counter).css('display', 'none');
-        $("#logo_img_"+counter_minus_one).css('display', 'block');
-        $("#post_img").val($("#logo_img_"+counter_minus_one).attr('src'));
-    }
 
     function addLink() {
         $("#addLink").css('display', 'none');
