@@ -844,6 +844,117 @@ KODELEARN.modules.add('document', (function () {
     }
 })());
 
+KODELEARN.modules.add('notice', (function () {
+    return {
+
+        init: function () {
+            this.filter();
+            this.email();
+            this.sms();
+        },
+        
+        userlist: function () {
+            var selected = [];
+            $("input[name='selected[]']").each(function () {
+                if ($(this).attr('checked')) {
+                    selected.push($(this).val());
+                }
+            });
+            return selected;
+        },
+
+        filter: function () {
+            var $rolelist = $("input[name='filter_role[]']"),
+            $course = $("select[name='course']"),
+            $batch = $("select[name='batch']");     
+            $("#filter-btn").click(function () { 
+                var course = $course.val(),
+                batch = $batch.val(),
+                roles = [];
+                $rolelist.each(function () {
+                    if ($(this).attr('checked')) {
+                        roles.push($(this).val());
+                    }
+                });
+                // console.log(course, batch, roles);
+                var data = 'course_id/'+course+'/batch_id/'+batch+'/roles/'+roles.join('_');
+                $("#manual-notice-userlist").load(KODELEARN.config.base_url+'notice/ajax_userlist/'+data);        
+            }).trigger('click');     
+        },
+
+        email: function () {
+            var $emailDialog = $("#email-dialog");
+            var that = this;
+            // initialize the dialog
+            $emailDialog.dialog({
+                autoOpen: false,
+                title: 'Compose Email',
+                width: 450,
+                height: 360
+            });
+            // open the dialog
+            $("#btn-create-email").click(function () {
+                $emailDialog.dialog('open');             
+            });
+            $("#proceed-email").click(function () {        
+                var users = that.userlist(),
+                subject = $("input[name='email_subject']").val(),
+                msg = $("textarea[name='email_message']").val();
+                if (!validate(users, subject, msg)) {
+                    return;
+                }        
+                $.post(KODELEARN.config.base_url+'notice/ajax_mail/', { "selected[]": users, "subject": subject, "message": msg }, function (resp) {
+                    if (resp == '0') {
+                        var error = 'Some Error occured. Please try again later';
+                        $("#email-dialog").prepend('<div class="formMessages w90"><span class="fmIcon bad"></span> <span class="fmText">'+error+'</span><span class="clear">&nbsp;</span>');
+                    } else {
+                        $emailDialog.dialog('close');
+                        var success = 'Emails sent successfully';
+                        $("form[name='recipients-form']").prepend('<div class="formMessages w90"><span class="fmIcon good"></span> <span class="fmText">'+success+'</span><span class="clear">&nbsp;</span>');
+                    }     
+                });
+            }); 
+            // function to validate before sending the email
+            function validate(users, subject, msg) {
+                var $error = $("#email-dialog>.formMessages"),        
+                error = '';
+                if (!users.length) {
+                    error = 'Please select atleast one user';
+                }
+                else if (subject == '') {
+                    error = 'Please enter a subject for the mail';
+                }       
+                else if (msg == '') {
+                    error = 'Please enter a body for the mail';
+                } 
+                if (error) {
+                    if (!$error.length) {
+                        $("#email-dialog").prepend('<div class="formMessages w90"><span class="fmIcon bad"></span> <span class="fmText">'+error+'</span><span class="clear">&nbsp;</span>');
+                    } else {
+                        $("#email-dialog>.formMessages>.fmText").text(error);
+                    }
+                    return false;
+                }
+                else {
+                    $error.remove();
+                    return true;
+                }
+            }
+        },
+
+        sms: function () {
+            var $smsDialog = $("#sms-dialog");
+            $smsDialog.dialog({
+                autoOpen: false,
+                title: 'Compose SMS'
+            });
+            $("#btn-create-sms").click(function () {
+                $smsDialog.dialog('open');             
+            }); 
+        },
+    }
+})());
+
 function delete_selfpost(self,id) {
 	$.ajax(
 	{

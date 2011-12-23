@@ -1438,5 +1438,7 @@ ul.math-editor-menu a:hover { text-decoration: underline; cursor: pointer; }
     height: 50px;
 }
 
-#manual-notice-userlist { height: 300px; border: 1px solid #eee; }
-#manual-notice-userlist td { padding: 5px; }
+#manual-notice-userlist { height: 300px; overflow: auto; border: 1px solid #eee; }
+#manual-notice-userlist td, #manual-notice-userlist th { padding: 5px; text-align: left; }
+
+.help { font-size: 10px; color: #666; }

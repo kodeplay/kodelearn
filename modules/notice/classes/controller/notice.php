@@ -113,7 +113,23 @@ class Controller_Notice extends Controller_Base {
     }
 
     public function action_ajax_userlist() {
-        
+        $course_id = $this->request->param('course_id');
+        $batch_id = $this->request->param('batch_id');
+        $roles = array_filter(explode("_", $this->request->param('roles')));
+        $users = Model_User::filtered_users($course_id, $batch_id, $roles);
+        $view = View::factory('notice/userlist')
+            ->set('users', $users);
+        $this->content = $view->render();
+    }
+
+    public function action_ajax_mail() {
+        $selected = array_map('intval', $this->request->post('selected'));
+        $subject = $this->request->post('subject');
+        $message = $this->request->post('message');
+        $users = ORM::factory('user')
+            ->where('id', ' IN ', $selected)
+            ->find_all();
+        Notice::email($users, $subject, $message);        
     }
 }
 

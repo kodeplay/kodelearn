@@ -114,6 +114,9 @@ class Notice {
     }
 
     public static function email($users, $subject, $body) {
+        if ($users instanceof Database_MySQL_Result) {
+            $users = self::email_recipients($users);
+        }
         $sender = Model_Noticesetting::settings()->sender_email;
         Email::decoratedmail($users, $sender, $subject, $body);
     }    
