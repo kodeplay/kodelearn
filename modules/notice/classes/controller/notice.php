@@ -130,6 +130,8 @@ class Controller_Notice extends Controller_Base {
             ->where('id', ' IN ', $selected)
             ->find_all();
         Notice::email($users, $subject, $message);        
+        echo 1;
+        exit;
     }
 }
 

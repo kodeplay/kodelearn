@@ -118,6 +118,8 @@ class Notice {
             $users = self::email_recipients($users);
         }
         $sender = Model_Noticesetting::settings()->sender_email;
-        Email::decoratedmail($users, $sender, $subject, $body);
+        // decoratedmail not used because decorator plugin of swiftmailer is buggy and needs fixing
+        // Email::decoratedmail($users, $sender, $subject, $body);
+        Email::templatedmail($users, $sender, $subject, $body);
     }    
 }
