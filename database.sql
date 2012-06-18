@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 3.3.2deb1
+-- version 3.3.2deb1ubuntu1
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Nov 12, 2011 at 01:15 PM
--- Server version: 5.1.41
--- PHP Version: 5.3.2-1ubuntu4.10
+-- Generation Time: Jun 18, 2012 at 06:43 PM
+-- Server version: 5.1.63
+-- PHP Version: 5.3.2-1ubuntu4.15
 
 SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 
@@ -16,7 +16,7 @@ SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 /*!40101 SET NAMES utf8 */;
 
 --
--- Database: `kodelearn_blank`
+-- Database: `kodelearn_basic`
 --
 
 -- --------------------------------------------------------
@@ -49,7 +49,7 @@ CREATE TABLE IF NOT EXISTS `batches` (
   `name` varchar(255) CHARACTER SET latin1 NOT NULL,
   `description` varchar(255) CHARACTER SET latin1 DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=11 ;
 
 --
 -- Dumping data for table `batches`
@@ -88,7 +88,7 @@ CREATE TABLE IF NOT EXISTS `courses` (
   `start_date` date NOT NULL,
   `end_date` date NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=12 ;
 
 --
 -- Dumping data for table `courses`
@@ -127,7 +127,7 @@ CREATE TABLE IF NOT EXISTS `documents` (
   `time` int(11) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=5 ;
 
 --
 -- Dumping data for table `documents`
@@ -186,7 +186,7 @@ CREATE TABLE IF NOT EXISTS `events` (
   `cancel` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `FK_events_rooms` (`room_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=174 ;
 
 --
 -- Dumping data for table `events`
@@ -204,7 +204,7 @@ CREATE TABLE IF NOT EXISTS `examgroups` (
   `name` varchar(50) CHARACTER SET latin1 DEFAULT NULL,
   `publish` tinyint(1) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=6 ;
 
 --
 -- Dumping data for table `examgroups`
@@ -248,11 +248,14 @@ CREATE TABLE IF NOT EXISTS `exams` (
   KEY `FK_exams_examgroups` (`examgroup_id`),
   KEY `FK_exams_events` (`event_id`),
   KEY `FK_exams_courses` (`course_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=45 ;
 
 --
 -- Dumping data for table `exams`
 --
+
+
+-- --------------------------------------------------------
 
 --
 -- Table structure for table `exercisequestions`
@@ -265,6 +268,11 @@ CREATE TABLE IF NOT EXISTS `exercisequestions` (
   KEY `exercise_id` (`exercise_id`),
   KEY `question_id` (`question_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `exercisequestions`
+--
+
 
 -- --------------------------------------------------------
 
@@ -282,7 +290,12 @@ CREATE TABLE IF NOT EXISTS `exerciseresults` (
   PRIMARY KEY (`id`),
   KEY `exercise_id` (`exercise_id`),
   KEY `user_id` (`user_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=8 ;
+
+--
+-- Dumping data for table `exerciseresults`
+--
+
 
 -- --------------------------------------------------------
 
@@ -303,11 +316,32 @@ CREATE TABLE IF NOT EXISTS `exercises` (
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `modified_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=23 ;
 
 --
--- Constraints for dumped tables
+-- Dumping data for table `exercises`
 --
+
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `feedcomments`
+--
+
+CREATE TABLE IF NOT EXISTS `feedcomments` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `comment` varchar(255) NOT NULL,
+  `feed_id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `date` varchar(255) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=119 ;
+
+--
+-- Dumping data for table `feedcomments`
+--
+
 
 -- --------------------------------------------------------
 
@@ -326,7 +360,7 @@ CREATE TABLE IF NOT EXISTS `feeds` (
   PRIMARY KEY (`id`),
   KEY `FK_feed_courses` (`course_id`),
   KEY `FK_feed_users` (`actor_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=76 ;
 
 --
 -- Dumping data for table `feeds`
@@ -347,7 +381,7 @@ CREATE TABLE IF NOT EXISTS `feedstreams` (
   `batch_id` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   UNIQUE KEY `idk_unique_combination` (`id`,`user_id`,`role_id`,`course_id`,`batch_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=27 ;
 
 --
 -- Dumping data for table `feedstreams`
@@ -371,6 +405,9 @@ CREATE TABLE IF NOT EXISTS `feeds_feedstreams` (
 -- Dumping data for table `feeds_feedstreams`
 --
 
+
+-- --------------------------------------------------------
+
 --
 -- Table structure for table `flashcards`
 --
@@ -381,7 +418,12 @@ CREATE TABLE IF NOT EXISTS `flashcards` (
   `description` text NOT NULL,
   `course_id` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=2 ;
+
+--
+-- Dumping data for table `flashcards`
+--
+
 
 -- --------------------------------------------------------
 
@@ -393,6 +435,10 @@ CREATE TABLE IF NOT EXISTS `flashcards_questions` (
   `flashcard_id` int(11) NOT NULL,
   `question_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `flashcards_questions`
+--
 
 
 -- --------------------------------------------------------
@@ -417,7 +463,7 @@ CREATE TABLE IF NOT EXISTS `institutions` (
 --
 
 INSERT INTO `institutions` (`id`, `name`, `institution_type_id`, `logo`, `address`, `website`, `last_modified`) VALUES
-(1, 'SFIT', 1, 'inst_1315202896_android.jpg', 'test', 'http://www.sfit.com', '2011-09-05 11:38:19');
+(1, 'My Awesome school', 1, 'logo.jpg', 'test', 'http://www.example.com', '2012-06-18 11:38:19');
 
 -- --------------------------------------------------------
 
@@ -460,7 +506,7 @@ CREATE TABLE IF NOT EXISTS `lectures` (
   `end_date` varchar(15) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `FK_lectures_courses` (`course_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=25 ;
 
 --
 -- Dumping data for table `lectures`
@@ -496,10 +542,31 @@ CREATE TABLE IF NOT EXISTS `locations` (
   `name` varchar(200) CHARACTER SET latin1 NOT NULL,
   `image` varchar(200) CHARACTER SET latin1 NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3 ;
 
 --
 -- Dumping data for table `locations`
+--
+
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `noticesettings`
+--
+
+CREATE TABLE IF NOT EXISTS `noticesettings` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `institution_id` int(11) NOT NULL,
+  `status` tinyint(1) NOT NULL,
+  `sender_email` varchar(128) NOT NULL,
+  `preferences` text NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `institution_id` (`institution_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=2 ;
+
+--
+-- Dumping data for table `noticesettings`
 --
 
 
@@ -516,7 +583,7 @@ CREATE TABLE IF NOT EXISTS `posts` (
   `user_id` int(11) unsigned NOT NULL,
   PRIMARY KEY (`id`),
   KEY `FK_posts_users` (`user_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=21 ;
 
 --
 -- Dumping data for table `posts`
@@ -557,7 +624,7 @@ CREATE TABLE IF NOT EXISTS `questionhints` (
   `sort_order` tinyint(4) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `question_id` (`question_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=15 ;
 
 --
 -- Dumping data for table `questionhints`
@@ -577,12 +644,12 @@ CREATE TABLE IF NOT EXISTS `questions` (
   `type` enum('choice','grouped','matching','open','ordering') NOT NULL,
   `parent_id` int(11) DEFAULT NULL,
   `user_id` int(11) NOT NULL,
-  `course_id` int(11) unsigned NOT NULL,   
+  `course_id` int(11) unsigned NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   KEY `parent_id` (`parent_id`),
   KEY `course_id` (`course_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=18 ;
 
 --
 -- Dumping data for table `questions`
@@ -647,7 +714,7 @@ CREATE TABLE IF NOT EXISTS `rooms` (
   `room_name` varchar(200) CHARACTER SET latin1 NOT NULL,
   PRIMARY KEY (`id`),
   KEY `locations` (`location_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=4 ;
 
 --
 -- Dumping data for table `rooms`
@@ -674,7 +741,7 @@ CREATE TABLE IF NOT EXISTS `setting` (
 
 INSERT INTO `setting` (`setting_id`, `group_name`, `config_key`, `config_value`) VALUES
 (1, 'config', 'language_id', '1'),
-(2, 'config', 'default_role', '5'),
+(2, 'config', 'default_role', '2'),
 (3, 'config', 'membership', '0'),
 (4, 'config', 'user_approval', '1');
 
@@ -699,14 +766,14 @@ CREATE TABLE IF NOT EXISTS `users` (
   `parent_user_id` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   UNIQUE KEY `uniq_email` (`email`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=39 ;
 
 --
 -- Dumping data for table `users`
 --
 
 INSERT INTO `users` (`id`, `firstname`, `lastname`, `email`, `password`, `about_me`, `logins`, `last_login`, `avatar`, `forgot_password_string`, `status`, `parent_user_id`) VALUES
-(1, 'admin', 'demo', 'admin.demo@kodelearn.com', '2ec953bb23dc94f9e661494a97fde5997dac5c9377da42b8fa4f236edcc5ec5e', '', 0, NULL, NULL, NULL, 1, 0);
+(1, 'admin', 'demo', 'admin.demo@kodelearn.com', '01cf1ab1d6b7d1290b27a0650bfcf17e0ded181173f931d61dfa19e281c39cfd', '', 0, NULL, NULL, NULL, 1, 0);
 
 -- --------------------------------------------------------
 
@@ -725,12 +792,14 @@ CREATE TABLE IF NOT EXISTS `user_tokens` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `uniq_token` (`token`),
   KEY `fk_user_id` (`user_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=126 ;
 
 --
 -- Dumping data for table `user_tokens`
 --
 
+INSERT INTO `user_tokens` (`id`, `user_id`, `user_agent`, `token`, `type`, `created`, `expires`) VALUES
+(125, 1, '', 'b69385fafbe947e6e31b13e4547c9fb37a32b2a8', '', 0, 1341234661);
 
 --
 -- Constraints for dumped tables
@@ -740,8 +809,6 @@ CREATE TABLE IF NOT EXISTS `user_tokens` (
 -- Constraints for table `batches_users`
 --
 ALTER TABLE `batches_users`
-  ADD CONSTRAINT `batches_users_ibfk_1` FOREIGN KEY (`batch_id`) REFERENCES `batches` (`id`) ON DELETE CASCADE,
-  ADD CONSTRAINT `batches_users_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `FK_batches_users_batches` FOREIGN KEY (`batch_id`) REFERENCES `batches` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `FK_batches_users_users` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE;
 
@@ -749,8 +816,6 @@ ALTER TABLE `batches_users`
 -- Constraints for table `courses_users`
 --
 ALTER TABLE `courses_users`
-  ADD CONSTRAINT `courses_users_ibfk_1` FOREIGN KEY (`course_id`) REFERENCES `courses` (`id`) ON DELETE CASCADE,
-  ADD CONSTRAINT `courses_users_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `FK_courses_users_courses` FOREIGN KEY (`course_id`) REFERENCES `courses` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `FK_courses_users_users` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE;
 
@@ -758,15 +823,12 @@ ALTER TABLE `courses_users`
 -- Constraints for table `documents`
 --
 ALTER TABLE `documents`
-  ADD CONSTRAINT `documents_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON UPDATE CASCADE,
   ADD CONSTRAINT `documents_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON UPDATE CASCADE;
 
 --
 -- Constraints for table `documents_courses`
 --
 ALTER TABLE `documents_courses`
-  ADD CONSTRAINT `documents_courses_ibfk_3` FOREIGN KEY (`course_id`) REFERENCES `courses` (`id`) ON DELETE CASCADE,
-  ADD CONSTRAINT `documents_courses_ibfk_4` FOREIGN KEY (`document_id`) REFERENCES `documents` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `documents_courses_ibfk_1` FOREIGN KEY (`course_id`) REFERENCES `courses` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `documents_courses_ibfk_2` FOREIGN KEY (`document_id`) REFERENCES `documents` (`id`) ON DELETE CASCADE;
 
@@ -774,8 +836,6 @@ ALTER TABLE `documents_courses`
 -- Constraints for table `documents_roles`
 --
 ALTER TABLE `documents_roles`
-  ADD CONSTRAINT `documents_roles_ibfk_3` FOREIGN KEY (`role_id`) REFERENCES `roles` (`id`) ON UPDATE CASCADE,
-  ADD CONSTRAINT `documents_roles_ibfk_4` FOREIGN KEY (`document_id`) REFERENCES `documents` (`id`) ON UPDATE CASCADE,
   ADD CONSTRAINT `documents_roles_ibfk_1` FOREIGN KEY (`role_id`) REFERENCES `roles` (`id`) ON UPDATE CASCADE,
   ADD CONSTRAINT `documents_roles_ibfk_2` FOREIGN KEY (`document_id`) REFERENCES `documents` (`id`) ON UPDATE CASCADE;
 
@@ -783,16 +843,12 @@ ALTER TABLE `documents_roles`
 -- Constraints for table `events`
 --
 ALTER TABLE `events`
-  ADD CONSTRAINT `events_ibfk_1` FOREIGN KEY (`room_id`) REFERENCES `rooms` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `FK_events_rooms` FOREIGN KEY (`room_id`) REFERENCES `rooms` (`id`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `exams`
 --
 ALTER TABLE `exams`
-  ADD CONSTRAINT `exams_ibfk_1` FOREIGN KEY (`course_id`) REFERENCES `courses` (`id`) ON DELETE CASCADE,
-  ADD CONSTRAINT `exams_ibfk_2` FOREIGN KEY (`event_id`) REFERENCES `events` (`id`) ON DELETE CASCADE,
-  ADD CONSTRAINT `exams_ibfk_3` FOREIGN KEY (`examgroup_id`) REFERENCES `examgroups` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `FK_exams_courses` FOREIGN KEY (`course_id`) REFERENCES `courses` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `FK_exams_events` FOREIGN KEY (`event_id`) REFERENCES `events` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `FK_exams_examgroups` FOREIGN KEY (`examgroup_id`) REFERENCES `examgroups` (`id`) ON DELETE CASCADE;
@@ -815,15 +871,12 @@ ALTER TABLE `exerciseresults`
 -- Constraints for table `feeds`
 --
 ALTER TABLE `feeds`
-  ADD CONSTRAINT `feeds_ibfk_1` FOREIGN KEY (`actor_id`) REFERENCES `users` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `FK_feed_users` FOREIGN KEY (`actor_id`) REFERENCES `users` (`id`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `feeds_feedstreams`
 --
 ALTER TABLE `feeds_feedstreams`
-  ADD CONSTRAINT `feeds_feedstreams_ibfk_3` FOREIGN KEY (`feedstream_id`) REFERENCES `feedstreams` (`id`) ON DELETE CASCADE,
-  ADD CONSTRAINT `feeds_feedstreams_ibfk_4` FOREIGN KEY (`feed_id`) REFERENCES `feeds` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `feeds_feedstreams_ibfk_1` FOREIGN KEY (`feedstream_id`) REFERENCES `feedstreams` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `feeds_feedstreams_ibfk_2` FOREIGN KEY (`feed_id`) REFERENCES `feeds` (`id`) ON DELETE CASCADE;
 
@@ -831,52 +884,50 @@ ALTER TABLE `feeds_feedstreams`
 -- Constraints for table `lectures`
 --
 ALTER TABLE `lectures`
-  ADD CONSTRAINT `lectures_ibfk_1` FOREIGN KEY (`course_id`) REFERENCES `courses` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `FK_lectures_courses` FOREIGN KEY (`course_id`) REFERENCES `courses` (`id`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `lectures_events`
 --
 ALTER TABLE `lectures_events`
-  ADD CONSTRAINT `lectures_events_ibfk_1` FOREIGN KEY (`event_id`) REFERENCES `events` (`id`) ON DELETE CASCADE,
-  ADD CONSTRAINT `lectures_events_ibfk_2` FOREIGN KEY (`lecture_id`) REFERENCES `lectures` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `FK_lectures_events_events` FOREIGN KEY (`event_id`) REFERENCES `events` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `FK_lectures_events_lectures` FOREIGN KEY (`lecture_id`) REFERENCES `lectures` (`id`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `noticesettings`
+--
+ALTER TABLE `noticesettings`
+  ADD CONSTRAINT `noticesettings_ibfk_1` FOREIGN KEY (`institution_id`) REFERENCES `institutions` (`id`);
 
 --
 -- Constraints for table `posts`
 --
 ALTER TABLE `posts`
-  ADD CONSTRAINT `posts_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `FK_posts_users` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `questionattributes`
 --
 ALTER TABLE `questionattributes`
-  ADD CONSTRAINT `questionattributes_ibfk_2` FOREIGN KEY (`question_id`) REFERENCES `questions` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `questionattributes_ibfk_1` FOREIGN KEY (`question_id`) REFERENCES `questions` (`id`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `questionhints`
 --
 ALTER TABLE `questionhints`
-  ADD CONSTRAINT `questionhints_ibfk_2` FOREIGN KEY (`question_id`) REFERENCES `questions` (`id`),
   ADD CONSTRAINT `questionhints_ibfk_1` FOREIGN KEY (`question_id`) REFERENCES `questions` (`id`);
 
 --
 -- Constraints for table `questions`
 --
 ALTER TABLE `questions`
-  ADD CONSTRAINT `questions_ibfk_2` FOREIGN KEY (`parent_id`) REFERENCES `questions` (`id`),
-  ADD CONSTRAINT `questions_ibfk_1` FOREIGN KEY (`parent_id`) REFERENCES `questions` (`id`);
+  ADD CONSTRAINT `questions_ibfk_1` FOREIGN KEY (`parent_id`) REFERENCES `questions` (`id`),
+  ADD CONSTRAINT `questions_ibfk_2` FOREIGN KEY (`course_id`) REFERENCES `courses` (`id`);
 
 --
 -- Constraints for table `roles_users`
 --
 ALTER TABLE `roles_users`
-  ADD CONSTRAINT `roles_users_ibfk_3` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE,
-  ADD CONSTRAINT `roles_users_ibfk_4` FOREIGN KEY (`role_id`) REFERENCES `roles` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `roles_users_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `roles_users_ibfk_2` FOREIGN KEY (`role_id`) REFERENCES `roles` (`id`) ON DELETE CASCADE;
 
@@ -884,12 +935,10 @@ ALTER TABLE `roles_users`
 -- Constraints for table `rooms`
 --
 ALTER TABLE `rooms`
-  ADD CONSTRAINT `rooms_ibfk_2` FOREIGN KEY (`location_id`) REFERENCES `locations` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `rooms_ibfk_1` FOREIGN KEY (`location_id`) REFERENCES `locations` (`id`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `user_tokens`
 --
 ALTER TABLE `user_tokens`
-  ADD CONSTRAINT `user_tokens_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `user_tokens_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE;
