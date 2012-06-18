@@ -71,10 +71,10 @@ in the same directory and modify the 'default' configuration in it to add your d
 
 Open the project url in the browser. 
 
-Following admin account is already there for you to get started quickly -
+Following admin account is already there for you to get started quickly - 
 
-email: admin.demo@kodelearn.com
-password: kodeplay2010
+email: admin.demo@kodelearn.com 
+password: kodelearn 
 
 After loggin in, change the email and password as per your convenience.
 
