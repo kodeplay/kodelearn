@@ -18,7 +18,7 @@ Kodelearn is written in PHP using the Kohana PHP Framework (v3.1)
 
 #### Downloading Source Code
   * Download the stable source code from
-    [Kodelearn website](http://kodelearn.com/download)
+    [Kodelearn website](http://kodelearn.com/kodelearn.tar.gz)
   
   * Or clone from github specially if you are looking to hack around
     
